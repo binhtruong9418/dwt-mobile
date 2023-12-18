@@ -10,7 +10,9 @@ const screenOptions = {
 function Router(): JSX.Element {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Navigator
+        screenOptions={screenOptions}
+        initialRouteName={'HomePage'}>
         {routePath.map((route, index) => (
           <Stack.Screen
             key={index}
