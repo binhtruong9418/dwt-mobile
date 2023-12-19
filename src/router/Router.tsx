@@ -2,12 +2,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {updater} from '../service/Updater';
 import {routePath} from './routePath.ts';
+import { useEffect } from 'react';
+import SplashScreen from 'react-native-splash-screen';
 const Stack = createNativeStackNavigator();
 const screenOptions = {
   headerShown: false,
 };
 
 function Router(): JSX.Element {
+  useEffect(() => { 
+    SplashScreen.hide();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator
