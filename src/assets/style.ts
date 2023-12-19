@@ -21,6 +21,10 @@ const globalStyle = StyleSheet.create({
     fontSize: 13,
     fontWeight: '400',
   },
+  fs_13_500: {
+    fontSize: 13,
+    fontWeight: '500',
+  },
   fs_15_500: {
     fontSize: 15,
     fontWeight: '500',
@@ -32,6 +36,10 @@ const globalStyle = StyleSheet.create({
   fs_12_400: {
     fontSize: 12,
     fontWeight: '400',
+  },
+  fs_12_500: {
+    fontSize: 12,
+    fontWeight: '500',
   },
   fs_12_700: {
     fontSize: 12,
@@ -67,9 +75,11 @@ export const {
   fs_16_700,
   fs_15_500,
   fs_13_400,
+  fs_13_500,
   fs_15_700,
   fs_12_400,
   fs_12_700,
+  fs_12_500,
   fs_10_400,
   fs_10_700,
   text_black,

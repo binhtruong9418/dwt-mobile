@@ -12,7 +12,7 @@ function Router(): JSX.Element {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName={'HomePage'}>
+        initialRouteName={'Login'}>
         {routePath.map((route, index) => (
           <Stack.Screen
             key={index}

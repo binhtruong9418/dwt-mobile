@@ -15,13 +15,14 @@ import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import ChevronLeft from '../../assets/img/chevron-left.svg';
 import {ReactNativeModal} from 'react-native-modal';
 import CheckSuccess from '../../assets/img/check-success.svg';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const {width} = Dimensions.get('window');
 const ForgotPassword = ({navigation}: any) => {
   const [username, setUsername] = useState<string>('');
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Logo width={width - 60} height={200} />
       <View style={styles.container}>
         <Text style={[fs_15_700, text_red, text_center]}>
@@ -80,7 +81,7 @@ const ForgotPassword = ({navigation}: any) => {
           </Text>
         </View>
       </ReactNativeModal>
-    </View>
+    </SafeAreaView>
   );
 };
 

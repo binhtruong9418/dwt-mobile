@@ -7,7 +7,7 @@ import AvatarIcon from '../../assets/img/avatar.svg';
 export default function Header({}) {
   return (
     <View style={styles.wrapper}>
-      <SmallLogo width={140} height={70} />
+      <SmallLogo width={140} height={60} />
       <View style={styles.row}>
         <TouchableOpacity style={styles.iconButton}>
           <SearchIcon width={20} height={20} />
@@ -47,5 +47,12 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: '#F5F5F5',
     elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 });
