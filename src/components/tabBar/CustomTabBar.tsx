@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 export default function CustomTabBar({state, descriptors, navigation}: any) {
   return (
     <View style={styles.container}>
@@ -30,7 +30,7 @@ export default function CustomTabBar({state, descriptors, navigation}: any) {
         };
 
         return (
-          <Pressable
+          <TouchableOpacity
             hitSlop={8}
             accessibilityRole="button"
             onPress={onPress}
@@ -39,7 +39,7 @@ export default function CustomTabBar({state, descriptors, navigation}: any) {
             style={styles.item}>
             {icon({isFocused})}
             {label({isFocused})}
-          </Pressable>
+          </TouchableOpacity>
         );
       })}
     </View>

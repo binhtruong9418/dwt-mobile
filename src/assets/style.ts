@@ -73,8 +73,14 @@ const globalStyle = StyleSheet.create({
   text_gray: {
     color: '#787878',
   },
+  text_light_gray: {
+    color: '#8E9294',
+  },
   text_red: {
     color: '#E00',
+  },
+  text_green: {
+    color: '#00CA28',
   },
   text_center: {
     textAlign: 'center',
@@ -97,6 +103,8 @@ export const {
   fs_10_700,
   text_black,
   text_gray,
+  text_light_gray,
   text_red,
+  text_green,
   text_center,
 } = globalStyle;
