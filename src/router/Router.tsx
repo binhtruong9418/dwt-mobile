@@ -4,15 +4,17 @@ import {updater} from '../service/Updater';
 import {routePath} from './routePath.ts';
 import {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
+
 const Stack = createNativeStackNavigator();
 const screenOptions = {
   headerShown: false,
 };
 
-function Router(): JSX.Element {
+const Router = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptions} initialRouteName={'Login'}>
@@ -26,6 +28,6 @@ function Router(): JSX.Element {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default updater(Router);

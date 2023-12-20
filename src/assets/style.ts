@@ -85,6 +85,47 @@ const globalStyle = StyleSheet.create({
   text_center: {
     textAlign: 'center',
   },
+  py10: {
+    paddingVertical: 10,
+  },
+  px10: {
+    paddingHorizontal: 10,
+  },
+  py20: {
+    paddingVertical: 20,
+  },
+  px20: {
+    paddingHorizontal: 20,
+  },
+  mt5: {
+    marginTop: 5,
+  },
+  mt10: {
+    marginTop: 10,
+  },
+  mt15: {
+    marginTop: 15,
+  },
+  mt20: {
+    marginTop: 20,
+  },
+  mb5: {
+    marginBottom: 5,
+  },
+  mb10: {
+    marginBottom: 10,
+  },
+  mb15: {
+    marginBottom: 15,
+  },
+  mb20: {
+    marginBottom: 20,
+  },
+  row_between: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 });
 
 export const {
@@ -107,4 +148,17 @@ export const {
   text_red,
   text_green,
   text_center,
+  py10,
+  px10,
+  py20,
+  px20,
+  mt5,
+  mt10,
+  mt15,
+  mt20,
+  mb5,
+  mb10,
+  mb15,
+  mb20,
+  row_between,
 } = globalStyle;
