@@ -1,10 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {
-  fs_12_500,
-  text_black,
-  text_center,
-  text_white,
-} from '../../../assets/style.ts';
+import {fs_12_500, text_black, text_center} from '../../../assets/style.ts';
 
 export default function PrimaryTable({columns, data}: any) {
   return (
@@ -35,7 +30,9 @@ export default function PrimaryTable({columns, data}: any) {
         data={data}
         renderItem={({item}) => {
           let bgColor = item.bgColor || '#FFF';
+          let textColor = item.textColor || '#000';
           delete item.bgColor;
+          delete item.textColor;
           return (
             <View style={[styles.row, styles.borderTop]}>
               {columns.map((column: any, index: any) => {
@@ -51,12 +48,7 @@ export default function PrimaryTable({columns, data}: any) {
                       styles.cell,
                       index !== 0 && styles.borderLeft,
                     ]}>
-                    <Text
-                      style={[
-                        fs_12_500,
-                        bgColor === '#FFF' ? text_black : text_white,
-                        text_center,
-                      ]}>
+                    <Text style={[fs_12_500, {color: textColor}, text_center]}>
                       {item[column.key]}
                     </Text>
                   </View>

@@ -1,26 +1,26 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import SmallLogo from '../../assets/img/small-logo.svg';
-import SearchIcon from '../../assets/img/search-icon.svg';
-import NotiIcon from '../../assets/img/noti-icon.svg';
-import AvatarIcon from '../../assets/img/avatar.svg';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import ChevronLeftIcon from '../../assets/img/chevron-left.svg';
+import PropTypes, {InferProps} from 'prop-types';
+import {fs_15_700, text_black} from '../../assets/style.ts';
 
-export default function Header({}) {
+export default function Header({
+  title,
+  handleGoBack,
+  rightView,
+}: InferProps<typeof Header.propTypes>) {
   return (
     <View style={styles.wrapper}>
-      <SmallLogo width={140} height={60} />
-      <View style={styles.row}>
-        <TouchableOpacity style={styles.iconButton}>
-          <SearchIcon width={20} height={20} />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.iconButton}>
-          <NotiIcon width={20} height={20} />
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <AvatarIcon width={35} height={35} />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        hitSlop={10}
+        onPress={() => {
+          if (handleGoBack) {
+            handleGoBack();
+          }
+        }}>
+        <ChevronLeftIcon width={20} height={20} />
+      </TouchableOpacity>
+      <Text style={[fs_15_700, text_black]}>{title}</Text>
+      {rightView ? rightView : <View style={{width: 20, height: 20}} />}
     </View>
   );
 }
@@ -30,29 +30,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7F7F7',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 15,
-  },
-  iconButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 35,
-    height: 35,
-    borderRadius: 999,
-    backgroundColor: '#F5F5F5',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    paddingVertical: 15,
   },
 });
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+  handleGoBack: PropTypes.func,
+  rightView: PropTypes.element,
+};

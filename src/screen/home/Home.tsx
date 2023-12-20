@@ -1,5 +1,5 @@
 import {StyleSheet, View, Dimensions, ScrollView} from 'react-native';
-import Header from '../../components/header/Header.tsx';
+import HomeHeader from '../../components/home/HomeHeader.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Banner from '../../assets/img/banner.svg';
 import WorkProgressBlock from '../../components/home/WorkProgressBlock.tsx';
@@ -40,6 +40,7 @@ export default function Home({navigation}: any) {
       amount: '3/10',
       kpi: '2',
       bgColor: '#FFB400',
+      textColor: '#FFF',
     },
 
     {
@@ -48,6 +49,7 @@ export default function Home({navigation}: any) {
       amount: '3/2',
       kpi: '6',
       bgColor: '#00DC75',
+      textColor: '#FFF',
     },
 
     {
@@ -56,6 +58,7 @@ export default function Home({navigation}: any) {
       amount: '3/2',
       kpi: '2',
       bgColor: '#7CB8FF',
+      textColor: '#FFF',
     },
 
     {
@@ -64,6 +67,7 @@ export default function Home({navigation}: any) {
       amount: '3/10',
       kpi: '2',
       bgColor: '#FFF',
+      textColor: '#000',
     },
     {
       index: 5,
@@ -71,6 +75,7 @@ export default function Home({navigation}: any) {
       amount: '3/10',
       kpi: '2',
       bgColor: '#FF0058',
+      textColor: '#FFF',
     },
 
     {
@@ -79,11 +84,12 @@ export default function Home({navigation}: any) {
       amount: '3/2',
       kpi: '6',
       bgColor: '#00DC75',
+      textColor: '#FFF',
     },
   ];
   return (
     <SafeAreaView style={styles.wrapper}>
-      <Header />
+      <HomeHeader />
       <ScrollView
         style={styles.container}
         contentContainerStyle={py20}
