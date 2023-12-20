@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Svg, {Circle, Text} from 'react-native-svg';
+import Svg, {Circle} from 'react-native-svg';
 
 interface CircleProgressChartProps {
   total: number;
@@ -11,8 +11,8 @@ interface CircleProgressChartProps {
 
 const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
   progress,
-  size = 60,
-  strokeWidth = 10,
+  size = 50,
+  strokeWidth = 8,
   total,
 }) => {
   const radius = (size - strokeWidth) / 2;
@@ -41,25 +41,6 @@ const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference - (progress / total) * circumference}
         />
-        <Text
-          x={size / 2 - 8}
-          y={size / 2}
-          textAnchor="middle"
-          fill="red"
-          fontSize="11"
-          dy=".3em">
-          {progress}
-        </Text>
-
-        <Text
-          x={size / 2 + 8}
-          y={size / 2}
-          textAnchor="middle"
-          fill="black"
-          fontSize="11"
-          dy=".3em">
-          {`/${total}`}
-        </Text>
       </Svg>
     </View>
   );

@@ -1,13 +1,8 @@
 import {StyleSheet} from 'react-native';
 
 const globalStyle = StyleSheet.create({
-  fs_14_400: {
-    fontSize: 14,
-    fontWeight: '400',
-    fontFamily: 'Roboto-Regular',
-  },
-  fs_14_700: {
-    fontSize: 14,
+  fs_20_700: {
+    fontSize: 20,
     fontWeight: '700',
     fontFamily: 'Roboto-Bold',
   },
@@ -20,6 +15,21 @@ const globalStyle = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     fontFamily: 'Roboto-Bold',
+  },
+  fs_14_400: {
+    fontSize: 14,
+    fontWeight: '400',
+    fontFamily: 'Roboto-Regular',
+  },
+  fs_14_700: {
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: 'Roboto-Bold',
+  },
+  fs_14_500: {
+    fontSize: 14,
+    fontWeight: '500',
+    fontFamily: 'Roboto-Medium',
   },
   fs_13_400: {
     fontSize: 13,
@@ -61,9 +71,13 @@ const globalStyle = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'Roboto-Regular',
   },
-
   fs_10_700: {
     fontSize: 10,
+    fontWeight: '700',
+    fontFamily: 'Roboto-Bold',
+  },
+  fs_8_700: {
+    fontSize: 8,
     fontWeight: '700',
     fontFamily: 'Roboto-Bold',
   },
@@ -81,6 +95,24 @@ const globalStyle = StyleSheet.create({
   },
   text_green: {
     color: '#00CA28',
+  },
+  text_white: {
+    color: '#FFFFFF',
+  },
+  bg_green: {
+    backgroundColor: '#00DC75',
+  },
+  bg_blue: {
+    backgroundColor: '#7CB8FF',
+  },
+  bg_yellow: {
+    backgroundColor: '#FFB400',
+  },
+  bg_red: {
+    backgroundColor: '#FF0058',
+  },
+  bg_white: {
+    backgroundColor: '#FFFFFF',
   },
   text_center: {
     textAlign: 'center',
@@ -129,8 +161,10 @@ const globalStyle = StyleSheet.create({
 });
 
 export const {
+  fs_20_700,
   fs_14_400,
   fs_14_700,
+  fs_14_500,
   fs_16_400,
   fs_16_700,
   fs_15_500,
@@ -142,12 +176,19 @@ export const {
   fs_12_500,
   fs_10_400,
   fs_10_700,
+  fs_8_700,
   text_black,
+  text_white,
   text_gray,
   text_light_gray,
   text_red,
   text_green,
   text_center,
+  bg_green,
+  bg_blue,
+  bg_yellow,
+  bg_red,
+  bg_white,
   py10,
   px10,
   py20,

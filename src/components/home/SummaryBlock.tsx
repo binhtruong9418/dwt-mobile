@@ -1,37 +1,64 @@
-import {View, StyleSheet, Text} from 'react-native';
-import {fs_12_500, text_black, text_center, text_red} from '../../assets/style';
-import CalendarInIcon from '../../assets/img/calendar-in.svg';
-import CheckoutIcon from '../../assets/img/check-out.svg';
-import CircleProgressChart from './CircleProgressChart';
+import {StyleSheet, Text, View} from 'react-native';
+import {
+  fs_10_400,
+  fs_12_500,
+  fs_14_500,
+  text_black,
+  text_center,
+  text_red,
+} from '../../assets/style.ts';
+import RowSummaryItem from './RowSummaryItem.tsx';
+import LinearGradient from 'react-native-linear-gradient';
+import {useState} from 'react';
+
 export default function SummaryBlock({}) {
+  const [labelHeight, setLabelHeight] = useState<number>(0);
+  const [wrapperHeight, setWrapperHeight] = useState<number>(0);
+  const [progress, setProgress] = useState<number>(0.75);
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.blockItem}>
-        <Text style={[fs_12_500, text_red, text_center]}>HÔM NAY</Text>
-        <View style={[styles.rowItem, styles.mt5]}>
-          <View style={styles.row_gap_5}>
-            <CalendarInIcon width={20} height={20} />
-            <Text style={[fs_12_500, text_black, text_center]}>Giờ vào</Text>
-          </View>
-          <Text style={[fs_12_500, text_black, text_center]}>8:00</Text>
-        </View>
-
-        <View style={[styles.rowItem, styles.mt8]}>
-          <View style={styles.row_gap_5}>
-            <CheckoutIcon width={20} height={20} />
-            <Text style={[fs_12_500, text_black, text_center]}>Giờ ra</Text>
-          </View>
-          <Text style={[fs_12_500, text_black, text_center]}>17:05</Text>
-        </View>
+    <View
+      style={styles.wrapper}
+      onLayout={e => setWrapperHeight(e.nativeEvent.layout.height)}>
+      <Text
+        style={[fs_14_500, text_red, text_center]}
+        onLayout={e => setLabelHeight(e.nativeEvent.layout.height)}>
+        TỔNG QUÁT THÁNG
+      </Text>
+      <View
+        style={[styles.statistic, {height: wrapperHeight - labelHeight - 20}]}>
+        <Text style={[styles.percent, text_center]}>100%</Text>
+        <Text style={[styles.percent, text_center]}>75%</Text>
+        <Text style={[styles.percent, text_center]}>50%</Text>
+        <Text style={[styles.percent, text_center]}>25%</Text>
+        <Text style={[styles.percent, text_center]}>0%</Text>
       </View>
+      <LinearGradient
+        colors={['#7cf6c3', '#fff']}
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}
+        locations={[0.1, 1]}
+        style={[
+          styles.chart,
+          {height: (wrapperHeight - labelHeight - 20) * progress},
+        ]}
+      />
+      <View style={styles.row_center}>
+        <View style={styles.box}>
+          <Text style={[fs_12_500, text_black, text_center]}>KPI cá nhân</Text>
+          <RowSummaryItem text={'Hàn hoàn thiện khung xe'} value={'3'} />
+          <RowSummaryItem text={'Cắt uốn khung'} value={'3'} />
+          <RowSummaryItem text={'Làm sạch bề mặt khung'} value={'4'} />
+          <RowSummaryItem text={'Lắp ráp hoàn thiện xe'} value={'5'} />
+          <RowSummaryItem text={'Nâng cấp xe'} value={'3'} />
+        </View>
 
-      <View style={styles.blockItem}>
-        <Text style={[fs_12_500, text_red, text_center]}>HÔM NAY</Text>
-        <View style={styles.col_center}>
-          <CircleProgressChart progress={15} total={22} />
-          <Text style={[fs_12_500, text_black, text_center, styles.mt3]}>
-            1 lần đi muộn
-          </Text>
+        <View style={styles.box}>
+          <Text style={[fs_12_500, text_black, text_center]}>KPI phòng</Text>
+          <RowSummaryItem text={'Hàn hoàn thiện khung xe'} value={'3'} />
+          <RowSummaryItem text={'Cắt uốn khung'} value={'3'} />
+          <RowSummaryItem text={'Làm sạch bề mặt khung'} value={'4'} />
+          <RowSummaryItem text={'Lắp ráp hoàn thiện xe'} value={'5'} />
+          <RowSummaryItem text={'Nâng cấp xe'} value={'3'} />
         </View>
       </View>
     </View>
@@ -40,49 +67,58 @@ export default function SummaryBlock({}) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: 'row',
     width: '100%',
-    justifyContent: 'space-between',
-  },
-  blockItem: {
-    width: '48%',
     backgroundColor: '#F5F5F5',
     borderRadius: 15,
     elevation: 5,
-    shadowColor: 'rgba(0, 0, 0, 0)',
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowOffset: {
       width: 0,
       height: 4,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    padding: 10,
-    height: 'auto',
+    paddingTop: 8,
   },
-  gap10: {
-    gap: 10,
-  },
-  mt8: {
-    marginTop: 8,
-  },
-  mt5: {
-    marginTop: 5,
-  },
-  mt3: {
-    marginTop: 3,
-  },
-  rowItem: {
+  row_center: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    marginTop: 10,
+    flex: 1,
+    gap: 20,
+    paddingHorizontal: 8,
+    paddingBottom: 8,
   },
-  row_gap_5: {
-    gap: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+  statistic: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: '100%',
+    justifyContent: 'space-between',
+    zIndex: 1,
   },
-  col_center: {
-    alignItems: 'center',
-    paddingTop: 2,
+  chart: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: '100%',
+    justifyContent: 'space-between',
+    borderTopColor: '#090',
+    borderTopWidth: 3,
+  },
+  box: {
+    padding: 7,
+    flex: 0.5,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#000',
+    gap: 6,
+  },
+  percent: {
+    color: '#60758D',
+    fontSize: 7,
+    fontWeight: '400',
+    lineHeight: 8,
   },
 });

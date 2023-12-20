@@ -1,6 +1,6 @@
 import {
   AttendanceScreen,
-  CommunicationScreen,
+  WorkScreen,
   ForgotPasswordScreen,
   HomeScreen,
   LoginScreen,
@@ -30,8 +30,8 @@ export const navigatorPath = [
     component: HomeScreen,
   },
   {
-    name: 'Communication',
-    component: CommunicationScreen,
+    name: 'Work',
+    component: WorkScreen,
   },
   {
     name: 'Attendance',

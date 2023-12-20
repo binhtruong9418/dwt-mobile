@@ -3,11 +3,19 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import {Text} from 'react-native';
+
 import HomeIcon from '../../assets/img/bottom-tab/home.svg';
-import CommunicationIcon from '../../assets/img/bottom-tab/communication.svg';
+import WorkIcon from '../../assets/img/bottom-tab/work.svg';
 import FingerprintIcon from '../../assets/img/bottom-tab/fingerprint.svg';
 import NewsIcon from '../../assets/img/bottom-tab/news.svg';
 import MenuIcon from '../../assets/img/bottom-tab/menu.svg';
+
+import HomeSelectIcon from '../../assets/img/bottom-tab/home-select.svg';
+import WorkSelectIcon from '../../assets/img/bottom-tab/work-select.svg';
+import FingerprintSelectIcon from '../../assets/img/bottom-tab/fingerprint-select.svg';
+import NewsSelectIcon from '../../assets/img/bottom-tab/news-select.svg';
+import MenuSelectIcon from '../../assets/img/bottom-tab/menu-select.svg';
+
 import {
   fs_10_400,
   fs_10_700,
@@ -22,18 +30,38 @@ const Tabs = createBottomTabNavigator();
 export default function BottomNavigator(): JSX.Element {
   const options = ({route}: any) => {
     return {
-      tabBarIcon: () => {
+      tabBarIcon: ({isFocused}: any) => {
         switch (route.name) {
           case 'Home':
-            return <HomeIcon width={25} height={25} />;
-          case 'Communication':
-            return <CommunicationIcon width={25} height={25} />;
+            return isFocused ? (
+              <HomeSelectIcon width={20} height={20} />
+            ) : (
+              <HomeIcon width={20} height={20} />
+            );
+          case 'Work':
+            return isFocused ? (
+              <WorkSelectIcon width={20} height={20} />
+            ) : (
+              <WorkIcon width={20} height={20} />
+            );
           case 'Attendance':
-            return <FingerprintIcon width={35} height={35} />;
+            return isFocused ? (
+              <FingerprintSelectIcon width={20} height={20} />
+            ) : (
+              <FingerprintIcon width={20} height={20} />
+            );
           case 'News':
-            return <NewsIcon width={25} height={25} />;
+            return isFocused ? (
+              <NewsSelectIcon width={20} height={20} />
+            ) : (
+              <NewsIcon width={20} height={20} />
+            );
           case 'Menu':
-            return <MenuIcon width={25} height={25} />;
+            return isFocused ? (
+              <MenuSelectIcon width={20} height={20} />
+            ) : (
+              <MenuIcon width={20} height={20} />
+            );
           default:
             null;
         }
@@ -46,16 +74,16 @@ export default function BottomNavigator(): JSX.Element {
                 Trang chủ
               </Text>
             );
-          case 'Communication':
+          case 'Work':
             return (
               <Text style={[fs_10_400, isFocused ? text_red : text_black]}>
-                Giao tiếp
+                Công việc
               </Text>
             );
           case 'Attendance':
             return (
-              <Text style={[fs_10_700, isFocused ? text_red : text_black]}>
-                CHẤM CÔNG
+              <Text style={[fs_10_400, isFocused ? text_red : text_black]}>
+                Chấm công
               </Text>
             );
           case 'News':
