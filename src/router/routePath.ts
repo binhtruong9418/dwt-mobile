@@ -6,6 +6,8 @@ import {
   LoginScreen,
   MenuScreen,
   NewsScreen,
+  WorkDetailScreen,
+  WorkReportScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -44,5 +46,13 @@ export const navigatorPath = [
   {
     name: 'Menu',
     component: MenuScreen,
+  },
+  {
+    name: 'WorkDetail',
+    component: WorkDetailScreen,
+  },
+  {
+    name: 'WorkReport',
+    component: WorkReportScreen,
   },
 ];

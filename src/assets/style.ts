@@ -16,6 +16,11 @@ const globalStyle = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Roboto-Bold',
   },
+  fs_16_500: {
+    fontSize: 16,
+    fontWeight: '500',
+    fontFamily: 'Roboto-Medium',
+  },
   fs_14_400: {
     fontSize: 14,
     fontWeight: '400',
@@ -40,6 +45,16 @@ const globalStyle = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
     fontFamily: 'Roboto-Medium',
+  },
+  fs_13_700: {
+    fontSize: 13,
+    fontWeight: '700',
+    fontFamily: 'Roboto-Bold',
+  },
+  fs_15_400: {
+    fontSize: 15,
+    fontWeight: '400',
+    fontFamily: 'Roboto-Regular',
   },
   fs_15_500: {
     fontSize: 15,
@@ -165,11 +180,14 @@ export const {
   fs_14_400,
   fs_14_700,
   fs_14_500,
+  fs_16_500,
   fs_16_400,
   fs_16_700,
+  fs_15_400,
   fs_15_500,
   fs_13_400,
   fs_13_500,
+  fs_13_700,
   fs_15_700,
   fs_12_400,
   fs_12_700,

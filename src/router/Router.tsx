@@ -23,6 +23,9 @@ const Router = () => {
             key={index}
             name={route.name}
             component={route.component}
+            options={{
+              animation: 'slide_from_right',
+            }}
           />
         ))}
       </Stack.Navigator>

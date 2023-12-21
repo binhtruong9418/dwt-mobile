@@ -39,8 +39,7 @@ export default function Home({navigation}: any) {
       name: 'Báo cáo',
       amount: '3/10',
       kpi: '2',
-      bgColor: '#FFB400',
-      textColor: '#FFF',
+      bgColor: '#FFB822',
     },
 
     {
@@ -48,8 +47,7 @@ export default function Home({navigation}: any) {
       name: 'Đào tạo',
       amount: '3/2',
       kpi: '6',
-      bgColor: '#00DC75',
-      textColor: '#FFF',
+      bgColor: '#03D87F',
     },
 
     {
@@ -57,8 +55,7 @@ export default function Home({navigation}: any) {
       name: 'Bảo dưỡng xe',
       amount: '3/2',
       kpi: '2',
-      bgColor: '#7CB8FF',
-      textColor: '#FFF',
+      bgColor: '#89B6FA',
     },
 
     {
@@ -67,15 +64,13 @@ export default function Home({navigation}: any) {
       amount: '3/10',
       kpi: '2',
       bgColor: '#FFF',
-      textColor: '#000',
     },
     {
       index: 5,
       name: 'Báo cáo',
       amount: '3/10',
       kpi: '2',
-      bgColor: '#FF0058',
-      textColor: '#FFF',
+      bgColor: '#F5325C',
     },
 
     {
@@ -83,8 +78,7 @@ export default function Home({navigation}: any) {
       name: 'Đào tạo',
       amount: '3/2',
       kpi: '6',
-      bgColor: '#00DC75',
-      textColor: '#FFF',
+      bgColor: '#03D87F',
     },
   ];
   return (
