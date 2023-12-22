@@ -1,5 +1,5 @@
 import {ReactNativeModal} from 'react-native-modal';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import CheckSuccess from '../../../assets/img/check-success.svg';
 import {
   fs_14_400,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const apiUrl = 'https://online-course-backend.vinhomes.co.uk/api';
+const apiUrl = 'https://test.s-team.tech/api/v1';
 const axiosClient = axios.create({
   baseURL: apiUrl,
   headers: {

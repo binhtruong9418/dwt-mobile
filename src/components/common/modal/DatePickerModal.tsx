@@ -99,6 +99,7 @@ export default function DatePickerModal({
               selectedItemColor={'#CA1F24'}
               weekDaysTextStyle={styles.weekDayTextStyle}
               calendarTextStyle={styles.dayTextStyle}
+              headerTextStyle={styles.headerTextStyle}
             />
           </View>
           <PrimaryButton
@@ -185,5 +186,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     marginTop: 15,
+  },
+  headerTextStyle: {
+    ...fs_14_700,
+    ...text_black,
   },
 });
