@@ -1,7 +1,6 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {
   fs_12_400,
-  fs_12_500,
   fs_12_700,
   text_black,
   text_center,

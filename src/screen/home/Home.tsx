@@ -10,80 +10,80 @@ import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 
 const {width: windowWidth} = Dimensions.get('window');
 
+const columns = [
+  {
+    key: 'index',
+    title: 'STT',
+    width: 0.1,
+  },
+  {
+    key: 'name',
+    title: 'Tên',
+    width: 0.4,
+  },
+  {
+    key: 'amount',
+    title: 'Số lượng',
+    width: 0.25,
+  },
+  {
+    key: 'kpi',
+    title: 'NS/KPI',
+    width: 0.25,
+  },
+];
+const tableData = [
+  {
+    index: 1,
+    name: 'Báo cáo',
+    amount: '3/10',
+    kpi: '2',
+    bgColor: '#FFB822',
+  },
+
+  {
+    index: 2,
+    name: 'Đào tạo',
+    amount: '3/2',
+    kpi: '6',
+    bgColor: '#03D87F',
+  },
+
+  {
+    index: 3,
+    name: 'Bảo dưỡng xe',
+    amount: '3/2',
+    kpi: '2',
+    bgColor: '#89B6FA',
+  },
+
+  {
+    index: 4,
+    name: 'Bảo dưỡng xe',
+    amount: '3/10',
+    kpi: '2',
+    bgColor: '#FFF',
+  },
+  {
+    index: 5,
+    name: 'Báo cáo',
+    amount: '3/10',
+    kpi: '2',
+    bgColor: '#F5325C',
+  },
+
+  {
+    index: 6,
+    name: 'Đào tạo',
+    amount: '3/2',
+    kpi: '6',
+    bgColor: '#03D87F',
+  },
+];
 export default function Home({navigation}: any) {
-  const columns = [
-    {
-      key: 'index',
-      title: 'STT',
-      width: 0.1,
-    },
-    {
-      key: 'name',
-      title: 'Tên',
-      width: 0.4,
-    },
-    {
-      key: 'amount',
-      title: 'Số lượng',
-      width: 0.25,
-    },
-    {
-      key: 'kpi',
-      title: 'NS/KPI',
-      width: 0.25,
-    },
-  ];
-  const tableData = [
-    {
-      index: 1,
-      name: 'Báo cáo',
-      amount: '3/10',
-      kpi: '2',
-      bgColor: '#FFB822',
-    },
-
-    {
-      index: 2,
-      name: 'Đào tạo',
-      amount: '3/2',
-      kpi: '6',
-      bgColor: '#03D87F',
-    },
-
-    {
-      index: 3,
-      name: 'Bảo dưỡng xe',
-      amount: '3/2',
-      kpi: '2',
-      bgColor: '#89B6FA',
-    },
-
-    {
-      index: 4,
-      name: 'Bảo dưỡng xe',
-      amount: '3/10',
-      kpi: '2',
-      bgColor: '#FFF',
-    },
-    {
-      index: 5,
-      name: 'Báo cáo',
-      amount: '3/10',
-      kpi: '2',
-      bgColor: '#F5325C',
-    },
-
-    {
-      index: 6,
-      name: 'Đào tạo',
-      amount: '3/2',
-      kpi: '6',
-      bgColor: '#03D87F',
-    },
-  ];
   return (
     <SafeAreaView style={styles.wrapper}>
-      <HomeHeader />
+      <HomeHeader navigation={navigation} />
       <ScrollView
         style={styles.container}
         contentContainerStyle={py20}

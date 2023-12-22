@@ -7,3 +7,4 @@ export {default as NewsScreen} from './home/News.tsx';
 export {default as MenuScreen} from './home/Menu.tsx';
 export {default as WorkDetailScreen} from './work/WorkDetail.tsx';
 export {default as WorkReportScreen} from './work/WorkReport.tsx';
+export {default as ProfileScreen} from './profile/Profile.tsx';

@@ -4,7 +4,7 @@ import SearchIcon from '../../assets/img/search-icon.svg';
 import NotiIcon from '../../assets/img/noti-icon.svg';
 import AvatarIcon from '../../assets/img/avatar.svg';
 
-export default function HomeHeader({}) {
+export default function HomeHeader({navigation}: any) {
   return (
     <View style={styles.wrapper}>
       <SmallLogo width={140} height={60} />
@@ -17,7 +17,10 @@ export default function HomeHeader({}) {
           <NotiIcon width={20} height={20} />
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Profile');
+          }}>
           <AvatarIcon width={35} height={35} />
         </TouchableOpacity>
       </View>
