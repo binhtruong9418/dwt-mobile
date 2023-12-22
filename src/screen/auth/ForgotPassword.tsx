@@ -12,7 +12,7 @@ import {
   text_red,
 } from '../../assets/style.ts';
 import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
-import ChevronLeft from '../../assets/img/chevron-left.svg';
+import ChevronLeftRed from '../../assets/img/chevron-left-red.svg';
 import {ReactNativeModal} from 'react-native-modal';
 import CheckSuccess from '../../assets/img/check-success.svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -53,7 +53,7 @@ const ForgotPassword = ({navigation}: any) => {
           bgColor={'#fff'}
           textColor={'#E00'}
           borderColor={'#E00'}
-          icon={<ChevronLeft width={16} height={16} />}
+          icon={<ChevronLeftRed width={16} height={16} />}
         />
       </View>
       <View style={styles.footer}>

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import ChevronLeftIcon from '../../assets/img/chevron-left.svg';
+import ChevronLeftIcon from '../../assets/img/chevron-left-dark.svg';
 import PropTypes, {InferProps} from 'prop-types';
 import {fs_15_700, text_black, text_center} from '../../assets/style.ts';
 
@@ -18,12 +18,12 @@ export default function Header({
             handleGoBack();
           }
         }}>
-        <ChevronLeftIcon width={20} height={20} />
+        <ChevronLeftIcon width={16} height={16} />
       </TouchableOpacity>
       <Text style={[fs_15_700, text_black, text_center, {width: '60%'}]}>
         {title}
       </Text>
-      {rightView ? <View style={styles.rightIcon}>{rightView}</View> : null}
+      {rightView ? <View style={styles.rightIcon}>{rightView}</View> : <View style={styles.rightIcon} />}
     </View>
   );
 }

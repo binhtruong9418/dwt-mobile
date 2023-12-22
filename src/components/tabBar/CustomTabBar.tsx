@@ -1,7 +1,9 @@
-import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Platform, Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 export default function CustomTabBar({state, descriptors, navigation}: any) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      paddingBottom: Platform.OS === 'ios' ? 20 : 7,
+    }]}>
       {state.routes.map((route: any, index: any) => {
         const {options} = descriptors[route.key];
         const icon = options.tabBarIcon;
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 7,
+    paddingTop: 7,
     backgroundColor: '#fff',
     borderTopColor: '#C1C1C1',
     borderTopWidth: 1,

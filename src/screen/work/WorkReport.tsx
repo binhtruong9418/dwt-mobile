@@ -24,6 +24,7 @@ import TrashIcon from '../../assets/img/trash.svg';
 import ImageIcon from '../../assets/img/image-icon.svg';
 import DeleteFileModal from '../../components/common/modal/DeleteFileModal.tsx';
 import ConfirmUploadWorkReportModal from '../../components/common/modal/ConfirmUploadWorkReportModal.tsx';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WorkReport({navigation}: any) {
   const [note, setNote] = useState('');
@@ -56,7 +57,7 @@ export default function WorkReport({navigation}: any) {
     navigation.navigate('Work');
   };
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Header
         title="BÁO CÁO CÔNG VIỆC"
         handleGoBack={() => {
@@ -172,7 +173,7 @@ export default function WorkReport({navigation}: any) {
         setVisible={setIsOpenConfirmUploadWorkReportModal}
         handlePressOk={handlePressOk}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

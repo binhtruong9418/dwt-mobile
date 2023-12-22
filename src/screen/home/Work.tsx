@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import ProgressBlock from '../../components/work/ProgressBlock.tsx';
 import TabBlock from '../../components/work/TabBlock.tsx';
@@ -99,7 +100,7 @@ export default function Work({navigation}: any) {
   const [onOpenTimeSelect, setOnOpenTimeSelect] = useState(false);
   const [onOpenStatusSelect, setOnOpenStatusSelect] = useState(false);
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Header title={'NHẬT TRÌNH CÔNG VIỆC'} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
@@ -148,7 +149,7 @@ export default function Work({navigation}: any) {
         setVisible={setOnOpenStatusSelect}
         setStatusValue={setStatusValue}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -156,7 +157,6 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#F4F4F4',
-    gap: 10,
   },
   content: {
     gap: 10,
