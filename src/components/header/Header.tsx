@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import ChevronLeftIcon from '../../assets/img/chevron-left.svg';
 import PropTypes, {InferProps} from 'prop-types';
-import {fs_15_700, text_black} from '../../assets/style.ts';
+import {fs_15_700, text_black, text_center} from '../../assets/style.ts';
 
 export default function Header({
   title,
@@ -11,6 +11,7 @@ export default function Header({
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
+        style={styles.backIcon}
         hitSlop={10}
         onPress={() => {
           if (handleGoBack) {
@@ -19,8 +20,10 @@ export default function Header({
         }}>
         <ChevronLeftIcon width={20} height={20} />
       </TouchableOpacity>
-      <Text style={[fs_15_700, text_black]}>{title}</Text>
-      {rightView ? rightView : <View style={{width: 20, height: 20}} />}
+      <Text style={[fs_15_700, text_black, text_center, {width: '60%'}]}>
+        {title}
+      </Text>
+      {rightView ? <View style={styles.rightIcon}>{rightView}</View> : null}
     </View>
   );
 }
@@ -29,11 +32,19 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: 10,
     backgroundColor: '#F7F7F7',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingVertical: 15,
+    paddingHorizontal: 10,
+  },
+  backIcon: {
+    width: '20%',
+    alignItems: 'flex-start',
+  },
+  rightIcon: {
+    width: '20%',
+    alignItems: 'flex-end',
   },
 });
 

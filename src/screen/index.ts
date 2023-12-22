@@ -5,3 +5,5 @@ export {default as WorkScreen} from './home/Work.tsx';
 export {default as AttendanceScreen} from './home/Attendance.tsx';
 export {default as NewsScreen} from './home/News.tsx';
 export {default as MenuScreen} from './home/Menu.tsx';
+export {default as WorkDetailScreen} from './work/WorkDetail.tsx';
+export {default as WorkReportScreen} from './work/WorkReport.tsx';
