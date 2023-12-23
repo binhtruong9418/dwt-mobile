@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import Svg, {Circle} from 'react-native-svg';
+import Svg, {Circle, Text} from 'react-native-svg';
 
 interface CircleProgressChartProps {
   total: number;
@@ -11,8 +11,8 @@ interface CircleProgressChartProps {
 
 const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
   progress,
-  size = 50,
-  strokeWidth = 8,
+  size = 54,
+  strokeWidth = 6,
   total,
 }) => {
   const radius = (size - strokeWidth) / 2;
@@ -35,12 +35,33 @@ const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="blue"
+          stroke="#2563EB"
           strokeWidth={strokeWidth}
           fill="none"
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference - (progress / total) * circumference}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          strokeLinecap="round"
         />
+        <Text
+          x={size / 2}
+          y={size / 2 - 6}
+          fill="#000"
+          textAnchor="middle"
+          alignmentBaseline="middle"
+          fontSize={9}>
+          {progress}
+        </Text>
+
+        <Text
+          x={size / 2}
+          y={size / 2 + 6}
+          fill="#000"
+          textAnchor="middle"
+          alignmentBaseline="middle"
+          fontSize={9}>
+          điểm
+        </Text>
       </Svg>
     </View>
   );
@@ -58,6 +79,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  text: {
+    fontSize: 6,
+    fontWeight: '500',
+    lineHeight: 9,
+    textAlign: 'center',
   },
 });
 

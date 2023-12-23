@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {useConnection} from '../redux/connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {authService} from '../api/service/authService.ts';
+import {dwtApi} from '../api/service/dwtApi.ts';
 
 const Stack = createNativeStackNavigator();
 const screenOptions = {
@@ -24,7 +24,7 @@ const Router = () => {
 
     if (accessToken) {
       try {
-        const response = await authService.me();
+        const response = await dwtApi.getMe();
         if (response.status === 200) {
           onSetUserInfo(response.data);
           setIsLogin(true);

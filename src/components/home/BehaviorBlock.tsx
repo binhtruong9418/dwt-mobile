@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {
   bg_green,
   bg_red,
@@ -7,48 +7,85 @@ import {
   text_center,
   text_white,
 } from '../../assets/style.ts';
-export default function BehaviorBlock({}) {
-  const testData1 = [74, 18, 8];
-
-  const testData2 = [15, 15, 35];
+import PropTypes, {InferProps} from 'prop-types';
+import {useMemo} from 'react';
+export default function BehaviorBlock({
+  rewardAndPunishData,
+}: InferProps<typeof BehaviorBlock.propTypes>) {
+  const totalRewardAndPunish = useMemo(() => {
+    return (
+      rewardAndPunishData.rewardsTotal +
+      rewardAndPunishData.punishmentTotal +
+      rewardAndPunishData.reminderTotal
+    );
+  }, [rewardAndPunishData]);
   return (
     <View style={styles.wrapper}>
+      {/*<View style={styles.chart}>*/}
+      {/*  <View*/}
+      {/*    style={[*/}
+      {/*      bg_green,*/}
+      {/*      styles.chartItem,*/}
+      {/*      {flex: rewardAndPunishData / 100},*/}
+      {/*    ]}>*/}
+      {/*    <Text style={[fs_8_700, text_white, text_center]}>*/}
+      {/*      {testData1[0]} HT*/}
+      {/*    </Text>*/}
+      {/*  </View>*/}
+
+      {/*  <View*/}
+      {/*    style={[*/}
+      {/*      bg_yellow,*/}
+      {/*      styles.chartItem,*/}
+      {/*      {flex: testData1[1] / totalRewardAndPunish},*/}
+      {/*    ]}>*/}
+      {/*    <Text style={[fs_8_700, text_white, text_center]}>*/}
+      {/*      {testData1[1]} HT*/}
+      {/*    </Text>*/}
+      {/*  </View>*/}
+
+      {/*  <View style={[bg_red, styles.chartItem, {flex: testData1[2] / 100}]}>*/}
+      {/*    <Text style={[fs_8_700, text_white, text_center]}>*/}
+      {/*      {testData1[2]} HT*/}
+      {/*    </Text>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
+
       <View style={styles.chart}>
-        <View style={[bg_green, styles.chartItem, {flex: testData1[0] / 100}]}>
+        <View
+          style={[
+            bg_green,
+            styles.chartItem,
+            {
+              flex: rewardAndPunishData.rewardsTotal / totalRewardAndPunish,
+            },
+          ]}>
           <Text style={[fs_8_700, text_white, text_center]}>
-            {testData1[0]} HT
+            Khen: {rewardAndPunishData.rewardsTotal}
           </Text>
         </View>
 
-        <View style={[bg_yellow, styles.chartItem, {flex: testData1[1] / 100}]}>
+        <View
+          style={[
+            bg_yellow,
+            styles.chartItem,
+            {
+              flex: rewardAndPunishData.reminderTotal / totalRewardAndPunish,
+            },
+          ]}>
           <Text style={[fs_8_700, text_white, text_center]}>
-            {testData1[1]} HT
+            Sự cố: {rewardAndPunishData.reminderTotal}
           </Text>
         </View>
 
-        <View style={[bg_red, styles.chartItem, {flex: testData1[2] / 100}]}>
+        <View
+          style={[
+            bg_red,
+            styles.chartItem,
+            {flex: rewardAndPunishData.punishmentTotal / totalRewardAndPunish},
+          ]}>
           <Text style={[fs_8_700, text_white, text_center]}>
-            {testData1[2]} HT
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.chart}>
-        <View style={[bg_green, styles.chartItem, {flex: testData2[0] / 65}]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            Khen: {testData2[0]}
-          </Text>
-        </View>
-
-        <View style={[bg_yellow, styles.chartItem, {flex: testData2[1] / 65}]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            Sự cố: {testData2[1]}
-          </Text>
-        </View>
-
-        <View style={[bg_red, styles.chartItem, {flex: testData2[2] / 65}]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            Vi phạm: {testData2[2]}
+            Vi phạm: {rewardAndPunishData.punishmentTotal}
           </Text>
         </View>
       </View>
@@ -86,3 +123,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
 });
+
+BehaviorBlock.propTypes = {
+  rewardAndPunishData: PropTypes.any,
+};

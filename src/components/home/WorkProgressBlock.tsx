@@ -7,12 +7,17 @@ import {
   text_black,
   text_center,
   text_red,
+  w_full,
 } from '../../assets/style';
 import CalendarIcon from '../../assets/img/calendar-icon.svg';
 import ClockIcon from '../../assets/img/clock-icon.svg';
 import ClockOtIcon from '../../assets/img/clock-ot-icon.svg';
 import CircleProgressChart from './CircleProgressChart';
-export default function WorkProgressBlock({}) {
+import PropTypes, {InferProps} from 'prop-types';
+import {padStart} from '../../utils';
+export default function WorkProgressBlock({
+  attendanceData,
+}: InferProps<typeof WorkProgressBlock.propTypes>) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.blockItem}>
@@ -21,7 +26,9 @@ export default function WorkProgressBlock({}) {
             <ClockIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Ngày công</Text>
           </View>
-          <Text style={[fs_12_400, text_black]}>15/24</Text>
+          <Text style={[fs_12_400, text_black]}>
+            {attendanceData.calcDaysWork}/{attendanceData.allDaysWork}
+          </Text>
         </View>
 
         <View style={[row_between, styles.mb4]}>
@@ -29,15 +36,17 @@ export default function WorkProgressBlock({}) {
             <CalendarIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Đã nghỉ / vắng</Text>
           </View>
-          <Text style={[fs_12_400, text_black]}>02</Text>
+          <Text style={[fs_12_400, text_black]}>
+            {padStart(attendanceData.countLate, 2, '0')}
+          </Text>
         </View>
 
-        <View style={[row_between, styles.mb4]}>
-          <View style={styles.row_gap3}>
+        <View style={[styles.row, styles.mb4, w_full]}>
+          <View style={[styles.row_gap3, {width: '80%'}]}>
             <ClockOtIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
-          <Text style={[fs_12_400, text_red]}>09</Text>
+          <Text style={[fs_12_400, text_red]}>{attendanceData.expectedOT}</Text>
         </View>
 
         <Text style={[fs_12_500, text_red, text_center, mt10]}>
@@ -46,17 +55,17 @@ export default function WorkProgressBlock({}) {
       </View>
 
       <View style={styles.blockItem}>
-        <Text style={[fs_12_500, text_red, text_center]}>
-          Lượng việc (Điểm)
-        </Text>
-        <View style={[row_between, styles.mb4]}>
-          <Text style={[fs_12_400, text_black]}>Được giao:</Text>
-          <Text style={[fs_12_400, text_black]}>30/100</Text>
-        </View>
+        <Text style={[fs_12_500, text_red, text_center]}>Lượng việc</Text>
+        <View style={styles.row_chart}>
+          <View style={[styles.col_chart]}>
+            <Text style={[fs_12_400, text_black]}>Cá nhân</Text>
+            <CircleProgressChart total={22} progress={15} />
+          </View>
 
-        <View style={[styles.row_between_chart]}>
-          <Text style={[fs_12_400, text_black]}>Thực hiện:</Text>
-          <CircleProgressChart total={22} progress={15} />
+          <View style={[styles.col_chart]}>
+            <Text style={[fs_12_400, text_black]}>Phòng</Text>
+            <CircleProgressChart total={22} progress={15} />
+          </View>
         </View>
       </View>
     </View>
@@ -67,6 +76,10 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     width: '100%',
+    justifyContent: 'space-between',
+  },
+  row: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   blockItem: {
@@ -87,13 +100,22 @@ const styles = StyleSheet.create({
   row_gap3: {
     flexDirection: 'row',
     gap: 3,
-    alignItems: 'center',
+  },
+  row_chart: {
+    flexDirection: 'row',
+    flex: 1,
   },
   mb4: {
     marginBottom: 4,
   },
-  row_between_chart: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  col_chart: {
+    flexDirection: 'column',
+    flex: 0.5,
+    alignItems: 'center',
+    gap: 5,
   },
 });
+
+WorkProgressBlock.propTypes = {
+  attendanceData: PropTypes.any,
+};

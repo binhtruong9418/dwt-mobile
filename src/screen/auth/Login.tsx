@@ -7,9 +7,9 @@ import {fs_14_400, text_black, text_red} from '../../assets/style.ts';
 import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {validateEmail, validatePhone} from '../../utils';
-import {authService} from '../../api/service/authService.ts';
 import {useConnection} from '../../redux/connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 
 const {width} = Dimensions.get('window');
 const Login = ({navigation}: any) => {
@@ -44,7 +44,7 @@ const Login = ({navigation}: any) => {
 
     try {
       setIsLoading(true);
-      const response = await authService.login(
+      const response = await dwtApi.login(
         username.trim().toLowerCase(),
         password.trim(),
       );

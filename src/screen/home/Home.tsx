@@ -1,4 +1,10 @@
-import {StyleSheet, View, Dimensions, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import HomeHeader from '../../components/home/HomeHeader.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Banner from '../../assets/img/banner.svg';
@@ -7,6 +13,10 @@ import SummaryBlock from '../../components/home/SummaryBlock.tsx';
 import {py20} from '../../assets/style.ts';
 import BehaviorBlock from '../../components/home/BehaviorBlock.tsx';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
+import {useQuery} from '@tanstack/react-query';
+import {useConnection} from '../../redux/connection';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -81,6 +91,34 @@ const tableData = [
   },
 ];
 export default function Home({navigation}: any) {
+  const {
+    connection: {userInfo},
+  } = useConnection();
+
+  const {data: attendanceData, isLoading: isLoadingAttendance} = useQuery(
+    ['getAttendanceInfo'],
+    async () => {
+      const res = await dwtApi.getAttendanceInfo();
+      return res.data;
+    },
+    {
+      enabled: !!userInfo,
+    },
+  );
+
+  const {data: rewardAndPunishData} = useQuery(
+    ['getRewardAndPunish'],
+    async () => {
+      const response = await dwtApi.getRewardAndPunish();
+      return response.data;
+    },
+    {enabled: !!userInfo},
+  );
+
+  if (isLoadingAttendance) {
+    return <PrimaryLoading />;
+  }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <HomeHeader navigation={navigation} />
@@ -94,9 +132,9 @@ export default function Home({navigation}: any) {
           style={[styles.banner]}
         />
         <View style={styles.content}>
-          <WorkProgressBlock />
+          <WorkProgressBlock attendanceData={attendanceData} />
           <SummaryBlock />
-          <BehaviorBlock />
+          <BehaviorBlock rewardAndPunishData={rewardAndPunishData} />
           <PrimaryTable columns={columns} data={tableData} />
         </View>
       </ScrollView>

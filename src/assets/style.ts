@@ -173,6 +173,9 @@ const globalStyle = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  w_full: {
+    width: '100%',
+  },
 });
 
 export const {
@@ -220,4 +223,5 @@ export const {
   mb15,
   mb20,
   row_between,
+  w_full,
 } = globalStyle;
