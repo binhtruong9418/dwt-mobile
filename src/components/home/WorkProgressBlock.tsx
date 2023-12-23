@@ -64,7 +64,10 @@ export default function WorkProgressBlock({
         <View style={styles.row_chart}>
           <View style={[styles.col_chart]}>
             <Text style={[fs_12_400, text_black]}>Cá nhân</Text>
-            <CircleProgressChart total={22} progress={15} />
+            <CircleProgressChart
+              total={Number(workData.tmpTotalKPI)}
+              progress={Number(workData.expectTotalKPI)}
+            />
           </View>
 
           <View style={[styles.col_chart]}>

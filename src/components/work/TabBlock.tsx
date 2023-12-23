@@ -1,26 +1,28 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   fs_14_400,
   text_black,
   text_center,
   text_red,
 } from '../../assets/style.ts';
+import PropTypes, {InferProps} from 'prop-types';
 
-export default function TabBlock({}) {
-  const [activeTab, setActiveTab] = useState('Key');
+export default function TabBlock({
+  currentTab,
+  setCurrentTab,
+}: InferProps<typeof TabBlock.propTypes>) {
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
-        style={[styles.item, activeTab === 'Key' && styles.item_active]}
+        style={[styles.item, currentTab === 0 && styles.item_active]}
         onPress={() => {
-          setActiveTab('Key');
+          setCurrentTab(0);
         }}>
         <Text
           style={[
             fs_14_400,
             text_center,
-            activeTab === 'Key' ? text_red : text_black,
+            currentTab === 0 ? text_red : text_black,
           ]}>
           {'Key'}
         </Text>
@@ -29,15 +31,15 @@ export default function TabBlock({}) {
       <View style={styles.divider} />
 
       <TouchableOpacity
-        style={[styles.item, activeTab === 'NonKey' && styles.item_active]}
+        style={[styles.item, currentTab === 1 && styles.item_active]}
         onPress={() => {
-          setActiveTab('NonKey');
+          setCurrentTab(1);
         }}>
         <Text
           style={[
             fs_14_400,
             text_center,
-            activeTab === 'NonKey' ? text_red : text_black,
+            currentTab === 1 ? text_red : text_black,
           ]}>
           {'NonKey'}
         </Text>
@@ -46,15 +48,15 @@ export default function TabBlock({}) {
       <View style={styles.divider} />
 
       <TouchableOpacity
-        style={[styles.item, activeTab === 'Phát sinh' && styles.item_active]}
+        style={[styles.item, currentTab === 2 && styles.item_active]}
         onPress={() => {
-          setActiveTab('Phát sinh');
+          setCurrentTab(2);
         }}>
         <Text
           style={[
             fs_14_400,
             text_center,
-            activeTab === 'Phát sinh' ? text_red : text_black,
+            currentTab === 2 ? text_red : text_black,
           ]}>
           {'Phát sinh'}
         </Text>
@@ -84,3 +86,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D20019',
   },
 });
+
+TabBlock.propTypes = {
+  currentTab: PropTypes.number.isRequired,
+  setCurrentTab: PropTypes.func.isRequired,
+};

@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import RowDetail from './RowDetail.tsx';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 export default function RowTable({item, columns, bgColor, canShowMore}: any) {
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
@@ -38,6 +38,7 @@ export default function RowTable({item, columns, bgColor, canShowMore}: any) {
       setIsMore(false);
     }
   };
+
   return (
     <View>
       <Pressable style={[styles.row]} onPress={toggleMore}>
@@ -75,7 +76,7 @@ export default function RowTable({item, columns, bgColor, canShowMore}: any) {
             setMoreSectionHeight(e.nativeEvent.layout.height);
           }}
           style={styles.moreContainer}>
-          <RowDetail />
+          <RowDetail data={item} />
         </View>
       </Animated.View>
     </View>
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
   },
   cell: {
     paddingVertical: 7,
+    paddingHorizontal: 3,
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#D9D9D9',

@@ -15,6 +15,14 @@ export const WORK_STATUS_COLOR = {
   '5': '#F5325C',
 };
 
+export const WORK_STATUS = {
+  '1': 'Đã giao',
+  '2': 'Đang làm',
+  '3': 'Đã xong',
+  '4': 'Đã nghiệm thu',
+  '5': 'Trễ',
+};
+
 export const LIST_TIME_FILTER = [
   {
     label: 'Hôm nay',
@@ -45,26 +53,26 @@ export const LIST_TIME_FILTER = [
 export const LIST_WORK_STATUS_FILTER = [
   {
     label: 'Tất cả trạng thái',
-    value: 'all',
+    value: '0',
   },
   {
     label: 'Đã giao',
-    value: 'delivered',
+    value: '1',
   },
   {
     label: 'Đang làm',
-    value: 'working',
+    value: '2',
   },
   {
     label: 'Đã xong',
-    value: 'done',
+    value: '3',
   },
   {
     label: 'Đã nghiệm thu',
-    value: 'tested',
+    value: '4',
   },
   {
     label: 'Trễ',
-    value: 'late',
+    value: '5',
   },
 ];

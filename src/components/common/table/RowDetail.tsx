@@ -7,37 +7,45 @@ import {
 } from '../../../assets/style.ts';
 import {useNavigation} from '@react-navigation/native';
 
-export default function RowDetail({}) {
+export default function RowDetail({data}: any) {
   const navigation = useNavigation();
   return (
     <View style={styles.wrapper}>
       <View style={styles.row}>
         <Text style={[fs_13_700, text_black, styles.title]}>Tên nhiệm vụ:</Text>
-        <Text style={[fs_13_400, text_black, styles.value]}>Báo cáo</Text>
+        <Text style={[fs_13_400, text_black, styles.value]}>{data.name}</Text>
       </View>
 
       <View style={styles.row}>
         <Text style={[fs_13_700, text_black, styles.title]}>ĐVT:</Text>
-        <Text style={[fs_13_400, text_black, styles.value]}>Báo cáo</Text>
+        <Text style={[fs_13_400, text_black, styles.value]}>
+          {data.unit_name}
+        </Text>
       </View>
 
       <View style={styles.row}>
         <Text style={[fs_13_700, text_black, styles.title]}>Chỉ tiêu:</Text>
-        <Text style={[fs_13_400, text_black, styles.value]}>5</Text>
+        <Text style={[fs_13_400, text_black, styles.value]}>
+          {data.totalTarget}
+        </Text>
       </View>
 
       <View style={styles.row}>
         <Text style={[fs_13_700, text_black, styles.title]}>
           Đã hoàn thành:
         </Text>
-        <Text style={[fs_13_400, text_black, styles.value]}>2</Text>
+        <Text style={[fs_13_400, text_black, styles.value]}>
+          {data.totalComplete}
+        </Text>
       </View>
 
       <View style={styles.row}>
         <Text style={[fs_13_700, text_black, styles.title]}>
           Định mức (giờ):
         </Text>
-        <Text style={[fs_13_400, text_black, styles.value]}>40</Text>
+        <Text style={[fs_13_400, text_black, styles.value]}>
+          {data.working_hours}
+        </Text>
       </View>
 
       <View style={styles.listButton}>
@@ -45,7 +53,9 @@ export default function RowDetail({}) {
           style={styles.leftButton}
           onPress={() => {
             // @ts-ignore
-            navigation.navigate('WorkDetail', {});
+            navigation.navigate('WorkDetail', {
+              data: data,
+            });
           }}>
           <Text style={[fs_13_400, text_black]}>Xem chi tiết</Text>
         </TouchableOpacity>
@@ -54,7 +64,9 @@ export default function RowDetail({}) {
           style={styles.rightButton}
           onPress={() => {
             // @ts-ignore
-            navigation.navigate('WorkReport', {});
+            navigation.navigate('WorkReport', {
+              data: data,
+            });
           }}>
           <Text style={[fs_13_400, text_black]}>Báo cáo</Text>
         </TouchableOpacity>

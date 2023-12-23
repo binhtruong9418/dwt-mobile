@@ -46,4 +46,16 @@ export const dwtApi = {
     const url = 'business-standard-history/personal-mobile';
     return await axiosClient.get(url);
   },
+
+  //API lấy danh sách công việc của cá nhân ( key, nonkey)
+  getListWork: async (params = {}): Promise<any> => {
+    const url = 'business-standard-history/personal';
+    return await axiosClient.get(url, {params});
+  },
+
+  //API lấy danh sách công việc phát sinh của cá nhân
+  getListWorkArise: async (params = {}): Promise<any> => {
+    const url = 'business-standard-work-arise/user-report';
+    return await axiosClient.get(url, {params});
+  },
 };

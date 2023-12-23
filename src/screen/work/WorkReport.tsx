@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import Header from '../../components/header/Header.tsx';
 import {
-  fs_14_400,
   fs_15_400,
   fs_15_700,
   text_black,
   text_center,
+  text_gray,
   text_red,
   text_white,
 } from '../../assets/style.ts';
@@ -22,19 +22,20 @@ import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import UploadFileModal from '../../components/common/modal/UploadFileModal.tsx';
 import TrashIcon from '../../assets/img/trash.svg';
 import ImageIcon from '../../assets/img/image-icon.svg';
-import DeleteFileModal from '../../components/common/modal/DeleteFileModal.tsx';
 import ConfirmUploadWorkReportModal from '../../components/common/modal/ConfirmUploadWorkReportModal.tsx';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import dayjs from 'dayjs';
+import CancelUploadWorkReport from '../../components/common/modal/CancelUploadWorkReport.tsx';
 
-export default function WorkReport({navigation}: any) {
+export default function WorkReport({route, navigation}: any) {
+  const {data} = route.params;
   const [note, setNote] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
   const [isCompletedAndReport, setIsCompletedAndReport] = useState(false);
   const [kpi, setKpi] = useState('');
   const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
   const [files, setFiles] = useState<any[]>([]);
-  const [isOpenDeleteFileModal, setIsOpenDeleteFileModal] = useState(false);
-  const [fileDeleteIndex, setFileDeleteIndex] = useState<number | null>(null);
+  const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
   const [
     isOpenConfirmUploadWorkReportModal,
     setIsOpenConfirmUploadWorkReportModal,
@@ -44,11 +45,10 @@ export default function WorkReport({navigation}: any) {
     setFiles([...files, `Ảnh ${files.length + 1}`]);
   };
 
-  const handleDeleteFile = () => {
+  const handleDeleteFile = (fileDeleteIndex: number) => {
     if (fileDeleteIndex !== null) {
       const newFiles = files.filter((item, index) => index !== fileDeleteIndex);
       setFiles(newFiles);
-      setIsOpenDeleteFileModal(false);
     }
   };
 
@@ -56,12 +56,21 @@ export default function WorkReport({navigation}: any) {
     setIsOpenConfirmUploadWorkReportModal(false);
     navigation.navigate('Work');
   };
+
+  const handleCancelUploadReport = () => {
+    setIsOpenCancelReportModal(false);
+    navigation.navigate('Work');
+  };
+
+  if (!data) {
+    return null;
+  }
   return (
     <SafeAreaView style={styles.wrapper}>
       <Header
         title="BÁO CÁO CÔNG VIỆC"
         handleGoBack={() => {
-          navigation.navigate('Work');
+          setIsOpenCancelReportModal(true);
         }}
         rightView={
           <TouchableOpacity
@@ -75,7 +84,7 @@ export default function WorkReport({navigation}: any) {
       />
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={[fs_15_700, text_black, text_center]}>
-          Ngày 15/12/2023
+          Ngày {dayjs(new Date()).format('DD/MM/YYYY')}
         </Text>
 
         <View style={styles.inputBox}>
@@ -83,7 +92,7 @@ export default function WorkReport({navigation}: any) {
           <TextInput
             style={[styles.input, text_black, fs_15_400, styles.disable]}
             placeholderTextColor={'#787878'}
-            placeholder={'Chào giá xe'}
+            placeholder={data.name}
             editable={false}
           />
         </View>
@@ -110,14 +119,19 @@ export default function WorkReport({navigation}: any) {
             labelStyle={styles.labelStyle}
           />
           {isCompleted && (
-            <TextInput
-              style={[styles.input, text_black, fs_15_400]}
-              placeholderTextColor={'#787878'}
-              placeholder={'Đạt giá trị'}
-              value={kpi}
-              onChangeText={setKpi}
-              keyboardType="numeric"
-            />
+            <View style={styles.row_gap10}>
+              <TextInput
+                style={[styles.input, text_black, fs_15_400]}
+                placeholderTextColor={'#787878'}
+                placeholder={'Đạt giá trị'}
+                value={kpi}
+                onChangeText={setKpi}
+                keyboardType="numeric"
+              />
+              <Text style={[fs_15_400, text_gray]}>
+                {data.unit_name}/{data.totalTarget} {data.unit_name}
+              </Text>
+            </View>
           )}
         </View>
 
@@ -137,10 +151,7 @@ export default function WorkReport({navigation}: any) {
                 </View>
                 <TouchableOpacity
                   hitSlop={10}
-                  onPress={() => {
-                    setFileDeleteIndex(index);
-                    setIsOpenDeleteFileModal(true);
-                  }}>
+                  onPress={() => handleDeleteFile(index)}>
                   <TrashIcon width={20} height={20} />
                 </TouchableOpacity>
               </View>
@@ -163,10 +174,10 @@ export default function WorkReport({navigation}: any) {
         visible={isOpenUploadFileModal}
         setVisible={setIsOpenUploadFileModal}
       />
-      <DeleteFileModal
-        visible={isOpenDeleteFileModal}
-        setVisible={setIsOpenDeleteFileModal}
-        handleDelete={handleDeleteFile}
+      <CancelUploadWorkReport
+        visible={isOpenCancelReportModal}
+        setVisible={setIsOpenCancelReportModal}
+        handleCancelUploadReport={handleCancelUploadReport}
       />
       <ConfirmUploadWorkReportModal
         visible={isOpenConfirmUploadWorkReportModal}
@@ -234,5 +245,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     width: '80%',
+  },
+  row_gap10: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'flex-end',
   },
 });

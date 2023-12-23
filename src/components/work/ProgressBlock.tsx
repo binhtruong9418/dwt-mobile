@@ -1,8 +1,16 @@
 import {StyleSheet, Text, View} from 'react-native';
 import {fs_14_400, row_between, text_black} from '../../assets/style.ts';
 import Svg, {Rect} from 'react-native-svg';
+import PropTypes, {InferProps} from 'prop-types';
 
-export default function ProgressBlock({}) {
+export default function ProgressBlock({
+  totalKeyWork,
+  totalNonKeyWork,
+  totalAriseWork,
+  totalKeyWorkCompleted,
+  totalNonKeyWorkCompleted,
+  totalAriseWorkCompleted,
+}: InferProps<typeof ProgressBlock.propTypes>) {
   return (
     <View style={styles.wrapper}>
       <View style={[row_between]}>
@@ -11,11 +19,17 @@ export default function ProgressBlock({}) {
           <View style={[styles.chart, {height: 6}]}>
             <Svg width={'100%'} height={6}>
               <Rect x="0" y="0" width={'100%'} height={6} fill={'#F1F1F1'} />
-              <Rect x="0" y="0" width={50 + '%'} height={6} fill={'#FF8926'} />
+              <Rect
+                x="0"
+                y="0"
+                width={(totalKeyWorkCompleted / totalKeyWork) * 100 + '%'}
+                height={6}
+                fill={'#FF8926'}
+              />
             </Svg>
           </View>
         </View>
-        <Text style={styles.text}>20</Text>
+        <Text style={styles.text}>{totalKeyWork}</Text>
       </View>
 
       <View style={[row_between]}>
@@ -24,11 +38,17 @@ export default function ProgressBlock({}) {
           <View style={[styles.chart, {height: 6}]}>
             <Svg width={'100%'} height={6}>
               <Rect x="0" y="0" width={'100%'} height={6} fill={'#F1F1F1'} />
-              <Rect x="0" y="0" width={30 + '%'} height={6} fill={'#00C644'} />
+              <Rect
+                x="0"
+                y="0"
+                width={(totalNonKeyWorkCompleted / totalNonKeyWork) * 100 + '%'}
+                height={6}
+                fill={'#00C644'}
+              />
             </Svg>
           </View>
         </View>
-        <Text style={styles.text}>20</Text>
+        <Text style={styles.text}>{totalNonKeyWork}</Text>
       </View>
 
       <View style={[row_between]}>
@@ -37,11 +57,17 @@ export default function ProgressBlock({}) {
           <View style={[styles.chart, {height: 6}]}>
             <Svg width={'100%'} height={6}>
               <Rect x="0" y="0" width={'100%'} height={6} fill={'#F1F1F1'} />
-              <Rect x="0" y="0" width={25 + '%'} height={6} fill={'#5EA8EE'} />
+              <Rect
+                x="0"
+                y="0"
+                width={(totalAriseWorkCompleted / totalAriseWork) * 100 + '%'}
+                height={6}
+                fill={'#5EA8EE'}
+              />
             </Svg>
           </View>
         </View>
-        <Text style={styles.text}>20</Text>
+        <Text style={styles.text}>{totalAriseWork}</Text>
       </View>
     </View>
   );
@@ -73,3 +99,12 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
 });
+
+ProgressBlock.propTypes = {
+  totalKeyWork: PropTypes.number.isRequired,
+  totalNonKeyWork: PropTypes.number.isRequired,
+  totalAriseWork: PropTypes.number.isRequired,
+  totalKeyWorkCompleted: PropTypes.number.isRequired,
+  totalNonKeyWorkCompleted: PropTypes.number.isRequired,
+  totalAriseWorkCompleted: PropTypes.number.isRequired,
+};

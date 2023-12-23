@@ -130,13 +130,12 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: 'rgba(217, 217, 217, 0.75)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     margin: 0,
   },
   content: {
     backgroundColor: '#FFF',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   row_center: {
     flexDirection: 'row',

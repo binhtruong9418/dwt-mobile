@@ -7,9 +7,8 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
-import ProgressBlock from '../../components/work/ProgressBlock.tsx';
 import TabBlock from '../../components/work/TabBlock.tsx';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import AddIcon from '../../assets/img/add.svg';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
@@ -19,7 +18,11 @@ import WorkStatusFilterModal from '../../components/common/modal/WorkStatusFilte
 import {
   LIST_TIME_FILTER,
   LIST_WORK_STATUS_FILTER,
+  WORK_STATUS_COLOR,
 } from '../../assets/constant.ts';
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 
 const columns = [
   {
@@ -33,61 +36,24 @@ const columns = [
     width: 0.3,
   },
   {
-    key: 'unit',
+    key: 'unit_name',
     title: 'ĐVT',
-    width: 0.2,
+    width: 0.15,
   },
   {
     key: 'amount',
-    title: 'Số lượng',
-    width: 0.2,
+    title: 'Chỉ tiêu',
+    width: 0.15,
   },
   {
-    key: 'kpi',
-    title: 'NS/KPI',
-    width: 0.2,
-  },
-];
-const tableData = [
-  {
-    index: 1,
-    name: 'Chào giá xe',
-    unit: 'Lượt',
-    amount: '5',
-    kpi: '2',
-    bgColor: '#FFB822',
+    key: 'accumulatedTotal',
+    title: 'Lũy kế',
+    width: 0.15,
   },
   {
-    index: 2,
-    name: 'Thăm hỏi đại lý',
-    unit: 'Lần',
-    amount: '10',
-    kpi: '2',
-    bgColor: '#89B6FA',
-  },
-  {
-    index: 3,
-    name: 'Khảo sát thị trường',
-    unit: 'Lượt',
-    amount: '5',
-    kpi: '2',
-    bgColor: '#FFB822',
-  },
-  {
-    index: 4,
-    name: 'Thăm hỏi đại lý',
-    unit: 'Lượt',
-    amount: '5',
-    kpi: '2',
-    bgColor: '#F5325C',
-  },
-  {
-    index: 5,
-    name: 'Thăm hỏi đại lý',
-    unit: 'Lượt',
-    amount: '5',
-    kpi: '2',
-    bgColor: '#03D87F',
+    key: 'todayTotal',
+    title: 'Hôm nay',
+    width: 0.15,
   },
 ];
 export default function Work({navigation}: any) {
@@ -99,13 +65,158 @@ export default function Work({navigation}: any) {
   });
   const [onOpenTimeSelect, setOnOpenTimeSelect] = useState(false);
   const [onOpenStatusSelect, setOnOpenStatusSelect] = useState(false);
+  const [paramsSearch, setParamsSearch] = useState({
+    date: '',
+  });
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const {
+    data: {listKeyWorkData, listNonKeyWorkData, listAriseWorkData} = {
+      listAriseWorkData: [],
+      listKeyWorkData: [],
+      listNonKeyWorkData: [],
+    },
+    isLoading: isLoadingListWork,
+  } = useQuery(['getListKeyAndNonKeyWork'], async () => {
+    const keyWorkRes = await dwtApi.getListWork(paramsSearch);
+    const arisWorkRes = await dwtApi.getListWorkArise(paramsSearch);
+    return {
+      listKeyWorkData: keyWorkRes.data.business_standard_key_all,
+      listNonKeyWorkData: keyWorkRes.data.business_standard_non_key_all,
+      listAriseWorkData: arisWorkRes.data.businessStandardWorkArise.data,
+    };
+  });
+
+  const tableData = useMemo(() => {
+    switch (currentTab) {
+      case 0:
+        return listKeyWorkData
+          .map((work: any, index: number) => {
+            return {
+              ...work,
+              index: index + 1,
+              amount: work.business_standard_quantity_display || '0/0',
+              accumulatedTotal: 0,
+              todayTotal: 0,
+              totalTarget:
+                work.business_standard_quantity_display.split('/')[1],
+              totalComplete: work.business_standard_result,
+              bgColor:
+                work.business_standard_reports.length > 0
+                  ? // @ts-ignore
+                    WORK_STATUS_COLOR[
+                      work.business_standard_reports[0].actual_state
+                    ]
+                  : '#FFF',
+            };
+          })
+          .filter((work: any) => {
+            if (statusValue.value === '0') {
+              return true;
+            }
+            if (work.business_standard_reports.length > 0) {
+              return (
+                work.business_standard_reports[0].actual_state.toString() ===
+                statusValue.value
+              );
+            }
+            if (
+              statusValue.value === '1' &&
+              work.business_standard_reports.length === 0
+            ) {
+              return true;
+            }
+            return false;
+          });
+      case 1:
+        return listNonKeyWorkData
+          .map((work: any, index: number) => {
+            return {
+              ...work,
+              index: index + 1,
+              amount: work.business_standard_quantity_display || '0/0',
+              accumulatedTotal: 0,
+              todayTotal: 0,
+              totalTarget:
+                work.business_standard_quantity_display.split('/')[1],
+              totalComplete: work.business_standard_result,
+              bgColor:
+                work.business_standard_reports.length > 0
+                  ? // @ts-ignore
+                    WORK_STATUS_COLOR[
+                      work.business_standard_reports[0].actual_state
+                    ]
+                  : '#FFF',
+            };
+          })
+          .filter((work: any) => {
+            if (statusValue.value === '0') {
+              return true;
+            }
+            if (work.business_standard_reports.length > 0) {
+              return (
+                work.business_standard_reports[0].actual_state.toString() ===
+                statusValue.value
+              );
+            }
+            if (
+              statusValue.value === '1' &&
+              work.business_standard_reports.length === 0
+            ) {
+              return true;
+            }
+            return false;
+          });
+      case 2:
+        return listAriseWorkData.map((work: any, index: number) => {
+          const listLog = work.business_standard_arise_logs || [];
+          const totalAmountCompleted =
+            listLog.length > 0 && listLog[listLog.length - 1].quantity
+              ? listLog[listLog.length - 1].quantity
+              : 0;
+          const totalAmount = work.quantity ? work.quantity : 0;
+          return {
+            ...work,
+            index: index + 1,
+            amount: totalAmountCompleted + '/' + totalAmount,
+            totalTarget: totalAmount,
+            totalComplete: totalAmountCompleted,
+            accumulatedTotal: 0,
+            todayTotal: 0,
+            bgColor:
+              listLog.length > 0 && listLog[listLog.length - 1].actual_state
+                ? // @ts-ignore
+                  WORK_STATUS_COLOR[listLog[listLog.length - 1].actual_state]
+                : '#FFF',
+          };
+        });
+      default:
+        return [];
+    }
+  }, [
+    currentTab,
+    statusValue,
+    timeValue,
+    listKeyWorkData,
+    listNonKeyWorkData,
+    listAriseWorkData,
+  ]);
+
+  if (isLoadingListWork) {
+    return <PrimaryLoading />;
+  }
+
   return (
     <SafeAreaView style={styles.wrapper}>
-      <Header title={'NHẬT TRÌNH CÔNG VIỆC'} />
+      <Header
+        title={'NHẬT TRÌNH CÔNG VIỆC'}
+        handleGoBack={() => {
+          navigation.goBack();
+        }}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
-          <ProgressBlock />
-          <TabBlock />
+          <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
           <View style={styles.filter_wrapper}>
             <TouchableOpacity
               style={styles.dropdown}
@@ -148,6 +259,7 @@ export default function Work({navigation}: any) {
         visible={onOpenStatusSelect}
         setVisible={setOnOpenStatusSelect}
         setStatusValue={setStatusValue}
+        statusValue={statusValue}
       />
     </SafeAreaView>
   );

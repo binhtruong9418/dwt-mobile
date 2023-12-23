@@ -11,6 +11,7 @@ import PropTypes, {InferProps} from 'prop-types';
 import {useMemo} from 'react';
 export default function BehaviorBlock({
   rewardAndPunishData,
+  workSummary,
 }: InferProps<typeof BehaviorBlock.propTypes>) {
   const totalRewardAndPunish = useMemo(() => {
     return (
@@ -21,35 +22,40 @@ export default function BehaviorBlock({
   }, [rewardAndPunishData]);
   return (
     <View style={styles.wrapper}>
-      {/*<View style={styles.chart}>*/}
-      {/*  <View*/}
-      {/*    style={[*/}
-      {/*      bg_green,*/}
-      {/*      styles.chartItem,*/}
-      {/*      {flex: rewardAndPunishData / 100},*/}
-      {/*    ]}>*/}
-      {/*    <Text style={[fs_8_700, text_white, text_center]}>*/}
-      {/*      {testData1[0]} HT*/}
-      {/*    </Text>*/}
-      {/*  </View>*/}
+      <View style={styles.chart}>
+        <View
+          style={[
+            bg_green,
+            styles.chartItem,
+            {flex: workSummary.done / workSummary.total},
+          ]}>
+          <Text style={[fs_8_700, text_white, text_center]}>
+            {workSummary.done} HT
+          </Text>
+        </View>
 
-      {/*  <View*/}
-      {/*    style={[*/}
-      {/*      bg_yellow,*/}
-      {/*      styles.chartItem,*/}
-      {/*      {flex: testData1[1] / totalRewardAndPunish},*/}
-      {/*    ]}>*/}
-      {/*    <Text style={[fs_8_700, text_white, text_center]}>*/}
-      {/*      {testData1[1]} HT*/}
-      {/*    </Text>*/}
-      {/*  </View>*/}
+        <View
+          style={[
+            bg_yellow,
+            styles.chartItem,
+            {flex: workSummary.working / workSummary.total},
+          ]}>
+          <Text style={[fs_8_700, text_white, text_center]}>
+            {workSummary.working} DL
+          </Text>
+        </View>
 
-      {/*  <View style={[bg_red, styles.chartItem, {flex: testData1[2] / 100}]}>*/}
-      {/*    <Text style={[fs_8_700, text_white, text_center]}>*/}
-      {/*      {testData1[2]} HT*/}
-      {/*    </Text>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
+        <View
+          style={[
+            bg_red,
+            styles.chartItem,
+            {flex: workSummary.late / workSummary.total},
+          ]}>
+          <Text style={[fs_8_700, text_white, text_center]}>
+            {workSummary.late} T
+          </Text>
+        </View>
+      </View>
 
       <View style={styles.chart}>
         <View
@@ -126,4 +132,5 @@ const styles = StyleSheet.create({
 
 BehaviorBlock.propTypes = {
   rewardAndPunishData: PropTypes.any,
+  workSummary: PropTypes.any,
 };

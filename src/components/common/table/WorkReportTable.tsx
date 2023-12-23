@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#D9D9D9',
+    paddingHorizontal: 3,
   },
 });
 

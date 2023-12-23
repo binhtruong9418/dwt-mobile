@@ -11,8 +11,31 @@ import {
   text_red,
 } from '../../assets/style.ts';
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
+import {useConnection} from '../../redux/connection';
+import {LIST_WORK_STATUS_FILTER, WORK_STATUS} from '../../assets/constant.ts';
+import {useMemo} from 'react';
 
-export default function WorkDetail({navigation}: any) {
+export default function WorkDetail({route, navigation}: any) {
+  const {data} = route.params;
+  const {
+    connection: {userInfo},
+  } = useConnection();
+  if (!data) {
+    return null;
+  }
+
+  const workStatus = useMemo(() => {
+    const report =
+      data.business_standard_reports.length > 0
+        ? data.business_standard_reports[0]
+        : null;
+    if (report) {
+      // @ts-ignore
+      return WORK_STATUS[report.actual_state];
+    }
+    return '';
+  }, []);
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <Header
@@ -28,11 +51,11 @@ export default function WorkDetail({navigation}: any) {
           data={[
             {
               label: 'Tên nhiệm vụ',
-              value: 'Nhiệm vụ 1',
+              value: data.name,
             },
             {
               label: 'Mô tả',
-              value: 'Xe đẩy điện',
+              value: data.desc,
             },
             {
               label: 'Mục tiêu',
@@ -40,15 +63,27 @@ export default function WorkDetail({navigation}: any) {
             },
             {
               label: 'Người đảm nhiệm',
-              value: 'Nguyễn Văn A',
+              value: userInfo.name,
+            },
+            {
+              label: 'Trạng thái',
+              value: workStatus,
             },
             {
               label: 'Tổng thời gian tạm tính',
-              value: '5 giờ',
+              value: data.working_hours + ' giờ',
             },
             {
-              label: 'KPI',
-              value: 'KPI nhiệm vụ',
+              label: 'ĐVT',
+              value: data.unit_name,
+            },
+            {
+              label: 'Chỉ tiêu',
+              value: data.totalTarget,
+            },
+            {
+              label: 'Tổng KPI dự kiến',
+              value: data.kpi,
             },
           ]}
         />
@@ -56,19 +91,21 @@ export default function WorkDetail({navigation}: any) {
           data={[
             {
               label: 'Số báo cáo đã lập trong tháng',
-              value: '1 báo cáo',
+              value: data.business_standard_report_logs.length + ' báo cáo',
             },
             {
               label: 'Giá trị đạt được trong tháng (12)',
-              value: '5/10',
+              value: data.totalComplete + '/' + data.totalTarget,
             },
             {
               label: '% hoàn thành công việc',
-              value: '50%',
+              value:
+                ((data.totalComplete / data.totalTarget) * 100).toFixed(0) +
+                '%',
             },
             {
               label: 'Điểm KPI tạm tính',
-              value: '1.75',
+              value: data.kpi,
             },
           ]}
         />
@@ -79,16 +116,28 @@ export default function WorkDetail({navigation}: any) {
           </Text>
           <View style={styles.inputBox}>
             <TextInput
-              style={[styles.inputContent, text_black, fs_15_400]}
+              style={[
+                styles.inputContent,
+                text_black,
+                fs_15_400,
+                styles.disableInput,
+              ]}
               placeholderTextColor={'#787878'}
               placeholder={'Nhập nội dung'}
               multiline={true}
+              editable={false}
             />
             <TextInput
-              style={[styles.inputGrade, text_black, fs_15_400]}
+              style={[
+                styles.inputGrade,
+                text_black,
+                fs_15_400,
+                styles.disableInput,
+              ]}
               placeholderTextColor={'#787878'}
               placeholder={'Điểm KPI'}
               keyboardType="numeric"
+              editable={false}
             />
           </View>
         </View>
@@ -99,16 +148,28 @@ export default function WorkDetail({navigation}: any) {
           </Text>
           <View style={styles.inputBox}>
             <TextInput
-              style={[styles.inputContent, text_black, fs_15_400]}
+              style={[
+                styles.inputContent,
+                text_black,
+                fs_15_400,
+                styles.disableInput,
+              ]}
               placeholderTextColor={'#787878'}
               placeholder={'Nhập nội dung'}
               multiline={true}
+              editable={false}
             />
             <TextInput
-              style={[styles.inputGrade, text_black, fs_15_400]}
+              style={[
+                styles.inputGrade,
+                text_black,
+                fs_15_400,
+                styles.disableInput,
+              ]}
               placeholderTextColor={'#787878'}
               placeholder={'Điểm KPI'}
               keyboardType="numeric"
+              editable={false}
             />
           </View>
         </View>
@@ -119,7 +180,7 @@ export default function WorkDetail({navigation}: any) {
             columns={[
               {
                 title: 'Ngày báo cáo',
-                key: 'data',
+                key: 'date',
                 width: 3 / 11,
               },
               {
@@ -138,56 +199,16 @@ export default function WorkDetail({navigation}: any) {
                 width: 3 / 11,
               },
             ]}
-            data={[
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-              {
-                data: '01/01/2021',
-                value: '5',
-                valueDone: '5',
-                dateDone: '01/01/2021',
-              },
-            ]}
+            data={data.business_standard_report_logs.map((item: any) => {
+              console.log(data.reported_date);
+              return {
+                ...item,
+                date: item.reported_date || '',
+                value: item.quantity || 0,
+                dateDone: item.updated_date || '',
+                valueDone: item.manager_quantity || 0,
+              };
+            })}
           />
         </View>
       </ScrollView>
@@ -228,5 +249,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 3,
+  },
+  disableInput: {
+    backgroundColor: '#D9D9D9',
   },
 });

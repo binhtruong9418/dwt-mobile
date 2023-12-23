@@ -12,11 +12,11 @@ import {
 } from '../../../assets/style.ts';
 import PropTypes, {InferProps} from 'prop-types';
 
-export default function DeleteFileModal({
+export default function CancelUploadWorkReport({
   visible,
   setVisible,
-  handleDelete,
-}: InferProps<typeof DeleteFileModal.propTypes>) {
+  handleCancelUploadReport,
+}: InferProps<typeof CancelUploadWorkReport.propTypes>) {
   return (
     <ReactNativeModal
       isVisible={visible}
@@ -45,7 +45,7 @@ export default function DeleteFileModal({
 
         <View style={styles.divider} />
 
-        <TouchableOpacity onPress={handleDelete}>
+        <TouchableOpacity onPress={handleCancelUploadReport}>
           <Text
             style={[fs_15_400, text_red, text_center, {paddingVertical: 15}]}>
             Hủy báo cáo
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
   },
 });
 
-DeleteFileModal.propTypes = {
+CancelUploadWorkReport.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
+  handleCancelUploadReport: PropTypes.func.isRequired,
 };

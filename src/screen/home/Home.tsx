@@ -80,23 +80,33 @@ export default function Home({navigation}: any) {
   );
 
   const {
-    data: {listWork, monthOverview, workData} = {
+    data: {listWork, monthOverview, workData, workSummary} = {
       listWork: [],
       monthOverview: {},
       workData: {},
+      workSummary: {},
     },
     isLoading: isLoadingWork,
   } = useQuery(['getWorkListAndPoint'], async () => {
     const res = await dwtApi.getWorkListAndPoint();
-    const listWork = [
-      ...res.data.kpi.keys,
-      ...res.data.kpi.noneKeys,
-      ...res.data.kpi.workArise,
-    ];
+    const kpi = res.data.kpi;
+    const listWork = [...kpi.keys, ...kpi.noneKeys, ...kpi.workArise];
+    const workSummary = {
+      done: listWork.filter((item: any) => item.actual_state === 4).length,
+      working: listWork.filter((item: any) => item.actual_state === 2).length,
+      late: listWork.filter((item: any) => item.actual_state === 5).length,
+      total: listWork.filter(
+        (item: any) =>
+          item.actual_state === 4 ||
+          item.actual_state === 2 ||
+          item.actual_state === 5,
+      ).length,
+    };
     return {
       listWork: listWork,
-      monthOverview: res.data.kpi.monthOverview,
-      workData: res.data.kpi,
+      monthOverview: kpi.monthOverview,
+      workData: kpi,
+      workSummary,
     };
   });
 
@@ -128,8 +138,11 @@ export default function Home({navigation}: any) {
             checkOut={checkOutTime}
             workData={workData}
           />
-          <SummaryBlock />
-          <BehaviorBlock rewardAndPunishData={rewardAndPunishData} />
+          <SummaryBlock monthOverview={monthOverview} />
+          <BehaviorBlock
+            rewardAndPunishData={rewardAndPunishData}
+            workSummary={workSummary}
+          />
           <PrimaryTable
             columns={columns}
             data={listWork.map((item: any, index: number) => {

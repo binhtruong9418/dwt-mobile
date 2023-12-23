@@ -8,17 +8,16 @@ import {useState} from 'react';
 import PrimaryButton from '../button/PrimaryButton.tsx';
 import {
   LIST_WORK_STATUS_FILTER,
-  WorkStatusColor,
+  WORK_STATUS_COLOR,
 } from '../../../assets/constant.ts';
 
 export default function WorkStatusFilterModal({
   visible,
   setVisible,
   setStatusValue,
+  statusValue,
 }: InferProps<typeof WorkStatusFilterModal.propTypes>) {
-  const [currentFilter, setCurrentFilter] = useState(
-    LIST_WORK_STATUS_FILTER[0].value,
-  );
+  const [currentFilter, setCurrentFilter] = useState(statusValue.value);
 
   const handleChangeCheck = (value: string) => {
     setCurrentFilter(value);
@@ -67,7 +66,7 @@ export default function WorkStatusFilterModal({
                 index === 0 && styles.borderTopBottom,
                 {
                   // @ts-ignore
-                  backgroundColor: WorkStatusColor[item.value],
+                  backgroundColor: WORK_STATUS_COLOR[item.value],
                 },
               ]}>
               <PrimaryCheckbox
@@ -92,13 +91,12 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: 'rgba(217, 217, 217, 0.75)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     margin: 0,
   },
   content: {
     backgroundColor: '#FFF',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   header: {
     paddingVertical: 13,
@@ -137,4 +135,5 @@ WorkStatusFilterModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
   setStatusValue: PropTypes.func.isRequired,
+  statusValue: PropTypes.any,
 };
