@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, View, Dimensions, ScrollView} from 'react-native';
 import HomeHeader from '../../components/home/HomeHeader.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Banner from '../../assets/img/banner.svg';
@@ -17,6 +11,8 @@ import {useQuery} from '@tanstack/react-query';
 import {useConnection} from '../../redux/connection';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import dayjs from 'dayjs';
+import {WORK_STATUS_COLOR} from '../../assets/constant.ts';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -32,62 +28,14 @@ const columns = [
     width: 0.4,
   },
   {
-    key: 'amount',
+    key: 'business_standard_quantity_display',
     title: 'Số lượng',
     width: 0.25,
   },
   {
-    key: 'kpi',
+    key: 'business_standard_score_tmp',
     title: 'NS/KPI',
     width: 0.25,
-  },
-];
-const tableData = [
-  {
-    index: 1,
-    name: 'Báo cáo',
-    amount: '3/10',
-    kpi: '2',
-    bgColor: '#FFB822',
-  },
-
-  {
-    index: 2,
-    name: 'Đào tạo',
-    amount: '3/2',
-    kpi: '6',
-    bgColor: '#03D87F',
-  },
-
-  {
-    index: 3,
-    name: 'Bảo dưỡng xe',
-    amount: '3/2',
-    kpi: '2',
-    bgColor: '#89B6FA',
-  },
-
-  {
-    index: 4,
-    name: 'Bảo dưỡng xe',
-    amount: '3/10',
-    kpi: '2',
-    bgColor: '#FFF',
-  },
-  {
-    index: 5,
-    name: 'Báo cáo',
-    amount: '3/10',
-    kpi: '2',
-    bgColor: '#F5325C',
-  },
-
-  {
-    index: 6,
-    name: 'Đào tạo',
-    amount: '3/2',
-    kpi: '6',
-    bgColor: '#03D87F',
   },
 ];
 export default function Home({navigation}: any) {
@@ -95,27 +43,69 @@ export default function Home({navigation}: any) {
     connection: {userInfo},
   } = useConnection();
 
+  const {
+    data: {checkInTime, checkOutTime} = {},
+    isLoading: isLoadingAttendanceDay,
+  } = useQuery(['getAttendanceByDate'], async () => {
+    const currentDate = new Date();
+    const dateDay = dayjs(currentDate).format('YYYY-MM-DD');
+    const res = await dwtApi.getAttendanceByDate(userInfo.id, dateDay);
+    if (res.status === 200) {
+      return {
+        checkInTime: res.data.checkIn,
+        checkOutTime: res.data.checkOut,
+      };
+    } else if (res.status === 404) {
+      return {
+        checkInTime: null,
+        checkOutTime: null,
+      };
+    }
+  });
+
   const {data: attendanceData, isLoading: isLoadingAttendance} = useQuery(
     ['getAttendanceInfo'],
     async () => {
       const res = await dwtApi.getAttendanceInfo();
       return res.data;
     },
-    {
-      enabled: !!userInfo,
-    },
   );
 
-  const {data: rewardAndPunishData} = useQuery(
+  const {data: rewardAndPunishData, isLoading: isLoadingReward} = useQuery(
     ['getRewardAndPunish'],
     async () => {
       const response = await dwtApi.getRewardAndPunish();
       return response.data;
     },
-    {enabled: !!userInfo},
   );
 
-  if (isLoadingAttendance) {
+  const {
+    data: {listWork, monthOverview, workData} = {
+      listWork: [],
+      monthOverview: {},
+      workData: {},
+    },
+    isLoading: isLoadingWork,
+  } = useQuery(['getWorkListAndPoint'], async () => {
+    const res = await dwtApi.getWorkListAndPoint();
+    const listWork = [
+      ...res.data.kpi.keys,
+      ...res.data.kpi.noneKeys,
+      ...res.data.kpi.workArise,
+    ];
+    return {
+      listWork: listWork,
+      monthOverview: res.data.kpi.monthOverview,
+      workData: res.data.kpi,
+    };
+  });
+
+  if (
+    isLoadingAttendance ||
+    isLoadingReward ||
+    isLoadingWork ||
+    isLoadingAttendanceDay
+  ) {
     return <PrimaryLoading />;
   }
 
@@ -132,10 +122,25 @@ export default function Home({navigation}: any) {
           style={[styles.banner]}
         />
         <View style={styles.content}>
-          <WorkProgressBlock attendanceData={attendanceData} />
+          <WorkProgressBlock
+            attendanceData={attendanceData}
+            checkIn={checkInTime}
+            checkOut={checkOutTime}
+            workData={workData}
+          />
           <SummaryBlock />
           <BehaviorBlock rewardAndPunishData={rewardAndPunishData} />
-          <PrimaryTable columns={columns} data={tableData} />
+          <PrimaryTable
+            columns={columns}
+            data={listWork.map((item: any, index: number) => {
+              return {
+                ...item,
+                index: index + 1,
+                // @ts-ignore
+                bgColor: WORK_STATUS_COLOR[item.actual_state],
+              };
+            })}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

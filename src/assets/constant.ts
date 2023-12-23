@@ -7,6 +7,14 @@ export const WorkStatusColor = {
   late: '#F5325C',
 };
 
+export const WORK_STATUS_COLOR = {
+  '1': '#FFF',
+  '2': '#FFB822',
+  '3': '#89B6FA',
+  '4': '#03D87F',
+  '5': '#F5325C',
+};
+
 export const LIST_TIME_FILTER = [
   {
     label: 'Hôm nay',

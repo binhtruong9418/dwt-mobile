@@ -52,7 +52,6 @@ export default function RowTable({item, columns, bgColor, canShowMore}: any) {
                   height: 'auto',
                 },
                 styles.cell,
-                index !== 0 && styles.borderLeft,
               ]}>
               <Text style={[fs_12_400, text_black, text_center]}>
                 {item[column.key]}
@@ -86,17 +85,15 @@ export default function RowTable({item, columns, bgColor, canShowMore}: any) {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#D9D9D9',
     flex: 1,
   },
   cell: {
     paddingVertical: 7,
     justifyContent: 'center',
-  },
-  borderLeft: {
-    borderLeftWidth: 1,
-    borderLeftColor: 'rgba(255, 255, 255, 0.50)',
+    borderWidth: 0.5,
+    borderColor: '#D9D9D9',
   },
   moreWrapper: {
     overflow: 'hidden',

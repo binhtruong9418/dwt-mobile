@@ -22,7 +22,6 @@ export default function PrimaryTable({
                   height: 'auto',
                 },
                 styles.cell,
-                index !== 0 && styles.borderLeft,
               ]}>
               <Text style={[fs_12_500, text_black, text_center]}>
                 {column.title}
@@ -36,11 +35,9 @@ export default function PrimaryTable({
         data={data}
         renderItem={({item}) => {
           let bgColor = item.bgColor || '#FFF';
-          const newItem = {...item};
-          delete newItem.bgColor;
           return (
             <RowTable
-              item={newItem}
+              item={item}
               columns={columns}
               bgColor={bgColor}
               canShowMore={canShowMore}
@@ -48,8 +45,6 @@ export default function PrimaryTable({
           );
         }}
         keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={() => <View style={{height: 5}} />}
-        contentContainerStyle={{marginTop: 5}}
       />
     </View>
   );
@@ -66,10 +61,8 @@ const styles = StyleSheet.create({
   cell: {
     paddingVertical: 7,
     justifyContent: 'center',
-  },
-  borderLeft: {
-    borderLeftWidth: 1,
-    borderLeftColor: 'rgba(255, 255, 255, 0.50)',
+    borderWidth: 0.5,
+    borderColor: '#D9D9D9',
   },
 });
 

@@ -16,8 +16,13 @@ import CircleProgressChart from './CircleProgressChart';
 import PropTypes, {InferProps} from 'prop-types';
 import {padStart} from '../../utils';
 export default function WorkProgressBlock({
+  checkIn,
+  checkOut,
   attendanceData,
+  workData,
 }: InferProps<typeof WorkProgressBlock.propTypes>) {
+  const formatCheckIn = checkIn ? checkIn.slice(0, 5) : '--:--';
+  const formatCheckOut = checkOut ? checkOut.slice(0, 5) : '--:--';
   return (
     <View style={styles.wrapper}>
       <View style={styles.blockItem}>
@@ -50,7 +55,7 @@ export default function WorkProgressBlock({
         </View>
 
         <Text style={[fs_12_500, text_red, text_center, mt10]}>
-          Vào: 00:00 - Ra: 00:00
+          Vào: {formatCheckIn} - Ra: {formatCheckOut}
         </Text>
       </View>
 
@@ -64,7 +69,7 @@ export default function WorkProgressBlock({
 
           <View style={[styles.col_chart]}>
             <Text style={[fs_12_400, text_black]}>Phòng</Text>
-            <CircleProgressChart total={22} progress={15} />
+            <CircleProgressChart total={100} progress={30} />
           </View>
         </View>
       </View>
@@ -118,4 +123,7 @@ const styles = StyleSheet.create({
 
 WorkProgressBlock.propTypes = {
   attendanceData: PropTypes.any,
+  checkIn: PropTypes.string,
+  checkOut: PropTypes.string,
+  workData: PropTypes.any,
 };
