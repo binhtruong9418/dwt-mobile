@@ -14,11 +14,19 @@ jobs:
    steps:
      - name: Checkout
        uses: actions/checkout@v2.4.0
+     - name: Set up Node.js
+       uses: actions/setup-node@v3
+       with:
+        node-version: '18'
+
+     - name: Install dependencies
+       run: npm install -g yarn && yarn install
+       
      - name: Setup JDK
        uses: actions/setup-java@v2.5.0
        with:
          distribution: temurin
-         java-version: "11"
+         java-version: "17"
      - name: Set execution flag for gradlew
        run: chmod +x gradlew
      - name: Build APK
