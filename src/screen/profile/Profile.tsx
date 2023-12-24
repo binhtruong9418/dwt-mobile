@@ -4,12 +4,14 @@ import ChevronLeft from '../../assets/img/chevron-left-dark.svg';
 import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useConnection} from '../../redux/connection';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 
 export default function Profile({navigation}: any) {
   const {onSetUserInfo} = useConnection();
   const handleLogout = async () => {
     await AsyncStorage.removeItem('accessToken');
     onSetUserInfo(null);
+    await dwtApi.logout();
     navigation.navigate('Login');
   };
   return (
