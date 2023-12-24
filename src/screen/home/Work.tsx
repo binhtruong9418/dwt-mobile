@@ -23,6 +23,8 @@ import {
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import dayjs from 'dayjs';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 const columns = [
   {
@@ -41,12 +43,12 @@ const columns = [
     width: 0.15,
   },
   {
-    key: 'amount',
+    key: 'totalTarget',
     title: 'Chỉ tiêu',
     width: 0.15,
   },
   {
-    key: 'accumulatedTotal',
+    key: 'totalComplete',
     title: 'Lũy kế',
     width: 0.15,
   },
@@ -77,12 +79,13 @@ export default function Work({navigation}: any) {
       listNonKeyWorkData: [],
     },
     isLoading: isLoadingListWork,
+    refetch: refetchListWork,
   } = useQuery(['getListKeyAndNonKeyWork'], async () => {
     const keyWorkRes = await dwtApi.getListWork(paramsSearch);
     const arisWorkRes = await dwtApi.getListWorkArise(paramsSearch);
     return {
-      listKeyWorkData: keyWorkRes.data.business_standard_key_all,
-      listNonKeyWorkData: keyWorkRes.data.business_standard_non_key_all,
+      listKeyWorkData: keyWorkRes.data.kpi.keys,
+      listNonKeyWorkData: keyWorkRes.data.kpi.noneKeys,
       listAriseWorkData: arisWorkRes.data.businessStandardWorkArise.data,
     };
   });
@@ -92,12 +95,25 @@ export default function Work({navigation}: any) {
       case 0:
         return listKeyWorkData
           .map((work: any, index: number) => {
+            let totalToday = 0;
+            if (work.business_standard_report_logs > 0) {
+              const todayLog = work.business_standard_report_logs.find(
+                (log: any) => {
+                  return log.reported_date === dayjs().format('YYYY-MM-DD');
+                },
+              );
+              totalToday = todayLog
+                ? todayLog.manager_quantity
+                  ? todayLog.manager_quantity
+                  : todayLog.quantity
+                  ? todayLog.quantity
+                  : 0
+                : 0;
+            }
             return {
               ...work,
               index: index + 1,
-              amount: work.business_standard_quantity_display || '0/0',
-              accumulatedTotal: 0,
-              todayTotal: 0,
+              todayTotal: totalToday,
               totalTarget:
                 work.business_standard_quantity_display.split('/')[1],
               totalComplete: work.business_standard_result,
@@ -131,12 +147,25 @@ export default function Work({navigation}: any) {
       case 1:
         return listNonKeyWorkData
           .map((work: any, index: number) => {
+            let totalToday = 0;
+            if (work.business_standard_report_logs > 0) {
+              const todayLog = work.business_standard_report_logs.find(
+                (log: any) => {
+                  return log.reported_date === dayjs().format('YYYY-MM-DD');
+                },
+              );
+              totalToday = todayLog
+                ? todayLog.manager_quantity
+                  ? todayLog.manager_quantity
+                  : todayLog.quantity
+                  ? todayLog.quantity
+                  : 0
+                : 0;
+            }
             return {
               ...work,
               index: index + 1,
-              amount: work.business_standard_quantity_display || '0/0',
-              accumulatedTotal: 0,
-              todayTotal: 0,
+              todayTotal: totalToday,
               totalTarget:
                 work.business_standard_quantity_display.split('/')[1],
               totalComplete: work.business_standard_result,
@@ -174,14 +203,17 @@ export default function Work({navigation}: any) {
             listLog.length > 0 && listLog[listLog.length - 1].quantity
               ? listLog[listLog.length - 1].quantity
               : 0;
-          const totalAmount = work.quantity ? work.quantity : 0;
+          let totalTarget = 0;
+          if (work.type === 1) {
+            totalTarget = work.working_hours;
+          } else if (work.type === 2) {
+            totalTarget = work.quantity * work.working_hours;
+          }
           return {
             ...work,
             index: index + 1,
-            amount: totalAmountCompleted + '/' + totalAmount,
-            totalTarget: totalAmount,
+            totalTarget: totalTarget,
             totalComplete: totalAmountCompleted,
-            accumulatedTotal: 0,
             todayTotal: 0,
             bgColor:
               listLog.length > 0 && listLog[listLog.length - 1].actual_state
@@ -201,6 +233,8 @@ export default function Work({navigation}: any) {
     listNonKeyWorkData,
     listAriseWorkData,
   ]);
+
+  useRefreshOnFocus(refetchListWork);
 
   if (isLoadingListWork) {
     return <PrimaryLoading />;
@@ -243,7 +277,11 @@ export default function Work({navigation}: any) {
               canShowMore={true}
             />
           </View>
-          <TouchableOpacity style={styles.align_end}>
+          <TouchableOpacity
+            style={styles.align_end}
+            onPress={() => {
+              navigation.navigate('AddWorkArise');
+            }}>
             <AddIcon />
           </TouchableOpacity>
         </View>

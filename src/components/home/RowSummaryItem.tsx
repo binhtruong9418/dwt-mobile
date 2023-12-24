@@ -16,7 +16,7 @@ export default function RowSummaryItem({
 
 const styles = StyleSheet.create({
   text: {
-    width: '95%',
+    width: '85%',
   },
   row: {
     flexDirection: 'row',
@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
 });
 
 RowSummaryItem.propTypes = {
-  text: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  text: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
 };

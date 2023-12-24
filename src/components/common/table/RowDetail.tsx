@@ -50,7 +50,18 @@ export default function RowDetail({data}: any) {
 
       <View style={styles.listButton}>
         <TouchableOpacity
-          style={styles.leftButton}
+          style={styles.button}
+          onPress={() => {
+            // @ts-ignore
+            navigation.navigate('WorkListReport', {
+              data: data,
+            });
+          }}>
+          <Text style={[fs_13_400, text_black]}>Tiến trình</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => {
             // @ts-ignore
             navigation.navigate('WorkDetail', {
@@ -61,7 +72,7 @@ export default function RowDetail({data}: any) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.rightButton}
+          style={styles.button}
           onPress={() => {
             // @ts-ignore
             navigation.navigate('WorkReport', {
@@ -104,20 +115,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginTop: 10,
   },
-  leftButton: {
-    flex: 0.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRightColor: '#D9D9D9',
-    borderRightWidth: 0.5,
-    paddingVertical: 7,
-  },
-  rightButton: {
-    flex: 0.5,
+  button: {
+    flex: 1 / 3,
     justifyContent: 'center',
     alignItems: 'center',
     borderLeftColor: '#D9D9D9',
     borderLeftWidth: 0.5,
+    borderRightColor: '#D9D9D9',
+    borderRightWidth: 0.5,
     paddingVertical: 7,
   },
 });

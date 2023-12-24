@@ -25,28 +25,8 @@ export const WORK_STATUS = {
 
 export const LIST_TIME_FILTER = [
   {
-    label: 'Hôm nay',
-    value: 'today',
-  },
-  {
     label: 'Tháng này',
     value: 'month',
-  },
-  {
-    label: '7 ngày trước',
-    value: '7days',
-  },
-  {
-    label: '14 ngày trước',
-    value: '14days',
-  },
-  {
-    label: 'Tháng trước',
-    value: '30days',
-  },
-  {
-    label: 'Tùy chọn',
-    value: 'custom',
   },
 ];
 

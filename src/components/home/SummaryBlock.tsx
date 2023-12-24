@@ -8,10 +8,21 @@ import {
 } from '../../assets/style.ts';
 import RowSummaryItem from './RowSummaryItem.tsx';
 import LinearGradient from 'react-native-linear-gradient';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 
-export default function SummaryBlock({monthOverview}: any) {
-  const [progress, setProgress] = useState<number>(monthOverview.percent / 100);
+export default function SummaryBlock({
+  monthOverviewDepartment,
+  monthOverviewPersonal,
+}: any) {
+  const progressPersonal = useMemo(
+    () => Number(monthOverviewPersonal.percent) / 100,
+    [monthOverviewPersonal],
+  );
+
+  const progressDepartment = useMemo(
+    () => Number(monthOverviewDepartment.percent) / 100,
+    [monthOverviewDepartment],
+  );
   const [boxHeight, setBoxHeight] = useState<number>(0);
   return (
     <View style={styles.wrapper}>
@@ -33,7 +44,7 @@ export default function SummaryBlock({monthOverview}: any) {
             style={[
               styles.leftCursor,
               {
-                bottom: (boxHeight - 2) * progress - 2.5,
+                bottom: (boxHeight - 2) * progressPersonal - 2.5,
               },
             ]}
           />
@@ -44,10 +55,10 @@ export default function SummaryBlock({monthOverview}: any) {
             locations={[0.1, 1]}
             style={[
               styles.chart,
-              {height: (boxHeight - 2) * progress},
+              {height: (boxHeight - 2) * progressPersonal},
               {
-                borderTopLeftRadius: progress === 1 ? 15 : 0,
-                borderTopRightRadius: progress === 1 ? 15 : 0,
+                borderTopLeftRadius: progressPersonal === 1 ? 15 : 0,
+                borderTopRightRadius: progressPersonal === 1 ? 15 : 0,
               },
             ]}
           />
@@ -55,12 +66,16 @@ export default function SummaryBlock({monthOverview}: any) {
             <Text style={[fs_12_500, text_black, text_center]}>
               KPI cá nhân
             </Text>
-            {monthOverview.tasks.map((task: any, index: number) => {
+            {monthOverviewPersonal.tasks.map((task: any, index: number) => {
               return (
                 <RowSummaryItem
                   key={index}
                   text={task.name}
-                  value={task.kpi ? task.kpi : 0}
+                  value={
+                    task.business_standard_score_tmp
+                      ? task.business_standard_score_tmp
+                      : 0
+                  }
                 />
               );
             })}
@@ -72,7 +87,7 @@ export default function SummaryBlock({monthOverview}: any) {
             style={[
               styles.rightCursor,
               {
-                bottom: (boxHeight - 2) * progress - 2.5,
+                bottom: (boxHeight - 2) * progressDepartment - 2.5,
               },
             ]}
           />
@@ -83,20 +98,28 @@ export default function SummaryBlock({monthOverview}: any) {
             locations={[0.1, 1]}
             style={[
               styles.chart,
-              {height: (boxHeight - 2) * progress},
+              {height: (boxHeight - 2) * progressDepartment},
               {
-                borderTopLeftRadius: progress === 1 ? 15 : 0,
-                borderTopRightRadius: progress === 1 ? 15 : 0,
+                borderTopLeftRadius: progressDepartment === 1 ? 15 : 0,
+                borderTopRightRadius: progressDepartment === 1 ? 15 : 0,
               },
             ]}
           />
           <View style={styles.boxText}>
             <Text style={[fs_12_500, text_black, text_center]}>KPI phòng</Text>
-            <RowSummaryItem text={'Hàn hoàn thiện khung xe'} value={'3'} />
-            <RowSummaryItem text={'Cắt uốn khung'} value={'3'} />
-            <RowSummaryItem text={'Làm sạch bề mặt khung'} value={'4'} />
-            <RowSummaryItem text={'Lắp ráp hoàn thiện xe'} value={'5'} />
-            <RowSummaryItem text={'Nâng cấp xe'} value={'3'} />
+            {monthOverviewDepartment.tasks.map((task: any, index: number) => {
+              return (
+                <RowSummaryItem
+                  key={index}
+                  text={task.name}
+                  value={
+                    task.business_standard_score_tmp
+                      ? task.business_standard_score_tmp
+                      : 0
+                  }
+                />
+              );
+            })}
           </View>
         </View>
       </View>

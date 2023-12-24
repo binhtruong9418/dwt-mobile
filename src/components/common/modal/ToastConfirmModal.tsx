@@ -12,19 +12,15 @@ import {
 } from '../../../assets/style.ts';
 import PropTypes, {InferProps} from 'prop-types';
 
-export default function CancelUploadWorkReport({
+export default function ToastConfirmModal({
   visible,
-  setVisible,
-  handleCancelUploadReport,
-}: InferProps<typeof CancelUploadWorkReport.propTypes>) {
+  handleOk,
+  handleCancel,
+  okText,
+  cancelText,
+}: InferProps<typeof ToastConfirmModal.propTypes>) {
   return (
-    <ReactNativeModal
-      isVisible={visible}
-      onBackdropPress={() => {
-        setVisible(false);
-      }}
-      swipeDirection={['up']}
-      style={styles.modal}>
+    <ReactNativeModal isVisible={visible} style={styles.modal}>
       <View style={styles.modalContent}>
         <Text style={[fs_15_700, text_black, text_center, mb20]}>
           Bạn thực sự muốn hủy báo cáo?
@@ -32,23 +28,23 @@ export default function CancelUploadWorkReport({
 
         <View style={styles.divider} />
 
-        <TouchableOpacity onPress={() => setVisible(false)}>
+        <TouchableOpacity onPress={handleOk}>
           <Text
             style={[
               fs_15_400,
               text_center,
               {paddingVertical: 15, color: '#0D6EFD'},
             ]}>
-            Tiếp tục báo cáo
+            {okText}
           </Text>
         </TouchableOpacity>
 
         <View style={styles.divider} />
 
-        <TouchableOpacity onPress={handleCancelUploadReport}>
+        <TouchableOpacity onPress={handleCancel}>
           <Text
             style={[fs_15_400, text_red, text_center, {paddingVertical: 15}]}>
-            Hủy báo cáo
+            {cancelText}
           </Text>
         </TouchableOpacity>
       </View>
@@ -74,8 +70,10 @@ const styles = StyleSheet.create({
   },
 });
 
-CancelUploadWorkReport.propTypes = {
+ToastConfirmModal.propTypes = {
   visible: PropTypes.bool.isRequired,
-  setVisible: PropTypes.func.isRequired,
-  handleCancelUploadReport: PropTypes.func.isRequired,
+  handleOk: PropTypes.func.isRequired,
+  handleCancel: PropTypes.func.isRequired,
+  okText: PropTypes.string,
+  cancelText: PropTypes.string,
 };

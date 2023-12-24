@@ -13,6 +13,7 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
 import {WORK_STATUS_COLOR} from '../../assets/constant.ts';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -46,16 +47,19 @@ export default function Home({navigation}: any) {
   const {
     data: {checkInTime, checkOutTime} = {},
     isLoading: isLoadingAttendanceDay,
+    refetch: refetchAttendanceDay,
   } = useQuery(['getAttendanceByDate'], async () => {
     const currentDate = new Date();
     const dateDay = dayjs(currentDate).format('YYYY-MM-DD');
-    const res = await dwtApi.getAttendanceByDate(userInfo.id, dateDay);
-    if (res.status === 200) {
-      return {
-        checkInTime: res.data.checkIn,
-        checkOutTime: res.data.checkOut,
-      };
-    } else if (res.status === 404) {
+    try {
+      const res = await dwtApi.getAttendanceByDate(userInfo.id, dateDay);
+      if (res.status === 200) {
+        return {
+          checkInTime: res.data.checkIn,
+          checkOutTime: res.data.checkOut,
+        };
+      }
+    } catch {
       return {
         checkInTime: null,
         checkOutTime: null,
@@ -63,30 +67,42 @@ export default function Home({navigation}: any) {
     }
   });
 
-  const {data: attendanceData, isLoading: isLoadingAttendance} = useQuery(
-    ['getAttendanceInfo'],
-    async () => {
-      const res = await dwtApi.getAttendanceInfo();
-      return res.data;
-    },
-  );
-
-  const {data: rewardAndPunishData, isLoading: isLoadingReward} = useQuery(
-    ['getRewardAndPunish'],
-    async () => {
-      const response = await dwtApi.getRewardAndPunish();
-      return response.data;
-    },
-  );
+  const {
+    data: attendanceData,
+    isLoading: isLoadingAttendance,
+    refetch: refetchAttendanceData,
+  } = useQuery(['getAttendanceInfo'], async () => {
+    const res = await dwtApi.getAttendanceInfo();
+    return res.data;
+  });
 
   const {
-    data: {listWork, monthOverview, workData, workSummary} = {
+    data: rewardAndPunishData,
+    isLoading: isLoadingReward,
+    refetch: refetchRewardAndPusnish,
+  } = useQuery(['getRewardAndPunish'], async () => {
+    const response = await dwtApi.getRewardAndPunish();
+    return response.data;
+  });
+
+  const {
+    data: {
+      listWork,
+      monthOverviewPersonal,
+      monthOverviewDepartment,
+      workPersonalData,
+      workDepartmentData,
+      workSummary,
+    } = {
       listWork: [],
-      monthOverview: {},
-      workData: {},
+      monthOverviewPersonal: {},
+      monthOverviewDepartment: {},
+      workPersonalData: {},
+      workDepartmentData: {},
       workSummary: {},
     },
     isLoading: isLoadingWork,
+    refetch: refetchWork,
   } = useQuery(['getWorkListAndPoint'], async () => {
     const res = await dwtApi.getWorkListAndPoint();
     const kpi = res.data.kpi;
@@ -104,10 +120,19 @@ export default function Home({navigation}: any) {
     };
     return {
       listWork: listWork,
-      monthOverview: kpi.monthOverview,
-      workData: kpi,
+      monthOverviewPersonal: kpi.monthOverview,
+      workPersonalData: kpi,
+      workDepartmentData: res.data.departmentKPI,
+      monthOverviewDepartment: res.data.departmentKPI.monthOverview,
       workSummary,
     };
+  });
+
+  useRefreshOnFocus(() => {
+    refetchAttendanceDay();
+    refetchAttendanceData();
+    refetchRewardAndPusnish();
+    refetchWork();
   });
 
   if (
@@ -136,9 +161,13 @@ export default function Home({navigation}: any) {
             attendanceData={attendanceData}
             checkIn={checkInTime}
             checkOut={checkOutTime}
-            workData={workData}
+            workPersonalData={workPersonalData}
+            workDepartmentData={workDepartmentData}
           />
-          <SummaryBlock monthOverview={monthOverview} />
+          <SummaryBlock
+            monthOverviewPersonal={monthOverviewPersonal}
+            monthOverviewDepartment={monthOverviewDepartment}
+          />
           <BehaviorBlock
             rewardAndPunishData={rewardAndPunishData}
             workSummary={workSummary}

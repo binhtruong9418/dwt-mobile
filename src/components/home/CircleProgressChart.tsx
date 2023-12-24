@@ -11,7 +11,7 @@ interface CircleProgressChartProps {
 
 const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
   progress,
-  size = 54,
+  size = 60,
   strokeWidth = 6,
   total,
 }) => {
@@ -45,22 +45,12 @@ const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
         />
         <Text
           x={size / 2}
-          y={size / 2 - 6}
+          y={size / 2}
           fill="#000"
           textAnchor="middle"
           alignmentBaseline="middle"
           fontSize={9}>
-          {progress}
-        </Text>
-
-        <Text
-          x={size / 2}
-          y={size / 2 + 6}
-          fill="#000"
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          fontSize={9}>
-          điểm
+          {`${progress.toFixed(0)}/${total.toFixed(0)}`}
         </Text>
       </Svg>
     </View>

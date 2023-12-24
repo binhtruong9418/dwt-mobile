@@ -5,14 +5,13 @@ import WorkDetailBlock from '../../components/work/WorkDetailBlock.tsx';
 import SummaryReportBlock from '../../components/work/SummaryReportBlock.tsx';
 import {
   fs_15_400,
-  fs_15_500,
   fs_15_700,
   text_black,
   text_red,
 } from '../../assets/style.ts';
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
 import {useConnection} from '../../redux/connection';
-import {LIST_WORK_STATUS_FILTER, WORK_STATUS} from '../../assets/constant.ts';
+import {WORK_STATUS} from '../../assets/constant.ts';
 import {useMemo} from 'react';
 
 export default function WorkDetail({route, navigation}: any) {
@@ -20,21 +19,34 @@ export default function WorkDetail({route, navigation}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
-  if (!data) {
-    return null;
-  }
 
-  const workStatus = useMemo(() => {
+  const {workStatus, workType} = useMemo(() => {
+    let workStatus = WORK_STATUS['1'];
+    let workType = 'Công việc đạt giá trị';
     const report =
       data.business_standard_reports.length > 0
         ? data.business_standard_reports[0]
         : null;
     if (report) {
       // @ts-ignore
-      return WORK_STATUS[report.actual_state];
+      workStatus = WORK_STATUS[report.actual_state];
     }
-    return '';
-  }, []);
+    if (data.type === 2) {
+      workType = 'Công việc liên tục';
+    } else if (data.type === 3) {
+      workType = 'Công việc đạt giá trị';
+    } else if (data.type === 1) {
+      workType = 'Công việc 1 lần';
+    }
+    return {
+      workStatus,
+      workType,
+    };
+  }, [data]);
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -59,7 +71,7 @@ export default function WorkDetail({route, navigation}: any) {
             },
             {
               label: 'Mục tiêu',
-              value: 'Liên tục',
+              value: workType,
             },
             {
               label: 'Người đảm nhiệm',
@@ -83,7 +95,7 @@ export default function WorkDetail({route, navigation}: any) {
             },
             {
               label: 'Tổng KPI dự kiến',
-              value: data.kpi,
+              value: data.business_standard_expected_score,
             },
           ]}
         />
@@ -105,7 +117,7 @@ export default function WorkDetail({route, navigation}: any) {
             },
             {
               label: 'Điểm KPI tạm tính',
-              value: data.kpi,
+              value: data.business_standard_score_tmp,
             },
           ]}
         />
@@ -200,13 +212,12 @@ export default function WorkDetail({route, navigation}: any) {
               },
             ]}
             data={data.business_standard_report_logs.map((item: any) => {
-              console.log(data.reported_date);
               return {
                 ...item,
                 date: item.reported_date || '',
-                value: item.quantity || 0,
-                dateDone: item.updated_date || '',
-                valueDone: item.manager_quantity || 0,
+                value: item.quantity,
+                dateDone: item.updated_date,
+                valueDone: item.manager_quantity,
               };
             })}
           />

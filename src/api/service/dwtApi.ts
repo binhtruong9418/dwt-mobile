@@ -1,4 +1,5 @@
 import axiosClient from '../config/axiosClient.ts';
+import axios from 'axios';
 
 export const dwtApi = {
   login: async (email: string, password: string): Promise<any> => {
@@ -57,5 +58,22 @@ export const dwtApi = {
   getListWorkArise: async (params = {}): Promise<any> => {
     const url = 'business-standard-work-arise/user-report';
     return await axiosClient.get(url, {params});
+  },
+
+  //API thêm báo cáo cá nhân(Non key, key)
+  addPersonalReport: async (data: any): Promise<any> => {
+    const url = 'business-standard-report-log/storev3';
+    return await axiosClient.post(url, data);
+  },
+
+  uploadFile: async (data: any): Promise<any> => {
+    const url = 'https://report.sweetsica.com/api/report/upload';
+    const formData = new FormData();
+    formData.append('files', data);
+    return await axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   },
 };

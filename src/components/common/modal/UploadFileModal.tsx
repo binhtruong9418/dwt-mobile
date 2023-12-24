@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import PropTypes, {InferProps} from 'prop-types';
-import {ReactNativeModal} from 'react-native-modal';
+import {PresentationStyle, ReactNativeModal} from 'react-native-modal';
 import {
   fs_14_700,
   fs_15_400,
@@ -18,12 +18,84 @@ import CloseIcon from '../../../assets/img/close-icon.svg';
 import FileIcon from '../../../assets/img/file-icon.svg';
 import GaleryIcon from '../../../assets/img/galery-icon.svg';
 import CameraIcon from '../../../assets/img/camera-icon.svg';
+import {useCallback, useState} from 'react';
+import DocumentPicker from 'react-native-document-picker';
+import {
+  launchCamera,
+  launchImageLibrary,
+  MediaType,
+} from 'react-native-image-picker';
 
 export default function UploadFileModal({
   visible,
   setVisible,
   handleUploadFile,
 }: InferProps<typeof UploadFileModal.propTypes>) {
+  const handleSelectFile = async () => {
+    try {
+      const response = await DocumentPicker.pick({
+        presentationStyle: 'fullScreen',
+        allowMultiSelection: true,
+      });
+      handleUploadFile(response);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const handleSelectImage = async () => {
+    const options = {
+      mediaType: 'photo' as MediaType,
+      includeBase64: false,
+      presentationStyle: 'fullScreen' as PresentationStyle,
+    };
+
+    const result = await launchImageLibrary(options);
+    if (result.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (result.errorCode) {
+      console.log('ImagePicker Error: ', result.errorMessage);
+    } else {
+      if (result?.assets) {
+        handleUploadFile(
+          result?.assets.map((image: any) => {
+            return {
+              ...image,
+              name: image.fileName,
+              size: image.fileSize,
+            };
+          }),
+        );
+      }
+    }
+  };
+
+  const handleTakePhoto = async () => {
+    const options = {
+      mediaType: 'photo' as MediaType,
+      includeBase64: false,
+      presentationStyle: 'fullScreen' as PresentationStyle,
+    };
+
+    const result = await launchCamera(options);
+    if (result.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (result.errorCode) {
+      console.log('ImagePicker Error: ', result.errorMessage);
+    } else {
+      if (result?.assets) {
+        handleUploadFile(
+          result?.assets.map((image: any) => {
+            return {
+              ...image,
+              name: image.fileName,
+              size: image.fileSize,
+            };
+          }),
+        );
+      }
+    }
+  };
   return (
     <ReactNativeModal
       animationInTiming={200}
@@ -53,17 +125,17 @@ export default function UploadFileModal({
           </Pressable>
         </View>
         <View style={styles.body}>
-          <TouchableOpacity style={styles.row} onPress={handleUploadFile}>
+          <TouchableOpacity style={styles.row} onPress={handleSelectFile}>
             <FileIcon width={24} height={24} />
             <Text style={[fs_15_400, text_black]}>Tệp</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.row} onPress={handleUploadFile}>
+          <TouchableOpacity style={styles.row} onPress={handleSelectImage}>
             <GaleryIcon width={24} height={24} />
             <Text style={[fs_15_400, text_black]}>Chọn ảnh</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.row} onPress={handleUploadFile}>
+          <TouchableOpacity style={styles.row} onPress={handleTakePhoto}>
             <CameraIcon width={24} height={24} />
             <Text style={[fs_15_400, text_black]}>Sử dụng máy ảnh</Text>
           </TouchableOpacity>

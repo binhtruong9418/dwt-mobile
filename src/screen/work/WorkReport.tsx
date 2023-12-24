@@ -22,17 +22,23 @@ import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import UploadFileModal from '../../components/common/modal/UploadFileModal.tsx';
 import TrashIcon from '../../assets/img/trash.svg';
 import ImageIcon from '../../assets/img/image-icon.svg';
-import ConfirmUploadWorkReportModal from '../../components/common/modal/ConfirmUploadWorkReportModal.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
-import CancelUploadWorkReport from '../../components/common/modal/CancelUploadWorkReport.tsx';
+import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
+import {showToast} from '../../utils';
+import {useConnection} from '../../redux/connection';
+import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 
 export default function WorkReport({route, navigation}: any) {
   const {data} = route.params;
+  const {
+    connection: {userInfo},
+  } = useConnection();
   const [note, setNote] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
   const [isCompletedAndReport, setIsCompletedAndReport] = useState(false);
-  const [kpi, setKpi] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
   const [files, setFiles] = useState<any[]>([]);
   const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
@@ -40,9 +46,9 @@ export default function WorkReport({route, navigation}: any) {
     isOpenConfirmUploadWorkReportModal,
     setIsOpenConfirmUploadWorkReportModal,
   ] = useState(false);
-  const handleUploadFile = () => {
+  const handleUploadFile = (newFiles: any[]) => {
     setIsOpenUploadFileModal(false);
-    setFiles([...files, `Ảnh ${files.length + 1}`]);
+    setFiles([...files, ...newFiles]);
   };
 
   const handleDeleteFile = (fileDeleteIndex: number) => {
@@ -58,8 +64,67 @@ export default function WorkReport({route, navigation}: any) {
   };
 
   const handleCancelUploadReport = () => {
+    setQuantity(0);
+    setIsCompletedAndReport(false);
+    setIsCompleted(false);
+    setFiles([]);
+    setNote('');
     setIsOpenCancelReportModal(false);
     navigation.navigate('Work');
+  };
+
+  const handleUploadReport = async () => {
+    if (!note) {
+      showToast('Vui lòng nhập ghi chú');
+      return;
+    }
+
+    if (!isCompleted) {
+      showToast('Vui lòng chọn hoàn thành');
+      return;
+    }
+
+    if (isCompleted && !quantity) {
+      showToast('Vui lòng nhập giá trị');
+      return;
+    }
+
+    if (
+      isCompleted &&
+      quantity &&
+      Number(quantity) > Number(data.totalTarget)
+    ) {
+      showToast('Giá trị không được lớn hơn mục tiêu');
+      return;
+    }
+
+    try {
+      const listImages = await Promise.all(
+        files.map(async (item: any) => {
+          const res = await dwtApi.uploadFile(item);
+          return {
+            file_path: res.data.downloadLink,
+            file_name: item.name,
+          };
+        }),
+      );
+
+      const requestData = {
+        business_standard_id: data.id,
+        user_id: userInfo.id,
+        reported_date: dayjs(new Date()).format('YYYY-MM-DD'),
+        note: note,
+        actual_state: isCompletedAndReport ? 3 : undefined,
+        quantity: data.type === 3 ? quantity : '1',
+        file_attachment: JSON.stringify(listImages),
+      };
+      const res = await dwtApi.addPersonalReport(requestData);
+      if (res.status === 200) {
+        setIsOpenConfirmUploadWorkReportModal(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (!data) {
@@ -75,14 +140,14 @@ export default function WorkReport({route, navigation}: any) {
         rightView={
           <TouchableOpacity
             style={styles.sendButton}
-            onPress={() => {
-              setIsOpenConfirmUploadWorkReportModal(true);
-            }}>
+            onPress={handleUploadReport}>
             <Text style={[fs_15_700, text_white, text_center]}>Gửi</Text>
           </TouchableOpacity>
         }
       />
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}>
         <Text style={[fs_15_700, text_black, text_center]}>
           Ngày {dayjs(new Date()).format('DD/MM/YYYY')}
         </Text>
@@ -118,21 +183,31 @@ export default function WorkReport({route, navigation}: any) {
             onChange={setIsCompleted}
             labelStyle={styles.labelStyle}
           />
-          {isCompleted && (
-            <View style={styles.row_gap10}>
-              <TextInput
-                style={[styles.input, text_black, fs_15_400]}
-                placeholderTextColor={'#787878'}
-                placeholder={'Đạt giá trị'}
-                value={kpi}
-                onChangeText={setKpi}
-                keyboardType="numeric"
-              />
-              <Text style={[fs_15_400, text_gray]}>
-                {data.unit_name}/{data.totalTarget} {data.unit_name}
-              </Text>
-            </View>
-          )}
+          {isCompleted &&
+            (data.type === 3 ? (
+              <View style={styles.row_gap10}>
+                <TextInput
+                  style={[styles.input, text_black, fs_15_400]}
+                  placeholderTextColor={'#787878'}
+                  placeholder={'Đạt giá trị'}
+                  value={quantity}
+                  onChangeText={setQuantity}
+                  keyboardType="numeric"
+                />
+                <Text style={[fs_15_400, text_gray]}>
+                  {data.unit_name}/{data.totalTarget} {data.unit_name}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.row_gap10}>
+                <TextInput
+                  style={[styles.input, text_black, fs_15_400, styles.disable]}
+                  placeholderTextColor={'#787878'}
+                  placeholder={'1'}
+                  editable={false}
+                />
+              </View>
+            ))}
         </View>
 
         <View style={styles.inputBox}>
@@ -147,7 +222,7 @@ export default function WorkReport({route, navigation}: any) {
               <View key={index} style={styles.fileBox}>
                 <View style={styles.row_gap3}>
                   <ImageIcon width={20} height={20} />
-                  <Text style={[fs_15_400, text_black]}>{item}</Text>
+                  <Text style={[fs_15_400, text_black]}>{item.name}</Text>
                 </View>
                 <TouchableOpacity
                   hitSlop={10}
@@ -174,15 +249,19 @@ export default function WorkReport({route, navigation}: any) {
         visible={isOpenUploadFileModal}
         setVisible={setIsOpenUploadFileModal}
       />
-      <CancelUploadWorkReport
+      <ToastConfirmModal
         visible={isOpenCancelReportModal}
-        setVisible={setIsOpenCancelReportModal}
-        handleCancelUploadReport={handleCancelUploadReport}
+        handleCancel={handleCancelUploadReport}
+        handleOk={() => {
+          setIsOpenCancelReportModal(false);
+        }}
+        okText={'Tiếp tục báo cáo'}
+        cancelText={'Hủy báo cáo'}
       />
-      <ConfirmUploadWorkReportModal
+      <ToastSuccessModal
         visible={isOpenConfirmUploadWorkReportModal}
-        setVisible={setIsOpenConfirmUploadWorkReportModal}
         handlePressOk={handlePressOk}
+        description={'Báo cáo thành công'}
       />
     </SafeAreaView>
   );
