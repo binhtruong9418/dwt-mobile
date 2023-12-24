@@ -25,10 +25,10 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: '11'
+        java-version: '17'
 
     - name: Build APK
-      run: cd android && ./gradlew assembleRelease
+      run: cd android && sudo chmod +x ./gradlew && sudo ./gradlew assembleRelease
 
   create-tag-and-release:
     needs: build
