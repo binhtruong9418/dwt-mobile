@@ -39,6 +39,17 @@ export default function RowTable({item, columns, bgColor, canShowMore}: any) {
     }
   };
 
+  useEffect(() => {
+    if (isMore) {
+      Animated.timing(shareValue, {
+        toValue: 0,
+        duration: 0,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [item]);
+
   return (
     <View>
       <Pressable style={[styles.row]} onPress={toggleMore}>

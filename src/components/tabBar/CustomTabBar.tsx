@@ -1,9 +1,13 @@
-import {Platform, Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 export default function CustomTabBar({state, descriptors, navigation}: any) {
   return (
-    <View style={[styles.container, {
-      paddingBottom: Platform.OS === 'ios' ? 20 : 7,
-    }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: Platform.OS === 'ios' ? 20 : 7,
+        },
+      ]}>
       {state.routes.map((route: any, index: any) => {
         const {options} = descriptors[route.key];
         const icon = options.tabBarIcon;

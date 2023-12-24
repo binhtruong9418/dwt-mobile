@@ -8,15 +8,18 @@ export default function RowSummaryItem({
 }: InferProps<typeof RowSummaryItem.propTypes>) {
   return (
     <View style={styles.row}>
-      <Text style={[fs_10_400, text_black, styles.text]}>{text}</Text>
-      <Text style={[fs_10_400, text_black]}>{value}</Text>
+      <Text style={[fs_10_400, text_black, styles.title]}>{text}</Text>
+      <Text style={[fs_10_400, text_black, styles.text]}>{value}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  title: {
+    width: '80%',
+  },
   text: {
-    width: '85%',
+    textAlign: 'right',
   },
   row: {
     flexDirection: 'row',
