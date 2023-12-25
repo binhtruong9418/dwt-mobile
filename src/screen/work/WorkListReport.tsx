@@ -31,22 +31,24 @@ LocaleConfig.defaultLocale = 'vi';
 
 export default function WorkListReport({route, navigation}: any) {
   const {data} = route.params;
+  const listLogs = data.business_standard_report_logs
+    ? data.business_standard_report_logs
+    : data.business_standard_arise_logs
+    ? data.business_standard_arise_logs
+    : [];
   const initialDate = dayjs(new Date()).format('YYYY-MM-DD');
   const [markedDates, setMarkedDates] = useState<any>({});
   useEffect(() => {
-    const markedDates = data.business_standard_report_logs.reduce(
-      (prev: any, curr: any) => {
-        const date = dayjs(curr.reported_date).format('YYYY-MM-DD');
-        return {
-          ...prev,
-          [date]: {
-            marked: true,
-            dotColor: '#DC3545',
-          },
-        };
-      },
-      {},
-    );
+    const markedDates = listLogs.reduce((prev: any, curr: any) => {
+      const date = dayjs(curr.reported_date).format('YYYY-MM-DD');
+      return {
+        ...prev,
+        [date]: {
+          marked: true,
+          dotColor: '#DC3545',
+        },
+      };
+    }, {});
     const today = dayjs(new Date()).format('YYYY-MM-DD');
     if (!markedDates[today]) {
       markedDates[today] = {
@@ -131,7 +133,7 @@ export default function WorkListReport({route, navigation}: any) {
         <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}
-          data={data.business_standard_report_logs}
+          data={listLogs}
           renderItem={({item}) => {
             return (
               <TouchableOpacity

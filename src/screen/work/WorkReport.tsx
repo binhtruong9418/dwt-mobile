@@ -29,6 +29,8 @@ import {showToast} from '../../utils';
 import {useConnection} from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import {dwtApi} from '../../api/service/dwtApi.ts';
+import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
+import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 
 export default function WorkReport({route, navigation}: any) {
   const {data} = route.params;
@@ -38,7 +40,7 @@ export default function WorkReport({route, navigation}: any) {
   const [note, setNote] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
   const [isCompletedAndReport, setIsCompletedAndReport] = useState(false);
-  const [quantity, setQuantity] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
   const [files, setFiles] = useState<any[]>([]);
   const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
@@ -46,6 +48,7 @@ export default function WorkReport({route, navigation}: any) {
     isOpenConfirmUploadWorkReportModal,
     setIsOpenConfirmUploadWorkReportModal,
   ] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const handleUploadFile = (newFiles: any[]) => {
     setIsOpenUploadFileModal(false);
     setFiles([...files, ...newFiles]);
@@ -84,7 +87,7 @@ export default function WorkReport({route, navigation}: any) {
       return;
     }
 
-    if (isCompleted && !quantity) {
+    if (isCompleted && !quantity && data.type === 3) {
       showToast('Vui lòng nhập giá trị');
       return;
     }
@@ -99,6 +102,7 @@ export default function WorkReport({route, navigation}: any) {
     }
 
     try {
+      setIsLoading(true);
       const listImages = await Promise.all(
         files.map(async (item: any) => {
           const res = await dwtApi.uploadFile(item);
@@ -115,7 +119,7 @@ export default function WorkReport({route, navigation}: any) {
         reported_date: dayjs(new Date()).format('YYYY-MM-DD'),
         note: note,
         actual_state: isCompletedAndReport ? 3 : undefined,
-        quantity: data.type === 3 ? quantity : '1',
+        quantity: data.type === 3 ? quantity : 1,
         file_attachment: JSON.stringify(listImages),
       };
       const res = await dwtApi.addPersonalReport(requestData);
@@ -124,12 +128,15 @@ export default function WorkReport({route, navigation}: any) {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   if (!data) {
-    return null;
+    return <ErrorScreen text={'Không có dữ liệu'} />;
   }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <Header
@@ -190,8 +197,9 @@ export default function WorkReport({route, navigation}: any) {
                   style={[styles.input, text_black, fs_15_400]}
                   placeholderTextColor={'#787878'}
                   placeholder={'Đạt giá trị'}
-                  value={quantity}
-                  onChangeText={setQuantity}
+                  value={quantity.toString()}
+                  inputMode="numeric"
+                  onChangeText={value => setQuantity(Number(value))}
                   keyboardType="numeric"
                 />
                 <Text style={[fs_15_400, text_gray]}>
@@ -263,6 +271,7 @@ export default function WorkReport({route, navigation}: any) {
         handlePressOk={handlePressOk}
         description={'Báo cáo thành công'}
       />
+      <LoadingActivity isLoading={isLoading} />
     </SafeAreaView>
   );
 }

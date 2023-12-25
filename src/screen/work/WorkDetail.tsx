@@ -13,17 +13,24 @@ import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
 import {useConnection} from '../../redux/connection';
 import {WORK_STATUS} from '../../assets/constant.ts';
 import {useMemo} from 'react';
+import NoDataScreen from '../../components/common/no-data/NoDataScreen.tsx';
 
 export default function WorkDetail({route, navigation}: any) {
   const {data} = route.params;
   const {
     connection: {userInfo},
   } = useConnection();
+  const listLogs = data.business_standard_report_logs
+    ? data.business_standard_report_logs
+    : data.business_standard_arise_logs
+    ? data.business_standard_arise_logs
+    : [];
 
   const {workStatus, workType} = useMemo(() => {
     let workStatus = WORK_STATUS['1'];
     let workType = 'Công việc đạt giá trị';
     const report =
+      data.business_standard_reports &&
       data.business_standard_reports.length > 0
         ? data.business_standard_reports[0]
         : null;
@@ -45,7 +52,7 @@ export default function WorkDetail({route, navigation}: any) {
   }, [data]);
 
   if (!data) {
-    return null;
+    return <NoDataScreen text={'Không có dữ liệu'} />;
   }
 
   return (
@@ -103,7 +110,7 @@ export default function WorkDetail({route, navigation}: any) {
           data={[
             {
               label: 'Số báo cáo đã lập trong tháng',
-              value: data.business_standard_report_logs.length + ' báo cáo',
+              value: listLogs.length + ' báo cáo',
             },
             {
               label: 'Giá trị đạt được trong tháng (12)',
@@ -211,7 +218,7 @@ export default function WorkDetail({route, navigation}: any) {
                 width: 3 / 11,
               },
             ]}
-            data={data.business_standard_report_logs.map((item: any) => {
+            data={listLogs.map((item: any) => {
               return {
                 ...item,
                 date: item.reported_date || '',
