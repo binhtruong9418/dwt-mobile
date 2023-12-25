@@ -16,13 +16,14 @@ import ClockOtIcon from '../../assets/img/clock-ot-icon.svg';
 import CircleProgressChart from './CircleProgressChart';
 import PropTypes, {InferProps} from 'prop-types';
 import {padStart} from '../../utils';
+
 export default function WorkProgressBlock({
-  checkIn,
-  checkOut,
-  attendanceData,
-  workPersonalData,
-  workDepartmentData,
-}: InferProps<typeof WorkProgressBlock.propTypes>) {
+                                            checkIn,
+                                            checkOut,
+                                            attendanceData,
+                                            workPersonalData,
+                                            workDepartmentData,
+                                          }: InferProps<typeof WorkProgressBlock.propTypes>) {
   const formatCheckIn = checkIn ? checkIn.slice(0, 5) : '--:--';
   const formatCheckOut = checkOut ? checkOut.slice(0, 5) : '--:--';
   return (
@@ -30,7 +31,7 @@ export default function WorkProgressBlock({
       <View style={styles.blockItem}>
         <View style={[row_between, styles.mb4]}>
           <View style={styles.row_gap3}>
-            <ClockIcon width={16} height={16} />
+            <ClockIcon width={16} height={16}/>
             <Text style={[fs_12_400, text_black]}>Ngày công</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
@@ -40,7 +41,7 @@ export default function WorkProgressBlock({
 
         <View style={[row_between, styles.mb4]}>
           <View style={styles.row_gap3}>
-            <CalendarIcon width={16} height={16} />
+            <CalendarIcon width={16} height={16}/>
             <Text style={[fs_12_400, text_black]}>Đã nghỉ / vắng</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
@@ -50,7 +51,7 @@ export default function WorkProgressBlock({
 
         <View style={[styles.row, styles.mb4, w_full]}>
           <View style={[styles.row_gap3, {width: '80%'}]}>
-            <ClockOtIcon width={16} height={16} />
+            <ClockOtIcon width={16} height={16}/>
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
           <Text style={[fs_12_400, text_red]}>{attendanceData.expectedOT}</Text>
@@ -65,23 +66,27 @@ export default function WorkProgressBlock({
         <Text style={[fs_12_500, text_red, text_center]}>Lượng việc</Text>
         <View style={styles.row_chart}>
           <View style={[styles.col_chart]}>
-            <Text style={[fs_12_400, text_black]}>Cá nhân/Phòng</Text>
+            <Text style={[fs_12_400, text_black]}>Cá nhân</Text>
             <CircleProgressChart
               progress={Number(workPersonalData.tmpTotalKPI)}
               total={Number(workDepartmentData.tmpTotalKPI)}
             />
           </View>
 
-          <View style={[styles.col_chart]}>
+          <View style={[styles.col_chart, {
+            justifyContent: 'center'
+          }]}>
             <TouchableOpacity
               style={{
-                paddingVertical: 5,
+                paddingVertical: 3,
                 paddingHorizontal: 7,
                 backgroundColor: '#FF0058',
                 borderColor: '#000',
                 borderWidth: 1,
+                width: '100%',
+                borderRadius: 10,
               }}>
-              <Text style={[fs_12_500, text_white]}>+</Text>
+              <Text style={[fs_12_500, text_white]}>Báo cáo ngày</Text>
             </TouchableOpacity>
           </View>
         </View>
