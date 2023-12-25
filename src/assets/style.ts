@@ -86,6 +86,11 @@ const globalStyle = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'Roboto-Regular',
   },
+  fs_10_500: {
+    fontSize: 10,
+    fontWeight: '500',
+    fontFamily: 'Roboto-Medium',
+  },
   fs_10_700: {
     fontSize: 10,
     fontWeight: '700',
@@ -196,6 +201,7 @@ export const {
   fs_12_700,
   fs_12_500,
   fs_10_400,
+  fs_10_500,
   fs_10_700,
   fs_8_700,
   text_black,

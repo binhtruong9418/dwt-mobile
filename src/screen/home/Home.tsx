@@ -79,7 +79,7 @@ export default function Home({navigation}: any) {
   const {
     data: rewardAndPunishData,
     isLoading: isLoadingReward,
-    refetch: refetchRewardAndPusnish,
+    refetch: refetchRewardAndPunish,
   } = useQuery(['getRewardAndPunish'], async () => {
     const response = await dwtApi.getRewardAndPunish();
     return response.data;
@@ -131,7 +131,7 @@ export default function Home({navigation}: any) {
   useRefreshOnFocus(() => {
     refetchAttendanceDay();
     refetchAttendanceData();
-    refetchRewardAndPusnish();
+    refetchRewardAndPunish();
     refetchWork();
   });
 

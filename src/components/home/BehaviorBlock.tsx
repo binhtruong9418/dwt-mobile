@@ -22,79 +22,86 @@ export default function BehaviorBlock({
   }, [rewardAndPunishData]);
   return (
     <View style={styles.wrapper}>
-      <View style={styles.chart}>
-        <View
-          style={[
-            bg_green,
-            styles.chartItem,
-            {flex: workSummary.done / workSummary.total},
-          ]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            {workSummary.done} HT
-          </Text>
-        </View>
+      {workSummary.total > 0 && (
+        <View style={styles.chart}>
+          <View
+            style={[
+              bg_green,
+              styles.chartItem,
+              {flex: workSummary.done / workSummary.total},
+            ]}>
+            <Text style={[fs_8_700, text_white, text_center]}>
+              {workSummary.done} HT
+            </Text>
+          </View>
 
-        <View
-          style={[
-            bg_yellow,
-            styles.chartItem,
-            {flex: workSummary.working / workSummary.total},
-          ]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            {workSummary.working} DL
-          </Text>
-        </View>
+          <View
+            style={[
+              bg_yellow,
+              styles.chartItem,
+              {flex: workSummary.working / workSummary.total},
+            ]}>
+            <Text style={[fs_8_700, text_white, text_center]}>
+              {workSummary.working} DL
+            </Text>
+          </View>
 
-        <View
-          style={[
-            bg_red,
-            styles.chartItem,
-            {flex: workSummary.late / workSummary.total},
-          ]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            {workSummary.late} T
-          </Text>
+          <View
+            style={[
+              bg_red,
+              styles.chartItem,
+              {flex: workSummary.late / workSummary.total},
+            ]}>
+            <Text style={[fs_8_700, text_white, text_center]}>
+              {workSummary.late} T
+            </Text>
+          </View>
         </View>
-      </View>
+      )}
 
-      <View style={styles.chart}>
-        <View
-          style={[
-            bg_green,
-            styles.chartItem,
-            {
-              flex: rewardAndPunishData.rewardsTotal / totalRewardAndPunish,
-            },
-          ]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            Khen: {rewardAndPunishData.rewardsTotal}
-          </Text>
-        </View>
+      {totalRewardAndPunish > 0 && (
+        <View style={styles.chart}>
+          <View
+            style={[
+              bg_green,
+              styles.chartItem,
+              {
+                flex: rewardAndPunishData.rewardsTotal / totalRewardAndPunish,
+              },
+            ]}>
+            <Text style={[fs_8_700, text_white, text_center]}>
+              Khen: {rewardAndPunishData.rewardsTotal}
+            </Text>
+          </View>
 
-        <View
-          style={[
-            bg_yellow,
-            styles.chartItem,
-            {
-              flex: rewardAndPunishData.reminderTotal / totalRewardAndPunish,
-            },
-          ]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            Sự cố: {rewardAndPunishData.reminderTotal}
-          </Text>
-        </View>
+          <View
+            style={[
+              bg_yellow,
+              styles.chartItem,
+              {
+                flex: rewardAndPunishData.reminderTotal / totalRewardAndPunish,
+              },
+            ]}>
+            <Text style={[fs_8_700, text_white, text_center]}>
+              Sự cố: {rewardAndPunishData.reminderTotal}
+            </Text>
+          </View>
 
-        <View
-          style={[
-            bg_red,
-            styles.chartItem,
-            {flex: rewardAndPunishData.punishmentTotal / totalRewardAndPunish},
-          ]}>
-          <Text style={[fs_8_700, text_white, text_center]}>
-            Vi phạm: {rewardAndPunishData.punishmentTotal}
-          </Text>
+          <View
+            style={[
+              bg_red,
+              styles.chartItem,
+              {
+                flex:
+                  rewardAndPunishData.punishmentTotal / totalRewardAndPunish,
+              },
+            ]}>
+            <Text style={[fs_8_700, text_white, text_center]}>
+              Vi phạm: {rewardAndPunishData.punishmentTotal}
+            </Text>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 }

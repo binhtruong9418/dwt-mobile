@@ -1,5 +1,7 @@
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {
+  fs_10_400,
+  fs_10_500,
   fs_12_400,
   fs_12_500,
   mt10,
@@ -18,12 +20,12 @@ import PropTypes, {InferProps} from 'prop-types';
 import {padStart} from '../../utils';
 
 export default function WorkProgressBlock({
-                                            checkIn,
-                                            checkOut,
-                                            attendanceData,
-                                            workPersonalData,
-                                            workDepartmentData,
-                                          }: InferProps<typeof WorkProgressBlock.propTypes>) {
+  checkIn,
+  checkOut,
+  attendanceData,
+  workPersonalData,
+  workDepartmentData,
+}: InferProps<typeof WorkProgressBlock.propTypes>) {
   const formatCheckIn = checkIn ? checkIn.slice(0, 5) : '--:--';
   const formatCheckOut = checkOut ? checkOut.slice(0, 5) : '--:--';
   return (
@@ -31,7 +33,7 @@ export default function WorkProgressBlock({
       <View style={styles.blockItem}>
         <View style={[row_between, styles.mb4]}>
           <View style={styles.row_gap3}>
-            <ClockIcon width={16} height={16}/>
+            <ClockIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Ngày công</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
@@ -41,7 +43,7 @@ export default function WorkProgressBlock({
 
         <View style={[row_between, styles.mb4]}>
           <View style={styles.row_gap3}>
-            <CalendarIcon width={16} height={16}/>
+            <CalendarIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Đã nghỉ / vắng</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
@@ -51,7 +53,7 @@ export default function WorkProgressBlock({
 
         <View style={[styles.row, styles.mb4, w_full]}>
           <View style={[styles.row_gap3, {width: '80%'}]}>
-            <ClockOtIcon width={16} height={16}/>
+            <ClockOtIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
           <Text style={[fs_12_400, text_red]}>{attendanceData.expectedOT}</Text>
@@ -73,20 +75,25 @@ export default function WorkProgressBlock({
             />
           </View>
 
-          <View style={[styles.col_chart, {
-            justifyContent: 'center'
-          }]}>
+          <View
+            style={[
+              styles.col_chart,
+              {
+                justifyContent: 'center',
+              },
+            ]}>
             <TouchableOpacity
               style={{
                 paddingVertical: 3,
-                paddingHorizontal: 7,
                 backgroundColor: '#FF0058',
                 borderColor: '#000',
                 borderWidth: 1,
                 width: '100%',
-                borderRadius: 10,
+                borderRadius: 5,
               }}>
-              <Text style={[fs_12_500, text_white]}>Báo cáo ngày</Text>
+              <Text style={[fs_10_500, text_white, text_center]}>
+                Báo cáo ngày
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -127,6 +134,7 @@ const styles = StyleSheet.create({
   row_chart: {
     flexDirection: 'row',
     flex: 1,
+    gap: 5,
   },
   mb4: {
     marginBottom: 4,
