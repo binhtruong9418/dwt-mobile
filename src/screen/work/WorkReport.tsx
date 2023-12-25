@@ -82,11 +82,6 @@ export default function WorkReport({route, navigation}: any) {
       return;
     }
 
-    if (!isCompleted) {
-      showToast('Vui lòng chọn hoàn thành');
-      return;
-    }
-
     if (isCompleted && !quantity && data.type === 3) {
       showToast('Vui lòng nhập giá trị');
       return;
@@ -103,24 +98,47 @@ export default function WorkReport({route, navigation}: any) {
 
     try {
       setIsLoading(true);
-      const listImages = await Promise.all(
-        files.map(async (item: any) => {
-          const res = await dwtApi.uploadFile(item);
-          return {
-            file_path: res.data.downloadLink,
-            file_name: item.name,
-          };
-        }),
-      );
+      let listImages = null;
+      if (files.length > 0) {
+        listImages = await Promise.all(
+          files.map(async (item: any) => {
+            const res = await dwtApi.uploadFile(item);
+            return {
+              file_path: res.data.downloadLink,
+              file_name: item.name,
+            };
+          }),
+        );
+      }
+
+      let actualState = null;
+      let requestQuantity = null;
+      let status = null;
+      if (isCompleted) {
+        if (data.type === 1 || data.type === 2) {
+          status = 2;
+          requestQuantity = 1;
+        } else if (data.type === 3) {
+          status = 3;
+          requestQuantity = Number(quantity);
+        }
+      }
+      if (isCompletedAndReport) {
+        actualState = 3;
+      }
 
       const requestData = {
         business_standard_id: data.id,
         user_id: userInfo.id,
         reported_date: dayjs(new Date()).format('YYYY-MM-DD'),
         note: note,
-        actual_state: isCompletedAndReport ? 3 : undefined,
-        quantity: data.type === 3 ? quantity : 1,
-        file_attachment: JSON.stringify(listImages),
+        status: status,
+        type: data.type,
+        actual_state: actualState,
+        quantity: requestQuantity,
+        file_attachment: listImages,
+        report_month: dayjs().month() + 1,
+        report_year: dayjs().year(),
       };
       const res = await dwtApi.addPersonalReport(requestData);
       if (res.status === 200) {

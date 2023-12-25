@@ -12,7 +12,7 @@ interface CircleProgressChartProps {
 const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
   progress,
   size = 60,
-  strokeWidth = 6,
+  strokeWidth = 5,
   total,
 }) => {
   const radius = (size - strokeWidth) / 2;

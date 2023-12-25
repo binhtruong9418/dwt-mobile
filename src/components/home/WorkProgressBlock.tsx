@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {
   fs_12_400,
   fs_12_500,
@@ -7,6 +7,7 @@ import {
   text_black,
   text_center,
   text_red,
+  text_white,
   w_full,
 } from '../../assets/style';
 import CalendarIcon from '../../assets/img/calendar-icon.svg';
@@ -62,12 +63,27 @@ export default function WorkProgressBlock({
 
       <View style={styles.blockItem}>
         <Text style={[fs_12_500, text_red, text_center]}>Lượng việc</Text>
-        <View style={[styles.col_chart]}>
-          <Text style={[fs_12_400, text_black]}>Cá nhân/Phòng</Text>
-          <CircleProgressChart
-            progress={Number(workPersonalData.tmpTotalKPI)}
-            total={Number(workDepartmentData.tmpTotalKPI)}
-          />
+        <View style={styles.row_chart}>
+          <View style={[styles.col_chart]}>
+            <Text style={[fs_12_400, text_black]}>Cá nhân/Phòng</Text>
+            <CircleProgressChart
+              progress={Number(workPersonalData.tmpTotalKPI)}
+              total={Number(workDepartmentData.tmpTotalKPI)}
+            />
+          </View>
+
+          <View style={[styles.col_chart]}>
+            <TouchableOpacity
+              style={{
+                paddingVertical: 5,
+                paddingHorizontal: 7,
+                backgroundColor: '#FF0058',
+                borderColor: '#000',
+                borderWidth: 1,
+              }}>
+              <Text style={[fs_12_500, text_white]}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
