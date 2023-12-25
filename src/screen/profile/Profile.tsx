@@ -9,9 +9,9 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 export default function Profile({navigation}: any) {
   const {onSetUserInfo} = useConnection();
   const handleLogout = async () => {
+    await dwtApi.logout();
     await AsyncStorage.removeItem('accessToken');
     onSetUserInfo(null);
-    await dwtApi.logout();
     navigation.navigate('Login');
   };
   return (
