@@ -19,6 +19,11 @@ export const dwtApi = {
     return await axiosClient.get(url);
   },
 
+  getListDepartment: async (): Promise<any> => {
+    const url = 'departments/all';
+    return await axiosClient.get(url);
+  },
+
   //API lấy thông tin chấm công cá nhân theo ngày
   getAttendanceByDate: async (userId: string, date: string): Promise<any> => {
     const url = 'attendances/personal/search';
@@ -54,9 +59,21 @@ export const dwtApi = {
     return await axiosClient.get(url, {params});
   },
 
+  //API lấy danh sách công việc của đơn vị ( key, nonkey)
+  getListWorkDepartment: async (params = {}): Promise<any> => {
+    const url = 'business-standard-history/department';
+    return await axiosClient.get(url, {params});
+  },
+
   //API lấy danh sách công việc phát sinh của cá nhân
   getListWorkArise: async (params = {}): Promise<any> => {
     const url = 'business-standard-work-arise/user-report';
+    return await axiosClient.get(url, {params});
+  },
+
+  //API lấy danh sách công việc phát sinh của đơn vị
+  getListWorkAriseDepartment: async (params = {}): Promise<any> => {
+    const url = 'business-standard-work-arise/admin-report';
     return await axiosClient.get(url, {params});
   },
 
@@ -75,5 +92,10 @@ export const dwtApi = {
         'Content-Type': 'multipart/form-data',
       },
     });
+  },
+
+  getDailyReportDepartment: async (params = {}): Promise<any> => {
+    const url = 'daily-report/department';
+    return await axiosClient.get(url, {params});
   },
 };

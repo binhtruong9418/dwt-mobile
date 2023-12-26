@@ -117,13 +117,10 @@ export default function Work({navigation}: any) {
               totalTarget:
                 work.business_standard_quantity_display.split('/')[1],
               totalComplete: work.business_standard_result,
-              bgColor:
-                work.business_standard_reports.length > 0
-                  ? // @ts-ignore
-                    WORK_STATUS_COLOR[
-                      work.business_standard_reports[0].actual_state
-                    ]
-                  : '#FFF',
+              bgColor: work.actual_state
+                ? // @ts-ignore
+                  WORK_STATUS_COLOR[work.actual_state]
+                : '#FFF',
             };
           })
           .filter((work: any) => {
@@ -169,13 +166,10 @@ export default function Work({navigation}: any) {
               totalTarget:
                 work.business_standard_quantity_display.split('/')[1],
               totalComplete: work.business_standard_result,
-              bgColor:
-                work.business_standard_reports.length > 0
-                  ? // @ts-ignore
-                    WORK_STATUS_COLOR[
-                      work.business_standard_reports[0].actual_state
-                    ]
-                  : '#FFF',
+              bgColor: work.actual_state
+                ? // @ts-ignore
+                  WORK_STATUS_COLOR[work.actual_state]
+                : '#FFF',
             };
           })
           .filter((work: any) => {
@@ -215,11 +209,10 @@ export default function Work({navigation}: any) {
             totalTarget: totalTarget,
             totalComplete: totalAmountCompleted,
             todayTotal: 0,
-            bgColor:
-              listLog.length > 0 && listLog[listLog.length - 1].actual_state
-                ? // @ts-ignore
-                  WORK_STATUS_COLOR[listLog[listLog.length - 1].actual_state]
-                : '#FFF',
+            bgColor: work.actual_state
+              ? // @ts-ignore
+                WORK_STATUS_COLOR[work.actual_state]
+              : '#FFF',
           };
         });
       default:

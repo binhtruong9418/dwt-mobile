@@ -1,48 +1,22 @@
-import {StyleSheet, View, Dimensions, ScrollView} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import HomeHeader from '../../components/home/HomeHeader.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Banner from '../../assets/img/banner.svg';
-import WorkProgressBlock from '../../components/home/WorkProgressBlock.tsx';
-import SummaryBlock from '../../components/home/SummaryBlock.tsx';
-import {py20} from '../../assets/style.ts';
-import BehaviorBlock from '../../components/home/BehaviorBlock.tsx';
-import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {useConnection} from '../../redux/connection';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
-import {WORK_STATUS_COLOR} from '../../assets/constant.ts';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import TabBlock from '../../components/home/TabBlock.tsx';
+import {useState} from 'react';
+import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
+import ManagerTabContainer from '../../components/home/tab-container/ManagerTabContainer.tsx';
 
-const {width: windowWidth} = Dimensions.get('window');
-
-const columns = [
-  {
-    key: 'index',
-    title: 'STT',
-    width: 0.1,
-  },
-  {
-    key: 'name',
-    title: 'Tên',
-    width: 0.4,
-  },
-  {
-    key: 'business_standard_quantity_display',
-    title: 'Số lượng',
-    width: 0.25,
-  },
-  {
-    key: 'business_standard_score_tmp',
-    title: 'NS/KPI',
-    width: 0.25,
-  },
-];
 export default function Home({navigation}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
+  const [currentTab, setCurrentTab] = useState(0);
 
   const {
     data: {checkInTime, checkOutTime} = {},
@@ -86,15 +60,52 @@ export default function Home({navigation}: any) {
   });
 
   const {
+    data: listWorkDepartment = [],
+    isLoading: isLoadingWorkDepartment,
+    refetch: refetchWorkDepartment,
+  } = useQuery(
+    ['getWorkListDepartment'],
+    async () => {
+      const listWorkDepartmentData = await dwtApi.getListWorkDepartment();
+      const listWorkAriseDepartmentData =
+        await dwtApi.getListWorkAriseDepartment();
+
+      const listWorkDepartmentAll = Object.keys(
+        listWorkDepartmentData.data.kpi.keyByUsers,
+      ).reduce((acc, val) => {
+        return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
+      }, []);
+
+      const listNonKeyWorkDepartmentAll = Object.keys(
+        listWorkDepartmentData.data.kpi.nonKeyByUsers,
+      ).reduce((acc, val) => {
+        return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
+      }, []);
+
+      const listWorkDepartment = [
+        ...listWorkDepartmentAll,
+        ...listNonKeyWorkDepartmentAll,
+        ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll,
+      ];
+      return listWorkDepartment;
+    },
+    {
+      enabled:
+        !!userInfo &&
+        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
+    },
+  );
+
+  const {
     data: {
-      listWork,
+      listWorkPersonal,
       monthOverviewPersonal,
       monthOverviewDepartment,
       workPersonalData,
       workDepartmentData,
       workSummary,
     } = {
-      listWork: [],
+      listWorkPersonal: [],
       monthOverviewPersonal: {},
       monthOverviewDepartment: {},
       workPersonalData: {},
@@ -104,14 +115,21 @@ export default function Home({navigation}: any) {
     isLoading: isLoadingWork,
     refetch: refetchWork,
   } = useQuery(['getWorkListAndPoint'], async () => {
-    const res = await dwtApi.getWorkListAndPoint();
-    const kpi = res.data.kpi;
-    const listWork = [...kpi.keys, ...kpi.noneKeys, ...kpi.workArise];
+    const resPersonal = await dwtApi.getWorkListAndPoint();
+    const kpiPersonal = resPersonal.data.kpi;
+    const listWorkPersonal = [
+      ...kpiPersonal.keys,
+      ...kpiPersonal.noneKeys,
+      ...kpiPersonal.workArise,
+    ];
     const workSummary = {
-      done: listWork.filter((item: any) => item.actual_state === 4).length,
-      working: listWork.filter((item: any) => item.actual_state === 2).length,
-      late: listWork.filter((item: any) => item.actual_state === 5).length,
-      total: listWork.filter(
+      done: listWorkPersonal.filter((item: any) => item.actual_state === 4)
+        .length,
+      working: listWorkPersonal.filter((item: any) => item.actual_state === 2)
+        .length,
+      late: listWorkPersonal.filter((item: any) => item.actual_state === 5)
+        .length,
+      total: listWorkPersonal.filter(
         (item: any) =>
           item.actual_state === 4 ||
           item.actual_state === 2 ||
@@ -119,11 +137,11 @@ export default function Home({navigation}: any) {
       ).length,
     };
     return {
-      listWork: listWork,
-      monthOverviewPersonal: kpi.monthOverview,
-      workPersonalData: kpi,
-      workDepartmentData: res.data.departmentKPI,
-      monthOverviewDepartment: res.data.departmentKPI.monthOverview,
+      listWorkPersonal: listWorkPersonal,
+      monthOverviewPersonal: kpiPersonal.monthOverview,
+      workPersonalData: kpiPersonal,
+      workDepartmentData: resPersonal.data.departmentKPI,
+      monthOverviewDepartment: resPersonal.data.departmentKPI.monthOverview,
       workSummary,
     };
   });
@@ -133,13 +151,15 @@ export default function Home({navigation}: any) {
     refetchAttendanceData();
     refetchRewardAndPunish();
     refetchWork();
+    refetchWorkDepartment();
   });
 
   if (
     isLoadingAttendance ||
     isLoadingReward ||
     isLoadingWork ||
-    isLoadingAttendanceDay
+    isLoadingAttendanceDay ||
+    isLoadingWorkDepartment
   ) {
     return <PrimaryLoading />;
   }
@@ -147,44 +167,34 @@ export default function Home({navigation}: any) {
   return (
     <SafeAreaView style={styles.wrapper}>
       <HomeHeader navigation={navigation} />
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={py20}
-        showsVerticalScrollIndicator={false}>
-        <Banner
-          width={windowWidth}
-          height={(windowWidth / 16) * 9}
-          style={[styles.banner]}
+      <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      {currentTab === 0 ? (
+        <HomeTabContainer
+          attendanceData={attendanceData}
+          checkInTime={checkInTime}
+          checkOutTime={checkOutTime}
+          workPersonalData={workPersonalData}
+          workDepartmentData={workDepartmentData}
+          monthOverviewPersonal={monthOverviewPersonal}
+          monthOverviewDepartment={monthOverviewDepartment}
+          rewardAndPunishData={rewardAndPunishData}
+          workSummary={workSummary}
+          listWorkPersonal={listWorkPersonal}
         />
-        <View style={styles.content}>
-          <WorkProgressBlock
-            attendanceData={attendanceData}
-            checkIn={checkInTime}
-            checkOut={checkOutTime}
-            workPersonalData={workPersonalData}
-            workDepartmentData={workDepartmentData}
-          />
-          <SummaryBlock
-            monthOverviewPersonal={monthOverviewPersonal}
-            monthOverviewDepartment={monthOverviewDepartment}
-          />
-          <BehaviorBlock
-            rewardAndPunishData={rewardAndPunishData}
-            workSummary={workSummary}
-          />
-          <PrimaryTable
-            columns={columns}
-            data={listWork.map((item: any, index: number) => {
-              return {
-                ...item,
-                index: index + 1,
-                // @ts-ignore
-                bgColor: WORK_STATUS_COLOR[item.actual_state],
-              };
-            })}
-          />
-        </View>
-      </ScrollView>
+      ) : currentTab === 1 ? (
+        <ManagerTabContainer
+          attendanceData={attendanceData}
+          checkInTime={checkInTime}
+          checkOutTime={checkOutTime}
+          workPersonalData={workPersonalData}
+          workDepartmentData={workDepartmentData}
+          monthOverviewPersonal={monthOverviewPersonal}
+          monthOverviewDepartment={monthOverviewDepartment}
+          rewardAndPunishData={rewardAndPunishData}
+          workSummary={workSummary}
+          listWorkDepartment={listWorkDepartment}
+        />
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -193,17 +203,5 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  banner: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-  container: {
-    position: 'relative',
-  },
-  content: {
-    gap: 12,
-    paddingHorizontal: 10,
   },
 });

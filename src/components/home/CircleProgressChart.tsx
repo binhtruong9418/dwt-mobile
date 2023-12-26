@@ -25,24 +25,28 @@ const CircleProgressChart: React.FC<CircleProgressChartProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#EFEFEF"
+          stroke="#FFF"
           strokeWidth={strokeWidth}
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={`${circumference} ${circumference}`}
           fill="none"
         />
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="#2563EB"
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeDasharray={`${circumference} ${circumference}`}
-          strokeDashoffset={circumference - (progress / total) * circumference}
-          transform={`rotate(-90 ${size / 2} ${size / 2})`}
-          strokeLinecap="round"
-        />
+        {total !== 0 && (
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="#2563EB"
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeDasharray={`${circumference} ${circumference}`}
+            strokeDashoffset={
+              circumference - (progress / total) * circumference
+            }
+            transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            strokeLinecap="round"
+          />
+        )}
         <Text
           x={size / 2}
           y={size / 2}
