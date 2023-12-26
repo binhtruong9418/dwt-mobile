@@ -25,6 +25,7 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import PlusButtonModal from '../../components/work/PlusButtonModal.tsx';
 
 const columns = [
   {
@@ -71,7 +72,13 @@ export default function Work({navigation}: any) {
     date: '',
   });
   const [currentTab, setCurrentTab] = useState(0);
-
+  const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
+  const [addButtonPosition, setAddButtonPosition] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
   const {
     data: {listKeyWorkData, listNonKeyWorkData, listAriseWorkData} = {
       listAriseWorkData: [],
@@ -221,7 +228,6 @@ export default function Work({navigation}: any) {
   }, [
     currentTab,
     statusValue,
-    timeValue,
     listKeyWorkData,
     listNonKeyWorkData,
     listAriseWorkData,
@@ -241,7 +247,11 @@ export default function Work({navigation}: any) {
           navigation.goBack();
         }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 10,
+        }}>
         <View style={styles.content}>
           <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
           <View style={styles.filter_wrapper}>
@@ -271,11 +281,23 @@ export default function Work({navigation}: any) {
             />
           </View>
           <TouchableOpacity
+            onLayout={({nativeEvent}) => {
+              setAddButtonPosition({
+                x: nativeEvent.layout.x,
+                y: nativeEvent.layout.y,
+                width: nativeEvent.layout.width,
+                height: nativeEvent.layout.height,
+              });
+            }}
             style={styles.align_end}
-            onPress={() => {
-              navigation.navigate('AddWorkArise');
-            }}>
-            <AddIcon />
+            onPress={() => setIsOpenPlusButton(true)}>
+            <AddIcon width={32} height={32} />
+            <PlusButtonModal
+              visible={isOpenPlusButton}
+              setVisible={setIsOpenPlusButton}
+              position={addButtonPosition}
+              navigation={navigation}
+            />
           </TouchableOpacity>
         </View>
       </ScrollView>

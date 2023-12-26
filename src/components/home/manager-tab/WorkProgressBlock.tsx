@@ -68,7 +68,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Giao ban</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
-            {padStart(Number(attendanceData.countLate).toFixed(0), 2, '0')}
+            00
           </Text>
         </View>
       </View>

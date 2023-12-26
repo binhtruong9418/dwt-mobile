@@ -47,7 +47,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Đã nghỉ / vắng</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
-            {padStart(Number(attendanceData.countLate).toFixed(2), 2, '0')}
+            {padStart(Number(attendanceData.countLate).toFixed(0), 2, '0')}
           </Text>
         </View>
 
@@ -56,7 +56,9 @@ export default function WorkProgressBlock({
             <ClockOtIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
-          <Text style={[fs_12_400, text_red]}>{attendanceData.expectedOT}</Text>
+          <Text style={[fs_12_400, text_red]}>
+            {padStart(Number(attendanceData.expectedOT).toFixed(0), 2, '0')}
+          </Text>
         </View>
 
         <Text style={[fs_12_500, text_red, text_center, mt10]}>

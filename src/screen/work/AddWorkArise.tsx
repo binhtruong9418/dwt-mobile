@@ -11,32 +11,151 @@ import Header from '../../components/header/Header.tsx';
 import {
   fs_15_400,
   fs_15_700,
-  mt20,
   row_between,
   text_black,
   text_center,
-  text_gray,
   text_red,
   text_white,
 } from '../../assets/style.ts';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useConnection} from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
+import dayjs from 'dayjs';
+import DatePickerModal from '../../components/common/modal/DatePickerModal.tsx';
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
+import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
+import {showToast} from '../../utils';
 
-export default function AddWorkArise({route, navigation}: any) {
+export default function AddWorkArise({navigation}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
   const [isOpenCancelAddWorkAriseModal, setIsOpenCancelAddWorkAriseModal] =
     useState(false);
+  const [isOpenSelectFromDateModal, setOpenSelectFromDateModal] =
+    useState(false);
+  const [isOpenSelectToDateModal, setOpenSelectToDateModal] = useState(false);
+  const [isOpenUpWorkModalSuccess, setOpenUpWorkModalSuccess] = useState(false);
 
-  const handleAddWorkArise = () => {};
+  // upload field
+  const [currentUnit, setCurrentUnit] = useState(0);
+  const [currentType, setCurrentType] = useState(0);
+  const [currentWorker, setCurrentWorker] = useState(0);
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [workingHour, setWorkingHour] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {data: listUnit = [], isLoading: isLoadingListUnit} = useQuery(
+    ['listUnit'],
+    async () => {
+      const res = await dwtApi.getListUnit();
+      return res.data.data;
+    },
+  );
+
+  const {data: listUserData = {}, isLoading: isLoadingListUser} = useQuery(
+    ['listUser'],
+    async () => {
+      if (userInfo.role === 'manager') {
+        return await dwtApi.getListAllUser();
+      } else {
+        return await dwtApi.getListUserDepartment(userInfo.department_id);
+      }
+    },
+    {
+      enabled: !!userInfo,
+    },
+  );
+
+  const listUser = useMemo(() => {
+    return listUserData?.data?.data || [];
+  }, [listUserData]);
+
+  const handleAddWorkArise = async () => {
+    if (!name) {
+      showToast('Vui lòng nhập tên nhiệm vụ');
+      return;
+    }
+
+    if (currentWorker === 0) {
+      showToast('Vui lòng chọn người đảm nhiệm');
+      return;
+    }
+
+    if (currentUnit === 0) {
+      showToast('Vui lòng chọn đơn vị tính');
+      return;
+    }
+
+    if (workingHour === '' || workingHour === '0') {
+      showToast('Vui lòng nhập giờ công');
+      return;
+    }
+
+    if (quantity === '' || quantity === '0') {
+      showToast('Vui lòng nhập số lượng');
+      return;
+    }
+
+    if (currentType === 0) {
+      showToast('Vui lòng chọn mục tiêu');
+      return;
+    }
+
+    if (!fromDate) {
+      showToast('Vui lòng chọn thời gian bắt đầu');
+      return;
+    }
+
+    if (!toDate) {
+      showToast('Vui lòng chọn thời gian kết thúc');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const requestData = {
+        name: name,
+        desc: description,
+        working_hours: workingHour,
+        quantity: quantity,
+        type: currentType,
+        start_time: dayjs(fromDate).format('YYYY-MM-DD'),
+        end_time: dayjs(toDate).format('YYYY-MM-DD'),
+        unit_id: currentUnit,
+        user_id: currentWorker,
+        createdBy: userInfo.id,
+        updatedBy: userInfo.id,
+      };
+
+      const res = await dwtApi.addWorkArise(requestData);
+      if (res.status === 200) {
+        setIsLoading(false);
+        setOpenUpWorkModalSuccess(true);
+      }
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoadingListUnit || isLoadingListUser) {
+    return <PrimaryLoading />;
+  }
   return (
     <SafeAreaView style={styles.wrapper}>
       <Header
-        title="Thêm mới nhiệm vụ phát sinh"
+        title="Việc phát sinh"
         handleGoBack={() => {
           setIsOpenCancelAddWorkAriseModal(true);
         }}
@@ -59,16 +178,18 @@ export default function AddWorkArise({route, navigation}: any) {
           <TextInput
             style={[styles.input, text_black, fs_15_400]}
             placeholderTextColor={'#787878'}
+            value={name}
+            onChangeText={setName}
           />
         </View>
 
         <View style={styles.inputBox}>
-          <Text style={[fs_15_700, text_black]}>
-            Mô tả/ Diễn giải <Text style={text_red}>*</Text>:
-          </Text>
+          <Text style={[fs_15_700, text_black]}>Mô tả/ Diễn giải:</Text>
           <TextInput
             style={[styles.input, text_black, fs_15_400]}
             placeholderTextColor={'#787878'}
+            value={description}
+            onChangeText={setDescription}
           />
         </View>
 
@@ -76,89 +197,127 @@ export default function AddWorkArise({route, navigation}: any) {
           <Text style={[fs_15_700, text_black]}>
             Người đảm nhiệm <Text style={text_red}>*</Text>:
           </Text>
-          <TextInput
-            style={[styles.input, text_black, fs_15_400]}
-            placeholderTextColor={'#787878'}
+          <PrimaryDropdown
+            data={listUser.map((user: any) => {
+              return {
+                label: user.name,
+                value: user.id,
+              };
+            })}
+            value={currentWorker}
+            changeValue={setCurrentWorker}
+            dropdownStyle={styles.dropdownStyle}
           />
         </View>
 
-        <View style={styles.inputBox}>
-          <Text style={[fs_15_700, text_black]}>
-            ĐVT <Text style={text_red}>*</Text>:
-          </Text>
-          <TextInput
-            style={[styles.input, text_black, fs_15_400]}
-            placeholderTextColor={'#787878'}
-          />
+        <View style={styles.rowBetweenGap20}>
+          <View style={[styles.inputBox, styles.w_50]}>
+            <Text style={[fs_15_700, text_black]}>
+              ĐVT <Text style={text_red}>*</Text>:
+            </Text>
+            <PrimaryDropdown
+              data={listUnit.map((unit: any) => {
+                return {
+                  label: unit.name,
+                  value: unit.id,
+                };
+              })}
+              value={currentUnit}
+              changeValue={setCurrentUnit}
+              dropdownStyle={styles.dropdownStyle}
+            />
+          </View>
+
+          <View style={[styles.inputBox, styles.w_50]}>
+            <Text style={[fs_15_700, text_black]}>
+              Giờ công <Text style={text_red}>*</Text>:
+            </Text>
+            <TextInput
+              style={[styles.input, text_black, fs_15_400]}
+              placeholderTextColor={'#787878'}
+              inputMode={'numeric'}
+              keyboardType={'numeric'}
+              value={workingHour}
+              onChangeText={setWorkingHour}
+            />
+          </View>
+        </View>
+
+        <View style={styles.rowBetweenGap20}>
+          <View style={[styles.inputBox, styles.w_50]}>
+            <Text style={[fs_15_700, text_black]}>
+              Mục tiêu <Text style={text_red}>*</Text>:
+            </Text>
+            <PrimaryDropdown
+              data={[
+                {
+                  label: '1 lần',
+                  value: 1,
+                },
+                {
+                  label: 'Liên tục',
+                  value: 2,
+                },
+                {
+                  label: 'Đạt giá trị',
+                  value: 3,
+                },
+              ]}
+              value={currentType}
+              changeValue={setCurrentType}
+              dropdownStyle={styles.dropdownStyle}
+            />
+          </View>
+
+          <View style={[styles.inputBox, styles.w_50]}>
+            <Text style={[fs_15_700, text_black]}>
+              Số lượng <Text style={text_red}>*</Text>:
+            </Text>
+            <TextInput
+              style={[styles.input, text_black, fs_15_400]}
+              placeholderTextColor={'#787878'}
+              inputMode={'numeric'}
+              keyboardType={'numeric'}
+              value={quantity}
+              onChangeText={setQuantity}
+            />
+          </View>
         </View>
 
         <View style={styles.inputBox}>
-          <Text style={[fs_15_700, text_black]}>
-            Giờ công <Text style={text_red}>*</Text>:
-          </Text>
-          <TextInput
-            style={[styles.input, text_black, fs_15_400]}
-            placeholderTextColor={'#787878'}
-          />
-        </View>
-
-        <View style={styles.inputBox}>
-          <Text style={[fs_15_700, text_black]}>
-            Mục tiêu <Text style={text_red}>*</Text>:
-          </Text>
-          <TextInput
-            style={[styles.input, text_black, fs_15_400]}
-            placeholderTextColor={'#787878'}
-          />
-        </View>
-
-        <View style={styles.inputBox}>
-          <Text style={[fs_15_700, text_black]}>
-            Số lượng <Text style={text_red}>*</Text>:
-          </Text>
-          <TextInput
-            style={[styles.input, text_black, fs_15_400]}
-            placeholderTextColor={'#787878'}
-          />
-        </View>
-        <View
-          style={[
-            {
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            },
-            mt20,
-          ]}>
           <Text style={[fs_15_700, text_black]}>Chọn thời gian:</Text>
-          <View style={styles.w_60}>
-            <Pressable style={[row_between]}>
+          <View style={styles.rowBetweenGap20}>
+            <Pressable
+              style={[row_between, styles.w_50]}
+              onPress={() => {
+                setOpenSelectFromDateModal(true);
+              }}>
               <Text style={[fs_15_400, text_black]}>Từ:</Text>
-              <View style={styles.rowGap3}>
-                <View style={styles.boxTime}>
-                  <Text style={[fs_15_400, text_black]}>08:00</Text>
-                </View>
 
-                <View style={styles.boxTime}>
-                  <Text style={[fs_15_400, text_black]}>17/12/2023</Text>
-                </View>
+              <View style={styles.boxTime}>
+                <Text style={[fs_15_400, text_black]}>
+                  {fromDate ? dayjs(fromDate).format('DD/MM/YYYY') : ''}
+                </Text>
               </View>
             </Pressable>
 
-            <Pressable style={[row_between]}>
+            <Pressable
+              style={[row_between, styles.w_50]}
+              onPress={() => {
+                setOpenSelectToDateModal(true);
+              }}>
               <Text style={[fs_15_400, text_black]}>Đến:</Text>
-              <View style={styles.rowGap3}>
-                <View style={styles.boxTime}>
-                  <Text style={[fs_15_400, text_black]}>08:00</Text>
-                </View>
 
-                <View style={styles.boxTime}>
-                  <Text style={[fs_15_400, text_black]}>17/12/2023</Text>
-                </View>
+              <View style={styles.boxTime}>
+                <Text style={[fs_15_400, text_black]}>
+                  {toDate ? dayjs(toDate).format('DD/MM/YYYY') : ''}
+                </Text>
               </View>
             </Pressable>
           </View>
         </View>
       </ScrollView>
+      <LoadingActivity isLoading={isLoading} />
       <ToastConfirmModal
         visible={isOpenCancelAddWorkAriseModal}
         handleCancel={() => {
@@ -171,11 +330,26 @@ export default function AddWorkArise({route, navigation}: any) {
         okText={'Tiếp tục tạo nhiệm vụ'}
         cancelText={'Hủy tạo mới'}
       />
-      {/*<ToastSuccessModal*/}
-      {/*  visible={isOpenConfirmUploadWorkReportModal}*/}
-      {/*  handlePressOk={handlePressOk}*/}
-      {/*  description={'Báo cáo thành công'}*/}
-      {/*/>*/}
+      <DatePickerModal
+        visible={isOpenSelectFromDateModal}
+        setVisible={setOpenSelectFromDateModal}
+        currentDate={fromDate}
+        setCurrentDate={setFromDate}
+      />
+      <DatePickerModal
+        visible={isOpenSelectToDateModal}
+        setVisible={setOpenSelectToDateModal}
+        currentDate={toDate}
+        setCurrentDate={setToDate}
+      />
+      <ToastSuccessModal
+        visible={isOpenUpWorkModalSuccess}
+        handlePressOk={() => {
+          setOpenUpWorkModalSuccess(false);
+          navigation.navigate('Work');
+        }}
+        description={'Thêm mới thành công'}
+      />
     </SafeAreaView>
   );
 }
@@ -210,6 +384,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 7,
   },
+  dropdownStyle: {
+    borderWidth: 1,
+    borderColor: '#D9D9D9',
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 3,
+  },
   inputBox: {
     gap: 6,
     marginTop: 20,
@@ -222,6 +403,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     gap: 12,
   },
+  rowBetweenGap20: {
+    flexDirection: 'row',
+    gap: 20,
+  },
   fileBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -233,25 +418,8 @@ const styles = StyleSheet.create({
     borderColor: '#787878',
     borderRadius: 5,
   },
-  row_gap3: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    width: '80%',
-  },
-  row_gap10: {
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'flex-end',
-  },
-  rowGap3: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  w_60: {
-    width: '60%',
-    gap: 10,
+  w_50: {
+    flex: 0.5,
   },
   boxTime: {
     borderWidth: 1,

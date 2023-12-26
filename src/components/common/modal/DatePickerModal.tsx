@@ -1,48 +1,50 @@
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  fs_14_400,
   fs_14_700,
-  row_between,
   text_black,
   text_center,
   text_red,
 } from '../../../assets/style.ts';
 import DateTimePicker from 'react-native-ui-datepicker';
 import CloseIcon from '../../../assets/img/close-icon.svg';
-import dayjs from 'dayjs';
 import {useState} from 'react';
 import 'dayjs/locale/vi';
 import PrimaryButton from '../button/PrimaryButton.tsx';
+import {ReactNativeModal} from 'react-native-modal';
+import dayjs from "dayjs";
 export default function DatePickerModal({
   setVisible,
-  customTime,
-  setCustomTime,
-  handleSaveCustomValue,
+  visible,
+  currentDate,
+  setCurrentDate,
 }: any) {
-  const [fromDate, setFromDate] = useState(customTime.fromDate || dayjs());
-  const [toDate, setToDate] = useState(customTime.toDate || dayjs());
-  const [currentSelect, setCurrentSelect] = useState(0);
+  const [dateSelect, setDateSelect] = useState(currentDate || dayjs());
 
   const handleSaveValue = () => {
-    setCustomTime({
-      fromDate: fromDate,
-      toDate: toDate,
-    });
-    handleSaveCustomValue();
+    setCurrentDate(dateSelect);
+    setVisible(false);
   };
+
   return (
-    <View style={styles.timePickerWrapper}>
-      <View style={styles.timePickerContainer}>
+    <ReactNativeModal
+      animationInTiming={200}
+      animationOutTiming={200}
+      animationIn={'fadeInUp'}
+      animationOut={'fadeOutDown'}
+      swipeDirection={'down'}
+      backdropTransitionInTiming={200}
+      backdropTransitionOutTiming={200}
+      onSwipeComplete={() => {
+        setVisible(false);
+      }}
+      style={styles.wrapper}
+      isVisible={visible}
+      onBackdropPress={() => {
+        setVisible(false);
+      }}>
+      <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={[fs_14_700, text_red, text_center]}>
-            TÙY CHỌN THỜI GIAN
-          </Text>
+          <Text style={[fs_14_700, text_red, text_center]}>LỌC THỜI GIAN</Text>
           <Pressable
             hitSlop={10}
             onPress={() => {
@@ -51,47 +53,13 @@ export default function DatePickerModal({
             <CloseIcon width={20} height={20} style={styles.closeIcon} />
           </Pressable>
         </View>
-        <View style={styles.content}>
-          <View style={row_between}>
-            <View style={styles.row_gap10}>
-              <Text style={[fs_14_400, text_black]}>Từ: </Text>
-              <TouchableOpacity
-                style={
-                  currentSelect === 0 ? styles.dateBoxSelect : styles.dateBox
-                }
-                onPress={() => {
-                  setCurrentSelect(0);
-                }}>
-                <Text style={[fs_14_400, text_black]}>
-                  {dayjs(fromDate).format('DD/MM/YYYY')}
-                </Text>
-              </TouchableOpacity>
-            </View>
 
-            <View style={styles.row_gap10}>
-              <Text style={[fs_14_400, text_black]}>Đến: </Text>
-              <TouchableOpacity
-                style={
-                  currentSelect === 1 ? styles.dateBoxSelect : styles.dateBox
-                }
-                onPress={() => {
-                  setCurrentSelect(1);
-                }}>
-                <Text style={[fs_14_400, text_black]}>
-                  {dayjs(toDate).format('DD/MM/YYYY')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+        <View style={styles.content}>
           <View style={styles.calendar}>
             <DateTimePicker
-              value={currentSelect === 0 ? fromDate : toDate}
+              value={dateSelect}
               onValueChange={(date: any) => {
-                if (currentSelect === 0) {
-                  setFromDate(date);
-                } else {
-                  setToDate(date);
-                }
+                setDateSelect(date);
               }}
               locale={'vi'}
               mode={'date'}
@@ -104,16 +72,22 @@ export default function DatePickerModal({
           </View>
           <PrimaryButton
             onPress={handleSaveValue}
-            text={'Áp dụng bộ lọc'}
+            text={'Áp dụng'}
             buttonStyle={styles.button}
           />
         </View>
       </View>
-    </View>
+    </ReactNativeModal>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: 'rgba(217, 217, 217, 0.75)',
+    justifyContent: 'center',
+    margin: 0,
+  },
   header: {
     paddingVertical: 13,
     paddingHorizontal: 20,
@@ -121,47 +95,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     position: 'relative',
   },
+  container: {
+    backgroundColor: '#FFF',
+    paddingBottom: 15,
+  },
   closeIcon: {
     position: 'absolute',
     right: 0,
     bottom: 0,
   },
-  timePickerWrapper: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(217, 217, 217, 0.83)',
-    zIndex: 1,
-  },
-  timePickerContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-  },
   content: {
-    padding: 15,
+    paddingHorizontal: 15,
   },
   row_gap10: {
     flexDirection: 'row',
     gap: 10,
-    alignItems: 'center',
-  },
-  dateBox: {
-    height: 30,
-    width: 100,
-    borderWidth: 1,
-    borderColor: '#D9D9D9',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dateBoxSelect: {
-    height: 30,
-    width: 100,
-    borderWidth: 1,
-    borderColor: '#CA1F24',
-    borderRadius: 5,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   calendar: {

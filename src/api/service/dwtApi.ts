@@ -19,6 +19,29 @@ export const dwtApi = {
     return await axiosClient.get(url);
   },
 
+  //API lấy danh sách các đơn vị tính
+  getListUnit: async (): Promise<any> => {
+    const url = 'units';
+    return await axiosClient.get(url);
+  },
+
+  //API laaysys danh sách tất cả nhân viên
+  getListAllUser: async (): Promise<any> => {
+    const url = 'users/all';
+    return await axiosClient.get(url);
+  },
+
+  //API lấy danh sách nhân viên của văn phòng
+  getListUserDepartment: async (departmentId: string): Promise<any> => {
+    const url = 'users';
+    return await axiosClient.get(url, {
+      params: {
+        department_id: departmentId,
+      },
+    });
+  },
+
+  //API lấy danh sách doanh nghiệp
   getListDepartment: async (): Promise<any> => {
     const url = 'departments/all';
     return await axiosClient.get(url);
@@ -97,5 +120,10 @@ export const dwtApi = {
   getDailyReportDepartment: async (params = {}): Promise<any> => {
     const url = 'daily-report/department';
     return await axiosClient.get(url, {params});
+  },
+
+  addWorkArise: async (data: any): Promise<any> => {
+    const url = 'business-standard-work-arise/store';
+    return await axiosClient.post(url, data);
   },
 };

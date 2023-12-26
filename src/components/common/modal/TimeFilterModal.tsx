@@ -18,38 +18,19 @@ import CloseIcon from '../../../assets/img/close-icon.svg';
 import PrimaryCheckbox from '../checkbox/PrimaryCheckbox.tsx';
 import {useState} from 'react';
 import PrimaryButton from '../button/PrimaryButton.tsx';
-import DatePickerModal from './DatePickerModal.tsx';
-import ChevronRightIcon from '../../../assets/img/chevron-right.svg';
-import dayjs from 'dayjs';
 import {LIST_TIME_FILTER} from '../../../assets/constant.ts';
 export default function TimeFilterModal({
   visible,
   setVisible,
   setTimeValue,
-  timeCustomValue,
-  setTimeCustomValue,
 }: InferProps<typeof TimeFilterModal.propTypes>) {
   const [currentFilter, setCurrentFilter] = useState(LIST_TIME_FILTER[0].value);
-  const [isOpenTimePicker, setIsOpenTimePicker] = useState<boolean>(false);
-  const [customTime, setCustomTime] = useState<any>(timeCustomValue);
   const handleChangeCheck = (value: string) => {
-    if (value === 'custom' && !customTime.fromDate && !customTime.toDate) {
-      setIsOpenTimePicker(true);
-    } else {
-      setCurrentFilter(value);
-    }
-  };
-
-  const handleSaveCustomValue = () => {
-    setCurrentFilter('custom');
-    setIsOpenTimePicker(false);
+    setCurrentFilter(value);
   };
 
   const handleSaveValue = () => {
     setTimeValue(LIST_TIME_FILTER.find(item => item.value === currentFilter));
-    if (currentFilter === 'custom') {
-      setTimeCustomValue(customTime);
-    }
     setVisible(false);
   };
   return (
@@ -91,37 +72,15 @@ export default function TimeFilterModal({
                   onChange={() => handleChangeCheck(item.value)}
                 />
               </View>
-              {item.value === 'custom' && currentFilter === item.value && (
-                <TouchableOpacity
-                  style={styles.row_center}
-                  hitSlop={10}
-                  onPress={() => {
-                    setIsOpenTimePicker(true);
-                  }}>
-                  <Text style={[fs_14_400, text_black]}>
-                    {dayjs(customTime.fromDate).format('DD/MM/YYYY')} -{' '}
-                    {dayjs(customTime.toDate).format('DD/MM/YYYY')}
-                  </Text>
-                  <ChevronRightIcon />
-                </TouchableOpacity>
-              )}
             </View>
           ))}
           <PrimaryButton
             onPress={handleSaveValue}
-            text={'Áp dụng bộ lọc'}
+            text={'Áp dụng'}
             buttonStyle={styles.button}
           />
         </View>
       </View>
-      {isOpenTimePicker && (
-        <DatePickerModal
-          setVisible={setIsOpenTimePicker}
-          setCustomTime={setCustomTime}
-          customTime={customTime}
-          handleSaveCustomValue={handleSaveCustomValue}
-        />
-      )}
     </ReactNativeModal>
   );
 }
