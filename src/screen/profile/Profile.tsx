@@ -124,15 +124,16 @@ export default function Profile({navigation}: any) {
   const handleUploadAvatar = async (images: any) => {
     try {
       setIsOpenUploadAvatar(false);
-      const uploadRes = await dwtApi.uploadFile(images[0]);
-      console.log(uploadRes);
+      setIsLoading(true);
+      const imageUrl = await dwtApi.uploadFile(images[0]);
       const res = await dwtApi.updateUserById(userInfo.id, {
-        avatar: uploadRes.data.downloadLink,
+        avatar: imageUrl,
       });
       if (res.status === 200) {
         setIsLoading(false);
         setIsSuccess(true);
         await refetch();
+        onSetUserInfo(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -310,6 +311,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     left: 15,
+    zIndex: 1,
   },
   buttonStyle: {
     paddingVertical: 12,

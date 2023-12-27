@@ -35,7 +35,7 @@ export default function TabBlock({
               text_center,
               currentTab === 0 ? text_red : text_black,
             ]}>
-            {'Trang chủ'}
+            {'Nhật trình'}
           </Text>
         </TouchableOpacity>
 
@@ -86,7 +86,7 @@ export default function TabBlock({
               text_center,
               currentTab === 3 ? text_red : text_black,
             ]}>
-            {'Kho vận'}
+            {'Sản xuất'}
           </Text>
         </TouchableOpacity>
 
@@ -102,6 +102,21 @@ export default function TabBlock({
               fs_14_400,
               text_center,
               currentTab === 4 ? text_red : text_black,
+            ]}>
+            {'Kho vận'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.item, currentTab === 4 && styles.item_active]}
+          onPress={() => {
+            setCurrentTab(4);
+          }}>
+          <Text
+            style={[
+              fs_14_400,
+              text_center,
+              currentTab === 5 ? text_red : text_black,
             ]}>
             {'HCNS'}
           </Text>

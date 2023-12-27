@@ -102,9 +102,9 @@ export default function WorkReport({route, navigation}: any) {
       if (files.length > 0) {
         listImages = await Promise.all(
           files.map(async (item: any) => {
-            const res = await dwtApi.uploadFile(item);
+            const imageUrl = await dwtApi.uploadFile(item);
             return {
-              file_path: res.data.downloadLink,
+              file_path: imageUrl,
               file_name: item.name,
             };
           }),
@@ -208,57 +208,55 @@ export default function WorkReport({route, navigation}: any) {
             onChange={setIsCompleted}
             labelStyle={styles.labelStyle}
           />
-          {isCompleted &&
-            (data.type === 3 ? (
+          {isCompleted && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                // alignItems: 'flex-end',
+              }}>
               <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                }}>
-                <View
-                  style={[
-                    styles.row_gap10,
-                    {
-                      width: '50%',
-                    },
-                  ]}>
-                  <TextInput
-                    style={[styles.input, text_black, fs_15_400]}
-                    placeholderTextColor={'#787878'}
-                    placeholder={'Đạt giá trị'}
-                    value={quantity}
-                    inputMode="numeric"
-                    onChangeText={value => setQuantity(value)}
-                    keyboardType="numeric"
-                  />
-                  <Text style={[fs_15_400, text_gray]}>
-                    /{data.totalTarget}
-                  </Text>
-                </View>
-                <View
+                style={[
+                  styles.row_gap10,
+                  {
+                    alignItems: 'center',
+                    width: '50%',
+                    height: 'auto',
+                  },
+                ]}>
+                <TextInput
                   style={[
                     styles.input,
-                    styles.disable,
-                    {
-                      width: '50%',
-                    },
-                  ]}>
-                  <Text style={[fs_15_400, text_gray, text_center]}>
-                    {data.unit_name}
-                  </Text>
-                </View>
-              </View>
-            ) : (
-              <View style={styles.row_gap10}>
-                <TextInput
-                  style={[styles.input, text_black, fs_15_400, styles.disable]}
+                    text_black,
+                    fs_15_400,
+                    data.type !== 3 && styles.disable,
+                  ]}
                   placeholderTextColor={'#787878'}
-                  placeholder={'1'}
-                  editable={false}
+                  placeholder={data.type !== 3 ? '1' : 'Đạt giá trị'}
+                  value={quantity}
+                  inputMode="numeric"
+                  onChangeText={value => setQuantity(value)}
+                  keyboardType="numeric"
+                  editable={data.type === 3}
                 />
+                <Text style={[fs_15_400, text_gray]}>/{data.totalTarget}</Text>
               </View>
-            ))}
+              <View
+                style={[
+                  styles.input,
+                  styles.disable,
+                  {
+                    width: '50%',
+                    height: 'auto',
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Text style={[fs_15_400, text_gray, text_center]}>
+                  {data.unit_name}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
 
         <View style={styles.inputBox}>

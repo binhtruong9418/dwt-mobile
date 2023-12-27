@@ -25,7 +25,7 @@ import CheckSalaryIcon from '../../assets/img/check-salary.svg';
 export default function SalaryDetail({route, navigation}: any) {
   const {id} = route.params;
   const {data: salaryInfo, isLoading: isLoadingSalary} = useQuery(
-    ['listSalary'],
+    ['salaryDetail'],
     async () => {
       const res = await dwtApi.getSalaryById(2);
       return res.data;

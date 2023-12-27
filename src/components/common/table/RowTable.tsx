@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
   },
   cell: {
     paddingVertical: 7,
-    paddingHorizontal: 3,
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#D9D9D9',

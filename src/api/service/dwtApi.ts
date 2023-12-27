@@ -119,11 +119,12 @@ export const dwtApi = {
     const url = 'https://report.sweetsica.com/api/report/upload';
     const formData = new FormData();
     formData.append('files', data);
-    return await axios.post(url, formData, {
+    const res = await axios.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return res.data.downloadLink.replace('http://', 'https://');
   },
 
   getDailyReportDepartment: async (params = {}): Promise<any> => {

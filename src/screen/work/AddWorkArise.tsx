@@ -134,8 +134,8 @@ export default function AddWorkArise({navigation}: any) {
         end_time: dayjs(toDate).format('YYYY-MM-DD'),
         unit_id: currentUnit,
         user_id: currentWorker,
-        createdBy: userInfo.id,
-        updatedBy: userInfo.id,
+        created_by: userInfo.id,
+        updated_by: userInfo.id,
       };
 
       const res = await dwtApi.addWorkArise(requestData);
@@ -143,8 +143,9 @@ export default function AddWorkArise({navigation}: any) {
         setIsLoading(false);
         setOpenUpWorkModalSuccess(true);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
+      showToast(err.message);
       setIsLoading(false);
     }
   };
@@ -429,8 +430,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#D9D9D9',
     borderRadius: 5,
-    paddingHorizontal: 7,
-    paddingVertical: 3,
+    paddingVertical: 10,
     width: '70%',
     alignItems: 'center',
   },

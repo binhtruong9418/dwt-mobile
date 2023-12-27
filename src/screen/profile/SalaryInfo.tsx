@@ -17,6 +17,7 @@ import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import SalaryItemIcon from '../../assets/img/salary-item-icon.svg';
 import dayjs from 'dayjs';
 import MonthPickerModal from '../../components/common/modal/MonthPickerModal.tsx';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 export default function SalaryInfo({navigation}: any) {
   const [isOpenMonthSelect, setIsOpenMonthSelect] = useState(false);
@@ -26,14 +27,16 @@ export default function SalaryInfo({navigation}: any) {
   });
   const [salaryMode, setSalaryMode] = useState(0);
 
-  const {data: listSalary = [], isLoading: isLoadingListSalary} = useQuery(
-    ['listSalary'],
-    async () => {
-      const res = await dwtApi.getSalaryHistory();
-      return res.data.data;
-    },
-  );
+  const {
+    data: listSalary = [],
+    isLoading: isLoadingListSalary,
+    refetch: refetchListSalary,
+  } = useQuery(['listSalary'], async () => {
+    const res = await dwtApi.getSalaryHistory();
+    return res.data.data;
+  });
 
+  useRefreshOnFocus(refetchListSalary);
   if (isLoadingListSalary) {
     return <PrimaryLoading />;
   }
