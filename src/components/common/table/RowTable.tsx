@@ -5,19 +5,21 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import RowDetail from './RowDetail.tsx';
 import {useEffect, useRef, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 export default function RowTable({item, columns, bgColor, canShowMore}: any) {
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
   const [isMore, setIsMore] = useState(false);
-
+  const navigation = useNavigation();
   const toggleMore = () => {
     if (!canShowMore) {
+      // @ts-ignore
+      navigation.navigate('WorkDetail', {data: item});
       return;
     }
     if (!isMore) {
