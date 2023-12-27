@@ -147,6 +147,9 @@ const globalStyle = StyleSheet.create({
   text_center: {
     textAlign: 'center',
   },
+  fw_bold: {
+    fontWeight: 'bold',
+  },
   py10: {
     paddingVertical: 10,
   },
@@ -191,6 +194,9 @@ const globalStyle = StyleSheet.create({
   w_full: {
     width: '100%',
   },
+  text_right: {
+    textAlign: 'right',
+  }
 });
 
 export const {
@@ -242,4 +248,6 @@ export const {
   mb20,
   row_between,
   w_full,
+  fw_bold,
+  text_right
 } = globalStyle;
