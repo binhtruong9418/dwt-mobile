@@ -207,6 +207,7 @@ export default function AddWorkArise({navigation}: any) {
             value={currentWorker}
             changeValue={setCurrentWorker}
             dropdownStyle={styles.dropdownStyle}
+            isSearch={true}
           />
         </View>
 
@@ -225,6 +226,7 @@ export default function AddWorkArise({navigation}: any) {
               value={currentUnit}
               changeValue={setCurrentUnit}
               dropdownStyle={styles.dropdownStyle}
+              isSearch={true}
             />
           </View>
 
@@ -266,6 +268,7 @@ export default function AddWorkArise({navigation}: any) {
               value={currentType}
               changeValue={setCurrentType}
               dropdownStyle={styles.dropdownStyle}
+              isSearch={false}
             />
           </View>
 
@@ -350,6 +353,7 @@ export default function AddWorkArise({navigation}: any) {
         }}
         description={'Thêm mới thành công'}
       />
+      <LoadingActivity isLoading={isLoading} />
     </SafeAreaView>
   );
 }
@@ -427,5 +431,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 7,
     paddingVertical: 3,
+    width: '70%',
+    alignItems: 'center',
   },
 });

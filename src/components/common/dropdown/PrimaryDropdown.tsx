@@ -10,12 +10,14 @@ export default function PrimaryDropdown({
   changeValue,
   dropdownStyle,
   placeholder,
+  isSearch,
+  textStyle,
 }: InferProps<typeof PrimaryDropdown.propTypes>) {
   return (
     <Dropdown
       style={[dropdownStyle]}
       itemTextStyle={[text_black, fs_15_400]}
-      selectedTextStyle={[text_black, fs_15_400, styles.pl3]}
+      selectedTextStyle={[text_black, fs_15_400, styles.pl3, {...textStyle}]}
       data={data}
       labelField="label"
       valueField="value"
@@ -24,9 +26,10 @@ export default function PrimaryDropdown({
       onChange={item => {
         changeValue(item.value);
       }}
-      search
+      search={isSearch || false}
       searchPlaceholder={'Tìm kiếm'}
       placeholder={placeholder || 'Chọn'}
+      placeholderStyle={[text_black, fs_15_400]}
     />
   );
 }
@@ -43,4 +46,10 @@ PrimaryDropdown.propTypes = {
   changeValue: PropTypes.func.isRequired,
   dropdownStyle: PropTypes.any,
   placeholder: PropTypes.string,
+  isSearch: PropTypes.bool,
+  textStyle: PropTypes.any,
+};
+
+PrimaryDropdown.defaultProps = {
+  isSearch: true,
 };

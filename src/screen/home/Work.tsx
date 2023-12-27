@@ -8,11 +8,11 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import TabBlock from '../../components/work/TabBlock.tsx';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import AddIcon from '../../assets/img/add.svg';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
-import {fs_12_400, text_black} from '../../assets/style.ts';
+import {fs_12_400, fs_14_400, text_black} from '../../assets/style.ts';
 import TimeFilterModal from '../../components/common/modal/TimeFilterModal.tsx';
 import WorkStatusFilterModal from '../../components/common/modal/WorkStatusFilterModal.tsx';
 import {
@@ -26,6 +26,10 @@ import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import PlusButtonModal from '../../components/work/PlusButtonModal.tsx';
+import MonthPickerModal from '../../components/common/modal/MonthPickerModal.tsx';
+import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import {useConnection} from '../../redux/connection';
+import ListDepartmentModal from '../../components/home/manager-tab/ListDepartmentModal.tsx';
 
 const columns = [
   {
@@ -60,17 +64,16 @@ const columns = [
   },
 ];
 export default function Work({navigation}: any) {
+  const {
+    connection: {userInfo},
+  } = useConnection();
   const [statusValue, setStatusValue] = useState(LIST_WORK_STATUS_FILTER[0]);
-  const [timeValue, setTimeValue] = useState(LIST_TIME_FILTER[0]);
-  const [timeCustomValue, setTimeCustomValue] = useState({
-    fromDate: null,
-    toDate: null,
+  const [currentMonth, setCurrentMonth] = useState({
+    month: dayjs().month(),
+    year: dayjs().year(),
   });
-  const [onOpenTimeSelect, setOnOpenTimeSelect] = useState(false);
-  const [onOpenStatusSelect, setOnOpenStatusSelect] = useState(false);
-  const [paramsSearch, setParamsSearch] = useState({
-    date: '',
-  });
+  const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
+  const [isOpenStatusSelect, setIsOpenStatusSelect] = useState(false);
   const [currentTab, setCurrentTab] = useState(0);
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
   const [addButtonPosition, setAddButtonPosition] = useState({
@@ -79,23 +82,33 @@ export default function Work({navigation}: any) {
     width: 0,
     height: 0,
   });
+  // const [currentWorkTab, setCurrentWorkTab] = useState(0);
   const {
     data: {listKeyWorkData, listNonKeyWorkData, listAriseWorkData} = {
-      listAriseWorkData: [],
       listKeyWorkData: [],
       listNonKeyWorkData: [],
+      listAriseWorkData: [],
     },
     isLoading: isLoadingListWork,
     refetch: refetchListWork,
   } = useQuery(['getListKeyAndNonKeyWork'], async () => {
-    const keyWorkRes = await dwtApi.getListWork(paramsSearch);
-    const arisWorkRes = await dwtApi.getListWorkArise(paramsSearch);
+    const keyWorkRes = await dwtApi.getListWork({
+      date: `${currentMonth.year}-${currentMonth.month + 1}`,
+    });
+    const arisWorkRes = await dwtApi.getListWorkArise({
+      date: `${currentMonth.year}-${currentMonth.month + 1}`,
+    });
+
     return {
       listKeyWorkData: keyWorkRes.data.kpi.keys,
       listNonKeyWorkData: keyWorkRes.data.kpi.noneKeys,
       listAriseWorkData: arisWorkRes.data.businessStandardWorkArise.data,
     };
   });
+
+  useEffect(() => {
+    refetchListWork().then();
+  }, [currentMonth]);
 
   const tableData = useMemo(() => {
     switch (currentTab) {
@@ -240,81 +253,90 @@ export default function Work({navigation}: any) {
   }
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <Header
-        title={'NHẬT TRÌNH CÔNG VIỆC'}
-        handleGoBack={() => {
-          navigation.goBack();
-        }}
-      />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 10,
-        }}>
-        <View style={styles.content}>
-          <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
-          <View style={styles.filter_wrapper}>
-            <TouchableOpacity
-              style={styles.dropdown}
-              onPress={() => {
-                setOnOpenStatusSelect(true);
-              }}>
-              <Text style={[text_black, fs_12_400]}>{statusValue.label}</Text>
-              <DropdownIcon width={20} height={20} />
-            </TouchableOpacity>
+    userInfo && (
+      <SafeAreaView style={styles.wrapper}>
+        <Header
+          title={'NHẬT TRÌNH CÔNG VIỆC'}
+          handleGoBack={() => {
+            navigation.goBack();
+          }}
+        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 10,
+          }}>
+          <View style={styles.content}>
+            {/*{userInfo && userInfo.role === 'admin' && (*/}
+            {/*  <AdminTabBlock*/}
+            {/*    currentTab={currentWorkTab}*/}
+            {/*    setCurrentTab={setCurrentWorkTab}*/}
+            {/*  />*/}
+            {/*)}*/}
+            <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
+            <View style={styles.filter_wrapper}>
+              <TouchableOpacity
+                style={styles.dropdown}
+                onPress={() => {
+                  setIsOpenStatusSelect(true);
+                }}>
+                <Text style={[text_black, fs_14_400]}>{statusValue.label}</Text>
+                <DropdownIcon width={20} height={20} />
+              </TouchableOpacity>
 
+              <TouchableOpacity
+                style={styles.dropdown}
+                onPress={() => {
+                  setIsOpenTimeSelect(true);
+                }}>
+                <Text style={[text_black, fs_14_400]}>
+                  {currentMonth.month + 1}/{currentMonth.year}
+                </Text>
+                <DropdownIcon width={20} height={20} />
+              </TouchableOpacity>
+            </View>
+            <View style={[styles.px15]}>
+              <PrimaryTable
+                data={tableData}
+                columns={columns}
+                canShowMore={true}
+              />
+            </View>
             <TouchableOpacity
-              style={styles.dropdown}
-              onPress={() => {
-                setOnOpenTimeSelect(true);
-              }}>
-              <Text style={[text_black, fs_12_400]}>{timeValue.label}</Text>
-              <DropdownIcon width={20} height={20} />
+              onLayout={({nativeEvent}) => {
+                setAddButtonPosition({
+                  x: nativeEvent.layout.x,
+                  y: nativeEvent.layout.y,
+                  width: nativeEvent.layout.width,
+                  height: nativeEvent.layout.height,
+                });
+              }}
+              style={styles.align_end}
+              onPress={() => setIsOpenPlusButton(true)}>
+              <AddIcon width={32} height={32} />
+              <PlusButtonModal
+                visible={isOpenPlusButton}
+                setVisible={setIsOpenPlusButton}
+                position={addButtonPosition}
+                navigation={navigation}
+              />
             </TouchableOpacity>
           </View>
-          <View style={[styles.px15]}>
-            <PrimaryTable
-              data={tableData}
-              columns={columns}
-              canShowMore={true}
-            />
-          </View>
-          <TouchableOpacity
-            onLayout={({nativeEvent}) => {
-              setAddButtonPosition({
-                x: nativeEvent.layout.x,
-                y: nativeEvent.layout.y,
-                width: nativeEvent.layout.width,
-                height: nativeEvent.layout.height,
-              });
-            }}
-            style={styles.align_end}
-            onPress={() => setIsOpenPlusButton(true)}>
-            <AddIcon width={32} height={32} />
-            <PlusButtonModal
-              visible={isOpenPlusButton}
-              setVisible={setIsOpenPlusButton}
-              position={addButtonPosition}
-              navigation={navigation}
-            />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      <TimeFilterModal
-        visible={onOpenTimeSelect}
-        setVisible={setOnOpenTimeSelect}
-        setTimeValue={setTimeValue}
-        timeCustomValue={timeCustomValue}
-        setTimeCustomValue={setTimeCustomValue}
-      />
-      <WorkStatusFilterModal
-        visible={onOpenStatusSelect}
-        setVisible={setOnOpenStatusSelect}
-        setStatusValue={setStatusValue}
-        statusValue={statusValue}
-      />
-    </SafeAreaView>
+        </ScrollView>
+        <WorkStatusFilterModal
+          visible={isOpenStatusSelect}
+          setVisible={setIsOpenStatusSelect}
+          setStatusValue={setStatusValue}
+          statusValue={statusValue}
+        />
+        <MonthPickerModal
+          visible={isOpenTimeSelect}
+          setVisible={setIsOpenTimeSelect}
+          setCurrentMonth={setCurrentMonth}
+          currentMonth={currentMonth}
+        />
+      </SafeAreaView>
+    )
   );
 }
 
@@ -332,11 +354,20 @@ const styles = StyleSheet.create({
   filter_wrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     paddingHorizontal: 15,
   },
   pl10: {
     paddingLeft: 10,
+  },
+  dropdownAdminDepartment: {
+    borderRadius: 5,
+    padding: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.25)',
   },
   dropdown: {
     width: '47%',

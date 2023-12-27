@@ -40,7 +40,7 @@ export default function WorkReport({route, navigation}: any) {
   const [note, setNote] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
   const [isCompletedAndReport, setIsCompletedAndReport] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState('');
   const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
   const [files, setFiles] = useState<any[]>([]);
   const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
@@ -67,7 +67,7 @@ export default function WorkReport({route, navigation}: any) {
   };
 
   const handleCancelUploadReport = () => {
-    setQuantity(0);
+    setQuantity('');
     setIsCompletedAndReport(false);
     setIsCompleted(false);
     setFiles([]);
@@ -210,19 +210,44 @@ export default function WorkReport({route, navigation}: any) {
           />
           {isCompleted &&
             (data.type === 3 ? (
-              <View style={styles.row_gap10}>
-                <TextInput
-                  style={[styles.input, text_black, fs_15_400]}
-                  placeholderTextColor={'#787878'}
-                  placeholder={'Đạt giá trị'}
-                  value={quantity.toString()}
-                  inputMode="numeric"
-                  onChangeText={value => setQuantity(Number(value))}
-                  keyboardType="numeric"
-                />
-                <Text style={[fs_15_400, text_gray]}>
-                  {data.unit_name}/{data.totalTarget} {data.unit_name}
-                </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                }}>
+                <View
+                  style={[
+                    styles.row_gap10,
+                    {
+                      width: '50%',
+                    },
+                  ]}>
+                  <TextInput
+                    style={[styles.input, text_black, fs_15_400]}
+                    placeholderTextColor={'#787878'}
+                    placeholder={'Đạt giá trị'}
+                    value={quantity}
+                    inputMode="numeric"
+                    onChangeText={value => setQuantity(value)}
+                    keyboardType="numeric"
+                  />
+                  <Text style={[fs_15_400, text_gray]}>
+                    /{data.totalTarget}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.input,
+                    styles.disable,
+                    {
+                      width: '50%',
+                    },
+                  ]}>
+                  <Text style={[fs_15_400, text_gray, text_center]}>
+                    {data.unit_name}
+                  </Text>
+                </View>
               </View>
             ) : (
               <View style={styles.row_gap10}>

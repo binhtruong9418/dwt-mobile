@@ -11,6 +11,14 @@ import {
   ProfileScreen,
   WorkListReportScreen,
   AddWorkAriseScreen,
+  UserInfoScreen,
+  SalaryInfoScreen,
+  WorkInfoScreen,
+  EducationInfoScreen,
+  AbsenceInfoScreen,
+  RewardAndPunishInfoScreen,
+  SettingInfoScreen,
+  SalaryDetailScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -69,5 +77,37 @@ export const navigatorPath = [
   {
     name: 'AddWorkArise',
     component: AddWorkAriseScreen,
+  },
+  {
+    name: 'UserInfo',
+    component: UserInfoScreen,
+  },
+  {
+    name: 'SalaryInfo',
+    component: SalaryInfoScreen,
+  },
+  {
+    name: 'WorkInfo',
+    component: WorkInfoScreen,
+  },
+  {
+    name: 'EducationInfo',
+    component: EducationInfoScreen,
+  },
+  {
+    name: 'AbsenceInfo',
+    component: AbsenceInfoScreen,
+  },
+  {
+    name: 'RewardAndPunishInfo',
+    component: RewardAndPunishInfoScreen,
+  },
+  {
+    name: 'SettingInfo',
+    component: SettingInfoScreen,
+  },
+  {
+    name: 'SalaryDetail',
+    component: SalaryDetailScreen,
   },
 ];

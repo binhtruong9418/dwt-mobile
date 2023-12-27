@@ -1,6 +1,11 @@
 import {StyleSheet} from 'react-native';
 
 const globalStyle = StyleSheet.create({
+  fs_25_700: {
+    fontSize: 25,
+    fontWeight: '700',
+    fontFamily: 'Roboto-Bold',
+  },
   fs_20_700: {
     fontSize: 20,
     fontWeight: '700',
@@ -30,6 +35,11 @@ const globalStyle = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     fontFamily: 'Roboto-Bold',
+  },
+  fs_14_600: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'Roboto-SemiBold',
   },
   fs_14_500: {
     fontSize: 14,
@@ -184,9 +194,11 @@ const globalStyle = StyleSheet.create({
 });
 
 export const {
+  fs_25_700,
   fs_20_700,
   fs_14_400,
   fs_14_700,
+  fs_14_600,
   fs_14_500,
   fs_16_500,
   fs_16_400,

@@ -11,7 +11,7 @@ import {useState} from 'react';
 import 'dayjs/locale/vi';
 import PrimaryButton from '../button/PrimaryButton.tsx';
 import {ReactNativeModal} from 'react-native-modal';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 export default function DatePickerModal({
   setVisible,
   visible,

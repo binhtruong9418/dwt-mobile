@@ -1,10 +1,14 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import SmallLogo from '../../assets/img/small-logo.svg';
 import SearchIcon from '../../assets/img/search-icon.svg';
 import NotiIcon from '../../assets/img/noti-icon.svg';
 import AvatarIcon from '../../assets/img/avatar.svg';
+import {useConnection} from '../../redux/connection';
 
 export default function HomeHeader({navigation}: any) {
+  const {
+    connection: {userInfo},
+  } = useConnection();
   return (
     <View style={styles.wrapper}>
       <SmallLogo width={140} height={60} />
@@ -18,10 +22,24 @@ export default function HomeHeader({navigation}: any) {
         {/*</TouchableOpacity>*/}
 
         <TouchableOpacity
+          style={{
+            width: 35,
+            height: 35,
+            borderRadius: 999,
+          }}
           onPress={() => {
             navigation.navigate('Profile');
           }}>
-          <AvatarIcon width={35} height={35} />
+          {userInfo?.avatar ? (
+            <Image
+              source={{uri: userInfo?.avatar}}
+              width={35}
+              height={35}
+              borderRadius={999}
+            />
+          ) : (
+            <AvatarIcon width={35} height={35} />
+          )}
         </TouchableOpacity>
       </View>
     </View>

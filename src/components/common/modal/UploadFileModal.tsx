@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: 'rgba(217, 217, 217, 0.75)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     margin: 0,
   },
   content: {

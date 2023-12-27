@@ -39,7 +39,7 @@ export default function TabBlock({
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.divider} />
+        {/*<View style={styles.divider} />*/}
 
         <TouchableOpacity
           style={[styles.item, currentTab === 1 && styles.item_active]}
@@ -56,7 +56,7 @@ export default function TabBlock({
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.divider} />
+        {/*<View style={styles.divider} />*/}
 
         <TouchableOpacity
           style={[styles.item, currentTab === 2 && styles.item_active]}
@@ -73,7 +73,7 @@ export default function TabBlock({
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.divider} />
+        {/*<View style={styles.divider} />*/}
 
         <TouchableOpacity
           style={[styles.item, currentTab === 3 && styles.item_active]}
@@ -90,7 +90,7 @@ export default function TabBlock({
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.divider} />
+        {/*<View style={styles.divider} />*/}
 
         <TouchableOpacity
           style={[styles.item, currentTab === 4 && styles.item_active]}

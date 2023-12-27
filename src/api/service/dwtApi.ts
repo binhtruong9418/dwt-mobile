@@ -18,6 +18,15 @@ export const dwtApi = {
     const url = 'auth/me';
     return await axiosClient.get(url);
   },
+  getUserById: async (id: number): Promise<any> => {
+    const url = `users/${id}`;
+    return await axiosClient.get(url);
+  },
+
+  updateUserById: async (id: number, data: any): Promise<any> => {
+    const url = `users/${id}`;
+    return await axiosClient.put(url, data);
+  },
 
   //API lấy danh sách các đơn vị tính
   getListUnit: async (): Promise<any> => {
@@ -125,5 +134,14 @@ export const dwtApi = {
   addWorkArise: async (data: any): Promise<any> => {
     const url = 'business-standard-work-arise/store';
     return await axiosClient.post(url, data);
+  },
+
+  getSalaryHistory: async (params = {}): Promise<any> => {
+    const url = 'salary-history';
+    return await axiosClient.get(url, {params});
+  },
+  getSalaryById: async (id: number): Promise<any> => {
+    const url = 'salary-history/detail/' + id;
+    return await axiosClient.get(url);
   },
 };
