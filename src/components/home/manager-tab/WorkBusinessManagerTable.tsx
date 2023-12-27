@@ -16,19 +16,19 @@ const columns = [
     width: 0.4,
   },
   {
-    key: 'business_standard_quantity_display',
+    key: 'amount',
     title: 'Số lượng',
     width: 0.25,
   },
   {
-    key: 'business_standard_score_tmp',
+    key: 'kpi',
     title: 'NS/KPI',
     width: 0.25,
   },
 ];
-export default function WorkDepartmentTable({
+export default function WorkBusinessManagerTable({
   listWork,
-}: InferProps<typeof WorkDepartmentTable.propTypes>) {
+}: InferProps<typeof WorkBusinessManagerTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
       <Text
@@ -40,7 +40,7 @@ export default function WorkDepartmentTable({
             marginBottom: 5,
           },
         ]}>
-        Báo cáo của đơn vị
+        Báo cáo của kinh doanh
       </Text>
       <PrimaryTable
         columns={columns}
@@ -48,6 +48,8 @@ export default function WorkDepartmentTable({
           return {
             ...item,
             index: index + 1,
+            amount: item.business_standard_quantity_display,
+            kpi: item.business_standard_score_tmp,
             bgColor: item.actual_state
               ? // @ts-ignore
                 WORK_STATUS_COLOR[item.actual_state]
@@ -77,6 +79,6 @@ const styles = StyleSheet.create({
   },
 });
 
-WorkDepartmentTable.propTypes = {
+WorkBusinessManagerTable.propTypes = {
   listWork: PropTypes.array.isRequired,
 };

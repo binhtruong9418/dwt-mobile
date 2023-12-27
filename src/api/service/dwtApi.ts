@@ -67,6 +67,11 @@ export const dwtApi = {
     });
   },
 
+  getOfficeWork: async (params = {}): Promise<any> => {
+    const url = 'mobile/office-diary';
+    return await axiosClient.get(url, {params});
+  },
+
   //API lấy thông tin Ngày công, Đã nghỉ / vắng, Dự kiến bù - tăng ca(Lấy data theo token đăng nhập)
   getAttendanceInfo: async (): Promise<any> => {
     const url = 'info-attendance/day-of-work-by-user';

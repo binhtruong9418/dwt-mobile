@@ -23,8 +23,8 @@ export default function WorkProgressBlock({
   checkIn,
   checkOut,
   attendanceData,
-  workPersonalData,
-  workDepartmentData,
+  userKpi,
+  departmentKpi,
 }: InferProps<typeof WorkProgressBlock.propTypes>) {
   const formatCheckIn = checkIn ? checkIn.slice(0, 5) : '--:--';
   const formatCheckOut = checkOut ? checkOut.slice(0, 5) : '--:--';
@@ -92,13 +92,12 @@ export default function WorkProgressBlock({
           </View>
           <View style={[styles.col_chart, {alignItems: 'center'}]}>
             <CircleProgressChart
-              progress={Number(workPersonalData.tmpTotalKPI)}
-              total={Number(workDepartmentData.tmpTotalKPI)}
+              progress={Number(userKpi)}
+              total={Number(departmentKpi)}
             />
 
             <Text style={[fs_10_500, text_black, text_center]}>
-              {workPersonalData.tmpTotalKPI}/{workDepartmentData.tmpTotalKPI}{' '}
-              nhiệm vụ
+              {userKpi}/{departmentKpi} nhiệm vụ
             </Text>
           </View>
         </View>
@@ -158,6 +157,6 @@ WorkProgressBlock.propTypes = {
   attendanceData: PropTypes.any,
   checkIn: PropTypes.string,
   checkOut: PropTypes.string,
-  workPersonalData: PropTypes.any,
-  workDepartmentData: PropTypes.any,
+  userKpi: PropTypes.any,
+  departmentKpi: PropTypes.any,
 };

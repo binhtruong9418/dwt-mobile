@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {fs_12_500, text_black, text_center} from '../../../assets/style.ts';
 import RowTable from './RowTable.tsx';
 import PropTypes, {InferProps} from 'prop-types';
@@ -7,6 +7,8 @@ export default function PrimaryTable({
   columns,
   data,
   canShowMore,
+  headerColor,
+  onRowPress,
 }: InferProps<typeof PrimaryTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
@@ -18,7 +20,7 @@ export default function PrimaryTable({
               style={[
                 {
                   flex: column.width,
-                  backgroundColor: '#DCE1E7',
+                  backgroundColor: headerColor || '#DCE1E7',
                   height: 'auto',
                 },
                 styles.cell,
@@ -36,12 +38,14 @@ export default function PrimaryTable({
         renderItem={({item}) => {
           let bgColor = item.bgColor || '#FFF';
           return (
-            <RowTable
-              item={item}
-              columns={columns}
-              bgColor={bgColor}
-              canShowMore={canShowMore}
-            />
+            <Pressable onPress={() => onRowPress && onRowPress(item)}>
+              <RowTable
+                item={item}
+                columns={columns}
+                bgColor={bgColor}
+                canShowMore={canShowMore}
+              />
+            </Pressable>
           );
         }}
         keyExtractor={(item, index) => index.toString()}
@@ -70,8 +74,11 @@ PrimaryTable.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   canShowMore: PropTypes.bool,
+  headerColor: PropTypes.string,
+  onRowPress: PropTypes.func,
 };
 
 PrimaryTable.defaultProps = {
   canShowMore: false,
+  headerColor: '#DCE1E7',
 };

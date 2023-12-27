@@ -59,108 +59,13 @@ export default function Home({navigation}: any) {
     return response.data;
   });
 
-  const {
-    data: listWorkDepartment = [],
-    isLoading: isLoadingWorkDepartment,
-    refetch: refetchWorkDepartment,
-  } = useQuery(
-    ['getWorkListDepartment'],
-    async () => {
-      const listWorkDepartmentData = await dwtApi.getListWorkDepartment();
-      const listWorkAriseDepartmentData =
-        await dwtApi.getListWorkAriseDepartment();
-
-      const listWorkDepartmentAll = Object.keys(
-        listWorkDepartmentData.data.kpi.keyByUsers,
-      ).reduce((acc, val) => {
-        return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
-      }, []);
-
-      const listNonKeyWorkDepartmentAll = Object.keys(
-        listWorkDepartmentData.data.kpi.nonKeyByUsers,
-      ).reduce((acc, val) => {
-        return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
-      }, []);
-
-      const listWorkDepartment = [
-        ...listWorkDepartmentAll,
-        ...listNonKeyWorkDepartmentAll,
-        ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll,
-      ];
-      return listWorkDepartment;
-    },
-    {
-      enabled:
-        !!userInfo &&
-        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
-    },
-  );
-
-  const {
-    data: {
-      listWorkPersonal,
-      monthOverviewPersonal,
-      monthOverviewDepartment,
-      workPersonalData,
-      workDepartmentData,
-      workSummary,
-    } = {
-      listWorkPersonal: [],
-      monthOverviewPersonal: {},
-      monthOverviewDepartment: {},
-      workPersonalData: {},
-      workDepartmentData: {},
-      workSummary: {},
-    },
-    isLoading: isLoadingWork,
-    refetch: refetchWork,
-  } = useQuery(['getWorkListAndPoint'], async () => {
-    const resPersonal = await dwtApi.getWorkListAndPoint();
-    const kpiPersonal = resPersonal.data.kpi;
-    const listWorkPersonal = [
-      ...kpiPersonal.keys,
-      ...kpiPersonal.noneKeys,
-      ...kpiPersonal.workArise,
-    ];
-    const workSummary = {
-      done: listWorkPersonal.filter((item: any) => item.actual_state === 4)
-        .length,
-      working: listWorkPersonal.filter((item: any) => item.actual_state === 2)
-        .length,
-      late: listWorkPersonal.filter((item: any) => item.actual_state === 5)
-        .length,
-      total: listWorkPersonal.filter(
-        (item: any) =>
-          item.actual_state === 4 ||
-          item.actual_state === 2 ||
-          item.actual_state === 5,
-      ).length,
-    };
-    return {
-      listWorkPersonal: listWorkPersonal,
-      monthOverviewPersonal: kpiPersonal.monthOverview,
-      workPersonalData: kpiPersonal,
-      workDepartmentData: resPersonal.data.departmentKPI,
-      monthOverviewDepartment: resPersonal.data.departmentKPI.monthOverview,
-      workSummary,
-    };
-  });
-
   useRefreshOnFocus(() => {
     refetchAttendanceDay();
     refetchAttendanceData();
     refetchRewardAndPunish();
-    refetchWork();
-    refetchWorkDepartment();
   });
 
-  if (
-    isLoadingAttendance ||
-    isLoadingReward ||
-    isLoadingWork ||
-    isLoadingAttendanceDay ||
-    isLoadingWorkDepartment
-  ) {
+  if (isLoadingAttendance || isLoadingReward || isLoadingAttendanceDay) {
     return <PrimaryLoading />;
   }
 
@@ -173,26 +78,21 @@ export default function Home({navigation}: any) {
           attendanceData={attendanceData}
           checkInTime={checkInTime}
           checkOutTime={checkOutTime}
-          workPersonalData={workPersonalData}
-          workDepartmentData={workDepartmentData}
-          monthOverviewPersonal={monthOverviewPersonal}
-          monthOverviewDepartment={monthOverviewDepartment}
           rewardAndPunishData={rewardAndPunishData}
-          workSummary={workSummary}
-          listWorkPersonal={listWorkPersonal}
         />
       ) : currentTab === 1 ? (
         <ManagerTabContainer
           attendanceData={attendanceData}
           checkInTime={checkInTime}
           checkOutTime={checkOutTime}
-          workPersonalData={workPersonalData}
-          workDepartmentData={workDepartmentData}
-          monthOverviewPersonal={monthOverviewPersonal}
-          monthOverviewDepartment={monthOverviewDepartment}
           rewardAndPunishData={rewardAndPunishData}
-          workSummary={workSummary}
-          listWorkDepartment={listWorkDepartment}
+        />
+      ) : currentTab === 2 ? (
+        <ManagerTabContainer
+          attendanceData={attendanceData}
+          checkInTime={checkInTime}
+          checkOutTime={checkOutTime}
+          rewardAndPunishData={rewardAndPunishData}
         />
       ) : null}
     </SafeAreaView>

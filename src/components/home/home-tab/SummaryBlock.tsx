@@ -68,15 +68,7 @@ export default function SummaryBlock({
             </Text>
             {monthOverviewPersonal.tasks.map((task: any, index: number) => {
               return (
-                <RowSummaryItem
-                  key={index}
-                  text={task.name}
-                  value={
-                    task.business_standard_score_tmp
-                      ? task.business_standard_score_tmp
-                      : 0
-                  }
-                />
+                <RowSummaryItem key={index} text={task.name} value={task.kpi} />
               );
             })}
           </View>

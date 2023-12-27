@@ -16,19 +16,13 @@ import CalendarIcon from '../../../assets/img/calendar-icon.svg';
 import ClockIcon from '../../../assets/img/clock-icon.svg';
 import ClockOtIcon from '../../../assets/img/clock-ot-icon.svg';
 import MeetingIcon from '../../../assets/img/meeting-icon.svg';
-import CircleProgressChart from './../CircleProgressChart';
 import PropTypes, {InferProps} from 'prop-types';
 import {padStart} from '../../../utils';
+import ResultChart from './ResultChart.tsx';
 
 export default function WorkProgressBlock({
-  checkIn,
-  checkOut,
   attendanceData,
-  workPersonalData,
-  workDepartmentData,
 }: InferProps<typeof WorkProgressBlock.propTypes>) {
-  const formatCheckIn = checkIn ? checkIn.slice(0, 5) : '--:--';
-  const formatCheckOut = checkOut ? checkOut.slice(0, 5) : '--:--';
   return (
     <View style={styles.wrapper}>
       <View style={styles.blockItem}>
@@ -67,9 +61,7 @@ export default function WorkProgressBlock({
             <MeetingIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Giao ban</Text>
           </View>
-          <Text style={[fs_12_400, text_black]}>
-            00
-          </Text>
+          <Text style={[fs_12_400, text_black]}>00</Text>
         </View>
       </View>
 
@@ -78,35 +70,86 @@ export default function WorkProgressBlock({
           Lượng việc (điểm)
         </Text>
         <View style={styles.row_chart}>
-          <View style={[styles.col_chart, {alignItems: 'center'}]}>
-            <View style={{height: 60, justifyContent: 'center'}}>
-              <TouchableOpacity
+          <ResultChart />
+          <View
+            style={{
+              justifyContent: 'space-between',
+              marginLeft: 10,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 5,
+              }}>
+              <Text
                 style={{
-                  paddingVertical: 3,
-                  backgroundColor: '#C02626',
-                  width: '100%',
-                  borderRadius: 5,
-                  paddingHorizontal: 5,
+                  fontSize: 12,
+                  fontWeight: '400',
+                  color: '#000',
                 }}>
-                <Text style={[fs_10_500, text_white, text_center]}>
-                  Báo cáo ngày
-                </Text>
-              </TouchableOpacity>
+                VP
+              </Text>
+              <View
+                style={{
+                  borderRadius: 25,
+                  backgroundColor: '#2563EB',
+                  width: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={[fs_10_500, text_white, text_center]}>70</Text>
+              </View>
             </View>
-            <Text style={[fs_10_500, text_black, text_center]}>
-              Cá nhân/Phòng
-            </Text>
-          </View>
-          <View style={[styles.col_chart, {alignItems: 'center'}]}>
-            <CircleProgressChart
-              progress={Number(workPersonalData.tmpTotalKPI)}
-              total={Number(workDepartmentData.tmpTotalKPI)}
-            />
 
-            <Text style={[fs_10_500, text_black, text_center]}>
-              {workPersonalData.tmpTotalKPI}/{workDepartmentData.tmpTotalKPI}{' '}
-              nhiệm vụ
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 5,
+              }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: '400',
+                  color: '#000',
+                }}>
+                KD
+              </Text>
+              <View
+                style={{
+                  borderRadius: 25,
+                  backgroundColor: '#38BDF8',
+                  width: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={[fs_10_500, text_white, text_center]}>70</Text>
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 5,
+              }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: '400',
+                  color: '#000',
+                }}>
+                SX
+              </Text>
+              <View
+                style={{
+                  borderRadius: 25,
+                  backgroundColor: '#DBEAFE',
+                  width: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={[fs_10_500, text_white, text_center]}>70</Text>
+              </View>
+            </View>
           </View>
         </View>
         <View style={[row_between, {width: '100%'}]} />
@@ -163,8 +206,4 @@ const styles = StyleSheet.create({
 
 WorkProgressBlock.propTypes = {
   attendanceData: PropTypes.any,
-  checkIn: PropTypes.string,
-  checkOut: PropTypes.string,
-  workPersonalData: PropTypes.any,
-  workDepartmentData: PropTypes.any,
 };

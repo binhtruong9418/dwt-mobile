@@ -16,22 +16,19 @@ import WorkProgressBlock from '../manager-tab/WorkProgressBlock.tsx';
 import DropdownIcon from '../../../assets/img/dropdown-icon.svg';
 import LockIcon from '../../../assets/img/lock-icon.svg';
 import ReportAndProposeBlock from '../manager-tab/ReportAndProposeBlock.tsx';
-import WorkDepartmentTable from '../manager-tab/WorkDepartmentTable.tsx';
+import WorkBusinessManagerTable from '../manager-tab/WorkBusinessManagerTable.tsx';
 import {useConnection} from '../../../redux/connection';
 import TopUserBlock from '../manager-tab/TopUserBlock.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../../api/service/dwtApi.ts';
 import {useState} from 'react';
 import ListDepartmentModal from '../manager-tab/ListDepartmentModal.tsx';
+import PrimaryLoading from '../../common/loading/PrimaryLoading.tsx';
+import WorkOfficeManagerTable from '../manager-tab/WorkOfficeManagerTable.tsx';
+import dayjs from 'dayjs';
+import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
 
-export default function ManagerTabContainer({
-  attendanceData,
-  checkInTime,
-  checkOutTime,
-  workPersonalData,
-  workDepartmentData,
-  listWorkDepartment,
-}: any) {
+export default function ManagerTabContainer({attendanceData}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
@@ -41,6 +38,11 @@ export default function ManagerTabContainer({
     value: 0,
     label: 'Phòng ban',
   });
+  const [currentMonth, setCurrentMonth] = useState({
+    month: dayjs().month(),
+    year: dayjs().year(),
+  });
+  const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
 
   const {data: listDepartment = []} = useQuery(['listDepartment'], async () => {
     const res = await dwtApi.getListDepartment();
@@ -55,6 +57,75 @@ export default function ManagerTabContainer({
     },
   );
 
+  const {
+    data: listWorkBusiness = [],
+    isLoading: isLoadingWorkDepartment,
+    refetch: refetchWorkDepartment,
+  } = useQuery(
+    ['getListWorkBusinessManager'],
+    async () => {
+      const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
+        date: `${currentMonth.year}-${currentMonth.month + 1}`,
+        department_id:
+          currentDepartment.value === 0 ? currentDepartment.value : undefined,
+      });
+      const listWorkAriseDepartmentData =
+        await dwtApi.getListWorkAriseDepartment({
+          date: `${currentMonth.year}-${currentMonth.month + 1}`,
+          department_id:
+            currentDepartment.value === 0 ? currentDepartment.value : undefined,
+        });
+
+      const listWorkDepartmentAll = Object.keys(
+        listWorkDepartmentData.data.kpi.keyByUsers,
+      ).reduce((acc, val) => {
+        return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
+      }, []);
+
+      const listNonKeyWorkDepartmentAll = Object.keys(
+        listWorkDepartmentData.data.kpi.nonKeyByUsers,
+      ).reduce((acc, val) => {
+        return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
+      }, []);
+
+      const listWorkBusiness = [
+        ...listWorkDepartmentAll,
+        ...listNonKeyWorkDepartmentAll,
+        ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll,
+      ];
+      return listWorkBusiness;
+    },
+    {
+      enabled:
+        !!userInfo &&
+        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
+    },
+  );
+
+  const {
+    data: listWorkOffice = [],
+    isLoading: isLoadingWorkOffice,
+    refetch: refetchWorkOffice,
+  } = useQuery(
+    ['getListWorkOfficeManager'],
+    async () => {
+      const resPersonal = await dwtApi.getOfficeWork();
+      return [
+        ...resPersonal.data.departmentKpi.targetDetails,
+        ...resPersonal.data.departmentKpi.reportTasks,
+      ];
+    },
+    {
+      enabled:
+        !!userInfo &&
+        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
+    },
+  );
+
+  if (isLoadingWorkDepartment || isLoadingWorkOffice) {
+    return <PrimaryLoading />;
+  }
+
   return (
     <View style={{flex: 1}}>
       <ScrollView
@@ -65,8 +136,15 @@ export default function ManagerTabContainer({
         (userInfo.role === 'manager' || userInfo.role === 'admin') ? (
           <View style={styles.content}>
             <View style={styles.filter_wrapper}>
-              <TouchableOpacity style={styles.dropdown}>
-                <Text style={[text_black, fs_12_400]}>Tháng 12/2023</Text>
+              <TouchableOpacity
+                style={styles.dropdown}
+                onPress={() => {
+                  setIsOpenTimeSelect(true);
+                }}>
+                <Text style={[text_black, fs_12_400]}>
+                  Tháng {currentMonth.month + 1}/{currentMonth.year}
+                </Text>
+                <DropdownIcon width={20} height={20} />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -80,18 +158,13 @@ export default function ManagerTabContainer({
                 <DropdownIcon width={20} height={20} />
               </TouchableOpacity>
             </View>
-            <WorkProgressBlock
-              attendanceData={attendanceData}
-              checkIn={checkInTime}
-              checkOut={checkOutTime}
-              workPersonalData={workPersonalData}
-              workDepartmentData={workDepartmentData}
-            />
+            <WorkProgressBlock attendanceData={attendanceData} />
             <ReportAndProposeBlock
               totalDailyReport={dailyReportDepartmentData.countDailyReports}
             />
-            <TopUserBlock />
-            <WorkDepartmentTable listWork={listWorkDepartment} />
+            {/*<TopUserBlock />*/}
+            <WorkOfficeManagerTable listWork={listWorkOffice} />
+            <WorkBusinessManagerTable listWork={listWorkBusiness} />
           </View>
         ) : (
           <View
@@ -123,6 +196,13 @@ export default function ManagerTabContainer({
           listDepartment={listDepartment}
         />
       )}
+
+      <MonthPickerModal
+        visible={isOpenTimeSelect}
+        setVisible={setIsOpenTimeSelect}
+        setCurrentMonth={setCurrentMonth}
+        currentMonth={currentMonth}
+      />
     </View>
   );
 }
