@@ -33,12 +33,22 @@ export default function SalaryInfo({navigation}: any) {
     refetch: refetchListSalary,
   } = useQuery(['listSalary'], async () => {
     const res = await dwtApi.getSalaryHistory();
-    return res.data.data;
+    const listSalaryHistories = res.data.data;
+    for (let i = 0; i < listSalaryHistories.length; i++) {
+      const salaryId = listSalaryHistories[i].id;
+      console.log("salaryId", salaryId);
+      const salaryDetail = await dwtApi.getSalaryById(2);
+      listSalaryHistories[i].salaryDetail = salaryDetail.data;
+    }
+    return listSalaryHistories;
   });
+
+  console.log("listSalary", listSalary);
+
 
   useRefreshOnFocus(refetchListSalary);
   if (isLoadingListSalary) {
-    return <PrimaryLoading />;
+    return <PrimaryLoading/>;
   }
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -56,7 +66,7 @@ export default function SalaryInfo({navigation}: any) {
           <Text style={[text_black, fs_14_400]}>
             {currentMonth.month + 1}/{currentMonth.year}
           </Text>
-          <DropdownIcon width={20} height={20} />
+          <DropdownIcon width={20} height={20}/>
         </TouchableOpacity>
 
         <PrimaryDropdown
@@ -117,7 +127,7 @@ export default function SalaryInfo({navigation}: any) {
                   flexDirection: 'row',
                   gap: 10,
                 }}>
-                <SalaryItemIcon width={30} height={30} />
+                <SalaryItemIcon width={30} height={30}/>
                 <View
                   style={{
                     gap: 5,
@@ -139,7 +149,9 @@ export default function SalaryInfo({navigation}: any) {
                   alignItems: 'flex-end',
                   justifyContent: 'space-between',
                 }}>
-                <Text style={[fs_14_500, text_black]}>1.000.000</Text>
+                <Text style={[fs_14_500, text_black]}>
+                  {item?.salaryDetail?.basic_salary?.toLocaleString()}
+                </Text>
                 <Text
                   style={[
                     fs_12_400,
@@ -153,7 +165,7 @@ export default function SalaryInfo({navigation}: any) {
             </TouchableOpacity>
           );
         }}
-        ItemSeparatorComponent={() => <View style={styles.divider} />}
+        ItemSeparatorComponent={() => <View style={styles.divider}/>}
       />
       <MonthPickerModal
         visible={isOpenMonthSelect}

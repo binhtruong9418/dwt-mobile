@@ -34,9 +34,10 @@ export default function SalaryDetail({route, navigation}: any) {
       enabled: !!id,
     },
   );
+  // console.log("salaryInfo", salaryInfo);
 
   if (isLoadingSalary) {
-    return <PrimaryLoading />;
+    return <PrimaryLoading/>;
   }
   return (
     salaryInfo && (
@@ -70,7 +71,7 @@ export default function SalaryDetail({route, navigation}: any) {
                 marginTop: 5,
                 gap: 5,
               }}>
-              <CheckSalaryIcon />
+              <CheckSalaryIcon/>
               <Text
                 style={[
                   {
@@ -92,6 +93,64 @@ export default function SalaryDetail({route, navigation}: any) {
               ]}>
               Thời gian chi trả {salaryInfo?.salary_history?.pay_day}
             </Text>
+          </View>
+
+          <View style={{...styles.box, marginTop: 20, backgroundColor: '#fff'}}>
+            <Text
+              style={[
+                text_gray,
+              ]}>
+              Chi trả qua
+            </Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                // justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 5,
+                gap: 5,
+              }}>
+              <SalaryItemIcon width={30} height={30}/>
+              <View style={{
+                marginLeft: 20,
+              }}>
+                <Text
+                  style={[
+                    fs_14_400,
+                    text_black,
+                  ]}>
+                  Tên tài khoản: <Text style={{fontWeight: 'bold'}}>
+                  {salaryInfo?.transfer_information?.receiver_name}
+                </Text>
+                </Text>
+
+                <Text
+                  style={[
+                    fs_14_400,
+                    text_black,
+                  ]}>
+                  Số tài khoản: <Text style={{fontWeight: 'bold'}}>
+                  {salaryInfo?.transfer_information?.bank_number}
+                </Text>
+                </Text>
+
+                <Text
+                  style={[
+                    fs_14_400,
+                    text_black,
+                  ]}>
+                  Ngân hàng: <Text style={{fontWeight: 'bold'}}>
+                  {salaryInfo?.transfer_information?.bank_name}
+                </Text>
+                </Text>
+              </View>
+            </View>
+
+          </View>
+
+          <View style={{...styles.box, marginTop: 20, backgroundColor: '#fff'}}>
+
           </View>
         </ScrollView>
       </SafeAreaView>
