@@ -36,14 +36,11 @@ export default function SalaryInfo({navigation}: any) {
     const listSalaryHistories = res.data.data;
     for (let i = 0; i < listSalaryHistories.length; i++) {
       const salaryId = listSalaryHistories[i].id;
-      console.log("salaryId", salaryId);
       const salaryDetail = await dwtApi.getSalaryById(2);
       listSalaryHistories[i].salaryDetail = salaryDetail.data;
     }
     return listSalaryHistories;
   });
-
-  console.log("listSalary", listSalary);
 
 
   useRefreshOnFocus(refetchListSalary);
@@ -150,7 +147,7 @@ export default function SalaryInfo({navigation}: any) {
                   justifyContent: 'space-between',
                 }}>
                 <Text style={[fs_14_500, text_black]}>
-                  {item?.salaryDetail?.basic_salary?.toLocaleString()}
+                  {item?.salaryDetail?.totalSalary?.toLocaleString()}
                 </Text>
                 <Text
                   style={[
@@ -170,7 +167,7 @@ export default function SalaryInfo({navigation}: any) {
       <MonthPickerModal
         visible={isOpenMonthSelect}
         setVisible={setIsOpenMonthSelect}
-        currentMonth={setCurrentMonth}
+        currentMonth={currentMonth}
         setCurrenMonth={setCurrentMonth}
       />
     </SafeAreaView>

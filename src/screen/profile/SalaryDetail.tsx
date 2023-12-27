@@ -11,14 +11,14 @@ import Header from '../../components/header/Header.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
-import SalaryItemIcon from '../../assets/img/salary-item-icon.svg';
+import SalaryItemIcon from '../../assets/img/wallet_icon.svg';
 import dayjs from 'dayjs';
 import {
   fs_12_700,
-  fs_14_400,
+  fs_14_400, fs_15_700, fw_bold,
   text_black,
   text_center,
-  text_gray,
+  text_gray, text_green, text_red, text_right,
 } from '../../assets/style.ts';
 import CheckSalaryIcon from '../../assets/img/check-salary.svg';
 
@@ -34,7 +34,7 @@ export default function SalaryDetail({route, navigation}: any) {
       enabled: !!id,
     },
   );
-  // console.log("salaryInfo", salaryInfo);
+  console.log("salaryInfo", salaryInfo);
 
   if (isLoadingSalary) {
     return <PrimaryLoading/>;
@@ -150,7 +150,209 @@ export default function SalaryDetail({route, navigation}: any) {
           </View>
 
           <View style={{...styles.box, marginTop: 20, backgroundColor: '#fff'}}>
+            <Text
+              style={[
+                text_red,
+                text_center,
+                fs_15_700,
+                {
+                  marginBottom: 10,
+                },
+              ]}>
+              Phiếu lương
+            </Text>
+            <View style={styles.table}>
+              {/* Header */}
+              <View style={[styles.row]}>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_center,
+                    fw_bold,
+                  ]}>Khoản</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_center,
+                    fw_bold,
+                  ]}>Tạm tính</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_center,
+                    fw_bold,
+                  ]}>Mức HT</Text>
+                </View>
+              </View>
 
+              {/* Rows */}
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                  ]}>Lương cơ bản</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.basic_salary?.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.basic_salary?.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+
+              {/* Add more rows as needed */}
+
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                  ]}>Lương năng suất / KPI</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.salary_history?.performance_salary?.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.salary_history?.performance_salary?.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                  ]}>Phụ cấp</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.salary_history?.allowance?.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.salary_history?.allowance?.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                  ]}>Lương chức danh</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.salary_history?.salary_title?.toLocaleString()}
+                  </Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>
+                    {salaryInfo?.salary_history?.salary_title?.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                  ]}>Các khoản giảm trừ phạt</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>0</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={[
+                    text_black,
+                    text_right,
+                    fw_bold
+                  ]}>0</Text>
+                </View>
+              </View>
+            </View>
+            <View style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 10,
+            }}>
+              <Text
+                style={[
+                  text_red,
+                  fs_15_700,
+                  {
+                    marginBottom: 10,
+                    marginRight: 10,
+                  },
+                ]}>
+                Tổng
+              </Text>
+              <View>
+                <Text
+                  style={[
+                    text_green,
+                    text_center,
+                    fs_15_700,
+                  ]}>
+                  {salaryInfo?.totalSalary?.toLocaleString()}
+                </Text>
+                <Text
+                  style={[
+                    text_black,
+                    text_center,
+                    fs_15_700,
+                  ]}>
+                  ( {salaryInfo?.totalSalary?.toLocaleString()})
+                </Text>
+              </View>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -179,4 +381,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  table: {
+    // borderWidth: 1,
+    // borderColor: '#000',
+    color: '#000',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#000',
+  },
+  cell: {
+    flex: 1,
+    padding: 8,
+    borderRightWidth: 1,
+    borderRightColor: '#efefef',
+  }
 });
