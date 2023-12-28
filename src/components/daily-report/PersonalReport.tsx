@@ -23,6 +23,7 @@ import {getDaysInMonth} from '../../utils';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import LoadingActivity from '../common/loading/LoadingActivity.tsx';
 import EmptyDailyReportIcon from '../../assets/img/empty-daily-report.svg';
+import CreateOrEditDailyReportModal from '../common/modal/CreateOrEditDailyReportModal.tsx';
 
 export default function PersonalReport({}) {
   const [currentDate, setCurrentDate] = useState<{
@@ -43,6 +44,7 @@ export default function PersonalReport({}) {
     currentDate.year === today.year() &&
     currentDate.date === today.date();
   const [listUserReports, setListUserReports] = useState<any[]>([]); //list report of current month
+  const [isOpenCreateOrEditModal, setIsOpenCreateOrEditModal] = useState(false);
   const fetchUserReports = async () => {
     const daysInMoth = getDaysInMonth(currentDate.month, currentDate.year);
     const userReports = [];
@@ -151,7 +153,9 @@ export default function PersonalReport({}) {
       )}
       {todayReport && canCreateOrEdit && (
         <PrimaryButton
-          onPress={() => {}}
+          onPress={() => {
+            setIsOpenCreateOrEditModal(true);
+          }}
           text={'Sửa báo cáo'}
           buttonStyle={styles.buttonStyle}
         />
@@ -159,7 +163,9 @@ export default function PersonalReport({}) {
 
       {!todayReport && canCreateOrEdit && (
         <PrimaryButton
-          onPress={() => {}}
+          onPress={() => {
+            setIsOpenCreateOrEditModal(true);
+          }}
           text={'Thêm báo cáo'}
           buttonStyle={styles.buttonStyle}
         />
@@ -172,6 +178,13 @@ export default function PersonalReport({}) {
         }}
         currentMonth={currentDate}
         setCurrentMonth={setCurrentDate}
+      />
+      <CreateOrEditDailyReportModal
+        visible={isOpenCreateOrEditModal}
+        setVisible={() => {
+          setIsOpenCreateOrEditModal(false);
+        }}
+        isEdit={todayReport}
       />
       <LoadingActivity isLoading={isLoading} />
     </View>
