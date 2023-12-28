@@ -76,7 +76,7 @@ export default function PersonalReport({}) {
   );
 
   useEffect(() => {
-    // fetchUserReports();
+    fetchUserReports();
     // setListUserReports([
     //   {
     //     created_at: '2023-12-28T17:57:09.000000Z',
@@ -87,7 +87,7 @@ export default function PersonalReport({}) {
     //     yesterday_work_note: 'hjdfsafds',
     //   },
     // ]);
-    setListUserReports([]);
+    // setListUserReports([]);
   }, [currentDate.month, currentDate.year]);
   return (
     <View style={styles.wrapper}>
