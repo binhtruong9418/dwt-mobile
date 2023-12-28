@@ -23,8 +23,8 @@ export default function WorkDetail({route, navigation}: any) {
   const listLogs = data.business_standard_report_logs
     ? data.business_standard_report_logs
     : data.business_standard_arise_logs
-    ? data.business_standard_arise_logs
-    : [];
+      ? data.business_standard_arise_logs
+      : [];
 
   const {workStatus, workType} = useMemo(() => {
     let workStatus = WORK_STATUS['1'];
@@ -52,8 +52,9 @@ export default function WorkDetail({route, navigation}: any) {
   }, [data]);
 
   if (!data) {
-    return <NoDataScreen text={'Không có dữ liệu'} />;
+    return <NoDataScreen text={'Không có dữ liệu'}/>;
   }
+  console.log(data)
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -114,12 +115,12 @@ export default function WorkDetail({route, navigation}: any) {
             },
             {
               label: 'Giá trị đạt được trong tháng (12)',
-              value: data.totalComplete + '/' + data.totalTarget,
+              value: data?.business_standard_quantity_display || "",
             },
             {
               label: '% hoàn thành công việc',
               value:
-                ((data.totalComplete / data.totalTarget) * 100).toFixed(0) +
+                ((data?.business_standard_score_tmp / data.quantity) * 100).toFixed(0) +
                 '%',
             },
             {
