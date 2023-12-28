@@ -69,7 +69,7 @@ export default function WorkProgressBlock({
         <Text style={[fs_12_500, text_red, text_center, styles.mb4]}>
           Lượng việc (điểm)
         </Text>
-        <View style={styles.row_chart}>
+        <View style={[styles.row_chart]}>
           <ResultChart />
           <View
             style={{
@@ -152,7 +152,6 @@ export default function WorkProgressBlock({
             </View>
           </View>
         </View>
-        <View style={[row_between, {width: '100%'}]} />
       </View>
     </View>
   );
@@ -191,6 +190,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     gap: 5,
+    justifyContent: 'space-between',
   },
   mb4: {
     marginBottom: 6,

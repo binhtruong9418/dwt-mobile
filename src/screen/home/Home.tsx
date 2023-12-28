@@ -11,7 +11,7 @@ import TabBlock from '../../components/home/TabBlock.tsx';
 import {useState} from 'react';
 import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
 import ManagerTabContainer from '../../components/home/tab-container/ManagerTabContainer.tsx';
-import BusinessTabContainer from "../../components/home/tab-container/BusinessTabContainer.tsx";
+import BusinessTabContainer from '../../components/home/tab-container/BusinessTabContainer.tsx';
 
 export default function Home({navigation}: any) {
   const {

@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import {
-  fs_12_500,
   fs_12_700,
   fs_14_700,
   fs_16_700,
@@ -34,12 +33,14 @@ export default function MonthPickerModal({
   const [dateSelect, setDateSelect] = useState({
     month: currentMonth.month || dayjs().month(),
     year: currentMonth.year || dayjs().year(),
+    date: currentMonth.date || dayjs().date(),
   });
 
   const handleSaveValue = () => {
     setCurrentMonth({
       month: dateSelect.month,
       year: dateSelect.year,
+      date: dateSelect.date,
     });
     setVisible(false);
   };

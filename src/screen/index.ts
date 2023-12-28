@@ -18,3 +18,4 @@ export {default as AbsenceInfoScreen} from './profile/AbsenceInfo.tsx';
 export {default as RewardAndPunishInfoScreen} from './profile/RewardAndPunishInfo.tsx';
 export {default as SettingInfoScreen} from './profile/SettingInfo.tsx';
 export {default as SalaryDetailScreen} from './profile/SalaryDetail.tsx';
+export {default as DailyReportScreen} from './daily-report/DailyReport.tsx';

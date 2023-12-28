@@ -19,6 +19,7 @@ import {
   RewardAndPunishInfoScreen,
   SettingInfoScreen,
   SalaryDetailScreen,
+  DailyReportScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -109,5 +110,9 @@ export const navigatorPath = [
   {
     name: 'SalaryDetail',
     component: SalaryDetailScreen,
+  },
+  {
+    name: 'DailyReport',
+    component: DailyReportScreen,
   },
 ];

@@ -1,4 +1,5 @@
 import Toast from 'react-native-simple-toast';
+import dayjs from 'dayjs';
 
 export const validateEmail = (email: string) => {
   return String(email.trim())
@@ -40,6 +41,19 @@ export const padStart = (
   const paddedString = padding + inputString;
 
   return paddedString;
+};
+
+export const getDaysInMonth = (month: number, year: number) => {
+  let date = dayjs().month(month).year(year).date(1).toDate();
+  let days = [];
+  while (date.getMonth() === month) {
+    days.push({
+      date: date.getDate(),
+      day: date.getDay(),
+    });
+    date.setDate(date.getDate() + 1);
+  }
+  return days;
 };
 
 export const capitalizeWords = (sentence: string) => {

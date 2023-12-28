@@ -18,6 +18,7 @@ import ClockOtIcon from '../../../assets/img/clock-ot-icon.svg';
 import CircleProgressChart from './../CircleProgressChart';
 import PropTypes, {InferProps} from 'prop-types';
 import {padStart} from '../../../utils';
+import {useNavigation} from '@react-navigation/native';
 
 export default function WorkProgressBlock({
   checkIn,
@@ -26,6 +27,7 @@ export default function WorkProgressBlock({
   userKpi,
   departmentKpi,
 }: InferProps<typeof WorkProgressBlock.propTypes>) {
+  const navigation = useNavigation();
   const formatCheckIn = checkIn ? checkIn.slice(0, 5) : '--:--';
   const formatCheckOut = checkOut ? checkOut.slice(0, 5) : '--:--';
   return (
@@ -80,6 +82,10 @@ export default function WorkProgressBlock({
                   width: '100%',
                   borderRadius: 5,
                   paddingHorizontal: 5,
+                }}
+                onPress={() => {
+                  // @ts-ignore
+                  navigation.navigate('DailyReport');
                 }}>
                 <Text style={[fs_10_500, text_white, text_center]}>
                   Báo cáo ngày
