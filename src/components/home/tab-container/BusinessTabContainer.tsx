@@ -44,56 +44,51 @@ export default function BusinessTabContainer({
       departmentKpi: 0,
     },
     isLoading: isLoadingWork,
-  } = useQuery(['getListWorkBusiness'], async () => {
-    const resPersonal = await dwtApi.getWorkListAndPoint();
+  } = useQuery(['getListWorkOffice'], async () => {
+    const resPersonal = await dwtApi.getOfficeWork();
     const listWorkPersonal = [
-      ...resPersonal.data.kpi.keys,
-      ...resPersonal.data.kpi.noneKeys,
-      ...resPersonal.data.kpi.workArise,
+      ...resPersonal.data.kpi.targetDetails,
+      ...resPersonal.data.kpi.reportTasks,
     ];
     const workSummary = {
-      done: listWorkPersonal.filter((item: any) => item.actual_state === 4)
+      done: listWorkPersonal.filter((item: any) => item.work_status === 3)
         .length,
-      working: listWorkPersonal.filter((item: any) => item.actual_state === 2)
+      working: listWorkPersonal.filter((item: any) => item.work_status === 2)
         .length,
-      late: listWorkPersonal.filter((item: any) => item.actual_state === 5)
+      late: listWorkPersonal.filter((item: any) => item.work_status === 4)
         .length,
       total: listWorkPersonal.filter(
         (item: any) =>
-          item.actual_state === 4 ||
-          item.actual_state === 2 ||
-          item.actual_state === 5,
+          item.work_status === 4 ||
+          item.work_status === 2 ||
+          item.work_status === 3,
       ).length,
     };
     return {
       listWorkPersonal: listWorkPersonal,
       monthOverviewPersonal: {
-        percent: resPersonal.data.kpi.monthOverview.percent,
-        tasks: resPersonal.data.kpi.monthOverview.tasks.map((item: any) => {
+        percent: resPersonal.data.kpi.percentFinish,
+        tasks: resPersonal.data.kpi.monthOverview.map((item: any) => {
           return {
             name: item.name,
-            kpi: item.business_standard_score_tmp
-              ? item.business_standard_score_tmp
-              : 0,
+            kpi: item.kpiValue ? item.kpiValue : 0,
           };
         }),
       },
       monthOverviewDepartment: {
-        percent: resPersonal.data.departmentKPI.monthOverview.percent,
-        tasks: resPersonal.data.departmentKPI.monthOverview.tasks.map(
-          (item: any) => {
-            return {
-              name: item.name,
-              kpi: item.business_standard_score_tmp
-                ? item.business_standard_score_tmp
-                : 0,
-            };
-          },
-        ),
+        percent: resPersonal.data.departmentKpi.percentFinish,
+        tasks: resPersonal.data.departmentKpi.monthOverview.map((item: any) => {
+          return {
+            name: item.name,
+            kpi: item.kpiValue ? item.kpiValue : 0,
+          };
+        }),
       },
       workSummary,
-      userKpi: resPersonal.data.kpi.tmpTotalKPI,
-      departmentKpi: resPersonal.data.departmentKPI.tmpTotalKPI,
+      userKpi: Number(resPersonal.data.kpi.totalTmpKpi.replace(',', '.')),
+      departmentKpi: Number(
+        resPersonal.data.departmentKpi.totalTmpKpi.replace(',', '.'),
+      ),
     };
   });
 

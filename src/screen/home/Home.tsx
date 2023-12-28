@@ -9,9 +9,9 @@ import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import TabBlock from '../../components/home/TabBlock.tsx';
 import {useState} from 'react';
-import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
 import ManagerTabContainer from '../../components/home/tab-container/ManagerTabContainer.tsx';
 import BusinessTabContainer from '../../components/home/tab-container/BusinessTabContainer.tsx';
+import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
 
 export default function Home({navigation}: any) {
   const {
@@ -71,32 +71,37 @@ export default function Home({navigation}: any) {
   }
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <HomeHeader navigation={navigation} />
-      <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      {currentTab === 0 ? (
-        <HomeTabContainer
-          attendanceData={attendanceData}
-          checkInTime={checkInTime}
-          checkOutTime={checkOutTime}
-          rewardAndPunishData={rewardAndPunishData}
-        />
-      ) : currentTab === 1 ? (
-        <ManagerTabContainer
-          attendanceData={attendanceData}
-          checkInTime={checkInTime}
-          checkOutTime={checkOutTime}
-          rewardAndPunishData={rewardAndPunishData}
-        />
-      ) : currentTab === 2 ? (
-        <BusinessTabContainer
-          attendanceData={attendanceData}
-          checkInTime={checkInTime}
-          checkOutTime={checkOutTime}
-          rewardAndPunishData={rewardAndPunishData}
-        />
-      ) : null}
-    </SafeAreaView>
+    userInfo && (
+      <SafeAreaView style={styles.wrapper}>
+        <HomeHeader navigation={navigation} />
+        {/*{userInfo.role === 'admin' ||*/}
+        {/*  (userInfo.role === 'manager' && (*/}
+        <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        {/*// ))}*/}
+        {currentTab === 0 ? (
+          <HomeTabContainer
+            attendanceData={attendanceData}
+            checkInTime={checkInTime}
+            checkOutTime={checkOutTime}
+            rewardAndPunishData={rewardAndPunishData}
+          />
+        ) : currentTab === 1 ? (
+          <ManagerTabContainer
+            attendanceData={attendanceData}
+            checkInTime={checkInTime}
+            checkOutTime={checkOutTime}
+            rewardAndPunishData={rewardAndPunishData}
+          />
+        ) : currentTab === 2 ? (
+          <BusinessTabContainer
+            attendanceData={attendanceData}
+            checkInTime={checkInTime}
+            checkOutTime={checkOutTime}
+            rewardAndPunishData={rewardAndPunishData}
+          />
+        ) : null}
+      </SafeAreaView>
+    )
   );
 }
 
