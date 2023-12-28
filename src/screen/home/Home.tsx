@@ -11,6 +11,7 @@ import TabBlock from '../../components/home/TabBlock.tsx';
 import {useState} from 'react';
 import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
 import ManagerTabContainer from '../../components/home/tab-container/ManagerTabContainer.tsx';
+import BusinessTabContainer from "../../components/home/tab-container/BusinessTabContainer.tsx";
 
 export default function Home({navigation}: any) {
   const {
@@ -88,7 +89,7 @@ export default function Home({navigation}: any) {
           rewardAndPunishData={rewardAndPunishData}
         />
       ) : currentTab === 2 ? (
-        <ManagerTabContainer
+        <BusinessTabContainer
           attendanceData={attendanceData}
           checkInTime={checkInTime}
           checkOutTime={checkOutTime}

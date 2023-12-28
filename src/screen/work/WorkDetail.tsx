@@ -23,8 +23,8 @@ export default function WorkDetail({route, navigation}: any) {
   const listLogs = data.business_standard_report_logs
     ? data.business_standard_report_logs
     : data.business_standard_arise_logs
-    ? data.business_standard_arise_logs
-    : [];
+      ? data.business_standard_arise_logs
+      : [];
 
   const {workStatus, workType} = useMemo(() => {
     let workStatus = WORK_STATUS['1'];
@@ -52,7 +52,7 @@ export default function WorkDetail({route, navigation}: any) {
   }, [data]);
 
   if (!data) {
-    return <NoDataScreen text={'Không có dữ liệu'} />;
+    return <NoDataScreen text={'Không có dữ liệu'}/>;
   }
 
   return (
@@ -60,7 +60,7 @@ export default function WorkDetail({route, navigation}: any) {
       <Header
         title="CHI TIẾT KẾ HOẠCH"
         handleGoBack={() => {
-          navigation.navigate('Work');
+          navigation.goBack();
         }}
       />
       <ScrollView
