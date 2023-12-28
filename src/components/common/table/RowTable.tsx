@@ -11,7 +11,13 @@ import RowDetail from './RowDetail.tsx';
 import {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
-export default function RowTable({item, columns, bgColor, canShowMore}: any) {
+export default function RowTable({
+  item,
+  columns,
+  bgColor,
+  canShowMore,
+  isWorkArise,
+}: any) {
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
   const [isMore, setIsMore] = useState(false);
@@ -89,7 +95,7 @@ export default function RowTable({item, columns, bgColor, canShowMore}: any) {
             setMoreSectionHeight(e.nativeEvent.layout.height);
           }}
           style={styles.moreContainer}>
-          <RowDetail data={item} />
+          <RowDetail data={item} isWorkArise={isWorkArise} />
         </View>
       </Animated.View>
     </View>

@@ -9,6 +9,7 @@ export default function PrimaryTable({
   canShowMore,
   headerColor,
   onRowPress,
+  isWorkArise,
 }: InferProps<typeof PrimaryTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
@@ -44,6 +45,7 @@ export default function PrimaryTable({
                 columns={columns}
                 bgColor={bgColor}
                 canShowMore={canShowMore}
+                isWorkArise={isWorkArise}
               />
             </Pressable>
           );
@@ -76,6 +78,7 @@ PrimaryTable.propTypes = {
   canShowMore: PropTypes.bool,
   headerColor: PropTypes.string,
   onRowPress: PropTypes.func,
+  isWorkArise: PropTypes.bool,
 };
 
 PrimaryTable.defaultProps = {

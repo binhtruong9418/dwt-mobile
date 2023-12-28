@@ -120,6 +120,11 @@ export const dwtApi = {
     return await axiosClient.post(url, data);
   },
 
+  addPersonalReportArise: async (data: any): Promise<any> => {
+    const url = '/business-standard-work-arise/store-report';
+    return await axiosClient.post(url, data);
+  },
+
   uploadFile: async (data: any): Promise<any> => {
     const url = 'https://report.sweetsica.com/api/report/upload';
     const formData = new FormData();
