@@ -7,7 +7,7 @@ import {
   text_gray,
 } from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import DatePickerModal from '../common/modal/DatePickerModal.tsx';
 import ListDepartmentModal from '../home/manager-tab/ListDepartmentModal.tsx';
@@ -29,7 +29,29 @@ export default function DepartmentReport({}) {
     return res.data;
   });
 
-  console.log(currentDepartment);
+  const {data: dailyReportData = {}} = useQuery(
+    [
+      'dwtApi.getDepartmentDailyReport',
+      {
+        department_id: currentDepartment.value,
+        date_report: `${currentDate.year()}-${
+          currentDate.month() + 1
+        }-${currentDate.date()}`,
+      },
+    ],
+    ({queryKey}) => dwtApi.getDepartmentDailyReport(queryKey[1]),
+    {
+      enabled: !!currentDate,
+    },
+  );
+
+  const {
+    data: {
+      countUsers,
+      countDailyReports,
+      dailyReportPaginate: {data: dailyReports = []} = {},
+    } = {},
+  } = dailyReportData;
 
   return (
     <View style={styles.wrapper}>
@@ -42,7 +64,7 @@ export default function DepartmentReport({}) {
           <Text style={[text_black, fs_14_400]}>
             {currentDate.format('DD-MM-YYYY')}
           </Text>
-          <DropdownIcon width={20} height={20} />
+          <DropdownIcon width={20} height={20}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -53,23 +75,23 @@ export default function DepartmentReport({}) {
           <Text style={[text_black, fs_14_400, {width: '80%'}]}>
             {currentDepartment.label}
           </Text>
-          <DropdownIcon width={20} height={20} />
+          <DropdownIcon width={20} height={20}/>
         </TouchableOpacity>
       </View>
       <View style={styles.totalReportBox}>
-        <Text style={[fs_12_500, text_gray]}>3/5 bao cao</Text>
+        <Text style={[fs_12_500, text_gray]}>{countDailyReports}/ {countUsers} báo cáo</Text>
       </View>
       <FlatList
-        data={[1, 2]}
+        data={dailyReports}
         contentContainerStyle={{
           paddingHorizontal: 15,
           paddingVertical: 20,
         }}
         renderItem={({item}) => {
-          return <UserReportDetail />;
+          return <UserReportDetail data={item}/>;
         }}
         keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={() => <View style={{height: 10}} />}
+        ItemSeparatorComponent={() => <View style={{height: 10}}/>}
       />
       {/*<View>*/}
       {/*  <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />*/}

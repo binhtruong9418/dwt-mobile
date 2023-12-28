@@ -12,12 +12,13 @@ import 'dayjs/locale/vi';
 import PrimaryButton from '../button/PrimaryButton.tsx';
 import {ReactNativeModal} from 'react-native-modal';
 import dayjs from 'dayjs';
+
 export default function DatePickerModal({
-  setVisible,
-  visible,
-  currentDate,
-  setCurrentDate,
-}: any) {
+                                          setVisible,
+                                          visible,
+                                          currentDate,
+                                          setCurrentDate,
+                                        }: any) {
   const [dateSelect, setDateSelect] = useState(currentDate || dayjs());
 
   const handleSaveValue = () => {
@@ -50,7 +51,7 @@ export default function DatePickerModal({
             onPress={() => {
               setVisible(false);
             }}>
-            <CloseIcon width={20} height={20} style={styles.closeIcon} />
+            <CloseIcon width={20} height={20} style={styles.closeIcon}/>
           </Pressable>
         </View>
 
@@ -59,7 +60,7 @@ export default function DatePickerModal({
             <DateTimePicker
               value={dateSelect}
               onValueChange={(date: any) => {
-                setDateSelect(date);
+                setDateSelect(dayjs(date, 'YYYY-MM-DD HH:mm'))
               }}
               locale={'vi'}
               mode={'date'}
