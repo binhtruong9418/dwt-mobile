@@ -17,6 +17,7 @@ export default function TabBlock({
   currentTab,
   setCurrentTab,
 }: InferProps<typeof TabBlock.propTypes>) {
+  const listTab = ['Nhật trình', 'Kinh doanh', 'Sản xuất', 'Kho vận', 'HCNS'];
   return (
     <View>
       <ScrollView
@@ -24,86 +25,25 @@ export default function TabBlock({
         contentContainerStyle={{height: 40}}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity
-          style={[styles.item, currentTab === 0 && styles.item_active]}
-          onPress={() => {
-            setCurrentTab(0);
-          }}>
-          <Text
-            style={[
-              fs_14_400,
-              text_center,
-              currentTab === 0 ? text_red : text_black,
-            ]}>
-            {'Nhật trình'}
-          </Text>
-        </TouchableOpacity>
-
-        {/*<View style={styles.divider} />*/}
-
-        <TouchableOpacity
-          style={[styles.item, currentTab === 2 && styles.item_active]}
-          onPress={() => {
-            setCurrentTab(2);
-          }}>
-          <Text
-            style={[
-              fs_14_400,
-              text_center,
-              currentTab === 2 ? text_red : text_black,
-            ]}>
-            {'Kinh doanh'}
-          </Text>
-        </TouchableOpacity>
-
-        {/*<View style={styles.divider} />*/}
-
-        <TouchableOpacity
-          style={[styles.item, currentTab === 3 && styles.item_active]}
-          onPress={() => {
-            setCurrentTab(3);
-          }}>
-          <Text
-            style={[
-              fs_14_400,
-              text_center,
-              currentTab === 3 ? text_red : text_black,
-            ]}>
-            {'Sản xuất'}
-          </Text>
-        </TouchableOpacity>
-
-        {/*<View style={styles.divider} />*/}
-
-        <TouchableOpacity
-          style={[styles.item, currentTab === 4 && styles.item_active]}
-          onPress={() => {
-            setCurrentTab(4);
-          }}>
-          <Text
-            style={[
-              fs_14_400,
-              text_center,
-              currentTab === 4 ? text_red : text_black,
-            ]}>
-            {'Kho vận'}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.item, currentTab === 4 && styles.item_active]}
-          onPress={() => {
-            setCurrentTab(4);
-          }}>
-          <Text
-            style={[
-              fs_14_400,
-              text_center,
-              currentTab === 5 ? text_red : text_black,
-            ]}>
-            {'HCNS'}
-          </Text>
-        </TouchableOpacity>
+        {listTab.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={[styles.item, currentTab === index && styles.item_active]}
+              onPress={() => {
+                setCurrentTab(index);
+              }}>
+              <Text
+                style={[
+                  fs_14_400,
+                  text_center,
+                  currentTab === index ? text_red : text_black,
+                ]}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );

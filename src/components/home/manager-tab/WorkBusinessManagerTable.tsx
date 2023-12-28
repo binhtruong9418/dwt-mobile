@@ -31,17 +31,6 @@ export default function WorkBusinessManagerTable({
 }: InferProps<typeof WorkBusinessManagerTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
-      <Text
-        style={[
-          fs_14_500,
-          text_red,
-          text_center,
-          {
-            marginBottom: 5,
-          },
-        ]}>
-        Báo cáo của kinh doanh
-      </Text>
       <PrimaryTable
         columns={columns}
         data={listWork.map((item: any, index: number) => {

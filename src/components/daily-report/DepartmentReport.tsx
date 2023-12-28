@@ -29,8 +29,6 @@ export default function DepartmentReport({}) {
     return res.data;
   });
 
-  console.log(currentDepartment);
-
   return (
     <View style={styles.wrapper}>
       <View style={styles.filter_wrapper}>

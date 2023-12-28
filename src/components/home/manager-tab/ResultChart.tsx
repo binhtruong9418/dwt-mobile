@@ -5,7 +5,7 @@ import Svg, {Rect} from 'react-native-svg';
 const ProgressBar = ({
   progress,
   height = 60,
-  backgroundColor = '#D9D9D9',
+  backgroundColor = '#FFF',
   fillColor = '#0056d2',
 }: any) => {
   return (

@@ -25,6 +25,7 @@ export default function PlusButtonModal({
   setVisible,
   position,
   navigation,
+  hasReceiveWork,
 }: InferProps<typeof PlusButtonModal.propTypes>) {
   const {
     connection: {userInfo},
@@ -50,8 +51,8 @@ export default function PlusButtonModal({
         style={[
           styles.content,
           {
-            left: position.x - position.width - 100,
-            top: position.y - 50 - position.height,
+            right: 10,
+            top: '50%',
           },
         ]}>
         <TouchableOpacity style={styles.item}>
@@ -62,16 +63,17 @@ export default function PlusButtonModal({
           <ReceiveWorkIcon width={20} height={20} />
           <Text style={[fs_15_500, text_black]}>Nhận việc</Text>
         </TouchableOpacity>
-        {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
-          <TouchableOpacity
-            style={styles.item}
-            onPress={() => {
-              navigation.navigate('AddWorkArise');
-            }}>
-            <GiveWorkIcon width={20} height={20} />
-            <Text style={[fs_15_500, text_black]}>Giao việc phát sinh</Text>
-          </TouchableOpacity>
-        )}
+        {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
+          hasReceiveWork && (
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {
+                navigation.navigate('AddWorkArise');
+              }}>
+              <GiveWorkIcon width={20} height={20} />
+              <Text style={[fs_15_500, text_black]}>Giao việc phát sinh</Text>
+            </TouchableOpacity>
+          )}
       </View>
     </ReactNativeModal>
   );
@@ -112,4 +114,5 @@ PlusButtonModal.propTypes = {
   setVisible: PropTypes.func.isRequired,
   position: PropTypes.any.isRequired,
   navigation: PropTypes.any,
+  hasReceiveWork: PropTypes.bool,
 };

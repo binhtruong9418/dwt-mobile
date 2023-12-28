@@ -154,7 +154,7 @@ export default function OfficeTabContainer({
                   setIsOpenDepartmentModal(true);
                 }}>
                 <Text style={[text_black, fs_12_400]}>
-                  {currentDepartment.name}
+                  {currentDepartment.label}
                 </Text>
                 <DropdownIcon width={20} height={20} />
               </TouchableOpacity>
@@ -219,7 +219,12 @@ export default function OfficeTabContainer({
           setCurrentDepartment={setCurrentDepartment}
           visible={isOpenDepartmentModal}
           setVisible={setIsOpenDepartmentModal}
-          listDepartment={listDepartment}
+          listDepartment={listDepartment.map((department: any) => {
+            return {
+              value: department.id,
+              label: department.name,
+            };
+          })}
         />
       )}
 
@@ -253,7 +258,6 @@ const styles = StyleSheet.create({
   filter_wrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   dropdown: {
     width: '47%',
@@ -268,6 +272,5 @@ const styles = StyleSheet.create({
   },
   align_end: {
     alignSelf: 'flex-end',
-    paddingRight: 15,
   },
 });

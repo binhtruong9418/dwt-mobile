@@ -100,7 +100,7 @@ export default function Home({navigation}: any) {
             attendanceData={attendanceData}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentMenuTab === 2 ? (
+        ) : currentMenuTab === 1 && currentManagerTab === 1 ? (
           <BusinessTabContainer
             attendanceData={attendanceData}
             checkInTime={checkInTime}
