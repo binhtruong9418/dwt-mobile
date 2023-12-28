@@ -9,11 +9,11 @@ export default function DailyCalendar({
   return (
     <View
       style={{
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
       }}>
       <FlatList
         contentContainerStyle={{
-          paddingBottom: 20,
+          paddingBottom: 10,
         }}
         style={{
           borderBottomColor: '#D0D0D0',
@@ -70,22 +70,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   day: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '500',
-    lineHeight: 18,
     color: '#3C3C434D',
     marginBottom: 5,
   },
   date: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '400',
-    lineHeight: 24,
     marginBottom: 4,
   },
   selectedDate: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '500',
-    lineHeight: 24,
     marginBottom: 4,
   },
   marked: {

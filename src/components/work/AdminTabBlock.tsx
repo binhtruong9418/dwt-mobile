@@ -13,39 +13,25 @@ export default function AdminTabBlock({currentTab, setCurrentTab}: any) {
   return (
     <View style={styles.wrapper}>
       <View style={[styles.toggleContainer]}>
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             setCurrentTab(0);
           }}
-          style={[
-            styles.toggleCircle,
-            {borderTopEndRadius: 50, borderBottomEndRadius: 50, flex: 0.5},
-            currentTab === 0 && styles.selected,
-          ]}>
+          style={[styles.toggleCircle, currentTab === 0 && styles.selected]}>
           <Text style={[fs_14_700, currentTab === 0 ? text_red : text_white]}>
             CÁ NHÂN
           </Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             setCurrentTab(1);
           }}
-          style={[
-            styles.toggleCircle,
-            {
-              borderTopStartRadius: 50,
-              borderBottomStartRadius: 50,
-              borderTopEndRadius: 50,
-              borderBottomEndRadius: 50,
-              flex: 0.5,
-            },
-            currentTab === 1 && styles.selected,
-          ]}>
+          style={[styles.toggleCircle, currentTab === 1 && styles.selected]}>
           <Text style={[fs_14_700, currentTab === 1 ? text_red : text_white]}>
             ĐƠN VỊ
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -54,26 +40,27 @@ export default function AdminTabBlock({currentTab, setCurrentTab}: any) {
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#DD0013',
-    flex: 1,
+    width: '100%',
     paddingVertical: 10,
     alignItems: 'center',
+    height: 60,
   },
   toggleContainer: {
     width: '50%',
     borderRadius: 50,
     backgroundColor: 'rgba(175, 42, 53, 0.68)',
-    padding: 2,
+    padding: 3,
     flexDirection: 'row',
     overflow: 'hidden',
+    height: 'auto',
     flex: 1,
   },
   toggleCircle: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
     borderRadius: 50,
     margin: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 0.5,
   },
   selected: {
     backgroundColor: '#fff',

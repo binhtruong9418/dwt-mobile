@@ -21,9 +21,9 @@ export default function ListDepartmentModal({
   currentDepartment,
   listDepartment,
 }: InferProps<typeof ListDepartmentModal.propTypes>) {
-  const [currentFilter, setCurrentFilter] = useState(currentDepartment.value);
+  const [currentFilter, setCurrentFilter] = useState(currentDepartment);
 
-  const handleChangeCheck = (value: string) => {
+  const handleChangeCheck = (value: any) => {
     setCurrentFilter(value);
   };
   const handleSaveValue = () => {
@@ -73,13 +73,13 @@ export default function ListDepartmentModal({
             renderItem={({item}) => {
               return (
                 <PrimaryCheckbox
-                  label={item.name}
-                  checked={currentFilter === item.id}
-                  onChange={() => handleChangeCheck(item.id)}
+                  label={item.label}
+                  checked={currentFilter.value === item.value}
+                  onChange={() => handleChangeCheck(item)}
                 />
               );
             }}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.value}
             ItemSeparatorComponent={() => <View style={{height: 10}} />}
           />
           <PrimaryButton

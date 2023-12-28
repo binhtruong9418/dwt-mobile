@@ -18,7 +18,6 @@ import LockIcon from '../../../assets/img/lock-icon.svg';
 import ReportAndProposeBlock from '../manager-tab/ReportAndProposeBlock.tsx';
 import WorkBusinessManagerTable from '../manager-tab/WorkBusinessManagerTable.tsx';
 import {useConnection} from '../../../redux/connection';
-import TopUserBlock from '../manager-tab/TopUserBlock.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../../api/service/dwtApi.ts';
 import {useState} from 'react';
@@ -27,11 +26,16 @@ import PrimaryLoading from '../../common/loading/PrimaryLoading.tsx';
 import WorkOfficeManagerTable from '../manager-tab/WorkOfficeManagerTable.tsx';
 import dayjs from 'dayjs';
 import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
+import AddIcon from '../../../assets/img/add.svg';
+import PlusButtonModal from '../../work/PlusButtonModal.tsx';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ManagerTabContainer({attendanceData}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
+
+  const navigation = useNavigation();
   const [isOpenDepartmentModal, setIsOpenDepartmentModal] =
     useState<boolean>(false);
   const [currentDepartment, setCurrentDepartment] = useState<any>({
@@ -44,6 +48,14 @@ export default function ManagerTabContainer({attendanceData}: any) {
   });
   const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
 
+  const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
+  const [addButtonPosition, setAddButtonPosition] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+
   const {data: listDepartment = []} = useQuery(['listDepartment'], async () => {
     const res = await dwtApi.getListDepartment();
     return res.data;
@@ -54,6 +66,11 @@ export default function ManagerTabContainer({attendanceData}: any) {
     async () => {
       const res = await dwtApi.getDailyReportDepartment();
       return res.data;
+    },
+    {
+      enabled:
+        !!userInfo &&
+        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
     },
   );
 
@@ -153,7 +170,7 @@ export default function ManagerTabContainer({attendanceData}: any) {
                   setIsOpenDepartmentModal(true);
                 }}>
                 <Text style={[text_black, fs_12_400]}>
-                  {currentDepartment.label}
+                  {currentDepartment.name}
                 </Text>
                 <DropdownIcon width={20} height={20} />
               </TouchableOpacity>
@@ -165,6 +182,26 @@ export default function ManagerTabContainer({attendanceData}: any) {
             {/*<TopUserBlock />*/}
             <WorkOfficeManagerTable listWork={listWorkOffice} />
             <WorkBusinessManagerTable listWork={listWorkBusiness} />
+
+            <TouchableOpacity
+              onLayout={({nativeEvent}) => {
+                setAddButtonPosition({
+                  x: nativeEvent.layout.x,
+                  y: nativeEvent.layout.y,
+                  width: nativeEvent.layout.width,
+                  height: nativeEvent.layout.height,
+                });
+              }}
+              style={styles.align_end}
+              onPress={() => setIsOpenPlusButton(true)}>
+              <AddIcon width={32} height={32} />
+              <PlusButtonModal
+                visible={isOpenPlusButton}
+                setVisible={setIsOpenPlusButton}
+                position={addButtonPosition}
+                navigation={navigation}
+              />
+            </TouchableOpacity>
           </View>
         ) : (
           <View
@@ -239,5 +276,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.25)',
+  },
+  align_end: {
+    alignSelf: 'flex-end',
+    paddingRight: 15,
   },
 });
