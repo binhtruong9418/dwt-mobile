@@ -150,4 +150,8 @@ export const dwtApi = {
     const url = 'salary-history/detail/' + id;
     return await axiosClient.get(url);
   },
+  getPersonalDailyReport: async (params = {}): Promise<any> => {
+    const url = 'daily-report/personal';
+    return await axiosClient.get(url, {params});
+  }
 };

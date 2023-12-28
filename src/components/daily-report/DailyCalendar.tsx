@@ -1,11 +1,15 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
+import {useQuery} from "@tanstack/react-query";
+import {dwtApi} from "../../api/service/dwtApi.ts";
 
 export default function DailyCalendar({
-  currentDate,
-  setCurrentDate,
-}: InferProps<typeof DailyCalendar.propTypes>) {
+                                        currentDate,
+                                        setCurrentDate,
+                                        listUserReports,
+                                      }: InferProps<typeof DailyCalendar.propTypes>) {
+
   return (
     <View
       style={{
@@ -22,7 +26,7 @@ export default function DailyCalendar({
         showsHorizontalScrollIndicator={false}
         data={getDaysInMonth(currentDate.month, currentDate.year)}
         horizontal={true}
-        ItemSeparatorComponent={() => <View style={{width: 10}} />}
+        ItemSeparatorComponent={() => <View style={{width: 10}}/>}
         renderItem={({item}) => {
           return (
             <TouchableOpacity
@@ -42,8 +46,11 @@ export default function DailyCalendar({
               </Text>
               <Text style={styles.date}>{item.date}</Text>
               {
-                // Show mark if the date is today
-                currentDate.date === item.date && <View style={styles.marked} />
+                // Show mark if current date has report
+                listUserReports.find((report: any) => report?.date_report === `${currentDate.year}-${currentDate.month + 1}-${
+                  item.date
+                    }`,
+                ) && <View style={styles.marked} />
               }
             </TouchableOpacity>
           );
@@ -79,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     marginBottom: 4,
+    color: '#111',
   },
   selectedDate: {
     fontSize: 18,
@@ -100,4 +108,5 @@ DailyCalendar.propTypes = {
     date: PropTypes.number.isRequired,
   }).isRequired,
   setCurrentDate: PropTypes.func.isRequired,
+  listUserReports: PropTypes.array.isRequired,
 };
