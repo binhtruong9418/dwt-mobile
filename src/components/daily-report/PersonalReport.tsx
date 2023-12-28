@@ -76,7 +76,7 @@ export default function PersonalReport({}) {
   );
 
   useEffect(() => {
-    // fetchUserReports();
+    fetchUserReports();
     // setListUserReports([
     //   {
     //     created_at: '2023-12-28T17:57:09.000000Z',
@@ -87,7 +87,7 @@ export default function PersonalReport({}) {
     //     yesterday_work_note: 'hjdfsafds',
     //   },
     // ]);
-    setListUserReports([]);
+    // setListUserReports([]);
   }, [currentDate.month, currentDate.year]);
   return (
     <View style={styles.wrapper}>
@@ -99,7 +99,7 @@ export default function PersonalReport({}) {
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
-        <DropdownIcon width={20} height={20} />
+        <DropdownIcon width={20} height={20}/>
       </TouchableOpacity>
       <DailyCalendar
         currentDate={currentDate}
@@ -118,34 +118,34 @@ export default function PersonalReport({}) {
             data={
               todayReport
                 ? [
-                    {
-                      key: 1,
-                      text: todayReport?.today_work_note ?? '',
-                      label: 'Hôm nay',
-                      time: dayjs(todayReport?.created_at).format('HH:mm'),
-                    },
-                    {
-                      key: 2,
-                      text: todayReport?.yesterday_work_note ?? '',
-                      label: 'Hôm qua',
-                      time: dayjs(todayReport?.created_at).format('HH:mm'),
-                    },
-                  ]
+                  {
+                    key: 1,
+                    text: todayReport?.today_work_note ?? '',
+                    label: 'Hôm nay',
+                    time: dayjs(todayReport?.created_at).format('HH:mm'),
+                  },
+                  {
+                    key: 2,
+                    text: todayReport?.yesterday_work_note ?? '',
+                    label: 'Hôm qua',
+                    time: dayjs(todayReport?.created_at).format('HH:mm'),
+                  },
+                ]
                 : []
             }
             renderItem={({item}) => {
               return (
                 <View style={styles.boxContainer}>
-                  <PersonalReportDetail data={item} />
+                  <PersonalReportDetail data={item}/>
                 </View>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}} />}
+            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />
+          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}}/>
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
@@ -181,12 +181,12 @@ export default function PersonalReport({}) {
       />
       <CreateOrEditDailyReportModal
         visible={isOpenCreateOrEditModal}
-        setVisible={() => {
-          setIsOpenCreateOrEditModal(false);
-        }}
+        setVisible={setIsOpenCreateOrEditModal}
         isEdit={todayReport}
+        currentDate={currentDate}
+        onSuccess={fetchUserReports}
       />
-      <LoadingActivity isLoading={isLoading} />
+      <LoadingActivity isLoading={isLoading}/>
     </View>
   );
 }
