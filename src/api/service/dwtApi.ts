@@ -162,5 +162,10 @@ export const dwtApi = {
   createPersonalDailyReport: async (data: any): Promise<any> => {
     const url = 'daily-report/store';
     return await axiosClient.post(url, data);
+  },
+  getDepartmentDailyReport: async (params = {}): Promise<any> => {
+    const url = 'daily-report/department';
+    console.log(params);
+    return await axiosClient.get(url, {params});
   }
 };

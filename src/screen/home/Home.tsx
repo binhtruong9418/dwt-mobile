@@ -88,7 +88,7 @@ export default function Home({navigation}: any) {
               setCurrentTab={setCurrentMenuTab}
             />
           )}
-        {currentMenuTab === 0 && currentManagerTab === 0 ? (
+        {currentManagerTab === 0 ? (
           <HomeTabContainer
             attendanceData={attendanceData}
             checkInTime={checkInTime}

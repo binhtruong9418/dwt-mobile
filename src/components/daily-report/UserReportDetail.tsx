@@ -1,6 +1,7 @@
 import {
   Animated,
   Easing,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,7 +19,10 @@ import RowDetail from '../common/table/RowDetail.tsx';
 import {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import PersonalReportDetail from './PersonalReportDetail.tsx';
-export default function UserReportDetail({}) {
+import dayjs from 'dayjs';
+
+export default function UserReportDetail({data}: any) {
+  console.log(data);
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
   const [isMore, setIsMore] = useState(false);
@@ -46,30 +50,47 @@ export default function UserReportDetail({}) {
     <View style={styles.wrapper}>
       <View style={styles.content}>
         <View style={styles.leftBox}>
-          <View style={styles.avatar} />
+          <Image
+            source={{
+              uri: data?.user_avatar,
+            }}
+            style={styles.avatar}
+          />
           <View style={{gap: 2}}>
-            <Text style={[fs_14_500, text_black]}>Nguyễn Văn A</Text>
+            <Text style={[fs_14_500, text_black]}>{data?.user_name}</Text>
             <Text style={[fs_12_400, text_gray]}>
-              Vị trí: Nhân viên lắp ráp
+              Vị trí: {data?.position_name}
             </Text>
-            <Text style={[fs_12_400, text_gray]}>15/01/2023 9:30</Text>
+            <Text style={[fs_12_400, text_gray]}>
+              {dayjs(data?.created_at).format('DD/MM/YYYY HH:mm')}
+            </Text>
           </View>
         </View>
         <TouchableOpacity onPress={toggleMore}>
-          <ChevronDownIcon />
+          {isMore ? <ChevronUpIcon /> : <ChevronDownIcon />}
         </TouchableOpacity>
       </View>
 
-      <View style={{marginTop: 15}}>
-        {isMore && (
+      {isMore && (
+        <View style={{marginTop: 15}}>
           <PersonalReportDetail
             data={{
               key: 1,
-              label: 'dada',
+              label: 'Hôm qua',
+              text: data?.yesterday_work_note,
             }}
           />
-        )}
-      </View>
+          <View style={{marginTop: 20}}>
+            <PersonalReportDetail
+              data={{
+                key: 2,
+                label: 'Hôm nay',
+                text: data?.today_work_note,
+              }}
+            />
+          </View>
+        </View>
+      )}
     </View>
   );
 }

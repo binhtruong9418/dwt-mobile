@@ -1,6 +1,5 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
-  fs_12_400,
   fs_12_500,
   fs_14_400,
   text_black,
@@ -29,6 +28,30 @@ export default function DepartmentReport({}) {
     return res.data;
   });
 
+  const {data: dailyReportData = {}} = useQuery(
+    [
+      'dwtApi.getDepartmentDailyReport',
+      {
+        department_id: currentDepartment.value,
+        date_report: `${currentDate.year()}-${
+          currentDate.month() + 1
+        }-${currentDate.date()}`,
+      },
+    ],
+    ({queryKey}) => dwtApi.getDepartmentDailyReport(queryKey[1]),
+    {
+      enabled: !!currentDate,
+    },
+  );
+
+  const {
+    data: {
+      countUsers = 0,
+      countDailyReports = 0,
+      dailyReportPaginate: {data: dailyReports = []} = {},
+    } = {},
+  } = dailyReportData;
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.filter_wrapper}>
@@ -55,16 +78,18 @@ export default function DepartmentReport({}) {
         </TouchableOpacity>
       </View>
       <View style={styles.totalReportBox}>
-        <Text style={[fs_12_500, text_gray]}>3/5 bao cao</Text>
+        <Text style={[fs_12_500, text_gray]}>
+          {countDailyReports}/ {countUsers} báo cáo
+        </Text>
       </View>
       <FlatList
-        data={[1, 2]}
+        data={dailyReports}
         contentContainerStyle={{
           paddingHorizontal: 15,
           paddingVertical: 20,
         }}
         renderItem={({item}) => {
-          return <UserReportDetail />;
+          return <UserReportDetail data={item} />;
         }}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={() => <View style={{height: 10}} />}
