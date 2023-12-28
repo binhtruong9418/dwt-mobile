@@ -78,7 +78,7 @@ const listMenu = [
 ];
 
 const downloadUrl =
-  'https://github.com/binhtruong9418/dwt-app-release/releases/download/v1.0.1/app-release.apk';
+  'https://github.com/lilhuy0405/dwt-mobile/releases/download/v1.0.0/dwt_1.0.0.apk';
 
 export default function Profile({navigation}: any) {
   const {
