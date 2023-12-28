@@ -7,7 +7,7 @@ import {
 } from '../../../assets/style.ts';
 import {useNavigation} from '@react-navigation/native';
 
-export default function RowDetail({data}: any) {
+export default function RowDetail({data, isWorkArise}: any) {
   const navigation = useNavigation();
   return (
     <View style={styles.wrapper}>
@@ -77,6 +77,7 @@ export default function RowDetail({data}: any) {
             // @ts-ignore
             navigation.navigate('WorkReport', {
               data: data,
+              isWorkArise: isWorkArise,
             });
           }}>
           <Text style={[fs_13_400, text_black]}>Báo cáo</Text>

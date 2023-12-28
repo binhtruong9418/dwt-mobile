@@ -33,7 +33,8 @@ import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 
 export default function WorkReport({route, navigation}: any) {
-  const {data} = route.params;
+  const {data, isWorkArise} = route.params;
+  console.log(isWorkArise);
   const {
     connection: {userInfo},
   } = useConnection();
@@ -111,9 +112,9 @@ export default function WorkReport({route, navigation}: any) {
         );
       }
 
-      let actualState = null;
-      let requestQuantity = null;
-      let status = null;
+      let actualState;
+      let requestQuantity;
+      let status;
       if (isCompleted) {
         if (data.type === 1 || data.type === 2) {
           status = 2;
@@ -127,22 +128,41 @@ export default function WorkReport({route, navigation}: any) {
         actualState = 3;
       }
 
-      const requestData = {
-        business_standard_id: data.id,
-        user_id: userInfo.id,
-        reported_date: dayjs(new Date()).format('YYYY-MM-DD'),
-        note: note,
-        status: status,
-        type: data.type,
-        actual_state: actualState,
-        quantity: requestQuantity,
-        file_attachment: listImages,
-        report_month: dayjs().month() + 1,
-        report_year: dayjs().year(),
-      };
-      const res = await dwtApi.addPersonalReport(requestData);
-      if (res.status === 200) {
-        setIsOpenConfirmUploadWorkReportModal(true);
+      if (isWorkArise) {
+        const requestData = {
+          work_arise_id: data.id,
+          user_id: userInfo.id,
+          reported_date: dayjs(new Date()).format('YYYY-MM-DD'),
+          note: note,
+          status: status,
+          actual_state: actualState,
+          quantity: requestQuantity,
+          file_attachment: listImages,
+        };
+        console.log('requestData');
+        console.log(requestData);
+        const res = await dwtApi.addPersonalReportArise(requestData);
+        if (res.status === 200) {
+          setIsOpenConfirmUploadWorkReportModal(true);
+        }
+      } else {
+        const requestData = {
+          business_standard_id: data.id,
+          user_id: userInfo.id,
+          reported_date: dayjs(new Date()).format('YYYY-MM-DD'),
+          note: note,
+          status: status,
+          type: data.type,
+          actual_state: actualState,
+          quantity: requestQuantity,
+          file_attachment: listImages,
+          report_month: dayjs().month() + 1,
+          report_year: dayjs().year(),
+        };
+        const res = await dwtApi.addPersonalReport(requestData);
+        if (res.status === 200) {
+          setIsOpenConfirmUploadWorkReportModal(true);
+        }
       }
     } catch (err) {
       console.log(err);

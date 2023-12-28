@@ -102,7 +102,7 @@ export default function Work({navigation}: any) {
     return {
       listKeyWorkData: keyWorkRes.data.kpi.keys,
       listNonKeyWorkData: keyWorkRes.data.kpi.noneKeys,
-      listAriseWorkData: arisWorkRes.data.businessStandardWorkArise.data,
+      listAriseWorkData: arisWorkRes.data.businessStandardWorkAriseAll,
     };
   });
 
@@ -115,20 +115,23 @@ export default function Work({navigation}: any) {
       case 0:
         return listKeyWorkData
           .map((work: any, index: number) => {
+            const listLog = work.business_standard_report_logs || [];
             let totalToday = 0;
-            if (work.business_standard_report_logs > 0) {
-              const todayLog = work.business_standard_report_logs.find(
-                (log: any) => {
-                  return log.reported_date === dayjs().format('YYYY-MM-DD');
-                },
+            if (listLog.length > 0) {
+              const listTodayLog = listLog.filter(
+                (log: any) =>
+                  log.reported_date === dayjs().format('YYYY-MM-DD'),
               );
-              totalToday = todayLog
-                ? todayLog.manager_quantity
-                  ? todayLog.manager_quantity
-                  : todayLog.quantity
-                  ? todayLog.quantity
-                  : 0
-                : 0;
+              listTodayLog.forEach((log: any) => {
+                let temp = log.manager_quantity
+                  ? log.manager_quantity
+                  : log.quantity
+                  ? log.quantity
+                  : 0;
+                if (temp > totalToday) {
+                  totalToday = temp;
+                }
+              });
             }
             return {
               ...work,
@@ -164,20 +167,23 @@ export default function Work({navigation}: any) {
       case 1:
         return listNonKeyWorkData
           .map((work: any, index: number) => {
+            const listLog = work.business_standard_report_logs || [];
             let totalToday = 0;
-            if (work.business_standard_report_logs > 0) {
-              const todayLog = work.business_standard_report_logs.find(
-                (log: any) => {
-                  return log.reported_date === dayjs().format('YYYY-MM-DD');
-                },
+            if (listLog.length > 0) {
+              const listTodayLog = listLog.filter(
+                (log: any) =>
+                  log.reported_date === dayjs().format('YYYY-MM-DD'),
               );
-              totalToday = todayLog
-                ? todayLog.manager_quantity
-                  ? todayLog.manager_quantity
-                  : todayLog.quantity
-                  ? todayLog.quantity
-                  : 0
-                : 0;
+              listTodayLog.forEach((log: any) => {
+                let temp = log.manager_quantity
+                  ? log.manager_quantity
+                  : log.quantity
+                  ? log.quantity
+                  : 0;
+                if (temp > totalToday) {
+                  totalToday = temp;
+                }
+              });
             }
             return {
               ...work,
@@ -213,22 +219,33 @@ export default function Work({navigation}: any) {
       case 2:
         return listAriseWorkData.map((work: any, index: number) => {
           const listLog = work.business_standard_arise_logs || [];
-          const totalAmountCompleted =
-            listLog.length > 0 && listLog[listLog.length - 1].quantity
-              ? listLog[listLog.length - 1].quantity
-              : 0;
-          let totalTarget = 0;
-          if (work.type === 1) {
-            totalTarget = work.working_hours;
-          } else if (work.type === 2) {
-            totalTarget = work.quantity * work.working_hours;
+          let totalAmountCompleted =
+            work.business_standard_quantity_display.split('/')[0];
+          let totalTarget =
+            work.business_standard_quantity_display.split('/')[1];
+
+          let totalToday = 0;
+          if (listLog.length > 0) {
+            const listTodayLog = listLog.filter(
+              (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD'),
+            );
+            listTodayLog.forEach((log: any) => {
+              let temp = log.manager_quantity
+                ? log.manager_quantity
+                : log.quantity
+                ? log.quantity
+                : 0;
+              if (temp > totalToday) {
+                totalToday = temp;
+              }
+            });
           }
           return {
             ...work,
             index: index + 1,
             totalTarget: totalTarget,
             totalComplete: totalAmountCompleted,
-            todayTotal: 0,
+            todayTotal: totalToday,
             bgColor: work.actual_state
               ? // @ts-ignore
                 WORK_STATUS_COLOR[work.actual_state]
@@ -300,6 +317,7 @@ export default function Work({navigation}: any) {
                 data={tableData}
                 columns={columns}
                 canShowMore={true}
+                isWorkArise={currentTab === 2}
               />
             </View>
             <TouchableOpacity
