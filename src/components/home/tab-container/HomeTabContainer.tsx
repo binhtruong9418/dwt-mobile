@@ -161,11 +161,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   content: {
-    gap: 12,
+    gap: 15,
     paddingHorizontal: 10,
   },
   align_end: {
     alignSelf: 'flex-end',
-    paddingRight: 15,
   },
 });

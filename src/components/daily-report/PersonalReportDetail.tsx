@@ -39,7 +39,7 @@ export default function PersonalReportDetail({data}: any) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: '90%',
+    width: '100%',
     backgroundColor: '#F4F4F4',
     borderRadius: 12,
     elevation: 5,

@@ -9,16 +9,17 @@ import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import TabBlock from '../../components/home/TabBlock.tsx';
 import {useState} from 'react';
-import ManagerTabContainer from '../../components/home/tab-container/ManagerTabContainer.tsx';
 import BusinessTabContainer from '../../components/home/tab-container/BusinessTabContainer.tsx';
 import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
+import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import OfficeTabContainer from '../../components/home/tab-container/OfficeTabContainer.tsx';
 
 export default function Home({navigation}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
-  const [currentTab, setCurrentTab] = useState(0);
-
+  const [currentMenuTab, setCurrentMenuTab] = useState(0);
+  const [currentManagerTab, setCurrentManagerTab] = useState(0);
   const {
     data: {checkInTime, checkOutTime} = {},
     isLoading: isLoadingAttendanceDay,
@@ -69,30 +70,37 @@ export default function Home({navigation}: any) {
   if (isLoadingAttendance || isLoadingReward || isLoadingAttendanceDay) {
     return <PrimaryLoading />;
   }
-
   return (
     userInfo && (
       <SafeAreaView style={styles.wrapper}>
         <HomeHeader navigation={navigation} />
-        {/*{userInfo.role === 'admin' ||*/}
-        {/*  (userInfo.role === 'manager' && (*/}
-        <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
-        {/*// ))}*/}
-        {currentTab === 0 ? (
+        {userInfo && userInfo.role === 'admin' && (
+          <AdminTabBlock
+            currentTab={currentManagerTab}
+            setCurrentTab={setCurrentManagerTab}
+            secondLabel={'Quản lý'}
+          />
+        )}
+        {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
+          currentManagerTab === 1 && (
+            <TabBlock
+              currentTab={currentMenuTab}
+              setCurrentTab={setCurrentMenuTab}
+            />
+          )}
+        {currentMenuTab === 0 && currentManagerTab === 0 ? (
           <HomeTabContainer
             attendanceData={attendanceData}
             checkInTime={checkInTime}
             checkOutTime={checkOutTime}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentTab === 1 ? (
-          <ManagerTabContainer
+        ) : currentMenuTab === 0 && currentManagerTab === 1 ? (
+          <OfficeTabContainer
             attendanceData={attendanceData}
-            checkInTime={checkInTime}
-            checkOutTime={checkOutTime}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentTab === 2 ? (
+        ) : currentMenuTab === 2 ? (
           <BusinessTabContainer
             attendanceData={attendanceData}
             checkInTime={checkInTime}

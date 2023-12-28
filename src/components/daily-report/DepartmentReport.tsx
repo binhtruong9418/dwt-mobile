@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   fs_12_400,
   fs_12_500,
@@ -13,6 +13,7 @@ import DatePickerModal from '../common/modal/DatePickerModal.tsx';
 import ListDepartmentModal from '../home/manager-tab/ListDepartmentModal.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
+import UserReportDetail from './UserReportDetail.tsx';
 
 export default function DepartmentReport({}) {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -58,6 +59,18 @@ export default function DepartmentReport({}) {
       <View style={styles.totalReportBox}>
         <Text style={[fs_12_500, text_gray]}>3/5 bao cao</Text>
       </View>
+      <FlatList
+        data={[1, 2]}
+        contentContainerStyle={{
+          paddingHorizontal: 15,
+          paddingVertical: 20,
+        }}
+        renderItem={({item}) => {
+          return <UserReportDetail />;
+        }}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent={() => <View style={{height: 10}} />}
+      />
       {/*<View>*/}
       {/*  <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />*/}
       {/*  <Text style={[fs_12_400, text_black, text_center]}>*/}

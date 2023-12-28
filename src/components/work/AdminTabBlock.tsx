@@ -9,7 +9,12 @@ import {
 import {useState} from 'react';
 import {fs_14_700, text_red, text_white} from '../../assets/style.ts';
 
-export default function AdminTabBlock({currentTab, setCurrentTab}: any) {
+export default function AdminTabBlock({
+  currentTab,
+  setCurrentTab,
+  firstLabel,
+  secondLabel,
+}: any) {
   return (
     <View style={styles.wrapper}>
       <View style={[styles.toggleContainer]}>
@@ -18,8 +23,13 @@ export default function AdminTabBlock({currentTab, setCurrentTab}: any) {
             setCurrentTab(0);
           }}
           style={[styles.toggleCircle, currentTab === 0 && styles.selected]}>
-          <Text style={[fs_14_700, currentTab === 0 ? text_red : text_white]}>
-            CÁ NHÂN
+          <Text
+            style={[
+              fs_14_700,
+              currentTab === 0 ? text_red : text_white,
+              {textTransform: 'uppercase'},
+            ]}>
+            {firstLabel || 'CÁ NHÂN'}
           </Text>
         </TouchableOpacity>
 
@@ -28,8 +38,13 @@ export default function AdminTabBlock({currentTab, setCurrentTab}: any) {
             setCurrentTab(1);
           }}
           style={[styles.toggleCircle, currentTab === 1 && styles.selected]}>
-          <Text style={[fs_14_700, currentTab === 1 ? text_red : text_white]}>
-            ĐƠN VỊ
+          <Text
+            style={[
+              fs_14_700,
+              currentTab === 1 ? text_red : text_white,
+              {textTransform: 'uppercase'},
+            ]}>
+            {secondLabel || 'ĐƠN VỊ'}
           </Text>
         </TouchableOpacity>
       </View>

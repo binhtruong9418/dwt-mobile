@@ -16,7 +16,6 @@ import WorkProgressBlock from '../manager-tab/WorkProgressBlock.tsx';
 import DropdownIcon from '../../../assets/img/dropdown-icon.svg';
 import LockIcon from '../../../assets/img/lock-icon.svg';
 import ReportAndProposeBlock from '../manager-tab/ReportAndProposeBlock.tsx';
-import WorkBusinessManagerTable from '../manager-tab/WorkBusinessManagerTable.tsx';
 import {useConnection} from '../../../redux/connection';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../../api/service/dwtApi.ts';
@@ -29,8 +28,12 @@ import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
 import AddIcon from '../../../assets/img/add.svg';
 import PlusButtonModal from '../../work/PlusButtonModal.tsx';
 import {useNavigation} from '@react-navigation/native';
+import BehaviorBlock from '../home-tab/BehaviorBlock.tsx';
 
-export default function ManagerTabContainer({attendanceData}: any) {
+export default function OfficeTabContainer({
+  attendanceData,
+  rewardAndPunishData,
+}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
@@ -75,62 +78,43 @@ export default function ManagerTabContainer({attendanceData}: any) {
   );
 
   const {
-    data: listWorkBusiness = [],
-    isLoading: isLoadingWorkDepartment,
-    refetch: refetchWorkDepartment,
-  } = useQuery(
-    ['getListWorkBusinessManager'],
-    async () => {
-      const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
-        date: `${currentMonth.year}-${currentMonth.month + 1}`,
-        department_id:
-          currentDepartment.value === 0 ? currentDepartment.value : undefined,
-      });
-      const listWorkAriseDepartmentData =
-        await dwtApi.getListWorkAriseDepartment({
-          date: `${currentMonth.year}-${currentMonth.month + 1}`,
-          department_id:
-            currentDepartment.value === 0 ? currentDepartment.value : undefined,
-        });
-
-      const listWorkDepartmentAll = Object.keys(
-        listWorkDepartmentData.data.kpi.keyByUsers,
-      ).reduce((acc, val) => {
-        return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
-      }, []);
-
-      const listNonKeyWorkDepartmentAll = Object.keys(
-        listWorkDepartmentData.data.kpi.nonKeyByUsers,
-      ).reduce((acc, val) => {
-        return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
-      }, []);
-
-      const listWorkBusiness = [
-        ...listWorkDepartmentAll,
-        ...listNonKeyWorkDepartmentAll,
-        ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll,
-      ];
-      return listWorkBusiness;
+    data: {listWorkOffice, workSummary} = {
+      listWorkOffice: [],
+      workSummary: {
+        done: 0,
+        working: 0,
+        late: 0,
+        total: 0,
+      },
     },
-    {
-      enabled:
-        !!userInfo &&
-        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
-    },
-  );
-
-  const {
-    data: listWorkOffice = [],
     isLoading: isLoadingWorkOffice,
     refetch: refetchWorkOffice,
   } = useQuery(
     ['getListWorkOfficeManager'],
     async () => {
       const resPersonal = await dwtApi.getOfficeWork();
-      return [
+      const listWorkOffice = [
         ...resPersonal.data.departmentKpi.targetDetails,
         ...resPersonal.data.departmentKpi.reportTasks,
       ];
+      const workSummary = {
+        done: listWorkOffice.filter((item: any) => item.work_status === 3)
+          .length,
+        working: listWorkOffice.filter((item: any) => item.work_status === 2)
+          .length,
+        late: listWorkOffice.filter((item: any) => item.work_status === 4)
+          .length,
+        total: listWorkOffice.filter(
+          (item: any) =>
+            item.work_status === 3 ||
+            item.work_status === 2 ||
+            item.work_status === 4,
+        ).length,
+      };
+      return {
+        listWorkOffice: listWorkOffice,
+        workSummary: workSummary,
+      };
     },
     {
       enabled:
@@ -139,7 +123,7 @@ export default function ManagerTabContainer({attendanceData}: any) {
     },
   );
 
-  if (isLoadingWorkDepartment || isLoadingWorkOffice) {
+  if (isLoadingWorkOffice) {
     return <PrimaryLoading />;
   }
 
@@ -176,12 +160,17 @@ export default function ManagerTabContainer({attendanceData}: any) {
               </TouchableOpacity>
             </View>
             <WorkProgressBlock attendanceData={attendanceData} />
+
             <ReportAndProposeBlock
               totalDailyReport={dailyReportDepartmentData.countDailyReports}
             />
+
+            <BehaviorBlock
+              rewardAndPunishData={rewardAndPunishData}
+              workSummary={workSummary}
+            />
             {/*<TopUserBlock />*/}
             <WorkOfficeManagerTable listWork={listWorkOffice} />
-            <WorkBusinessManagerTable listWork={listWorkBusiness} />
 
             <TouchableOpacity
               onLayout={({nativeEvent}) => {
@@ -258,7 +247,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   content: {
-    gap: 12,
+    gap: 15,
     paddingHorizontal: 10,
   },
   filter_wrapper: {

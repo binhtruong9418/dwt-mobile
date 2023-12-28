@@ -1,5 +1,4 @@
 import {StyleSheet, Text, View} from 'react-native';
-import {text_center, text_red, fs_14_500} from '../../../assets/style.ts';
 import PropTypes, {InferProps} from 'prop-types';
 import PrimaryTable from '../../common/table/PrimaryTable.tsx';
 import {WORK_STATUS_COLOR} from '../../../assets/constant.ts';
@@ -31,20 +30,8 @@ export default function WorkOfficeManagerTable({
 }: InferProps<typeof WorkOfficeManagerTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
-      <Text
-        style={[
-          fs_14_500,
-          text_red,
-          text_center,
-          {
-            marginBottom: 5,
-          },
-        ]}>
-        Báo cáo của văn phòng
-      </Text>
       <PrimaryTable
         columns={columns}
-        headerColor={'#FFF'}
         data={listWork.map((item: any, index: number) => {
           return {
             ...item,
@@ -65,7 +52,7 @@ export default function WorkOfficeManagerTable({
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    backgroundColor: '#F9CCCC',
+    backgroundColor: '#FFF',
     borderRadius: 6,
     elevation: 5,
     shadowColor: 'rgba(0, 0, 0, 0.25)',

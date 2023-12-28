@@ -42,23 +42,6 @@ export default function TabBlock({
         {/*<View style={styles.divider} />*/}
 
         <TouchableOpacity
-          style={[styles.item, currentTab === 1 && styles.item_active]}
-          onPress={() => {
-            setCurrentTab(1);
-          }}>
-          <Text
-            style={[
-              fs_14_400,
-              text_center,
-              currentTab === 1 ? text_red : text_black,
-            ]}>
-            {'Quản lý'}
-          </Text>
-        </TouchableOpacity>
-
-        {/*<View style={styles.divider} />*/}
-
-        <TouchableOpacity
           style={[styles.item, currentTab === 2 && styles.item_active]}
           onPress={() => {
             setCurrentTab(2);
