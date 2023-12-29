@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
 import {useCallback} from 'react';
-import {setUserInfo} from './reducer';
+import {setCurrentTabManager, setUserInfo} from './reducer';
 
 export const useConnection = () => {
   const connection = useSelector((state: RootState) => state.connection);
@@ -14,5 +14,12 @@ export const useConnection = () => {
     [dispatch],
   );
 
-  return {connection, onSetUserInfo};
+  const onSetCurrentTabManager = useCallback(
+    (currentTabManager: number) => {
+      dispatch(setCurrentTabManager(currentTabManager));
+    },
+    [dispatch],
+  );
+
+  return {connection, onSetUserInfo, onSetCurrentTabManager};
 };

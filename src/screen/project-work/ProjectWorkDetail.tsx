@@ -7,48 +7,50 @@ import {useMemo, useState} from 'react';
 import WorkDetailBlock from '../../components/work/WorkDetailBlock.tsx';
 import {fs_15_700, text_red} from '../../assets/style.ts';
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
-import {useQuery} from "@tanstack/react-query";
-import {dwtApi} from "../../api/service/dwtApi.ts";
-import dayjs from "dayjs";
-import LoadingActivity from "../../components/common/loading/LoadingActivity.tsx";
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import dayjs from 'dayjs';
+import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 
 export default function ProjectWorkDetail({route, navigation}: any) {
-  const [currentManagerTab, setCurrentManagerTab] = useState(1);
   const {
-    connection: {userInfo},
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
   } = useConnection();
   const {data} = route.params;
-  const {
-    data: projectWorkDetailData = {},
-    isLoading,
-  } = useQuery(['dwtApi.getProductionDiaryDetail', data], ({queryKey}) => dwtApi.getProductionDiaryDetail(+queryKey[1]));
+  const {data: projectWorkDetailData = {}, isLoading} = useQuery(
+    ['dwtApi.getProductionDiaryDetail', data],
+    ({queryKey}) => dwtApi.getProductionDiaryDetail(+queryKey[1]),
+  );
   const {data: projectWorkDetail = {}} = projectWorkDetailData;
   //normalization data
   // mỗi log có type 1 là giao việc, 2 là báo cáo
   // tuy nhiên hiển thị thì cần phải nhóm lại theo ngày báo cáo
   const workLogs = useMemo(() => {
-    const logs = projectWorkDetail?.project_work_logs ?? []
+    const logs = projectWorkDetail?.project_work_logs ?? [];
     const logsByDate: any[] = [];
     logs?.forEach((item: any) => {
-      const index = logsByDate.findIndex((log: any) => log?.logDate === item?.logDate)
+      const index = logsByDate.findIndex(
+        (log: any) => log?.logDate === item?.logDate,
+      );
       if (index === -1) {
         logsByDate.push({
           logDate: item?.logDate,
-          logs: [item]
-        })
+          logs: [item],
+        });
       } else {
-        logsByDate[index].logs.push(item)
+        logsByDate[index].logs.push(item);
       }
-    })
+    });
 
     return logsByDate;
-  }, [projectWorkDetail])
+  }, [projectWorkDetail]);
   return (
     <SafeAreaView style={styles.wrapper}>
       {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
         <AdminTabBlock
-          currentTab={currentManagerTab}
-          setCurrentTab={setCurrentManagerTab}
+          currentTab={currentTabManager}
+          setCurrentTab={onSetCurrentTabManager}
           secondLabel={'Quản lý'}
         />
       )}
@@ -121,23 +123,21 @@ export default function ProjectWorkDetail({route, navigation}: any) {
                 width: 3 / 11,
               },
             ]}
-            data={
-              workLogs.map((item: any) => {
-                const assigneeLog = item.logs.find((log: any) => log?.type === 1)
-                const assignerLog = item.logs.find((log: any) => log?.type === 2)
-                return {
-                  key: item.id,
-                  logDate: dayjs(item?.logDate).format('DD/MM/YYYY'),
-                  userName: assignerLog?.user?.name,
-                  assigneeContent: assigneeLog?.content,
-                  assignerContent: assignerLog?.content,
-                }
-              })
-            }
+            data={workLogs.map((item: any) => {
+              const assigneeLog = item.logs.find((log: any) => log?.type === 1);
+              const assignerLog = item.logs.find((log: any) => log?.type === 2);
+              return {
+                key: item.id,
+                logDate: dayjs(item?.logDate).format('DD/MM/YYYY'),
+                userName: assignerLog?.user?.name,
+                assigneeContent: assigneeLog?.content,
+                assignerContent: assignerLog?.content,
+              };
+            })}
           />
         </View>
       </ScrollView>
-      <LoadingActivity isLoading={isLoading}/>
+      <LoadingActivity isLoading={isLoading} />
     </SafeAreaView>
   );
 }

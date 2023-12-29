@@ -7,7 +7,8 @@ import {useConnection} from '../../redux/connection';
 
 export default function WorkStorage({navigation}: any) {
   const {
-    connection: {userInfo},
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
   } = useConnection();
   const [currentWorkTab, setCurrentWorkTab] = useState(0);
 
@@ -15,8 +16,8 @@ export default function WorkStorage({navigation}: any) {
     <SafeAreaView style={styles.wrapper}>
       {userInfo && userInfo.role === 'admin' && (
         <AdminTabBlock
-          currentTab={currentWorkTab}
-          setCurrentTab={setCurrentWorkTab}
+          currentTab={currentTabManager}
+          setCurrentTab={onSetCurrentTabManager}
           secondLabel={'Quản lý'}
         />
       )}

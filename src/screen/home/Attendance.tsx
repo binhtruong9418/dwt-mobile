@@ -28,10 +28,13 @@ import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import AttendanceCalendar from '../../components/attendance/AttendanceCalendar.tsx';
+import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 export default function Attendance({navigation}: any) {
   const {
-    connection: {userInfo},
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
   } = useConnection();
   const [isOpenCheckSuccessModal, setIsOpenCheckSuccessModal] = useState(false);
   const [checkInOutTime, setCheckInOutTime] = useState('--:--');
@@ -43,11 +46,19 @@ export default function Attendance({navigation}: any) {
   } = useQuery(
     ['checkInOut', dayjs().format('YYYY-MM-DD')],
     async ({queryKey}) => {
-      const response = await dwtApi.getCheckInOutByDate(
-        userInfo.id,
-        queryKey[1],
-      );
-      return response.data;
+      try {
+        const response = await dwtApi.getCheckInOutByDate(
+          userInfo.id,
+          queryKey[1],
+        );
+        return response.data;
+      } catch (error) {
+        console.log(error);
+        return {
+          checkIn: '--:--',
+          checkOut: '--:--',
+        };
+      }
     },
     {
       enabled: !!userInfo && !!userInfo.id,
@@ -102,6 +113,11 @@ export default function Attendance({navigation}: any) {
     }
   };
 
+  useRefreshOnFocus(() => {
+    refetchAttendanceData();
+    refetchAttendanceMonthData();
+    refetchCheckInOut();
+  });
   if (
     isLoadingCheckInOut ||
     isLoadingAttendance ||
@@ -113,6 +129,13 @@ export default function Attendance({navigation}: any) {
   return (
     userInfo && (
       <SafeAreaView style={styles.wrapper}>
+        {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
+          <AdminTabBlock
+            currentTab={currentTabManager}
+            setCurrentTab={onSetCurrentTabManager}
+            secondLabel={'Quản lý'}
+          />
+        )}
         <Header title={'CHẤM CÔNG'} handleGoBack={() => navigation.goBack()} />
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
           <Text style={[fs_15_400, text_red, text_center]}>

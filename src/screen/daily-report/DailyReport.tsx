@@ -9,21 +9,21 @@ import DepartmentReport from '../../components/daily-report/DepartmentReport.tsx
 
 export default function DailyReport({navigation}: any) {
   const {
-    connection: {userInfo},
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
   } = useConnection();
-  const [currentWorkTab, setCurrentWorkTab] = useState(0);
 
   return (
     <SafeAreaView style={styles.wrapper}>
       {userInfo && userInfo.role === 'admin' && (
         <AdminTabBlock
-          currentTab={currentWorkTab}
-          setCurrentTab={setCurrentWorkTab}
+          currentTab={currentTabManager}
+          setCurrentTab={onSetCurrentTabManager}
           secondLabel={'Quản lý'}
         />
       )}
       <Header title={'Báo cáo ngày'} handleGoBack={() => navigation.goBack()} />
-      {currentWorkTab === 0 ? <PersonalReport /> : <DepartmentReport />}
+      {currentTabManager === 0 ? <PersonalReport /> : <DepartmentReport />}
     </SafeAreaView>
   );
 }

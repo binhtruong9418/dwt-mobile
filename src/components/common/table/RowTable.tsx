@@ -70,7 +70,12 @@ export default function RowTable({
                 },
                 styles.cell,
               ]}>
-              <Text style={[fs_12_400, text_black, text_center]}>
+              <Text
+                style={[
+                  fs_12_400,
+                  item.textColor ? item.textColor : text_black,
+                  text_center,
+                ]}>
                 {item[column.key]}
               </Text>
             </View>

@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {useConnection} from '../../redux/connection';
@@ -7,25 +13,31 @@ import {useState} from 'react';
 import {fs_14_400, text_black} from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import DatePickerFromToModal from '../../components/common/modal/DatePickerFromToModal.tsx';
-import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
+import AttendanceHistoryTable from '../../components/attendance/AttendanceHistoryTable.tsx';
+import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 
 export default function AttendanceHistory({route, navigation}: any) {
-  const {departmentId} = route.params;
+  const {departmentId, title} = route.params;
   const {
-    connection: {userInfo},
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
   } = useConnection();
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [isSelectDate, setIsSelectDate] = useState(false);
 
-  const {data: listAttendanceHistory = []} = useQuery(
+  const {data: listAttendanceHistory = [], isLoading} = useQuery(
     ['listAttendanceHistoryDepartment', fromDate, toDate],
     async () => {
+      console.log(fromDate, toDate, departmentId);
       const res = await dwtApi.getAttendanceHistoryDepartment({
         datetime:
-          fromDate.format('DD/MM/YYYY') + ' - ' + toDate.format('DD/MM/YYYY'),
+          dayjs(fromDate).format('DD/MM/YYYY') +
+          ' - ' +
+          dayjs(toDate).format('DD/MM/YYYY'),
         department: departmentId,
       });
       return res.data.data;
@@ -35,64 +47,53 @@ export default function AttendanceHistory({route, navigation}: any) {
     },
   );
 
-  const columns = [
-    {
-      key: 'name',
-      title: 'Nhân viên',
-      width: 0.35,
-    },
-    {
-      key: 'date',
-      title: 'Thời gian',
-      width: 0.25,
-    },
-    {
-      key: 'checkIn',
-      title: 'Giờ vào',
-      width: 0.2,
-    },
-    {
-      key: 'checkOut',
-      title: 'Giờ ra',
-      width: 0.2,
-    },
-  ];
+  console.log(listAttendanceHistory);
+  if (isLoading) {
+    return <PrimaryLoading />;
+  }
+
   return (
     userInfo && (
       <SafeAreaView style={styles.wrapper}>
+        {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
+          <AdminTabBlock
+            currentTab={currentTabManager}
+            setCurrentTab={onSetCurrentTabManager}
+            secondLabel={'Quản lý'}
+          />
+        )}
         <Header
-          title={'LỊCH SỬ CHẤM CÔNG'}
+          title={'LỊCH SỬ CHẤM CÔNG' + ' ' + title}
           handleGoBack={() => navigation.goBack()}
         />
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content}>
           <TouchableOpacity
             style={styles.dateSelectBox}
             onPress={() => {
               setIsSelectDate(true);
             }}>
             <Text style={[fs_14_400, text_black]}>
-              {fromDate.format('DD/MM/YYYY')} - {toDate.format('DD/MM/YYYY')}
+              {dayjs(fromDate).format('DD/MM/YYYY')} -{' '}
+              {dayjs(toDate).format('DD/MM/YYYY')}
             </Text>
             <DropdownIcon />
           </TouchableOpacity>
-          <PrimaryTable
+          <AttendanceHistoryTable
             data={listAttendanceHistory.map((item: any) => {
               return {
                 ...item,
                 name: item.users.name,
                 date: dayjs()
-                  .month(item.month)
-                  .date(item.day)
+                  .month(item.month - 1)
                   .year(item.year)
+                  .date(item.day)
                   .format('DD/MM/YYYY'),
-                checkIn: item.checkIn,
-                checkOut: item.checkOut,
+                checkIn: item.checkIn ? item.checkIn : '--:--',
+                checkOut: item.checkOut ? item.checkOut : '--:--',
               };
             })}
-            columns={columns}
-            headerColor={'#DCE1E7'}
           />
-        </View>
+        </ScrollView>
         {isSelectDate && (
           <DatePickerFromToModal
             fromDate={fromDate}

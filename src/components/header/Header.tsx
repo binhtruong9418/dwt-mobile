@@ -20,10 +20,20 @@ export default function Header({
         }}>
         <ChevronLeftIcon width={16} height={16} />
       </TouchableOpacity>
-      <Text style={[fs_15_700, text_black, text_center, {width: '60%'}]}>
+      <Text
+        style={[
+          fs_15_700,
+          text_black,
+          text_center,
+          {width: '60%', textTransform: 'uppercase'},
+        ]}>
         {title}
       </Text>
-      {rightView ? <View style={styles.rightIcon}>{rightView}</View> : <View style={styles.rightIcon} />}
+      {rightView ? (
+        <View style={styles.rightIcon}>{rightView}</View>
+      ) : (
+        <View style={styles.rightIcon} />
+      )}
     </View>
   );
 }

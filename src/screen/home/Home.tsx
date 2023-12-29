@@ -18,10 +18,10 @@ import ManufactureTabContainer from '../../components/home/tab-container/Manufac
 
 export default function Home({navigation}: any) {
   const {
-    connection: {userInfo},
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
   } = useConnection();
   const [currentMenuTab, setCurrentMenuTab] = useState(0);
-  const [currentManagerTab, setCurrentManagerTab] = useState(0);
   const {
     data: {checkInTime, checkOutTime} = {},
     isLoading: isLoadingAttendanceDay,
@@ -79,38 +79,38 @@ export default function Home({navigation}: any) {
         <HomeHeader navigation={navigation} />
         {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
           <AdminTabBlock
-            currentTab={currentManagerTab}
-            setCurrentTab={setCurrentManagerTab}
+            currentTab={currentTabManager}
+            setCurrentTab={onSetCurrentTabManager}
             secondLabel={'Quản lý'}
           />
         )}
         {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
-          currentManagerTab === 1 && (
+          currentTabManager === 1 && (
             <TabBlock
               currentTab={currentMenuTab}
               setCurrentTab={setCurrentMenuTab}
             />
           )}
-        {currentManagerTab === 0 ? (
+        {currentTabManager === 0 ? (
           <HomeTabContainer
             attendanceData={attendanceData}
             checkInTime={checkInTime}
             checkOutTime={checkOutTime}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentMenuTab === 0 && currentManagerTab === 1 ? (
+        ) : currentMenuTab === 0 && currentTabManager === 1 ? (
           <OfficeTabContainer
             attendanceData={attendanceData}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentMenuTab === 1 && currentManagerTab === 1 ? (
+        ) : currentMenuTab === 1 && currentTabManager === 1 ? (
           <BusinessTabContainer
             attendanceData={attendanceData}
             checkInTime={checkInTime}
             checkOutTime={checkOutTime}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentMenuTab === 2 && currentManagerTab === 1 ? (
+        ) : currentMenuTab === 2 && currentTabManager === 1 ? (
           <ManufactureTabContainer />
         ) : null}
       </SafeAreaView>
