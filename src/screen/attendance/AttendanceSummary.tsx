@@ -12,8 +12,8 @@ export default function AttendanceSummary({navigation}: any) {
   const {
     connection: {userInfo},
   } = useConnection();
-  const [fromDate, setFromDate] = useState(dayjs().format('YYYY/MM/DD'));
-  const [toDate, setToDate] = useState(dayjs().format('YYYY/MM/DD'));
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [toDate, setToDate] = useState(dayjs());
   const [isSelectDate, setIsSelectDate] = useState(false);
   return (
     userInfo && (
@@ -29,7 +29,7 @@ export default function AttendanceSummary({navigation}: any) {
               setIsSelectDate(true);
             }}>
             <Text style={[fs_14_400, text_black]}>
-              {fromDate} - {toDate}
+              {fromDate.format('DD/MM/YYYY')} - {toDate.format('DD/MM/YYYY')}
             </Text>
             <DropdownIcon />
           </TouchableOpacity>
@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingVertical: 10,
     borderRadius: 5,
     borderColor: 'rgba(0, 0, 0, 0.25)',
     borderWidth: 1,
-    width: 210,
+    width: 220,
     alignSelf: 'flex-end',
   },
 });
