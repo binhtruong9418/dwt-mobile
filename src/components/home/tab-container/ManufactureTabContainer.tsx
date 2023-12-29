@@ -70,7 +70,7 @@ export default function ManufactureTabContainer() {
         listProjectLogs={listProjectLogs}
       />
       {todayLogs.length > 0 ? (
-        <ScrollView style={styles.listReport}>
+        <ScrollView style={styles.listReport} >
           <Text style={styles.timeText}>9:30</Text>
           <FlatList
             scrollEnabled={false}
@@ -82,7 +82,7 @@ export default function ManufactureTabContainer() {
             renderItem={({item}) => {
               return (
                 <TouchableOpacity style={styles.boxContainer} onPress={() => {
-                  console.log('item', item);
+                  console.log('item', item.project_work_id);
                 }}>
                   <View style={styles.logWrapper}>
                     <View style={[styles.timeBox, {backgroundColor: '#7CB8FF'}]}>
