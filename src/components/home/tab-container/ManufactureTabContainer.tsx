@@ -98,7 +98,6 @@ export default function ManufactureTabContainer() {
                     navigation.navigate('ProjectWorkDetail', {
                       data: item.project_work_id,
                     });
-                    console.log('item', item.project_work_id);
                   }}>
                   <View style={styles.logWrapper}>
                     <View

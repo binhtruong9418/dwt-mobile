@@ -218,13 +218,20 @@ export const dwtApi = {
     });
   },
 
-  //daily-report
+  //daily-report báo cáo ngày
   getDailyReportPersonalPerMonth: async (params = {}): Promise<any> => {
     const url = 'daily-report/personal-by-month';
     return await axiosClient.get(url, {params});
   },
+  //trang home -> tab quản lý -> sub tab sản xuất:  nhật ký sản xuất ( cái này ngày xưa entity là project work logs) mà giờ đổi thành production diary
   getProductionDiaryPerMonth: async (params = {}): Promise<any> => {
     const url = 'mobile/production-diary/by-month';
     return await axiosClient.get(url, {params});
+
+  },
+  // trang home -> tab quản lý -> sub tab sản xuất bấm vào 1 cái log
+  getProductionDiaryDetail: async (id: number): Promise<any> => {
+    const url = `mobile/production-diary/project-work-detail/${id}`;
+    return await axiosClient.get(url);
   },
 };
