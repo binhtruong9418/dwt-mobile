@@ -11,7 +11,8 @@ import {
   fs_12_400,
   fs_15_700,
   text_black,
-  text_center, text_white,
+  text_center,
+  text_white,
 } from '../../../assets/style.ts';
 import {useMemo, useState} from 'react';
 import dayjs from 'dayjs';
@@ -25,8 +26,10 @@ import PrimaryButton from '../../common/button/PrimaryButton.tsx';
 import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
 import CreateOrEditDailyReportModal from '../../common/modal/CreateOrEditDailyReportModal.tsx';
 import LoadingActivity from '../../common/loading/LoadingActivity.tsx';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ManufactureTabContainer() {
+  const navigation = useNavigation();
   const [currentDate, setCurrentDate] = useState<{
     month: number;
     year: number;
@@ -39,7 +42,11 @@ export default function ManufactureTabContainer() {
   const [isOpenSelectMonth, setIsOpenSelectMonth] = useState(false);
   const {data: productionDiaryData = {}, isLoading: loadingProductionDiary} =
     useQuery(
-      ['dwtApi.getProductionDiaryPerMonth', currentDate.month, currentDate.year],
+      [
+        'dwtApi.getProductionDiaryPerMonth',
+        currentDate.month,
+        currentDate.year,
+      ],
       ({queryKey}: any) =>
         dwtApi.getProductionDiaryPerMonth({
           date: `${queryKey[2]}-${queryKey[1] + 1}`,
@@ -48,9 +55,12 @@ export default function ManufactureTabContainer() {
   // console.log('productionDiaryData', productionDiaryData);
   const {data: listProjectLogs = []} = productionDiaryData;
   const todayLogs = useMemo(() => {
-    return listProjectLogs.filter((item: any) => item.logDate === `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`)
+    return listProjectLogs.filter(
+      (item: any) =>
+        item.logDate ===
+        `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
+    );
   }, [listProjectLogs, currentDate]);
-
 
   return (
     <View style={styles.wrapper}>
@@ -62,7 +72,7 @@ export default function ManufactureTabContainer() {
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
-        <DropdownIcon width={20} height={20}/>
+        <DropdownIcon width={20} height={20} />
       </TouchableOpacity>
       <DailyCalendar
         currentDate={currentDate}
@@ -70,7 +80,7 @@ export default function ManufactureTabContainer() {
         listProjectLogs={listProjectLogs}
       />
       {todayLogs.length > 0 ? (
-        <ScrollView style={styles.listReport} >
+        <ScrollView style={styles.listReport}>
           <Text style={styles.timeText}>9:30</Text>
           <FlatList
             scrollEnabled={false}
@@ -81,34 +91,38 @@ export default function ManufactureTabContainer() {
             data={todayLogs.map((item: any) => ({...item, key: item.id}))}
             renderItem={({item}) => {
               return (
-                <TouchableOpacity style={styles.boxContainer} onPress={() => {
-                  console.log('item', item.project_work_id);
-                }}>
+                <TouchableOpacity
+                  style={styles.boxContainer}
+                  onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('ProjectWorkDetail', {
+                      data: item.project_work_id,
+                    });
+                    console.log('item', item.project_work_id);
+                  }}>
                   <View style={styles.logWrapper}>
-                    <View style={[styles.timeBox, {backgroundColor: '#7CB8FF'}]}>
+                    <View
+                      style={[styles.timeBox, {backgroundColor: '#7CB8FF'}]}>
                       <Text style={[fs_10_500, text_white, text_center]}>
                         {item?.user_name} ({item?.type === 1 ? 'GV' : 'TK'})
                       </Text>
                     </View>
-                    <Text style={[fs_12_400, text_black]}>
-                      {item?.content}
-                    </Text>
+                    <Text style={[fs_12_400, text_black]}>{item?.content}</Text>
                   </View>
                 </TouchableOpacity>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
+            ItemSeparatorComponent={() => <View style={{height: 20}} />}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}}/>
+          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
         </View>
       )}
-
 
       <MonthPickerModal
         visible={isOpenSelectMonth}
@@ -118,7 +132,7 @@ export default function ManufactureTabContainer() {
         currentMonth={currentDate}
         setCurrentMonth={setCurrentDate}
       />
-      <LoadingActivity isLoading={loadingProductionDiary}/>
+      <LoadingActivity isLoading={loadingProductionDiary} />
     </View>
   );
 }

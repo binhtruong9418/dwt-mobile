@@ -22,6 +22,7 @@ import {
   DailyReportScreen,
   WorkStorageScreen,
   AttendanceSummaryScreen,
+  ProjectWorkDetailScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -124,5 +125,9 @@ export const navigatorPath = [
   {
     name: 'AttendanceSummary',
     component: AttendanceSummaryScreen,
+  },
+  {
+    name: 'ProjectWorkDetail',
+    component: ProjectWorkDetailScreen,
   },
 ];
