@@ -44,7 +44,6 @@ export default function PrimaryTable({
                 bgColor={bgColor}
                 canShowMore={canShowMore}
                 isWorkArise={item.isWorkArise ? item.isWorkArise : false}
-                isManagerWork={item.isManagerWork ? item.isManagerWork : false}
               />
             </Pressable>
           );

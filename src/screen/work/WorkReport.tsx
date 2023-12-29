@@ -64,6 +64,11 @@ export default function WorkReport({route, navigation}: any) {
 
   const handlePressOk = () => {
     setIsOpenConfirmUploadWorkReportModal(false);
+    setQuantity('');
+    setNote('');
+    setFiles([]);
+    setIsCompleted(false);
+    setIsCompletedAndReport(false);
     navigation.navigate('Work');
   };
 
@@ -112,23 +117,22 @@ export default function WorkReport({route, navigation}: any) {
         );
       }
 
-      let actualState;
-      let requestQuantity;
-      let status;
-      if (isCompleted) {
-        if (data.type === 1 || data.type === 2) {
-          status = 2;
-          requestQuantity = 1;
-        } else if (data.type === 3) {
-          status = 3;
-          requestQuantity = Number(quantity);
-        }
-      }
-      if (isCompletedAndReport) {
-        actualState = 3;
-      }
-
       if (isWorkArise) {
+        let actualState;
+        let requestQuantity;
+        let status;
+        if (isCompleted) {
+          if (data.type === 1) {
+            status = 2;
+            requestQuantity = 1;
+          } else if (data.type === 2) {
+            status = 3;
+            requestQuantity = Number(quantity);
+          }
+        }
+        if (isCompletedAndReport) {
+          actualState = 3;
+        }
         const requestData = {
           work_arise_id: data.id,
           user_id: userInfo.id,
@@ -146,6 +150,21 @@ export default function WorkReport({route, navigation}: any) {
           setIsOpenConfirmUploadWorkReportModal(true);
         }
       } else {
+        let actualState;
+        let requestQuantity;
+        let status;
+        if (isCompleted) {
+          if (data.type === 1 || data.type === 2) {
+            status = 2;
+            requestQuantity = 1;
+          } else if (data.type === 3) {
+            status = 3;
+            requestQuantity = Number(quantity);
+          }
+        }
+        if (isCompletedAndReport) {
+          actualState = 3;
+        }
         const requestData = {
           business_standard_id: data.id,
           user_id: userInfo.id,
@@ -252,12 +271,18 @@ export default function WorkReport({route, navigation}: any) {
                     data.type !== 3 && styles.disable,
                   ]}
                   placeholderTextColor={'#787878'}
-                  placeholder={data.type !== 3 ? '1' : 'Đạt giá trị'}
+                  placeholder={
+                    data.type === 3 || (data.isWorkArise && data.type === 2)
+                      ? 'Đạt giá trị'
+                      : '1'
+                  }
                   value={quantity}
                   inputMode="numeric"
                   onChangeText={value => setQuantity(value)}
                   keyboardType="numeric"
-                  editable={data.type === 3}
+                  editable={
+                    data.type === 3 || (data.isWorkArise && data.type === 2)
+                  }
                 />
                 <Text style={[fs_15_400, text_gray]}>/{data.totalTarget}</Text>
               </View>

@@ -20,12 +20,10 @@ import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 export default function WorkDetail({route, navigation}: any) {
-  const {data} = route.params;
+  const {data, managerWorkId} = route.params;
   const {
     connection: {userInfo},
   } = useConnection();
-
-  console.log(data.id)
 
   const {
     data: workDetailData = {},
@@ -42,6 +40,10 @@ export default function WorkDetail({route, navigation}: any) {
           username: usernameData.data.name,
         };
       } else {
+        if (managerWorkId) {
+          const res = await dwtApi.getWorkDetail(managerWorkId, userInfo.id);
+          return res.data;
+        }
         const res = await dwtApi.getWorkDetail(queryKey[1], userInfo.id);
         return res.data;
       }

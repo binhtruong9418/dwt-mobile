@@ -8,11 +8,12 @@ import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import TabBlock from '../../components/home/TabBlock.tsx';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import BusinessTabContainer from '../../components/home/tab-container/BusinessTabContainer.tsx';
 import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import OfficeTabContainer from '../../components/home/tab-container/OfficeTabContainer.tsx';
+import WorkStorage from '../work-storage/WorkStorage.tsx';
 
 export default function Home({navigation}: any) {
   const {
@@ -67,10 +68,10 @@ export default function Home({navigation}: any) {
     refetchRewardAndPunish();
   });
 
-
   if (isLoadingAttendance || isLoadingReward || isLoadingAttendanceDay) {
     return <PrimaryLoading />;
   }
+
   return (
     userInfo && (
       <SafeAreaView style={styles.wrapper}>
@@ -108,6 +109,8 @@ export default function Home({navigation}: any) {
             checkOutTime={checkOutTime}
             rewardAndPunishData={rewardAndPunishData}
           />
+        ) : currentMenuTab === 1 && currentManagerTab === 3 ? (
+          <WorkStorage />
         ) : null}
       </SafeAreaView>
     )

@@ -20,6 +20,7 @@ import {
   SettingInfoScreen,
   SalaryDetailScreen,
   DailyReportScreen,
+  WorkStorageScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -114,5 +115,9 @@ export const navigatorPath = [
   {
     name: 'DailyReport',
     component: DailyReportScreen,
+  },
+  {
+    name: 'WorkStorage',
+    component: WorkStorageScreen,
   },
 ];

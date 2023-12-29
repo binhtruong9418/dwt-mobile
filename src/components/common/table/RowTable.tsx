@@ -17,7 +17,6 @@ export default function RowTable({
   bgColor,
   canShowMore,
   isWorkArise,
-  isManagerWork,
 }: any) {
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
@@ -25,8 +24,17 @@ export default function RowTable({
   const navigation = useNavigation();
   const toggleMore = () => {
     if (!canShowMore) {
-      if (isManagerWork) {
-        return;
+      if (item.isManagerWork) {
+        if (item.managerWorkId) {
+          // @ts-ignore
+          navigation.navigate('WorkDetail', {
+            data: item,
+            managerWorkId: item.managerWorkId,
+          });
+          return;
+        } else {
+          return;
+        }
       }
       // @ts-ignore
       navigation.navigate('WorkDetail', {data: item});

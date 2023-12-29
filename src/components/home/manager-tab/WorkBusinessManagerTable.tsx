@@ -1,5 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
-import {text_center, text_red, fs_14_500} from '../../../assets/style.ts';
+import {StyleSheet, View} from 'react-native';
 import PropTypes, {InferProps} from 'prop-types';
 import PrimaryTable from '../../common/table/PrimaryTable.tsx';
 import {WORK_STATUS_COLOR} from '../../../assets/constant.ts';
@@ -44,6 +43,7 @@ export default function WorkBusinessManagerTable({
                 WORK_STATUS_COLOR[item.actual_state]
               : '#FFF',
             isManagerWork: true,
+            managerWorkId: item.business_standard_id,
           };
         })}
       />

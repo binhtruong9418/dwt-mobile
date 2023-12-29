@@ -33,52 +33,51 @@ import StarIcon from '../../assets/img/star.svg';
 import BoxIcon from '../../assets/img/profile/box.svg';
 import ChevronRightProfileIcon from '../../assets/img/profile/chevron-right-profile.svg';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
-import React, {useCallback, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import UploadAvatarModal from '../../components/profile/UploadAvatarModal.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import axios from 'axios';
+import VersionCheck from 'react-native-version-check';
 
 const listMenu = [
   {
     name: 'Thông tin cá nhân',
-    icon: <FontAwesome5Icon name={'user'} color={'#CA1F24'} size={20}/>,
+    icon: <FontAwesome5Icon name={'user'} color={'#CA1F24'} size={20} />,
     screen: 'UserInfo',
   },
   {
     name: 'Quá trình công tác',
-    icon: <FontAwesome5Icon name={'edit'} color={'#CA1F24'} size={20}/>,
+    icon: <FontAwesome5Icon name={'edit'} color={'#CA1F24'} size={20} />,
     screen: 'WorkInfo',
   },
   {
     name: 'Lịch sử lương',
-    icon: <FontAwesome5Icon name={'coins'} color={'#CA1F24'} size={20}/>,
+    icon: <FontAwesome5Icon name={'coins'} color={'#CA1F24'} size={20} />,
     screen: 'SalaryInfo',
   },
   {
     name: 'Trang bị & Đào tạo',
-    icon: <BoxIcon width={20} height={20} color={'#CA1F24'}/>,
+    icon: <BoxIcon width={20} height={20} color={'#CA1F24'} />,
     screen: 'EducationInfo',
   },
   {
     name: 'Khen & Vi phạm',
-    icon: <FontAwesome5Icon name={'star'} color={'#CA1F24'} size={20}/>,
+    icon: <FontAwesome5Icon name={'star'} color={'#CA1F24'} size={20} />,
     screen: 'RewardAndPunishInfo',
   },
   {
     name: 'Nghỉ & Phép',
-    icon: <FontAwesome5Icon name={'minus'} color={'#CA1F24'} size={20}/>,
+    icon: <FontAwesome5Icon name={'minus'} color={'#CA1F24'} size={20} />,
     screen: 'AbsenceInfo',
   },
   {
     name: 'Cập nhật mật khẩu',
-    icon: <FontAwesome5Icon name={'cog'} color={'#CA1F24'} size={20}/>,
+    icon: <FontAwesome5Icon name={'cog'} color={'#CA1F24'} size={20} />,
     screen: 'SettingInfo',
   },
 ];
-
-const downloadUrl =
-  'https://github.com/lilhuy0405/dwt-mobile/releases/download/v1.0.0/dwt_1.0.0.apk';
 
 export default function Profile({navigation}: any) {
   const {
@@ -88,6 +87,11 @@ export default function Profile({navigation}: any) {
   const [isOpenUploadAvatar, setIsOpenUploadAvatar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [currentVersion, setCurrentVersion] = useState('1.0.0');
+
+  useEffect(() => {
+    setCurrentVersion(VersionCheck.getCurrentVersion());
+  }, []);
   const handleLogout = async () => {
     await dwtApi.logout();
     await AsyncStorage.removeItem('accessToken');
@@ -96,10 +100,9 @@ export default function Profile({navigation}: any) {
   };
 
   const handleOpenUpdateLink = async () => {
-    // Checking if the link is supported for links with custom URL scheme.
-    // const supported = await Linking.canOpenURL(downloadUrl);
-    // console.log(downloadUrl);
     try {
+      const newLink = await axios.get('https://zombie-game.fun/api/release');
+      const downloadUrl = newLink.data.data.url;
       await Linking.openURL(downloadUrl);
     } catch (err: any) {
       console.log(err);
@@ -144,7 +147,7 @@ export default function Profile({navigation}: any) {
   useRefreshOnFocus(refetch);
 
   if (isLoadingUserData) {
-    return <PrimaryLoading/>;
+    return <PrimaryLoading />;
   }
   return (
     userData && (
@@ -155,7 +158,7 @@ export default function Profile({navigation}: any) {
           onPress={() => {
             navigation.goBack();
           }}>
-          <ChevronLeft width={16} height={16}/>
+          <ChevronLeft width={16} height={16} />
         </TouchableOpacity>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -179,7 +182,7 @@ export default function Profile({navigation}: any) {
                   }}
                 />
               ) : (
-                <NoAvatarIcon width={90} height={90}/>
+                <NoAvatarIcon width={90} height={90} />
               )}
             </View>
             <TouchableOpacity
@@ -187,7 +190,7 @@ export default function Profile({navigation}: any) {
               onPress={() => {
                 setIsOpenUploadAvatar(true);
               }}>
-              <CameraAvatarIcon width={30} height={30}/>
+              <CameraAvatarIcon width={30} height={30} />
             </TouchableOpacity>
           </View>
           <Text
@@ -216,11 +219,11 @@ export default function Profile({navigation}: any) {
 
           <View style={styles.ratingContainer}>
             <View style={styles.starContainer}>
-              <StarFillIcon width={16} height={16}/>
-              <StarFillIcon width={16} height={16}/>
-              <StarFillIcon width={16} height={16}/>
-              <StarFillIcon width={16} height={16}/>
-              <StarIcon width={16} height={16}/>
+              <StarFillIcon width={16} height={16} />
+              <StarFillIcon width={16} height={16} />
+              <StarFillIcon width={16} height={16} />
+              <StarFillIcon width={16} height={16} />
+              <StarIcon width={16} height={16} />
             </View>
             <Text style={[fs_12_400, text_black, {marginLeft: 10}]}>4.5</Text>
           </View>
@@ -243,7 +246,7 @@ export default function Profile({navigation}: any) {
             </View>
           </View>
 
-          <View style={styles.divider}/>
+          <View style={styles.divider} />
 
           <View>
             {listMenu.map((item, index) => (
@@ -266,7 +269,7 @@ export default function Profile({navigation}: any) {
                     {item.name}
                   </Text>
                 </View>
-                <ChevronRightProfileIcon width={16} height={16}/>
+                <ChevronRightProfileIcon width={16} height={16} />
               </TouchableOpacity>
             ))}
           </View>
@@ -281,6 +284,9 @@ export default function Profile({navigation}: any) {
             text={'Cập nhật phiên bản mới nhất'}
             buttonStyle={styles.buttonStyle}
           />
+          <Text style={[fs_12_400, text_gray, text_center, {marginTop: 10}]}>
+            Phiên bản {currentVersion}
+          </Text>
         </ScrollView>
         <UploadAvatarModal
           visible={isOpenUploadAvatar}
@@ -288,14 +294,13 @@ export default function Profile({navigation}: any) {
           handleUploadAvatar={handleUploadAvatar}
         />
 
-        <LoadingActivity isLoading={isLoading}/>
+        <LoadingActivity isLoading={isLoading} />
 
         <ToastSuccessModal
           visible={isSuccess}
           handlePressOk={() => setIsSuccess(false)}
           description={'Cập nhật avatar thành công'}
         />
-
       </SafeAreaView>
     )
   );
