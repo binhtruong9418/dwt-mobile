@@ -143,8 +143,6 @@ export default function WorkReport({route, navigation}: any) {
           quantity: requestQuantity,
           file_attachment: listImages,
         };
-        console.log('requestData');
-        console.log(requestData);
         const res = await dwtApi.addPersonalReportArise(requestData);
         if (res.status === 200) {
           setIsOpenConfirmUploadWorkReportModal(true);

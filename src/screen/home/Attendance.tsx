@@ -1,4 +1,10 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {useConnection} from '../../redux/connection';
@@ -16,15 +22,12 @@ import {
   text_red,
 } from '../../assets/style.ts';
 import CheckWorkBlock from '../../components/attendance/CheckWorkBlock.tsx';
-import DateTimePicker from 'react-native-ui-datepicker';
 import {useState} from 'react';
-import {Calendar} from 'react-native-calendars';
-import ChevronLeftIcon from '../../assets/img/chevron-left-calendar.svg';
-import ChevronRightIcon from '../../assets/img/chevron-right-calendar.svg';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import AttendanceCalendar from '../../components/attendance/AttendanceCalendar.tsx';
 
 export default function Attendance({navigation}: any) {
   const {
@@ -32,6 +35,7 @@ export default function Attendance({navigation}: any) {
   } = useConnection();
   const [isOpenCheckSuccessModal, setIsOpenCheckSuccessModal] = useState(false);
   const [checkInOutTime, setCheckInOutTime] = useState('--:--');
+  const [currentMonth, setCurrentMonth] = useState(dayjs().format('YYYY-MM'));
   const {
     data: checkInOutData = {},
     isLoading: isLoadingCheckInOut,
@@ -49,6 +53,24 @@ export default function Attendance({navigation}: any) {
       enabled: !!userInfo && !!userInfo.id,
     },
   );
+
+  const {
+    data: attendanceMonthData = [],
+    isLoading: isLoadingAttendanceMonthData,
+    refetch: refetchAttendanceMonthData,
+  } = useQuery(['getAttendanceMonthInfo', currentMonth], async ({queryKey}) => {
+    const response = await dwtApi.getAttendanceByMonth(queryKey[1]);
+    return response.data;
+  });
+
+  const {
+    data: attendanceData,
+    isLoading: isLoadingAttendance,
+    refetch: refetchAttendanceData,
+  } = useQuery(['getAttendanceInfo'], async () => {
+    const res = await dwtApi.getAttendanceInfo();
+    return res.data;
+  });
 
   const handleCheckIn = async () => {
     try {
@@ -80,7 +102,11 @@ export default function Attendance({navigation}: any) {
     }
   };
 
-  if (isLoadingCheckInOut) {
+  if (
+    isLoadingCheckInOut ||
+    isLoadingAttendance ||
+    isLoadingAttendanceMonthData
+  ) {
     return <PrimaryLoading />;
   }
 
@@ -122,31 +148,10 @@ export default function Attendance({navigation}: any) {
             </View>
           </View>
 
-          <Calendar
-            style={styles.calendarContainer}
-            initialDate={dayjs().format('YYYY-MM-DD')}
-            firstDay={1}
-            markedDates={{
-              '2023-12-29': {
-                selected: true,
-                selectedColor: 'rgba(0, 112, 255, 0.20)',
-                selectedTextColor: '#000',
-              },
-            }}
-            // onDayPress={day => handleChangeDay(day.dateString)}
-            theme={{
-              dayTextColor: '#000',
-              todayTextColor: '#DC3545',
-              textDayFontSize: 13,
-              textDayFontWeight: '700',
-            }}
-            renderArrow={direction => {
-              return direction === 'left' ? (
-                <ChevronLeftIcon width={20} height={20} />
-              ) : (
-                <ChevronRightIcon width={20} height={20} />
-              );
-            }}
+          <AttendanceCalendar
+            attendanceMonthData={attendanceMonthData}
+            currentMonth={currentMonth}
+            setCurrentMonth={setCurrentMonth}
           />
 
           <View
@@ -160,24 +165,34 @@ export default function Attendance({navigation}: any) {
               },
             ]}>
             <Text style={[fs_15_700, text_black]}>THỐNG KÊ THÁNG</Text>
-            <Text
-              style={[
-                fs_14_400,
-                {
-                  color: 'rgba(0, 112, 255, 0.71)',
-                },
-              ]}>
-              {'Bảng công >'}
-            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AttendanceSummary');
+              }}
+              hitSlop={10}>
+              <Text
+                style={[
+                  fs_14_400,
+                  {
+                    color: 'rgba(0, 112, 255, 0.71)',
+                  },
+                ]}>
+                {'Bảng công >'}
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.boxContainer}>
             <View style={styles.box}>
               <Text style={[fs_15_400, text_black]}>Tổng công</Text>
-              <Text style={[fs_15_400, text_black]}>3/24</Text>
+              <Text style={[fs_15_400, text_black]}>
+                {attendanceData.calcDaysWork}/{attendanceData.allDaysWork}
+              </Text>
             </View>
             <View style={styles.box}>
               <Text style={[fs_15_400, text_black]}>Nghỉ / Vắng</Text>
-              <Text style={[fs_15_400, text_black]}>2</Text>
+              <Text style={[fs_15_400, text_black]}>
+                {attendanceData.numAbsent}
+              </Text>
             </View>
           </View>
         </ScrollView>
@@ -202,13 +217,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 15,
     gap: 10,
-  },
-  calendarContainer: {
-    width: '100%',
-    borderRadius: 12,
-    backgroundColor: '#FFF',
-    borderColor: '#787878',
-    borderWidth: 0.5,
   },
   boxContainer: {
     flexDirection: 'row',

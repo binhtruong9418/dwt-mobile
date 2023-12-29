@@ -20,3 +20,4 @@ export {default as SettingInfoScreen} from './profile/SettingInfo.tsx';
 export {default as SalaryDetailScreen} from './profile/SalaryDetail.tsx';
 export {default as DailyReportScreen} from './daily-report/DailyReport.tsx';
 export {default as WorkStorageScreen} from './work-storage/WorkStorage.tsx';
+export {default as AttendanceSummaryScreen} from './attendance/AttendanceSummary.tsx';

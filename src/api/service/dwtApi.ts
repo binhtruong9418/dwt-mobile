@@ -208,6 +208,17 @@ export const dwtApi = {
       },
     });
   },
+
+  getAttendanceByMonth: async (date: string): Promise<any> => {
+    const url = 'mobile/attendance/self';
+    return await axiosClient.get(url, {
+      params: {
+        date: date,
+      },
+    });
+  },
+
+  //daily-report
   getDailyReportPersonalPerMonth: async (params = {}): Promise<any> => {
     const url = 'daily-report/personal-by-month';
     return await axiosClient.get(url, {params});
