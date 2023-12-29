@@ -25,6 +25,8 @@ export default function WorkDetail({route, navigation}: any) {
     connection: {userInfo},
   } = useConnection();
 
+  console.log(data.id)
+
   const {
     data: workDetailData = {},
     isLoading: isLoadingWorkDetail,
@@ -45,7 +47,7 @@ export default function WorkDetail({route, navigation}: any) {
       }
     },
     {
-      enabled: !!data.id && !!userInfo.id,
+      enabled: !!userInfo && !!data.id && !!userInfo.id,
     },
   );
 

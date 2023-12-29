@@ -42,6 +42,7 @@ export default function WorkOfficeManagerTable({
               ? // @ts-ignore
                 WORK_STATUS_COLOR[item.work_status]
               : '#FFF',
+            isManagerWork: true,
           };
         })}
       />

@@ -67,6 +67,7 @@ export default function Home({navigation}: any) {
     refetchRewardAndPunish();
   });
 
+
   if (isLoadingAttendance || isLoadingReward || isLoadingAttendanceDay) {
     return <PrimaryLoading />;
   }
@@ -74,7 +75,7 @@ export default function Home({navigation}: any) {
     userInfo && (
       <SafeAreaView style={styles.wrapper}>
         <HomeHeader navigation={navigation} />
-        {userInfo && userInfo.role === 'admin' && (
+        {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
           <AdminTabBlock
             currentTab={currentManagerTab}
             setCurrentTab={setCurrentManagerTab}

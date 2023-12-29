@@ -43,6 +43,7 @@ export default function WorkBusinessManagerTable({
               ? // @ts-ignore
                 WORK_STATUS_COLOR[item.actual_state]
               : '#FFF',
+            isManagerWork: true,
           };
         })}
       />

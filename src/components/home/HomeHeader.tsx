@@ -13,13 +13,13 @@ export default function HomeHeader({navigation}: any) {
     <View style={styles.wrapper}>
       <SmallLogo width={140} height={60} />
       <View style={styles.row}>
-        {/*<TouchableOpacity style={styles.iconButton}>*/}
-        {/*  <SearchIcon width={20} height={20} />*/}
-        {/*</TouchableOpacity>*/}
+        <TouchableOpacity style={styles.iconButton}>
+          <SearchIcon width={20} height={20} />
+        </TouchableOpacity>
 
-        {/*<TouchableOpacity style={styles.iconButton}>*/}
-        {/*  <NotiIcon width={20} height={20} />*/}
-        {/*</TouchableOpacity>*/}
+        <TouchableOpacity style={styles.iconButton}>
+          <NotiIcon width={20} height={20} />
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={{
@@ -54,6 +54,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderBottomColor: '#DADADA',
+    borderBottomWidth: 1,
   },
   row: {
     flexDirection: 'row',
