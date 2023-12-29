@@ -1,14 +1,32 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
-import {useQuery} from "@tanstack/react-query";
-import {dwtApi} from "../../api/service/dwtApi.ts";
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 
 export default function DailyCalendar({
                                         currentDate,
                                         setCurrentDate,
                                         listUserReports,
+                                        listProjectLogs,
                                       }: InferProps<typeof DailyCalendar.propTypes>) {
+  const haveLog = (item: any) => {
+    if (listUserReports) {
+      return !!listUserReports.find(
+        (report: any) =>
+          report?.date_report ===
+          `${currentDate.year}-${currentDate.month + 1}-${item.date}`,
+      );
+    }
+    if (listProjectLogs) {
+      return !!listProjectLogs.find(
+        (log: any) =>
+          log?.logDate ===
+          `${currentDate.year}-${currentDate.month + 1}-${item.date}`,
+      );
+    }
+    return false;
+  };
 
   return (
     <View
@@ -47,10 +65,7 @@ export default function DailyCalendar({
               <Text style={styles.date}>{item.date}</Text>
               {
                 // Show mark if current date has report
-                listUserReports.find((report: any) => report?.date_report === `${currentDate.year}-${currentDate.month + 1}-${
-                  item.date
-                    }`,
-                ) && <View style={styles.marked} />
+                haveLog(item) && <View style={styles.marked}/>
               }
             </TouchableOpacity>
           );
@@ -108,5 +123,6 @@ DailyCalendar.propTypes = {
     date: PropTypes.number.isRequired,
   }).isRequired,
   setCurrentDate: PropTypes.func.isRequired,
-  listUserReports: PropTypes.array.isRequired,
+  listUserReports: PropTypes.array,
+  listProjectLogs: PropTypes.array,
 };

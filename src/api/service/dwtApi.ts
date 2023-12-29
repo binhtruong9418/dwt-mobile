@@ -223,4 +223,8 @@ export const dwtApi = {
     const url = 'daily-report/personal-by-month';
     return await axiosClient.get(url, {params});
   },
+  getProductionDiaryPerMonth: async (params = {}): Promise<any> => {
+    const url = 'mobile/production-diary/by-month';
+    return await axiosClient.get(url, {params});
+  },
 };
