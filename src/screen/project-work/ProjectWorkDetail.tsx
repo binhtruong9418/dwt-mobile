@@ -3,7 +3,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
 import Header from '../../components/header/Header.tsx';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import WorkDetailBlock from '../../components/work/WorkDetailBlock.tsx';
 import {fs_15_700, text_red} from '../../assets/style.ts';
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
@@ -23,7 +23,26 @@ export default function ProjectWorkDetail({route, navigation}: any) {
     isLoading,
   } = useQuery(['dwtApi.getProductionDiaryDetail', data], ({queryKey}) => dwtApi.getProductionDiaryDetail(+queryKey[1]));
   const {data: projectWorkDetail = {}} = projectWorkDetailData;
+  //normalization data
+  // mỗi log có type 1 là giao việc, 2 là báo cáo
+  // tuy nhiên hiển thị thì cần phải nhóm lại theo ngày báo cáo
+  const workLogs = useMemo(() => {
+    const logs = projectWorkDetail?.project_work_logs ?? []
+    const logsByDate: any[] = [];
+    logs?.forEach((item: any) => {
+      const index = logsByDate.findIndex((log: any) => log?.logDate === item?.logDate)
+      if (index === -1) {
+        logsByDate.push({
+          logDate: item?.logDate,
+          logs: [item]
+        })
+      } else {
+        logsByDate[index].logs.push(item)
+      }
+    })
 
+    return logsByDate;
+  }, [projectWorkDetail])
   return (
     <SafeAreaView style={styles.wrapper}>
       {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
@@ -103,31 +122,22 @@ export default function ProjectWorkDetail({route, navigation}: any) {
               },
             ]}
             data={
-              projectWorkDetail.project_work_logs?.map((item: any) => {
-                if(item?.type === 1) {
-                  //1 meams tbp giao viec
-                  return {
-                    key: item.id,
-                    logDate: dayjs(item?.logDate).format('DD/MM/YYYY'),
-                    userName: item?.user?.name + "(GV)",
-                    assigneeContent: item?.content,
-                    assignerContent: "",
-                  }
-                }
-                //2 means ntk bao cao
+              workLogs.map((item: any) => {
+                const assigneeLog = item.logs.find((log: any) => log?.type === 1)
+                const assignerLog = item.logs.find((log: any) => log?.type === 2)
                 return {
                   key: item.id,
                   logDate: dayjs(item?.logDate).format('DD/MM/YYYY'),
-                  userName: item?.user?.name + "(TK)",
-                  assignerContent: item?.content,
-                  assigneeContent: "",
+                  userName: assignerLog?.user?.name,
+                  assigneeContent: assigneeLog?.content,
+                  assignerContent: assignerLog?.content,
                 }
               })
             }
           />
         </View>
       </ScrollView>
-      <LoadingActivity isLoading={isLoading} />
+      <LoadingActivity isLoading={isLoading}/>
     </SafeAreaView>
   );
 }
