@@ -17,9 +17,8 @@ import DailyCalendar from './DailyCalendar.tsx';
 import PersonalReportDetail from './PersonalReportDetail.tsx';
 import PrimaryButton from '../common/button/PrimaryButton.tsx';
 import MonthPickerModal from '../common/modal/MonthPickerModal.tsx';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import dayjs from 'dayjs';
-import {getDaysInMonth} from '../../utils';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import LoadingActivity from '../common/loading/LoadingActivity.tsx';
 import EmptyDailyReportIcon from '../../assets/img/empty-daily-report.svg';
@@ -38,7 +37,6 @@ export default function PersonalReport({}) {
   });
   const [isOpenSelectMonth, setIsOpenSelectMonth] = useState(false);
   const today = dayjs();
-  const [isLoading, setIsLoading] = useState(false);
   //only can create or edit if today is same day with currentDate
   const canCreateOrEdit =
     currentDate.month === today.month() &&
@@ -64,7 +62,6 @@ export default function PersonalReport({}) {
       item.date_report ===
       `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
   );
-  console.log('todayReport', todayReport);
 
   return (
     <View style={styles.wrapper}>
