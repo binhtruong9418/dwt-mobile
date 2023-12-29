@@ -72,7 +72,7 @@ export default function ManufactureTabContainer() {
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
-        <DropdownIcon width={20} height={20} />
+        <DropdownIcon width={20} height={20}/>
       </TouchableOpacity>
       <DailyCalendar
         currentDate={currentDate}
@@ -111,12 +111,12 @@ export default function ManufactureTabContainer() {
                 </TouchableOpacity>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}} />}
+            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />
+          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}}/>
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
@@ -131,7 +131,7 @@ export default function ManufactureTabContainer() {
         currentMonth={currentDate}
         setCurrentMonth={setCurrentDate}
       />
-      <LoadingActivity isLoading={loadingProductionDiary} />
+      <LoadingActivity isLoading={loadingProductionDiary}/>
     </View>
   );
 }
