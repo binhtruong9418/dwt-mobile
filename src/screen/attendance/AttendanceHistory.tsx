@@ -11,7 +11,8 @@ import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 
-export default function AttendanceSummary({navigation}: any) {
+export default function AttendanceHistory({route, navigation}: any) {
+  const {departmentId} = route.params;
   const {
     connection: {userInfo},
   } = useConnection();
@@ -19,26 +20,26 @@ export default function AttendanceSummary({navigation}: any) {
   const [toDate, setToDate] = useState(dayjs());
   const [isSelectDate, setIsSelectDate] = useState(false);
 
-  const {data: listAttendanceSummary = []} = useQuery(
-    ['listAttendanceSummary', fromDate, toDate],
+  const {data: listAttendanceHistory = []} = useQuery(
+    ['listAttendanceHistoryDepartment', fromDate, toDate],
     async () => {
-      const res = await dwtApi.getAttendanceSummaryDepartment({
-        datetimeFilter:
+      const res = await dwtApi.getAttendanceHistoryDepartment({
+        datetime:
           fromDate.format('DD/MM/YYYY') + ' - ' + toDate.format('DD/MM/YYYY'),
-        department: userInfo.departement_id,
+        department: departmentId,
       });
       return res.data.data;
     },
     {
-      enabled: !!userInfo,
+      enabled: !!userInfo && !!departmentId,
     },
   );
 
   const columns = [
     {
       key: 'name',
-      title: 'Tên',
-      width: 0.3,
+      title: 'Nhân viên',
+      width: 0.35,
     },
     {
       key: 'date',
@@ -46,13 +47,13 @@ export default function AttendanceSummary({navigation}: any) {
       width: 0.25,
     },
     {
-      key: 'totalSuccess',
-      title: 'Đã điểm danh',
-      width: 0.25,
+      key: 'checkIn',
+      title: 'Giờ vào',
+      width: 0.2,
     },
     {
-      key: 'totalFail',
-      title: 'Đi trễ',
+      key: 'checkOut',
+      title: 'Giờ ra',
       width: 0.2,
     },
   ];
@@ -60,7 +61,7 @@ export default function AttendanceSummary({navigation}: any) {
     userInfo && (
       <SafeAreaView style={styles.wrapper}>
         <Header
-          title={'TỔNG QUAN CHẤM CÔNG'}
+          title={'LỊCH SỬ CHẤM CÔNG'}
           handleGoBack={() => navigation.goBack()}
         />
         <View style={styles.content}>
@@ -75,15 +76,17 @@ export default function AttendanceSummary({navigation}: any) {
             <DropdownIcon />
           </TouchableOpacity>
           <PrimaryTable
-            data={listAttendanceSummary.map((item: any) => {
+            data={listAttendanceHistory.map((item: any) => {
               return {
                 ...item,
-                onRowPress: (item: any) => {
-                  console.log(item);
-                  navigation.navigate('AttendanceHistory', {
-                    departmentId: item.id,
-                  });
-                },
+                name: item.users.name,
+                date: dayjs()
+                  .month(item.month)
+                  .date(item.day)
+                  .year(item.year)
+                  .format('DD/MM/YYYY'),
+                checkIn: item.checkIn,
+                checkOut: item.checkOut,
               };
             })}
             columns={columns}

@@ -22,3 +22,4 @@ export {default as DailyReportScreen} from './daily-report/DailyReport.tsx';
 export {default as WorkStorageScreen} from './work-storage/WorkStorage.tsx';
 export {default as AttendanceSummaryScreen} from './attendance/AttendanceSummary.tsx';
 export {default as ProjectWorkDetailScreen} from './project-work/ProjectWorkDetail.tsx';
+export {default as AttendanceHistoryScreen} from './attendance/AttendanceHistory.tsx';

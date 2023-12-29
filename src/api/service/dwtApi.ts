@@ -199,6 +199,7 @@ export const dwtApi = {
     return await axiosClient.post(url, {checkIn: checkIn, checkOut: checkOut});
   },
 
+  //API lấy thông tin chấm công cá nhân theo ngày
   getCheckInOutByDate: async (userId: number, date: string) => {
     const url = 'attendances/personal/search';
     return await axiosClient.get(url, {
@@ -209,6 +210,7 @@ export const dwtApi = {
     });
   },
 
+  //API lấy danh sách chấm công của người dùng theo tháng
   getAttendanceByMonth: async (date: string): Promise<any> => {
     const url = 'mobile/attendance/self';
     return await axiosClient.get(url, {
@@ -216,6 +218,18 @@ export const dwtApi = {
         date: date,
       },
     });
+  },
+
+  //API lấy tổng quan chấm công theo phòng ban
+  getAttendanceSummaryDepartment: async (params = {}): Promise<any> => {
+    const url = 'attendances/department/search';
+    return await axiosClient.get(url, {params});
+  },
+
+  //API lấy lịch sử chấm công theo phòng ban
+  getAttendanceHistoryDepartment: async (params = {}): Promise<any> => {
+    const url = 'attendances';
+    return await axiosClient.get(url, {params});
   },
 
   //daily-report
