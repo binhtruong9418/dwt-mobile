@@ -118,13 +118,14 @@ export default function Attendance({navigation}: any) {
     refetchAttendanceMonthData();
     refetchCheckInOut();
   });
-  if (
-    isLoadingCheckInOut ||
-    isLoadingAttendance ||
-    isLoadingAttendanceMonthData
-  ) {
-    return <PrimaryLoading />;
-  }
+
+  // if (
+  //   isLoadingCheckInOut ||
+  //   isLoadingAttendance ||
+  //   isLoadingAttendanceMonthData
+  // ) {
+  //   return <PrimaryLoading />;
+  // }
 
   return (
     userInfo && (

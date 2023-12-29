@@ -18,12 +18,13 @@ export default function ToastConfirmModal({
   handleCancel,
   okText,
   cancelText,
+  description,
 }: InferProps<typeof ToastConfirmModal.propTypes>) {
   return (
     <ReactNativeModal isVisible={visible} style={styles.modal}>
       <View style={styles.modalContent}>
         <Text style={[fs_15_700, text_black, text_center, mb20]}>
-          Bạn thực sự muốn hủy báo cáo?
+          {description}
         </Text>
 
         <View style={styles.divider} />
@@ -76,4 +77,5 @@ ToastConfirmModal.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   okText: PropTypes.string,
   cancelText: PropTypes.string,
+  description: PropTypes.string,
 };

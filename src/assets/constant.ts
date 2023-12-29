@@ -57,6 +57,42 @@ export const LIST_WORK_STATUS_FILTER = [
   },
 ];
 
+export const LIST_PROPOSE_STATUS_COLOR = {
+  0: '#FFF',
+  1: '#F9F2CE',
+  2: '#D9D9D9',
+  3: '#89B6FA',
+  4: '#D4F3D5',
+  5: '#D9D9D9',
+};
+
+export const LIST_PROPOSE_STATUS = [
+  {
+    label: 'Tất cả',
+    value: 0,
+  },
+  {
+    label: 'Đã tiếp nhận',
+    value: 1,
+  },
+  {
+    label: 'Đã giao',
+    value: 2,
+  },
+  {
+    label: 'Đã có hướng giải quyết',
+    value: 3,
+  },
+  {
+    label: 'Đã giải quyết',
+    value: 4,
+  },
+  {
+    label: 'Không thể giải quyết',
+    value: 5,
+  },
+];
+
 export const BANK_LIST = [
   {
     label: '(Ngân hàng Nông nghiệp và Phát triển Nông thôn) Agribank',

@@ -18,12 +18,60 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useState} from 'react';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
+import {showToast} from '../../utils';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
 
-export default function AddPropose({}) {
+export default function AddPropose({navigation}: any) {
   const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
   const [isOpenSuccessModal, setIsOpenSuccessModal] = useState(false);
-  const [currentType, setCurrentType] = useState(1);
-  const [note, setNote] = useState('');
+  const [currentType, setCurrentType] = useState(0);
+  const [description, setDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSave = async () => {
+    if (currentType === 0) {
+      showToast('Vui lòng chọn phân loại');
+      return;
+    }
+    if (description === '') {
+      showToast('Vui lòng nhập vấn đề tồn đọng');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await dwtApi.createNewPropose({
+        description: description,
+        type: currentType,
+      });
+
+      console.log(response.data);
+      if (response.status === 200) {
+        setIsLoading(false);
+        setIsOpenSuccessModal(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showToast('Có lỗi xảy ra, vui lòng thử lại');
+    }
+  };
+
+  const handleGoBack = () => {
+    setDescription('');
+    setCurrentType(0);
+    setIsOpenCancelReportModal(false);
+    navigation.goBack();
+  };
+
+  const handleOk = () => {
+    setDescription('');
+    setCurrentType(0);
+    setIsOpenSuccessModal(false);
+    navigation.goBack('Propose');
+  };
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <Header
@@ -32,7 +80,7 @@ export default function AddPropose({}) {
           setIsOpenCancelReportModal(true);
         }}
         rightView={
-          <TouchableOpacity style={styles.sendButton} onPress={() => {}}>
+          <TouchableOpacity style={styles.sendButton} onPress={handleSave}>
             <Text style={[fs_15_700, text_white, text_center]}>Gửi</Text>
           </TouchableOpacity>
         }
@@ -45,22 +93,19 @@ export default function AddPropose({}) {
           <PrimaryDropdown
             data={[
               {
-                label: '1 lần',
+                label: 'Than phiền',
                 value: 1,
               },
               {
-                label: 'Liên tục',
+                label: 'Cần giải quyết',
                 value: 2,
-              },
-              {
-                label: 'Đạt giá trị',
-                value: 3,
               },
             ]}
             value={currentType}
             changeValue={setCurrentType}
             dropdownStyle={styles.dropdownStyle}
             isSearch={false}
+            placeholder={'Chọn phân loại'}
           />
         </View>
 
@@ -71,15 +116,26 @@ export default function AddPropose({}) {
           <TextInput
             style={[styles.input, text_black, fs_15_400]}
             placeholderTextColor={'#787878'}
-            value={note}
-            onChangeText={setNote}
+            value={description}
+            onChangeText={setDescription}
+            multiline={true}
           />
         </View>
       </View>
       <ToastSuccessModal
         visible={isOpenSuccessModal}
-        handlePressOk={() => {}}
+        handlePressOk={handleOk}
         description={'Thêm đề xuất thành công'}
+      />
+      <ToastConfirmModal
+        visible={isOpenCancelReportModal}
+        handleOk={handleGoBack}
+        handleCancel={() => {
+          setIsOpenCancelReportModal(false);
+        }}
+        okText={'Đồng ý'}
+        cancelText={'Hủy'}
+        description={'Bạn có muốn hủy thêm đề xuất?'}
       />
     </SafeAreaView>
   );

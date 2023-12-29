@@ -347,6 +347,7 @@ export default function WorkReport({route, navigation}: any) {
         handleOk={() => {
           setIsOpenCancelReportModal(false);
         }}
+        description={'Bạn thực sự muốn hủy báo cáo?'}
         okText={'Tiếp tục báo cáo'}
         cancelText={'Hủy báo cáo'}
       />

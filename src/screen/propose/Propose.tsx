@@ -11,18 +11,24 @@ import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import AddIcon from '../../assets/img/add.svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import ProposeStatusFilterModal from '../../components/common/modal/ProposeStatusFilterModal.tsx';
 import DatePickerModal from '../../components/common/modal/DatePickerModal.tsx';
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import {
+  LIST_PROPOSE_STATUS,
+  LIST_PROPOSE_STATUS_COLOR,
+} from '../../assets/constant.ts';
+import dayjs from 'dayjs';
+import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 export default function Propose({navigation}: any) {
   const [isOpenStatusSelect, setIsOpenStatusSelect] = useState(false);
   const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
-  const [statusValue, setStatusValue] = useState({
-    label: 'Tất cả',
-    value: 'all',
-  });
-
+  const [statusValue, setStatusValue] = useState(LIST_PROPOSE_STATUS[0]);
+  const [timeValue, setTimeValue] = useState(dayjs());
   const columns = [
     {
       key: 'index',
@@ -30,7 +36,7 @@ export default function Propose({navigation}: any) {
       width: 0.1,
     },
     {
-      key: 'name',
+      key: 'description',
       title: 'Vấn đề',
       width: 0.35,
     },
@@ -45,6 +51,43 @@ export default function Propose({navigation}: any) {
       width: 0.25,
     },
   ];
+
+  const {
+    data: listPropose = [],
+    isLoading: isProposeLoading,
+    refetch: refetchPropose,
+  } = useQuery(
+    ['listPropose', statusValue, timeValue],
+    async ({queryKey}: any) => {
+      const response = await dwtApi.getAllPropose({
+        status: queryKey[1].value === 0 ? undefined : queryKey[1].value,
+        created_at: dayjs(queryKey[2]).format('YYYY-MM-DD'),
+      });
+      return response.data.data;
+    },
+  );
+
+  const tableData = useMemo(() => {
+    const data = listPropose.map((item: any, index: number) => {
+      return {
+        ...item,
+        index: index + 1,
+        creator: item.user.name,
+        date: dayjs(item.created_at).format('DD/MM/YYYY'),
+        bgColor: item.status
+          ? // @ts-ignore
+            LIST_PROPOSE_STATUS_COLOR[item.status]
+          : '#FFF',
+      };
+    });
+    return data;
+  }, [listPropose]);
+
+  useRefreshOnFocus(refetchPropose);
+
+  // if (isProposeLoading) {
+  //   return <PrimaryLoading />;
+  // }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -63,7 +106,7 @@ export default function Propose({navigation}: any) {
             onPress={() => {
               setIsOpenStatusSelect(true);
             }}>
-            <Text style={[text_black, fs_14_400]}>{'Trang thai'}</Text>
+            <Text style={[text_black, fs_14_400]}>{statusValue.label}</Text>
             <DropdownIcon width={20} height={20} />
           </TouchableOpacity>
 
@@ -72,22 +115,17 @@ export default function Propose({navigation}: any) {
             onPress={() => {
               setIsOpenTimeSelect(true);
             }}>
-            <Text style={[text_black, fs_14_400]}>Thowi gian</Text>
+            <Text style={[text_black, fs_14_400]}>
+              {dayjs(timeValue).format('DD/MM/YYYY')}
+            </Text>
             <DropdownIcon width={20} height={20} />
           </TouchableOpacity>
         </View>
         <View>
           <PrimaryTable
-            data={[
-              {
-                name: 'Vấn đề 1',
-                creator: 'Người nêu 1',
-                date: '01/01/2021',
-                index: 1,
-                bgColor: '#FBF2CA',
-              },
-            ]}
+            data={tableData}
             columns={columns}
+            headerColor={'#D9D9D9'}
           />
         </View>
         <TouchableOpacity
@@ -107,8 +145,8 @@ export default function Propose({navigation}: any) {
       <DatePickerModal
         visible={isOpenTimeSelect}
         setVisible={setIsOpenTimeSelect}
-        currentDate={''}
-        setCurrentDate={() => {}}
+        currentDate={timeValue}
+        setCurrentDate={setTimeValue}
       />
     </SafeAreaView>
   );

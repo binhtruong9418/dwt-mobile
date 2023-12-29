@@ -246,4 +246,13 @@ export const dwtApi = {
     const url = `mobile/production-diary/project-work-detail/${id}`;
     return await axiosClient.get(url);
   },
+
+  createNewPropose: async (data: any): Promise<any> => {
+    const url = 'quick-reports';
+    return await axiosClient.post(url, data);
+  },
+  getAllPropose: async (params = {}): Promise<any> => {
+    const url = 'quick-reports';
+    return await axiosClient.get(url, {params});
+  },
 };

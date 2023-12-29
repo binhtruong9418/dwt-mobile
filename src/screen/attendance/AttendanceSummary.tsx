@@ -105,10 +105,6 @@ export default function AttendanceSummary({navigation}: any) {
     },
   ];
 
-  if (isLoading) {
-    return <PrimaryLoading />;
-  }
-
   return (
     userInfo && (
       <SafeAreaView style={styles.wrapper}>

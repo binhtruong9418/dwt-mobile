@@ -47,11 +47,6 @@ export default function AttendanceHistory({route, navigation}: any) {
     },
   );
 
-  console.log(listAttendanceHistory);
-  if (isLoading) {
-    return <PrimaryLoading />;
-  }
-
   return (
     userInfo && (
       <SafeAreaView style={styles.wrapper}>

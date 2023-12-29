@@ -7,6 +7,8 @@ import PrimaryCheckbox from '../checkbox/PrimaryCheckbox.tsx';
 import {useState} from 'react';
 import PrimaryButton from '../button/PrimaryButton.tsx';
 import {
+  LIST_PROPOSE_STATUS,
+  LIST_PROPOSE_STATUS_COLOR,
   LIST_WORK_STATUS_FILTER,
   WORK_STATUS_COLOR,
 } from '../../../assets/constant.ts';
@@ -17,15 +19,15 @@ export default function ProposeStatusFilterModal({
   setStatusValue,
   statusValue,
 }: InferProps<typeof ProposeStatusFilterModal.propTypes>) {
-  const [currentFilter, setCurrentFilter] = useState(statusValue.value);
+  const [currentFilter, setCurrentFilter] = useState(statusValue);
 
-  const handleChangeCheck = (value: string) => {
+  const handleChangeCheck = (value: any) => {
     setCurrentFilter(value);
   };
 
   const handleSaveValue = () => {
     setStatusValue(
-      LIST_WORK_STATUS_FILTER.find(item => item.value === currentFilter),
+      LIST_PROPOSE_STATUS.find(item => item.value === currentFilter.value),
     );
     setVisible(false);
   };
@@ -58,7 +60,7 @@ export default function ProposeStatusFilterModal({
           </Pressable>
         </View>
         <View style={styles.row_container}>
-          {LIST_WORK_STATUS_FILTER.map((item: any, index) => (
+          {LIST_PROPOSE_STATUS.map((item: any, index) => (
             <View
               key={index}
               style={[
@@ -66,13 +68,13 @@ export default function ProposeStatusFilterModal({
                 index === 0 && styles.borderTopBottom,
                 {
                   // @ts-ignore
-                  backgroundColor: WORK_STATUS_COLOR[item.value],
+                  backgroundColor: LIST_PROPOSE_STATUS_COLOR[item.value],
                 },
               ]}>
               <PrimaryCheckbox
                 label={item.label}
-                checked={currentFilter === item.value}
-                onChange={() => handleChangeCheck(item.value)}
+                checked={currentFilter.value === item.value}
+                onChange={() => handleChangeCheck(item)}
               />
             </View>
           ))}

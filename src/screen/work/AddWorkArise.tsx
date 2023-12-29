@@ -331,6 +331,7 @@ export default function AddWorkArise({navigation}: any) {
         handleOk={() => {
           setIsOpenCancelAddWorkAriseModal(false);
         }}
+        description={'Bạn có muốn hủy tạo mới nhiệm vụ này?'}
         okText={'Tiếp tục tạo nhiệm vụ'}
         cancelText={'Hủy tạo mới'}
       />
