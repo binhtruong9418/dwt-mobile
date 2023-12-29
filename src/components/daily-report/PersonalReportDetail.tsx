@@ -31,7 +31,11 @@ export default function PersonalReportDetail({data}: any) {
             {data?.label ?? ''}
           </Text>
         </View>
-        <Text style={[fs_12_400, text_black]}>• {data?.text}</Text>
+        {data?.text?.split('\n').map((item: any, index: any) => (
+          <Text style={[fs_12_400, text_black]} key={index}>
+            • {item}
+          </Text>
+        ))}
       </View>
     </View>
   );

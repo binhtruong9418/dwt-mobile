@@ -24,6 +24,7 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 import LoadingActivity from '../common/loading/LoadingActivity.tsx';
 import EmptyDailyReportIcon from '../../assets/img/empty-daily-report.svg';
 import CreateOrEditDailyReportModal from '../common/modal/CreateOrEditDailyReportModal.tsx';
+import {useQuery} from '@tanstack/react-query';
 
 export default function PersonalReport({}) {
   const [currentDate, setCurrentDate] = useState<{
@@ -43,52 +44,28 @@ export default function PersonalReport({}) {
     currentDate.month === today.month() &&
     currentDate.year === today.year() &&
     currentDate.date === today.date();
-  const [listUserReports, setListUserReports] = useState<any[]>([]); //list report of current month
+
   const [isOpenCreateOrEditModal, setIsOpenCreateOrEditModal] = useState(false);
-  const fetchUserReports = async () => {
-    const daysInMoth = getDaysInMonth(currentDate.month, currentDate.year);
-    const userReports = [];
-    for (const day of daysInMoth) {
-      setIsLoading(true);
-      try {
-        //convert to YYYY-MM-DD
-        const reportDate = `${currentDate.year}-${currentDate.month + 1}-${
-          day.date
-        }`;
-        console.log(reportDate);
-        const userReport = await dwtApi.getPersonalDailyReport({
-          date_report: reportDate,
-        });
-        userReports.push(userReport.data);
-      } catch (err: any) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    setListUserReports(userReports);
-  };
-  console.log('listUserReports', listUserReports);
-  const todayReport = listUserReports.find(
+
+  const {
+    data: userDailyReportData = {},
+    isLoading: loadingUserReport,
+    refetch: reFetchUseReport,
+  } = useQuery(
+    ['dwtApi.getDailyReportPersonalPerMonth', currentDate],
+    ({queryKey}: any) =>
+      dwtApi.getDailyReportPersonalPerMonth({
+        date_report: `${queryKey[1].year}-${queryKey[1].month + 1}`,
+      }),
+  );
+  const {data: userDailyReports = []} = userDailyReportData;
+  const todayReport = userDailyReports.find(
     (item: any) =>
       item.date_report ===
       `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
   );
+  console.log('todayReport', todayReport);
 
-  useEffect(() => {
-    fetchUserReports();
-    // setListUserReports([
-    //   {
-    //     created_at: '2023-12-28T17:57:09.000000Z',
-    //     date_report: '2023-12-29',
-    //     id: 1,
-    //     today_work_note: '432432',
-    //     user_id: 31,
-    //     yesterday_work_note: 'hjdfsafds',
-    //   },
-    // ]);
-    // setListUserReports([]);
-  }, [currentDate.month, currentDate.year]);
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
@@ -99,12 +76,12 @@ export default function PersonalReport({}) {
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
-        <DropdownIcon width={20} height={20}/>
+        <DropdownIcon width={20} height={20} />
       </TouchableOpacity>
       <DailyCalendar
         currentDate={currentDate}
         setCurrentDate={setCurrentDate}
-        listUserReports={listUserReports}
+        listUserReports={userDailyReports}
       />
       {todayReport ? (
         <ScrollView style={styles.listReport}>
@@ -118,34 +95,34 @@ export default function PersonalReport({}) {
             data={
               todayReport
                 ? [
-                  {
-                    key: 1,
-                    text: todayReport?.today_work_note ?? '',
-                    label: 'Hôm nay',
-                    time: dayjs(todayReport?.created_at).format('HH:mm'),
-                  },
-                  {
-                    key: 2,
-                    text: todayReport?.yesterday_work_note ?? '',
-                    label: 'Hôm qua',
-                    time: dayjs(todayReport?.created_at).format('HH:mm'),
-                  },
-                ]
+                    {
+                      key: 1,
+                      text: todayReport?.today_work_note ?? '',
+                      label: 'Hôm nay',
+                      time: dayjs(todayReport?.created_at).format('HH:mm'),
+                    },
+                    {
+                      key: 2,
+                      text: todayReport?.yesterday_work_note ?? '',
+                      label: 'Hôm qua',
+                      time: dayjs(todayReport?.created_at).format('HH:mm'),
+                    },
+                  ]
                 : []
             }
             renderItem={({item}) => {
               return (
                 <View style={styles.boxContainer}>
-                  <PersonalReportDetail data={item}/>
+                  <PersonalReportDetail data={item} />
                 </View>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
+            ItemSeparatorComponent={() => <View style={{height: 20}} />}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}}/>
+          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
@@ -184,9 +161,9 @@ export default function PersonalReport({}) {
         setVisible={setIsOpenCreateOrEditModal}
         isEdit={todayReport}
         currentDate={currentDate}
-        onSuccess={fetchUserReports}
+        onSuccess={reFetchUseReport}
       />
-      <LoadingActivity isLoading={isLoading}/>
+      <LoadingActivity isLoading={loadingUserReport} />
     </View>
   );
 }
