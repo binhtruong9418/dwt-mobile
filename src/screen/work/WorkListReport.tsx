@@ -9,26 +9,6 @@ import ChevronLeftIcon from '../../assets/img/chevron-left-calendar.svg';
 import ChevronRightIcon from '../../assets/img/chevron-right-calendar.svg';
 import {fs_13_400, row_between, text_gray} from '../../assets/style.ts';
 
-LocaleConfig.locales.vi = {
-  monthNames: [
-    'Tháng 1',
-    'Tháng 2',
-    'Tháng 3',
-    'Tháng 4',
-    'Tháng 5',
-    'Tháng 6',
-    'Tháng 7',
-    'Tháng 8',
-    'Tháng 9',
-    'Tháng 10',
-    'Tháng 11',
-    'Tháng 12',
-  ],
-  dayNamesShort: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
-  dayNames: ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
-};
-LocaleConfig.defaultLocale = 'vi';
-
 export default function WorkListReport({route, navigation}: any) {
   const {data} = route.params;
   const listLogs = data.business_standard_report_logs

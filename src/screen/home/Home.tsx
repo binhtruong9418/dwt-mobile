@@ -14,6 +14,7 @@ import HomeTabContainer from '../../components/home/tab-container/HomeTabContain
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import OfficeTabContainer from '../../components/home/tab-container/OfficeTabContainer.tsx';
 import WorkStorage from '../work-storage/WorkStorage.tsx';
+import ManufactureTabContainer from '../../components/home/tab-container/ManufactureTabContainer.tsx';
 
 export default function Home({navigation}: any) {
   const {
@@ -109,8 +110,8 @@ export default function Home({navigation}: any) {
             checkOutTime={checkOutTime}
             rewardAndPunishData={rewardAndPunishData}
           />
-        ) : currentMenuTab === 1 && currentManagerTab === 3 ? (
-          <WorkStorage />
+        ) : currentMenuTab === 2 && currentManagerTab === 1 ? (
+          <ManufactureTabContainer />
         ) : null}
       </SafeAreaView>
     )

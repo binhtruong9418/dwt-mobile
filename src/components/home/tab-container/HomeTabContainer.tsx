@@ -97,8 +97,8 @@ export default function HomeTabContainer({
         ),
       },
       workSummary,
-      userKpi: resPersonal.data.kpi.tmpTotalKPI,
-      departmentKpi: resPersonal.data.departmentKPI.tmpTotalKPI,
+      userKpi: resPersonal.data.kpi.monthOverview.totalWork,
+      departmentKpi: resPersonal.data.departmentKPI.monthOverview.totalWork,
     };
   });
 

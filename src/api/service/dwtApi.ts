@@ -192,4 +192,20 @@ export const dwtApi = {
     console.log(params);
     return await axiosClient.get(url, {params});
   },
+
+  // Cham cong
+  checkInOut: async (checkIn: string, checkOut?: string) => {
+    const url = 'mobile/attendance/store-check-in-out';
+    return await axiosClient.post(url, {checkIn: checkIn, checkOut: checkOut});
+  },
+
+  getCheckInOutByDate: async (userId: number, date: string) => {
+    const url = 'attendances/personal/search';
+    return await axiosClient.get(url, {
+      params: {
+        user_id: userId,
+        datetime: date,
+      },
+    });
+  },
 };

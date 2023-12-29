@@ -10,8 +10,15 @@ import {
 } from '../../assets/style.ts';
 import CheckInDoorIcon from '../../assets/img/check-in-door.svg';
 import CheckOutDoorIcon from '../../assets/img/check-out-door.svg';
+import dayjs from 'dayjs';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 
-export default function CheckWorkBlock({}) {
+export default function CheckWorkBlock({
+  handleCheckIn,
+  handleCheckOut,
+  checkIn,
+  checkOut,
+}: any) {
   return (
     <View style={styles.wrapper}>
       <View
@@ -29,15 +36,21 @@ export default function CheckWorkBlock({}) {
       <View style={styles.checkinoutContainer}>
         <View style={[styles.col]}>
           <Text style={[fs_15_700, text_black]}>GIỜ VÀO</Text>
-          <Text style={[fs_15_700, text_black]}>08:00</Text>
+          <Text style={[fs_15_700, text_black]}>
+            {checkIn ? checkIn.substring(0, 5) : '--:--'}
+          </Text>
           <TouchableOpacity
+            disabled={!!checkIn}
             style={[
               styles.button,
               {
-                backgroundColor: '#D1D1D1',
+                backgroundColor: checkIn ? '#D1D1D1' : '#BC2426',
               },
-            ]}>
-            <Text style={[fs_12_500, text_gray]}>Vào ca</Text>
+            ]}
+            onPress={handleCheckIn}>
+            <Text style={[fs_12_500, checkIn ? text_gray : text_white]}>
+              Vào ca
+            </Text>
           </TouchableOpacity>
         </View>
         <View
@@ -59,15 +72,21 @@ export default function CheckWorkBlock({}) {
         </View>
         <View style={[styles.col]}>
           <Text style={[fs_15_700, text_black]}>GIỜ RA</Text>
-          <Text style={[fs_15_700, text_black]}>--:--</Text>
+          <Text style={[fs_15_700, text_black]}>
+            {checkOut ? checkOut.substring(0, 5) : '--:--'}
+          </Text>
           <TouchableOpacity
+            disabled={!!checkOut}
             style={[
               styles.button,
               {
-                backgroundColor: '#BC2426',
+                backgroundColor: checkOut ? '#D1D1D1' : '#BC2426',
               },
-            ]}>
-            <Text style={[fs_12_500, text_white]}>Tan ca</Text>
+            ]}
+            onPress={handleCheckOut}>
+            <Text style={[fs_12_500, checkOut ? text_gray : text_white]}>
+              Tan ca
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
