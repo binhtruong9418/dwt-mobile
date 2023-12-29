@@ -55,7 +55,11 @@ export default function PlusButtonModal({
             top: '50%',
           },
         ]}>
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => {
+            navigation.navigate('Propose');
+          }}>
           <NoticeIcon width={20} height={20} />
           <Text style={[fs_15_500, text_black]}>Đề xuất</Text>
         </TouchableOpacity>

@@ -24,6 +24,8 @@ import {
   AttendanceSummaryScreen,
   ProjectWorkDetailScreen,
   AttendanceHistoryScreen,
+  ProposeScreen,
+  AddProposeScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -134,5 +136,13 @@ export const navigatorPath = [
   {
     name: 'AttendanceHistory',
     component: AttendanceHistoryScreen,
+  },
+  {
+    name: 'Propose',
+    component: ProposeScreen,
+  },
+  {
+    name: 'AddPropose',
+    component: AddProposeScreen,
   },
 ];
