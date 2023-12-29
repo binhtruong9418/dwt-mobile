@@ -95,7 +95,12 @@ export default function OfficeTabContainer({
       const resPersonal = await dwtApi.getOfficeWork();
       const listWorkOffice = [
         ...resPersonal.data.departmentKpi.targetDetails,
-        ...resPersonal.data.departmentKpi.reportTasks,
+        ...resPersonal.data.departmentKpi.reportTasks.map((item: any) => {
+          return {
+            ...item,
+            isWorkArise: true,
+          };
+        }),
       ];
       const workSummary = {
         done: listWorkOffice.filter((item: any) => item.work_status === 3)

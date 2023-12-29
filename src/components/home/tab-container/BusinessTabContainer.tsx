@@ -83,7 +83,14 @@ export default function BusinessTabContainer({
     const listWorkDepartment = [
       ...listWorkDepartmentAll,
       ...listNonKeyWorkDepartmentAll,
-      ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll,
+      ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll.map(
+        (item: any) => {
+          return {
+            ...item,
+            isWorkArise: true,
+          };
+        },
+      ),
     ];
     const workSummary = {
       done: listWorkDepartment.filter((item: any) => item.actual_state === 3)

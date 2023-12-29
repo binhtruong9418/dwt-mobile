@@ -96,6 +96,30 @@ export const dwtApi = {
     return await axiosClient.get(url, {params});
   },
 
+  getWorkDetail: async (
+    workId: number,
+    userId: number,
+    date?: string,
+  ): Promise<any> => {
+    const url = 'business-standard-history/report-detail';
+    return await axiosClient.get(url, {
+      params: {
+        business_standard_id: workId,
+        user_id: userId,
+        date: date,
+      },
+    });
+  },
+
+  getWorkAriseDetail: async (workId: number, date?: string): Promise<any> => {
+    const url = `/business-standard-work-arise/detail/${workId}`;
+    return await axiosClient.get(url, {
+      params: {
+        date: date,
+      },
+    });
+  },
+
   //API lấy danh sách công việc của đơn vị ( key, nonkey)
   getListWorkDepartment: async (params = {}): Promise<any> => {
     const url = 'business-standard-history/department';
@@ -167,5 +191,5 @@ export const dwtApi = {
     const url = 'daily-report/department';
     console.log(params);
     return await axiosClient.get(url, {params});
-  }
+  },
 };

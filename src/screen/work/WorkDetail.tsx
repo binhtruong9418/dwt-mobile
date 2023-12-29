@@ -14,47 +14,92 @@ import {useConnection} from '../../redux/connection';
 import {WORK_STATUS} from '../../assets/constant.ts';
 import {useMemo} from 'react';
 import NoDataScreen from '../../components/common/no-data/NoDataScreen.tsx';
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../api/service/dwtApi.ts';
+import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 
 export default function WorkDetail({route, navigation}: any) {
   const {data} = route.params;
   const {
     connection: {userInfo},
   } = useConnection();
-  const listLogs = data.business_standard_report_logs
-    ? data.business_standard_report_logs
-    : data.business_standard_arise_logs
-      ? data.business_standard_arise_logs
-      : [];
 
-  const {workStatus, workType} = useMemo(() => {
-    let workStatus = WORK_STATUS['1'];
-    let workType = 'Công việc đạt giá trị';
-    const report =
-      data.business_standard_reports &&
-      data.business_standard_reports.length > 0
-        ? data.business_standard_reports[0]
-        : null;
-    if (report) {
-      // @ts-ignore
-      workStatus = WORK_STATUS[report.actual_state];
-    }
-    if (data.type === 2) {
-      workType = 'Công việc liên tục';
-    } else if (data.type === 3) {
-      workType = 'Công việc đạt giá trị';
-    } else if (data.type === 1) {
-      workType = 'Công việc 1 lần';
+  const {
+    data: workDetailData = {},
+    isLoading: isLoadingWorkDetail,
+    refetch,
+  } = useQuery(
+    ['workDetail', data.id],
+    async ({queryKey}: any) => {
+      if (data.isWorkArise) {
+        const res = await dwtApi.getWorkAriseDetail(queryKey[1]);
+        const usernameData = await dwtApi.getUserById(res.data.user_id);
+        return {
+          ...res.data,
+          username: usernameData.data.name,
+        };
+      } else {
+        const res = await dwtApi.getWorkDetail(queryKey[1], userInfo.id);
+        return res.data;
+      }
+    },
+    {
+      enabled: !!data.id && !!userInfo.id,
+    },
+  );
+
+  const workDetail = useMemo(() => {
+    let listLogs = [];
+    let workType = 'Đạt giá trị';
+    let target = 0;
+    if (data.isWorkArise) {
+      listLogs = workDetailData.business_standard_arise_logs;
+      workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
+      target = workDetailData.quantity;
+    } else {
+      listLogs = workDetailData.business_standard_report_logs;
+      workType =
+        workDetailData.type === 2
+          ? 'Liên tục'
+          : workDetailData.type === 3
+          ? 'Đạt giá trị'
+          : '1 lần';
+      target = workDetailData.targets;
     }
     return {
-      workStatus,
-      workType,
+      name: workDetailData.name,
+      desc: workDetailData.desc,
+      workType: workType,
+      workerName: workDetailData.username,
+      workStatus: workDetailData.actual_state
+        ? // @ts-ignore
+          WORK_STATUS[workDetailData.actual_state.toString()]
+        : WORK_STATUS['1'],
+      totalWorkingHours: workDetailData.total_working_hours,
+      unitName: workDetailData.unit_name,
+      target: target,
+      totalKpiExpect: workDetailData.kpi_expected,
+      totalReport: workDetailData.count_report,
+      totalCompletedValue: workDetailData.achieved_value,
+      totalPercent: workDetailData.percent,
+      totalTmpKpi: workDetailData.kpi_tmp,
+      listLogs: listLogs,
+      adminComment: workDetailData.admin_comment,
+      adminKpi: workDetailData.admin_kpi,
+      managerComment: workDetailData.comment,
+      managerKpi: workDetailData.kpi,
     };
-  }, [data]);
+  }, [workDetailData, data.isWorkArise]);
 
-  if (!data) {
-    return <NoDataScreen text={'Không có dữ liệu'}/>;
+  useRefreshOnFocus(refetch);
+
+  if (isLoadingWorkDetail) {
+    return <PrimaryLoading />;
   }
-  console.log(data)
+  if (!data) {
+    return <NoDataScreen text={'Không có dữ liệu'} />;
+  }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -71,39 +116,39 @@ export default function WorkDetail({route, navigation}: any) {
           data={[
             {
               label: 'Tên nhiệm vụ',
-              value: data.name,
+              value: workDetail?.name,
             },
             {
               label: 'Mô tả',
-              value: data.desc,
+              value: workDetail?.desc,
             },
             {
               label: 'Mục tiêu',
-              value: workType,
+              value: workDetail?.workType,
             },
             {
               label: 'Người đảm nhiệm',
-              value: userInfo.name,
+              value: workDetail?.workerName,
             },
             {
               label: 'Trạng thái',
-              value: workStatus,
+              value: workDetail?.workStatus,
             },
             {
               label: 'Tổng thời gian tạm tính',
-              value: data.working_hours + ' giờ',
+              value: workDetail?.totalWorkingHours + ' giờ',
             },
             {
               label: 'ĐVT',
-              value: data.unit_name,
+              value: workDetail?.unitName,
             },
             {
               label: 'Chỉ tiêu',
-              value: data.totalTarget,
+              value: workDetail?.target,
             },
             {
               label: 'Tổng KPI dự kiến',
-              value: data.business_standard_expected_score,
+              value: workDetail?.totalKpiExpect,
             },
           ]}
         />
@@ -111,21 +156,19 @@ export default function WorkDetail({route, navigation}: any) {
           data={[
             {
               label: 'Số báo cáo đã lập trong tháng',
-              value: listLogs.length + ' báo cáo',
+              value: workDetail?.totalReport + ' báo cáo',
             },
             {
               label: 'Giá trị đạt được trong tháng (12)',
-              value: data?.business_standard_quantity_display || "",
+              value: workDetail?.totalCompletedValue || '',
             },
             {
               label: '% hoàn thành công việc',
-              value:
-                ((data?.business_standard_score_tmp / data.quantity) * 100).toFixed(0) +
-                '%',
+              value: workDetail?.totalPercent + '%',
             },
             {
               label: 'Điểm KPI tạm tính',
-              value: data.business_standard_score_tmp,
+              value: workDetail?.totalTmpKpi || '',
             },
           ]}
         />
@@ -143,7 +186,7 @@ export default function WorkDetail({route, navigation}: any) {
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={'Nhập nội dung'}
+              placeholder={workDetail?.managerComment || ''}
               multiline={true}
               editable={false}
             />
@@ -155,7 +198,7 @@ export default function WorkDetail({route, navigation}: any) {
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={'Điểm KPI'}
+              placeholder={workDetail?.managerKpi || ''}
               keyboardType="numeric"
               editable={false}
             />
@@ -175,7 +218,7 @@ export default function WorkDetail({route, navigation}: any) {
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={'Nhập nội dung'}
+              placeholder={workDetail?.adminComment || ''}
               multiline={true}
               editable={false}
             />
@@ -187,7 +230,7 @@ export default function WorkDetail({route, navigation}: any) {
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={'Điểm KPI'}
+              placeholder={workDetail.adminKpi || ''}
               keyboardType="numeric"
               editable={false}
             />
@@ -219,7 +262,7 @@ export default function WorkDetail({route, navigation}: any) {
                 width: 3 / 11,
               },
             ]}
-            data={listLogs.map((item: any) => {
+            data={workDetail.listLogs.map((item: any) => {
               return {
                 ...item,
                 date: item.reported_date || '',

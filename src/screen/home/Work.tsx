@@ -250,6 +250,7 @@ export default function Work({navigation}: any) {
               ? // @ts-ignore
                 WORK_STATUS_COLOR[work.actual_state]
               : '#FFF',
+            isWorkArise: true,
           };
         });
       default:
@@ -317,7 +318,6 @@ export default function Work({navigation}: any) {
                 data={tableData}
                 columns={columns}
                 canShowMore={true}
-                isWorkArise={currentTab === 2}
               />
             </View>
             <TouchableOpacity

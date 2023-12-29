@@ -49,7 +49,12 @@ export default function HomeTabContainer({
     const listWorkPersonal = [
       ...resPersonal.data.kpi.keys,
       ...resPersonal.data.kpi.noneKeys,
-      ...resPersonal.data.kpi.workArise,
+      ...resPersonal.data.kpi.workArise.map((item: any) => {
+        return {
+          ...item,
+          isWorkArise: true,
+        };
+      }),
     ];
     const workSummary = {
       done: listWorkPersonal.filter((item: any) => item.actual_state === 4)

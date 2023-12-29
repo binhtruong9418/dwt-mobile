@@ -17,7 +17,7 @@ export default function TabBlock({
   currentTab,
   setCurrentTab,
 }: InferProps<typeof TabBlock.propTypes>) {
-  const listTab = ['Nhật trình', 'Kinh doanh', 'Sản xuất', 'Kho vận', 'HCNS'];
+  const listTab = ['Văn phòng', 'Kinh doanh', 'Sản xuất', 'Kho vận', 'HCNS'];
   return (
     <View>
       <ScrollView

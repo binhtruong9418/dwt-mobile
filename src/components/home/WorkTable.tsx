@@ -40,6 +40,7 @@ export default function WorkTable({
             ? // @ts-ignore
               WORK_STATUS_COLOR[item.actual_state]
             : '#FFF',
+          isWorkArise: item.isWorkArise ? item.isWorkArise : false,
         };
       })}
     />
