@@ -268,4 +268,20 @@ export const dwtApi = {
     const url = 'quick-reports';
     return await axiosClient.get(url, { params });
   },
+
+  //API nghi phep
+  getAllAbsencePersonal: async (params = {}): Promise<any> => {
+    const url = 'mobile/leave-request/self';
+    return await axiosClient.get(url, { params });
+  },
+
+  createAbsence: async (data: any): Promise<any> => {
+    const url = 'mobile/leave-request/store';
+    return await axiosClient.post(url, data);
+  },
+
+  getAllAbsenceManager: async (params = {}): Promise<any> => {
+    const url = 'mobile/leave-request/manager';
+    return await axiosClient.get(url, { params });
+  }
 };

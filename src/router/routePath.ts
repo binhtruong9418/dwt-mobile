@@ -27,7 +27,7 @@ import {
   ProposeScreen,
   AddProposeScreen,
   WorkDetailDepartmentScreen,
-  WorkDetailOfficeScreen,
+  WorkDetailOfficeScreen, AddAbsenceScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -155,4 +155,8 @@ export const navigatorPath = [
     name: 'WorkDetailOffice',
     component: WorkDetailOfficeScreen,
   },
+  {
+    name: 'AddAbsence',
+    component: AddAbsenceScreen,
+  }
 ];
