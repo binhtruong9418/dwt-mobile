@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   fs_12_500,
   fs_15_400,
@@ -11,7 +11,7 @@ import {
 import CheckInDoorIcon from '../../assets/img/check-in-door.svg';
 import CheckOutDoorIcon from '../../assets/img/check-out-door.svg';
 import dayjs from 'dayjs';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 
 export default function CheckWorkBlock({
   handleCheckIn,
@@ -19,6 +19,9 @@ export default function CheckWorkBlock({
   checkIn,
   checkOut,
 }: any) {
+  const startWorkTime = dayjs().day() === 0 ? '--:--' : '08:00';
+  const endWorkTime =
+    dayjs().day() === 0 ? '--:--' : dayjs().day() === 6 ? '12:00' : '17:00';
   return (
     <View style={styles.wrapper}>
       <View
@@ -29,9 +32,12 @@ export default function CheckWorkBlock({
             borderBottomColor: '#D9D9D9',
             borderBottomWidth: 1,
           },
-        ]}>
+        ]}
+      >
         <Text style={[fs_15_400, text_black]}>Ca làm việc</Text>
-        <Text style={[fs_15_400, text_black]}>08:00 - 17:00</Text>
+        <Text style={[fs_15_400, text_black]}>
+          {startWorkTime} - {endWorkTime}
+        </Text>
       </View>
       <View style={styles.checkinoutContainer}>
         <View style={[styles.col]}>
@@ -47,7 +53,8 @@ export default function CheckWorkBlock({
                 backgroundColor: checkIn ? '#D1D1D1' : '#BC2426',
               },
             ]}
-            onPress={handleCheckIn}>
+            onPress={handleCheckIn}
+          >
             <Text style={[fs_12_500, checkIn ? text_gray : text_white]}>
               Vào ca
             </Text>
@@ -59,7 +66,8 @@ export default function CheckWorkBlock({
             width: '40%',
             justifyContent: 'space-between',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <CheckInDoorIcon />
           <View
             style={{
@@ -83,7 +91,8 @@ export default function CheckWorkBlock({
                 backgroundColor: checkOut ? '#D1D1D1' : '#BC2426',
               },
             ]}
-            onPress={handleCheckOut}>
+            onPress={handleCheckOut}
+          >
             <Text style={[fs_12_500, checkOut ? text_gray : text_white]}>
               Tan ca
             </Text>

@@ -1,9 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
-import {text_center, text_red, fs_14_500} from '../../assets/style.ts';
-import PropTypes, {InferProps} from 'prop-types';
+import { StyleSheet, Text, View } from 'react-native';
+import { text_center, text_red, fs_14_500 } from '../../assets/style.ts';
+import PropTypes, { InferProps } from 'prop-types';
 import PrimaryTable from '../common/table/PrimaryTable.tsx';
-import {WORK_STATUS_COLOR} from '../../assets/constant.ts';
-import {useNavigation} from '@react-navigation/native';
+import { WORK_STATUS_COLOR } from '../../assets/constant.ts';
+import { useNavigation } from '@react-navigation/native';
 
 const columns = [
   {
@@ -34,6 +34,10 @@ export default function WorkTable({
   return (
     <PrimaryTable
       columns={columns}
+      onRowPress={(item: any) => {
+        // @ts-ignore
+        navigation.navigate('WorkDetail', { data: item });
+      }}
       data={listWork.map((item: any, index: number) => {
         return {
           ...item,
@@ -43,10 +47,6 @@ export default function WorkTable({
               WORK_STATUS_COLOR[item.actual_state]
             : '#FFF',
           isWorkArise: item.isWorkArise ? item.isWorkArise : false,
-          onRowPress: (item: any) => {
-            // @ts-ignore
-            navigation.navigate('WorkDetail', {data: item});
-          },
         };
       })}
     />

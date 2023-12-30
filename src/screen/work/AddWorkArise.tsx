@@ -17,23 +17,23 @@ import {
   text_red,
   text_white,
 } from '../../assets/style.ts';
-import {useMemo, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useConnection} from '../../redux/connection';
+import { useMemo, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useConnection } from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
 import dayjs from 'dayjs';
 import DatePickerModal from '../../components/common/modal/DatePickerModal.tsx';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
-import {showToast} from '../../utils';
+import { showToast } from '../../utils';
 
-export default function AddWorkArise({navigation}: any) {
+export default function AddWorkArise({ navigation }: any) {
   const {
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
   const [isOpenCancelAddWorkAriseModal, setIsOpenCancelAddWorkAriseModal] =
     useState(false);
@@ -55,15 +55,15 @@ export default function AddWorkArise({navigation}: any) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const {data: listUnit = [], isLoading: isLoadingListUnit} = useQuery(
+  const { data: listUnit = [], isLoading: isLoadingListUnit } = useQuery(
     ['listUnit'],
     async () => {
       const res = await dwtApi.getListUnit();
       return res.data.data;
-    },
+    }
   );
 
-  const {data: listUserData = {}, isLoading: isLoadingListUser} = useQuery(
+  const { data: listUserData = {}, isLoading: isLoadingListUser } = useQuery(
     ['listUser'],
     async () => {
       if (userInfo.role === 'manager') {
@@ -74,7 +74,7 @@ export default function AddWorkArise({navigation}: any) {
     },
     {
       enabled: !!userInfo,
-    },
+    }
   );
 
   const listUser = useMemo(() => {
@@ -150,6 +150,30 @@ export default function AddWorkArise({navigation}: any) {
     }
   };
 
+  const handleClearData = () => {
+    setName('');
+    setDescription('');
+    setWorkingHour('');
+    setQuantity('');
+    setCurrentType(0);
+    setCurrentUnit(0);
+    setCurrentWorker(0);
+    setFromDate(null);
+    setToDate(null);
+  };
+
+  const handlePressCancel = () => {
+    setIsOpenCancelAddWorkAriseModal(false);
+    handleClearData();
+    navigation.goBack();
+  };
+
+  const handlePressOk = () => {
+    setOpenUpWorkModalSuccess(false);
+    handleClearData();
+    navigation.goBack();
+  };
+
   if (isLoadingListUnit || isLoadingListUser) {
     return <PrimaryLoading />;
   }
@@ -163,15 +187,17 @@ export default function AddWorkArise({navigation}: any) {
         rightView={
           <TouchableOpacity
             style={styles.sendButton}
-            onPress={handleAddWorkArise}>
+            onPress={handleAddWorkArise}
+          >
             <Text style={[fs_15_700, text_white, text_center]}>Lưu</Text>
           </TouchableOpacity>
         }
       />
       <ScrollView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.inputBox}>
           <Text style={[fs_15_700, text_black]}>
             Tên nhiệm vụ <Text style={text_red}>*</Text>:
@@ -295,7 +321,8 @@ export default function AddWorkArise({navigation}: any) {
               style={[row_between, styles.w_50]}
               onPress={() => {
                 setOpenSelectFromDateModal(true);
-              }}>
+              }}
+            >
               <Text style={[fs_15_400, text_black]}>Từ:</Text>
 
               <View style={styles.boxTime}>
@@ -309,7 +336,8 @@ export default function AddWorkArise({navigation}: any) {
               style={[row_between, styles.w_50]}
               onPress={() => {
                 setOpenSelectToDateModal(true);
-              }}>
+              }}
+            >
               <Text style={[fs_15_400, text_black]}>Đến:</Text>
 
               <View style={styles.boxTime}>
@@ -324,10 +352,7 @@ export default function AddWorkArise({navigation}: any) {
       <LoadingActivity isLoading={isLoading} />
       <ToastConfirmModal
         visible={isOpenCancelAddWorkAriseModal}
-        handleCancel={() => {
-          setIsOpenCancelAddWorkAriseModal(false);
-          navigation.navigate('Work');
-        }}
+        handleCancel={handlePressCancel}
         handleOk={() => {
           setIsOpenCancelAddWorkAriseModal(false);
         }}
@@ -349,10 +374,7 @@ export default function AddWorkArise({navigation}: any) {
       />
       <ToastSuccessModal
         visible={isOpenUpWorkModalSuccess}
-        handlePressOk={() => {
-          setOpenUpWorkModalSuccess(false);
-          navigation.navigate('Work');
-        }}
+        handlePressOk={handlePressOk}
         description={'Thêm mới thành công'}
       />
       <LoadingActivity isLoading={isLoading} />

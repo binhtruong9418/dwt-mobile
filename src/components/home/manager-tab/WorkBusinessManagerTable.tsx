@@ -1,8 +1,8 @@
-import {StyleSheet, View} from 'react-native';
-import PropTypes, {InferProps} from 'prop-types';
+import { StyleSheet, View } from 'react-native';
+import PropTypes, { InferProps } from 'prop-types';
 import PrimaryTable from '../../common/table/PrimaryTable.tsx';
-import {WORK_STATUS_COLOR} from '../../../assets/constant.ts';
-import {useNavigation} from '@react-navigation/native';
+import { WORK_STATUS_COLOR } from '../../../assets/constant.ts';
+import { useNavigation } from '@react-navigation/native';
 
 const columns = [
   {
@@ -34,6 +34,13 @@ export default function WorkBusinessManagerTable({
     <View style={styles.wrapper}>
       <PrimaryTable
         columns={columns}
+        onRowPress={(item: any) => {
+          // @ts-ignore
+          navigation.navigate('WorkDetailDepartment', {
+            data: item,
+            managerWorkId: item.business_standard_id,
+          });
+        }}
         data={listWork.map((item: any, index: number) => {
           return {
             ...item,
@@ -44,13 +51,6 @@ export default function WorkBusinessManagerTable({
               ? // @ts-ignore
                 WORK_STATUS_COLOR[item.actual_state]
               : '#FFF',
-            onRowPress: (item: any) => {
-              // @ts-ignore
-              navigation.navigate('WorkDetail', {
-                data: item,
-                managerWorkId: item.business_standard_id,
-              });
-            },
           };
         })}
       />

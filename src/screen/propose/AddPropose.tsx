@@ -14,15 +14,15 @@ import {
   text_red,
   text_white,
 } from '../../assets/style.ts';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useState} from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
-import {showToast} from '../../utils';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { showToast } from '../../utils';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
 
-export default function AddPropose({navigation}: any) {
+export default function AddPropose({ navigation }: any) {
   const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
   const [isOpenSuccessModal, setIsOpenSuccessModal] = useState(false);
   const [currentType, setCurrentType] = useState(0);
@@ -46,7 +46,6 @@ export default function AddPropose({navigation}: any) {
         type: currentType,
       });
 
-      console.log(response.data);
       if (response.status === 200) {
         setIsLoading(false);
         setIsOpenSuccessModal(true);
@@ -129,12 +128,12 @@ export default function AddPropose({navigation}: any) {
       />
       <ToastConfirmModal
         visible={isOpenCancelReportModal}
-        handleOk={handleGoBack}
-        handleCancel={() => {
+        handleOk={() => {
           setIsOpenCancelReportModal(false);
         }}
-        okText={'Đồng ý'}
-        cancelText={'Hủy'}
+        handleCancel={handleGoBack}
+        okText={'Tiếp tuc'}
+        cancelText={'Hủy đề xuất'}
         description={'Bạn có muốn hủy thêm đề xuất?'}
       />
     </SafeAreaView>

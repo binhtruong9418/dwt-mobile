@@ -11,15 +11,16 @@ import {
 } from '../../assets/style.ts';
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
 import { useConnection } from '../../redux/connection';
-import { WORK_STATUS } from '../../assets/constant.ts';
+import { WORK_STATUS, WORK_STATUS_OFFICE } from '../../assets/constant.ts';
 import { useMemo } from 'react';
 import NoDataScreen from '../../components/common/no-data/NoDataScreen.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
+import dayjs from "dayjs";
 
-export default function WorkDetail({ route, navigation }: any) {
+export default function WorkDetailDepartment({ route, navigation }: any) {
   const { data } = route.params;
   const {
     connection: { userInfo },
@@ -30,17 +31,13 @@ export default function WorkDetail({ route, navigation }: any) {
     isLoading: isLoadingWorkDetail,
     refetch,
   } = useQuery(
-    ['workDetail', data.id],
+    ['workDetailOffice', data.id],
     async ({ queryKey }: any) => {
       if (data.isWorkArise) {
-        const res = await dwtApi.getWorkAriseDetail(queryKey[1]);
-        const usernameData = await dwtApi.getUserById(res.data.user_id);
-        return {
-          ...res.data,
-          username: usernameData.data.name,
-        };
+        const res = await dwtApi.getOfficeWorkAriseDetail(queryKey[1]);
+        return res.data;
       } else {
-        const res = await dwtApi.getWorkDetail(queryKey[1], userInfo.id);
+        const res = await dwtApi.getOfficeWorkDetail(queryKey[1]);
         return res.data;
       }
     },
@@ -50,45 +47,35 @@ export default function WorkDetail({ route, navigation }: any) {
   );
 
   const workDetail = useMemo(() => {
-    let listLogs = [];
-    let workType = 'Đạt giá trị';
-    let target = 0;
-    if (data.isWorkArise) {
-      listLogs = workDetailData.business_standard_arise_logs;
-      workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
-      target = workDetailData.quantity;
-    } else {
-      listLogs = workDetailData.business_standard_report_logs;
-      workType =
-        workDetailData.type === 2
-          ? 'Liên tục'
-          : workDetailData.type === 3
-          ? 'Đạt giá trị'
-          : '1 lần';
-      target = workDetailData.targets;
-    }
     return {
-      name: workDetailData.name,
-      desc: workDetailData.desc,
-      workType: workType,
-      workerName: workDetailData.username,
+      name: workDetailData?.target?.name,
+      workType: workDetailData.name,
+      desc: workDetailData?.target?.description,
+      workerName: workDetailData?.user_name,
+      startDate: workDetailData?.startDate,
+      deadline: workDetailData?.deadline,
+      workPerComplete: `${workDetailData?.manday} giờ (${workDetailData?.kpiTmp} KPI)`,
+      criteria: workDetailData?.criteria,
+      totalExpected: `${workDetailData?.criteria_required} ${workDetailData?.unit_name}`,
+      totalExpectedKpi: workDetailData?.expected_kpi,
       workStatus: workDetailData.actual_state
         ? // @ts-ignore
-          WORK_STATUS[workDetailData.actual_state.toString()]
-        : WORK_STATUS['1'],
-      totalWorkingHours: workDetailData.total_working_hours,
-      unitName: workDetailData.unit_name,
-      target: target,
-      totalKpiExpect: workDetailData.kpi_expected,
-      totalReport: workDetailData.count_report,
-      totalCompletedValue: workDetailData.achieved_value,
-      totalPercent: workDetailData.percent,
-      totalTmpKpi: workDetailData.kpi_tmp,
-      listLogs: listLogs,
-      adminComment: workDetailData.admin_comment,
-      adminKpi: workDetailData.admin_kpi,
-      managerComment: workDetailData.comment,
-      managerKpi: workDetailData.kpi,
+          WORK_STATUS_OFFICE[workDetailData?.actual_state]
+        : WORK_STATUS_OFFICE[1],
+      totalReport: workDetailData?.count_report,
+      totalCompletedValue: `${workDetailData?.keysPassed} / ${workDetailData?.criteria_required}`,
+      totalWorker: workDetailData?.users ? workDetailData?.users.length : 0,
+      totalTmpKpi: workDetailData?.kpiValue,
+      managerComment: workDetailData?.managerComment,
+      managerKpi: workDetailData?.managerManDay,
+      targetLogs: workDetailData?.targetLogs?.map((item: any) => {
+        return {
+          ...item,
+          date: item.reportedDate,
+          criteria: item?.targetLogDetails[0]?.kpiKeys[0]?.name,
+          quantity: item?.targetLogDetails[0]?.kpiKeys[0]?.quantity,
+        };
+      }),
     };
   }, [workDetailData, data.isWorkArise]);
 
@@ -120,36 +107,44 @@ export default function WorkDetail({ route, navigation }: any) {
               value: workDetail?.name,
             },
             {
-              label: 'Mô tả',
-              value: workDetail?.desc,
+              label: 'Thuộc định mức lao động',
+              value: workDetail?.workType,
             },
             {
-              label: 'Mục tiêu',
-              value: workDetail?.workType,
+              label: 'Mô tả',
+              value: workDetail?.desc,
             },
             {
               label: 'Người đảm nhiệm',
               value: workDetail?.workerName,
             },
             {
-              label: 'Trạng thái',
-              value: workDetail?.workStatus,
+              label: 'Ngày bắt đầu',
+              value: workDetail?.startDate,
             },
             {
-              label: 'Tổng thời gian tạm tính',
-              value: workDetail?.totalWorkingHours + ' giờ',
+              label: 'Thời hạn',
+              value: workDetail?.deadline,
             },
             {
-              label: 'ĐVT',
-              value: workDetail?.unitName,
+              label: 'Giờ công 1 lượt hoàn thành',
+              value: workDetail?.workPerComplete,
             },
             {
-              label: 'Chỉ tiêu',
-              value: workDetail?.target,
+              label: 'Tiêu chí',
+              value: workDetail?.criteria,
+            },
+            {
+              label: 'Tổng giá trị dự kiến',
+              value: workDetail?.totalExpected,
             },
             {
               label: 'Tổng KPI dự kiến',
-              value: workDetail?.totalKpiExpect,
+              value: workDetail?.totalExpectedKpi,
+            },
+            {
+              label: 'Trạng thái',
+              value: workDetail?.workStatus,
             },
           ]}
         />
@@ -160,12 +155,12 @@ export default function WorkDetail({ route, navigation }: any) {
               value: workDetail?.totalReport + ' báo cáo',
             },
             {
-              label: 'Giá trị đạt được trong tháng (12)',
+              label: `Giá trị đạt được trong tháng (${dayjs().month() + 1})`,
               value: workDetail?.totalCompletedValue || '',
             },
             {
-              label: '% hoàn thành công việc',
-              value: workDetail?.totalPercent + '%',
+              label: 'Số nhân sự thực hiện',
+              value: workDetail?.totalWorker + ' nhân sự',
             },
             {
               label: 'Điểm KPI tạm tính',
@@ -175,9 +170,7 @@ export default function WorkDetail({ route, navigation }: any) {
         />
 
         <View style={styles.commentBlock}>
-          <Text style={[fs_15_700, text_red]}>
-            NHẬN XÉT NHIỆM VỤ CỦA TRƯỞNG BỘ PHẬN
-          </Text>
+          <Text style={[fs_15_700, text_red]}>NHẬN XÉT NHIỆM VỤ</Text>
           <View style={styles.inputBox}>
             <TextInput
               style={[
@@ -208,70 +201,27 @@ export default function WorkDetail({ route, navigation }: any) {
 
         <View style={styles.commentBlock}>
           <Text style={[fs_15_700, text_red]}>
-            NHẬN XÉT NHIỆM VỤ CỦA KIỂM SOÁT
+            DANH SÁCH TIÊU CHÍ CÔNG VIỆC
           </Text>
-          <View style={styles.inputBox}>
-            <TextInput
-              style={[
-                styles.inputContent,
-                text_black,
-                fs_15_400,
-                styles.disableInput,
-              ]}
-              placeholderTextColor={'#787878'}
-              placeholder={workDetail?.adminComment || ''}
-              multiline={true}
-              editable={false}
-            />
-            <TextInput
-              style={[
-                styles.inputGrade,
-                text_black,
-                fs_15_400,
-                styles.disableInput,
-              ]}
-              placeholderTextColor={'#787878'}
-              placeholder={workDetail.adminKpi || ''}
-              keyboardType="numeric"
-              editable={false}
-            />
-          </View>
-        </View>
-
-        <View style={styles.commentBlock}>
-          <Text style={[fs_15_700, text_red]}>DANH SÁCH BÁO CÁO CÔNG VIỆC</Text>
           <WorkReportTable
             columns={[
               {
                 title: 'Ngày báo cáo',
                 key: 'date',
-                width: 3 / 11,
+                width: 0.3,
+              },
+              {
+                title: 'Tiêu chí',
+                key: 'criteria',
+                width: 0.5,
               },
               {
                 title: 'Giá trị',
-                key: 'value',
-                width: 2 / 11,
-              },
-              {
-                title: 'GT nghiệm thu',
-                key: 'valueDone',
-                width: 3 / 11,
-              },
-              {
-                title: 'Ngày nghiệm thu',
-                key: 'dateDone',
-                width: 3 / 11,
+                key: 'quantity',
+                width: 0.2,
               },
             ]}
-            data={workDetail.listLogs.map((item: any) => {
-              return {
-                ...item,
-                date: item.reported_date || '',
-                value: item.quantity,
-                dateDone: item.updated_date,
-                valueDone: item.manager_quantity,
-              };
-            })}
+            data={workDetail.targetLogs}
           />
         </View>
       </ScrollView>

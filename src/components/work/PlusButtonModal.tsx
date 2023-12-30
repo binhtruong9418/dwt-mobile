@@ -5,8 +5,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import PropTypes, {InferProps} from 'prop-types';
-import {ReactNativeModal} from 'react-native-modal';
+import PropTypes, { InferProps } from 'prop-types';
+import { ReactNativeModal } from 'react-native-modal';
 import {
   fs_14_700,
   fs_15_400,
@@ -18,17 +18,16 @@ import {
 import NoticeIcon from '../../assets/img/notice-icon.svg';
 import ReceiveWorkIcon from '../../assets/img/receive-work-icon.svg';
 import GiveWorkIcon from '../../assets/img/give-work-icon.svg';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 
 export default function PlusButtonModal({
   visible,
   setVisible,
-  position,
   navigation,
   hasReceiveWork,
 }: InferProps<typeof PlusButtonModal.propTypes>) {
   const {
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
   return (
     <ReactNativeModal
@@ -46,20 +45,23 @@ export default function PlusButtonModal({
       isVisible={visible}
       onBackdropPress={() => {
         setVisible(false);
-      }}>
+      }}
+    >
       <View
         style={[
           styles.content,
           {
-            right: 10,
-            top: '50%',
+            right: 15,
+            bottom: 110,
           },
-        ]}>
+        ]}
+      >
         <TouchableOpacity
           style={styles.item}
           onPress={() => {
             navigation.navigate('Propose');
-          }}>
+          }}
+        >
           <NoticeIcon width={20} height={20} />
           <Text style={[fs_15_500, text_black]}>Đề xuất</Text>
         </TouchableOpacity>
@@ -73,7 +75,8 @@ export default function PlusButtonModal({
               style={styles.item}
               onPress={() => {
                 navigation.navigate('AddWorkArise');
-              }}>
+              }}
+            >
               <GiveWorkIcon width={20} height={20} />
               <Text style={[fs_15_500, text_black]}>Giao việc phát sinh</Text>
             </TouchableOpacity>
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
 PlusButtonModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   setVisible: PropTypes.func.isRequired,
-  position: PropTypes.any.isRequired,
   navigation: PropTypes.any,
   hasReceiveWork: PropTypes.bool,
 };

@@ -16,13 +16,12 @@ import {
   text_black,
   text_gray,
 } from '../../assets/style.ts';
-import {useRef, useState} from 'react';
+import { useRef, useState } from 'react';
 
 import PersonalReportDetail from './PersonalReportDetail.tsx';
 import dayjs from 'dayjs';
 
-export default function UserReportDetail({data}: any) {
-  console.log(data);
+export default function UserReportDetail({ data }: any) {
   // const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
   const [isMore, setIsMore] = useState(false);
@@ -61,7 +60,7 @@ export default function UserReportDetail({data}: any) {
             <AvatarDefault width={50} />
           )}
 
-          <View style={{gap: 2}}>
+          <View style={{ gap: 2 }}>
             <Text style={[fs_14_500, text_black]}>{data?.user_name}</Text>
             <Text style={[fs_12_400, text_gray]}>
               Vị trí: {data?.position_name}
@@ -77,7 +76,7 @@ export default function UserReportDetail({data}: any) {
       </View>
 
       {isMore && (
-        <View style={{marginTop: 15}}>
+        <View style={{ marginTop: 15 }}>
           <PersonalReportDetail
             data={{
               key: 1,
@@ -85,7 +84,7 @@ export default function UserReportDetail({data}: any) {
               text: data?.yesterday_work_note,
             }}
           />
-          <View style={{marginTop: 20}}>
+          <View style={{ marginTop: 20 }}>
             <PersonalReportDetail
               data={{
                 key: 2,

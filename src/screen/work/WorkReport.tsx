@@ -16,27 +16,26 @@ import {
   text_red,
   text_white,
 } from '../../assets/style.ts';
-import {useState} from 'react';
+import { useState } from 'react';
 import PrimaryCheckbox from '../../components/common/checkbox/PrimaryCheckbox.tsx';
 import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import UploadFileModal from '../../components/common/modal/UploadFileModal.tsx';
 import TrashIcon from '../../assets/img/trash.svg';
 import ImageIcon from '../../assets/img/image-icon.svg';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
-import {showToast} from '../../utils';
-import {useConnection} from '../../redux/connection';
+import { showToast } from '../../utils';
+import { useConnection } from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 
-export default function WorkReport({route, navigation}: any) {
-  const {data, isWorkArise} = route.params;
-  console.log(isWorkArise);
+export default function WorkReport({ route, navigation }: any) {
+  const { data, isWorkArise } = route.params;
   const {
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
   const [note, setNote] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
@@ -63,12 +62,12 @@ export default function WorkReport({route, navigation}: any) {
   };
 
   const handlePressOk = () => {
-    setIsOpenConfirmUploadWorkReportModal(false);
     setQuantity('');
     setNote('');
     setFiles([]);
     setIsCompleted(false);
     setIsCompletedAndReport(false);
+    setIsOpenConfirmUploadWorkReportModal(false);
     navigation.navigate('Work');
   };
 
@@ -113,7 +112,7 @@ export default function WorkReport({route, navigation}: any) {
               file_path: imageUrl,
               file_name: item.name,
             };
-          }),
+          })
         );
       }
 
@@ -202,14 +201,16 @@ export default function WorkReport({route, navigation}: any) {
         rightView={
           <TouchableOpacity
             style={styles.sendButton}
-            onPress={handleUploadReport}>
+            onPress={handleUploadReport}
+          >
             <Text style={[fs_15_700, text_white, text_center]}>Gửi</Text>
           </TouchableOpacity>
         }
       />
       <ScrollView
         contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={[fs_15_700, text_black, text_center]}>
           Ngày {dayjs(new Date()).format('DD/MM/YYYY')}
         </Text>
@@ -251,7 +252,8 @@ export default function WorkReport({route, navigation}: any) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 // alignItems: 'flex-end',
-              }}>
+              }}
+            >
               <View
                 style={[
                   styles.row_gap10,
@@ -260,7 +262,8 @@ export default function WorkReport({route, navigation}: any) {
                     width: '50%',
                     height: 'auto',
                   },
-                ]}>
+                ]}
+              >
                 <TextInput
                   style={[
                     styles.input,
@@ -276,7 +279,7 @@ export default function WorkReport({route, navigation}: any) {
                   }
                   value={quantity}
                   inputMode="numeric"
-                  onChangeText={value => setQuantity(value)}
+                  onChangeText={(value) => setQuantity(value)}
                   keyboardType="numeric"
                   editable={
                     data.type === 3 || (data.isWorkArise && data.type === 2)
@@ -293,7 +296,8 @@ export default function WorkReport({route, navigation}: any) {
                     height: 'auto',
                     justifyContent: 'center',
                   },
-                ]}>
+                ]}
+              >
                 <Text style={[fs_15_400, text_gray, text_center]}>
                   {data.unit_name}
                 </Text>
@@ -318,7 +322,8 @@ export default function WorkReport({route, navigation}: any) {
                 </View>
                 <TouchableOpacity
                   hitSlop={10}
-                  onPress={() => handleDeleteFile(index)}>
+                  onPress={() => handleDeleteFile(index)}
+                >
                   <TrashIcon width={20} height={20} />
                 </TouchableOpacity>
               </View>

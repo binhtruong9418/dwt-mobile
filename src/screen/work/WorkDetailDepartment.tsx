@@ -19,8 +19,8 @@ import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
-export default function WorkDetail({ route, navigation }: any) {
-  const { data } = route.params;
+export default function WorkDetailDepartment({ route, navigation }: any) {
+  const { data, managerWorkId } = route.params;
   const {
     connection: { userInfo },
   } = useConnection();
@@ -30,7 +30,7 @@ export default function WorkDetail({ route, navigation }: any) {
     isLoading: isLoadingWorkDetail,
     refetch,
   } = useQuery(
-    ['workDetail', data.id],
+    ['workDetailDepartment', data.id],
     async ({ queryKey }: any) => {
       if (data.isWorkArise) {
         const res = await dwtApi.getWorkAriseDetail(queryKey[1]);
@@ -40,7 +40,7 @@ export default function WorkDetail({ route, navigation }: any) {
           username: usernameData.data.name,
         };
       } else {
-        const res = await dwtApi.getWorkDetail(queryKey[1], userInfo.id);
+        const res = await dwtApi.getWorkDetail(managerWorkId, userInfo.id);
         return res.data;
       }
     },

@@ -1,13 +1,23 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import {fs_12_500, text_black, text_center} from '../../../assets/style.ts';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { fs_12_500, text_black, text_center } from '../../../assets/style.ts';
 import RowTable from './RowTable.tsx';
-import PropTypes, {InferProps} from 'prop-types';
+import PropTypes, { InferProps } from 'prop-types';
 
 export default function PrimaryTable({
   columns,
   data,
   canShowMore,
   headerColor,
+  onRowPress,
+  isFetchingData,
+  getMoreData,
 }: InferProps<typeof PrimaryTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
@@ -23,7 +33,8 @@ export default function PrimaryTable({
                   height: 'auto',
                 },
                 styles.cell,
-              ]}>
+              ]}
+            >
               <Text style={[fs_12_500, text_black, text_center]}>
                 {column.title}
               </Text>
@@ -34,20 +45,27 @@ export default function PrimaryTable({
       <FlatList
         scrollEnabled={false}
         data={data}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           let bgColor = item.bgColor || '#FFF';
           return (
-            <Pressable>
-              <RowTable
-                item={item}
-                columns={columns}
-                bgColor={bgColor}
-                canShowMore={canShowMore}
-                isWorkArise={item.isWorkArise ? item.isWorkArise : false}
-              />
-            </Pressable>
+            <RowTable
+              item={item}
+              columns={columns}
+              bgColor={bgColor}
+              canShowMore={canShowMore}
+              isWorkArise={item.isWorkArise ? item.isWorkArise : false}
+              onRowPress={onRowPress}
+            />
           );
         }}
+        onEndReachedThreshold={0.5}
+        onEndReached={getMoreData ? getMoreData() : null}
+        refreshing={isFetchingData ? isFetchingData : false}
+        ListFooterComponent={
+          isFetchingData ? (
+            <ActivityIndicator size={'large'} color={'#CA1F24'} />
+          ) : null
+        }
         keyExtractor={(item, index) => index.toString()}
       />
     </View>
@@ -75,6 +93,9 @@ PrimaryTable.propTypes = {
   data: PropTypes.array.isRequired,
   canShowMore: PropTypes.bool,
   headerColor: PropTypes.string,
+  onRowPress: PropTypes.func,
+  isFetchingData: PropTypes.bool,
+  getMoreData: PropTypes.func,
 };
 
 PrimaryTable.defaultProps = {

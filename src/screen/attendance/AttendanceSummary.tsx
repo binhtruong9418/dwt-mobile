@@ -5,27 +5,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 import dayjs from 'dayjs';
-import {useState} from 'react';
-import {fs_14_400, text_black} from '../../assets/style.ts';
+import { useState } from 'react';
+import { fs_14_400, text_black } from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import DatePickerFromToModal from '../../components/common/modal/DatePickerFromToModal.tsx';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
-import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import ListDepartmentModal from '../../components/home/manager-tab/ListDepartmentModal.tsx';
 
-export default function AttendanceSummary({navigation}: any) {
+export default function AttendanceSummary({ navigation }: any) {
   const {
-    connection: {userInfo, currentTabManager},
+    connection: { userInfo, currentTabManager },
     onSetCurrentTabManager,
   } = useConnection();
-  const [fromDate, setFromDate] = useState(dayjs());
+  const [fromDate, setFromDate] = useState(dayjs().startOf('week'));
   const [toDate, setToDate] = useState(dayjs());
   const [isSelectDate, setIsSelectDate] = useState(false);
   const [isOpenSelectDepartment, setIsOpenSelectDepartment] = useState(false);
@@ -35,7 +34,7 @@ export default function AttendanceSummary({navigation}: any) {
     label: 'Phòng ban',
   });
 
-  const {data: listDepartment = []} = useQuery(
+  const { data: listDepartment = [] } = useQuery(
     ['listDepartment'],
     async () => {
       const res = await dwtApi.getListDepartment();
@@ -45,9 +44,9 @@ export default function AttendanceSummary({navigation}: any) {
       enabled:
         !!userInfo &&
         (userInfo.role === 'admin' || userInfo.role === 'manager'),
-    },
+    }
   );
-  const {data: listAttendanceSummary = [], isLoading} = useQuery(
+  const { data: listAttendanceSummary = [], isLoading } = useQuery(
     [
       'listAttendanceSummary',
       fromDate,
@@ -55,7 +54,7 @@ export default function AttendanceSummary({navigation}: any) {
       currentDepartment,
       currentTabManager,
     ],
-    async ({queryKey}) => {
+    async ({ queryKey }) => {
       if (queryKey[4] === 1) {
         let departmentid =
           queryKey[3].value === 0 ? undefined : queryKey[3].value;
@@ -79,7 +78,7 @@ export default function AttendanceSummary({navigation}: any) {
     },
     {
       enabled: !!userInfo,
-    },
+    }
   );
 
   const columns = [
@@ -126,14 +125,16 @@ export default function AttendanceSummary({navigation}: any) {
               justifyContent:
                 currentTabManager === 1 ? 'space-between' : 'flex-end',
             },
-          ]}>
+          ]}
+        >
           {currentTabManager === 1 && (
             <TouchableOpacity
               style={[styles.dropdown]}
               onPress={() => {
                 setIsOpenSelectDepartment(true);
-              }}>
-              <Text style={[text_black, fs_14_400, {width: '80%'}]}>
+              }}
+            >
+              <Text style={[text_black, fs_14_400, { width: '80%' }]}>
                 {currentDepartment.label}
               </Text>
               <DropdownIcon width={20} height={20} />
@@ -143,7 +144,8 @@ export default function AttendanceSummary({navigation}: any) {
             style={styles.dateSelectBox}
             onPress={() => {
               setIsSelectDate(true);
-            }}>
+            }}
+          >
             <Text style={[fs_14_400, text_black]}>
               {dayjs(fromDate).format('DD/MM/YYYY')} -{' '}
               {dayjs(toDate).format('DD/MM/YYYY')}
@@ -153,15 +155,15 @@ export default function AttendanceSummary({navigation}: any) {
         </View>
         <ScrollView contentContainerStyle={styles.content}>
           <PrimaryTable
+            onRowPress={(item: any) => {
+              navigation.navigate('AttendanceHistory', {
+                departmentId: item.id,
+                title: currentTabManager === 1 ? item.name : '',
+              });
+            }}
             data={listAttendanceSummary.map((item: any) => {
               return {
                 ...item,
-                onRowPress: (item: any) => {
-                  navigation.navigate('AttendanceHistory', {
-                    departmentId: item.id,
-                    title: currentTabManager === 1 ? item.name : '',
-                  });
-                },
               };
             })}
             columns={columns}

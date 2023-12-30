@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 import dayjs from 'dayjs';
 import {
   fs_12_500,
@@ -22,18 +22,18 @@ import {
   text_red,
 } from '../../assets/style.ts';
 import CheckWorkBlock from '../../components/attendance/CheckWorkBlock.tsx';
-import {useState} from 'react';
+import { useState } from 'react';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import AttendanceCalendar from '../../components/attendance/AttendanceCalendar.tsx';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
-import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
-export default function Attendance({navigation}: any) {
+export default function Attendance({ navigation }: any) {
   const {
-    connection: {userInfo, currentTabManager},
+    connection: { userInfo, currentTabManager },
     onSetCurrentTabManager,
   } = useConnection();
   const [isOpenCheckSuccessModal, setIsOpenCheckSuccessModal] = useState(false);
@@ -45,34 +45,36 @@ export default function Attendance({navigation}: any) {
     refetch: refetchCheckInOut,
   } = useQuery(
     ['checkInOut', dayjs().format('YYYY-MM-DD')],
-    async ({queryKey}) => {
+    async ({ queryKey }) => {
       try {
         const response = await dwtApi.getCheckInOutByDate(
           userInfo.id,
-          queryKey[1],
+          queryKey[1]
         );
         return response.data;
-      } catch (error) {
-        console.log(error);
+      } catch {
         return {
-          checkIn: '--:--',
-          checkOut: '--:--',
+          checkIn: null,
+          checkOut: null,
         };
       }
     },
     {
       enabled: !!userInfo && !!userInfo.id,
-    },
+    }
   );
 
   const {
     data: attendanceMonthData = [],
     isLoading: isLoadingAttendanceMonthData,
     refetch: refetchAttendanceMonthData,
-  } = useQuery(['getAttendanceMonthInfo', currentMonth], async ({queryKey}) => {
-    const response = await dwtApi.getAttendanceByMonth(queryKey[1]);
-    return response.data;
-  });
+  } = useQuery(
+    ['getAttendanceMonthInfo', currentMonth],
+    async ({ queryKey }) => {
+      const response = await dwtApi.getAttendanceByMonth(queryKey[1]);
+      return response.data;
+    }
+  );
 
   const {
     data: attendanceData,
@@ -101,7 +103,7 @@ export default function Attendance({navigation}: any) {
       const currentTime = dayjs().format('HH:mm');
       const response = await dwtApi.checkInOut(
         checkInOutData.checkIn.substring(0, 5),
-        currentTime,
+        currentTime
       );
       if (response.status === 200) {
         setCheckInOutTime(response.data.checkOut.substring(0, 5));
@@ -157,7 +159,8 @@ export default function Attendance({navigation}: any) {
                 borderBottomColor: '#D9D9D9',
                 borderBottomWidth: 1,
               },
-            ]}>
+            ]}
+          >
             <Text style={[fs_15_700, text_black]}>BẢNG CHẤM CÔNG</Text>
             <View
               style={{
@@ -167,7 +170,8 @@ export default function Attendance({navigation}: any) {
                 backgroundColor: '#FFF',
                 borderColor: '#DD0013',
                 borderWidth: 1,
-              }}>
+              }}
+            >
               <Text style={[fs_12_500, text_red]}>+ Đơn nghỉ</Text>
             </View>
           </View>
@@ -187,20 +191,23 @@ export default function Attendance({navigation}: any) {
                 borderBottomColor: '#D9D9D9',
                 borderBottomWidth: 1,
               },
-            ]}>
+            ]}
+          >
             <Text style={[fs_15_700, text_black]}>THỐNG KÊ THÁNG</Text>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('AttendanceSummary');
               }}
-              hitSlop={10}>
+              hitSlop={10}
+            >
               <Text
                 style={[
                   fs_14_400,
                   {
                     color: 'rgba(0, 112, 255, 0.71)',
                   },
-                ]}>
+                ]}
+              >
                 {'Bảng công >'}
               </Text>
             </TouchableOpacity>
@@ -247,7 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   box: {
-    width: '47%',
+    width: '48%',
     borderRadius: 5,
     padding: 8,
     flexDirection: 'row',

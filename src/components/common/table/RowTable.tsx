@@ -1,15 +1,16 @@
-import {fs_12_400, text_black, text_center} from '../../../assets/style.ts';
+import { fs_12_400, text_black, text_center } from '../../../assets/style.ts';
 import {
   Animated,
   Easing,
   Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import RowDetail from './RowDetail.tsx';
-import {useEffect, useRef, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function RowTable({
   item,
@@ -17,14 +18,21 @@ export default function RowTable({
   bgColor,
   canShowMore,
   isWorkArise,
+  onRowPress,
 }: any) {
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
   const [isMore, setIsMore] = useState(false);
-  const toggleMore = () => {
-    if (!canShowMore) {
-      item.onRowPress && item.onRowPress(item);
+
+  const handlePressRow = () => {
+    if (canShowMore) {
+      toggleMore();
+      return;
+    } else {
+      onRowPress && onRowPress(item);
     }
+  };
+  const toggleMore = () => {
     if (!isMore) {
       Animated.timing(shareValue, {
         toValue: 1,
@@ -57,7 +65,7 @@ export default function RowTable({
 
   return (
     <View>
-      <Pressable style={[styles.row]} onPress={toggleMore}>
+      <TouchableOpacity style={[styles.row]} onPress={handlePressRow}>
         {columns.map((column: any, index: any) => {
           return (
             <View
@@ -69,19 +77,21 @@ export default function RowTable({
                   height: 'auto',
                 },
                 styles.cell,
-              ]}>
+              ]}
+            >
               <Text
                 style={[
                   fs_12_400,
                   item.textColor ? item.textColor : text_black,
                   text_center,
-                ]}>
+                ]}
+              >
                 {item[column.key]}
               </Text>
             </View>
           );
         })}
-      </Pressable>
+      </TouchableOpacity>
       <Animated.View
         style={[
           styles.moreWrapper,
@@ -91,12 +101,14 @@ export default function RowTable({
               outputRange: [0, moreSectionHeight],
             }),
           },
-        ]}>
+        ]}
+      >
         <View
-          onLayout={e => {
+          onLayout={(e) => {
             setMoreSectionHeight(e.nativeEvent.layout.height);
           }}
-          style={styles.moreContainer}>
+          style={styles.moreContainer}
+        >
           <RowDetail data={item} isWorkArise={isWorkArise} />
         </View>
       </Animated.View>

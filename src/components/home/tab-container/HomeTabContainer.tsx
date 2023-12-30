@@ -1,16 +1,16 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {py20} from '../../../assets/style.ts';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { py20 } from '../../../assets/style.ts';
 import WorkProgressBlock from '../home-tab/WorkProgressBlock.tsx';
 import SummaryBlock from '../home-tab/SummaryBlock.tsx';
 import BehaviorBlock from '../home-tab/BehaviorBlock.tsx';
 import WorkTable from '../WorkTable.tsx';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../common/loading/PrimaryLoading.tsx';
 import AddIcon from '../../../assets/img/add.svg';
 import PlusButtonModal from '../../work/PlusButtonModal.tsx';
-import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeTabContainer({
   attendanceData,
@@ -20,12 +20,6 @@ export default function HomeTabContainer({
 }: any) {
   const navigation = useNavigation();
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
-  const [addButtonPosition, setAddButtonPosition] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
 
   const {
     data: {
@@ -67,7 +61,7 @@ export default function HomeTabContainer({
         (item: any) =>
           item.actual_state === 4 ||
           item.actual_state === 2 ||
-          item.actual_state === 5,
+          item.actual_state === 5
       ).length,
     };
     return {
@@ -93,7 +87,7 @@ export default function HomeTabContainer({
                 ? item.business_standard_score_tmp
                 : 0,
             };
-          },
+          }
         ),
       },
       workSummary,
@@ -106,11 +100,11 @@ export default function HomeTabContainer({
     return <PrimaryLoading />;
   }
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={py20}
-      showsVerticalScrollIndicator={false}>
-      <View style={styles.content}>
+    <View style={styles.wrapper}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <WorkProgressBlock
           attendanceData={attendanceData}
           checkIn={checkInTime}
@@ -127,28 +121,20 @@ export default function HomeTabContainer({
           workSummary={workSummary}
         />
         <WorkTable listWork={listWorkPersonal} />
+      </ScrollView>
 
-        <TouchableOpacity
-          onLayout={({nativeEvent}) => {
-            setAddButtonPosition({
-              x: nativeEvent.layout.x,
-              y: nativeEvent.layout.y,
-              width: nativeEvent.layout.width,
-              height: nativeEvent.layout.height,
-            });
-          }}
-          style={styles.align_end}
-          onPress={() => setIsOpenPlusButton(true)}>
-          <AddIcon width={32} height={32} />
-          <PlusButtonModal
-            visible={isOpenPlusButton}
-            setVisible={setIsOpenPlusButton}
-            position={addButtonPosition}
-            navigation={navigation}
-          />
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      <TouchableOpacity
+        style={styles.align_end}
+        onPress={() => setIsOpenPlusButton(true)}
+      >
+        <AddIcon width={32} height={32} />
+        <PlusButtonModal
+          visible={isOpenPlusButton}
+          setVisible={setIsOpenPlusButton}
+          navigation={navigation}
+        />
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -156,20 +142,18 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  banner: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-  container: {
     position: 'relative',
   },
   content: {
     gap: 15,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingBottom: 20,
+    paddingTop: 10,
   },
   align_end: {
-    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 10,
+    right: 15,
+    zIndex: 2,
   },
 });

@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import ChevronLeftIcon from '../../assets/img/chevron-left-calendar.svg';
 import ChevronRightIcon from '../../assets/img/chevron-right-calendar.svg';
-import {Calendar} from 'react-native-calendars';
-import {StyleSheet} from 'react-native';
-import {useMemo} from 'react';
+import { Calendar } from 'react-native-calendars';
+import { StyleSheet } from 'react-native';
+import { useMemo } from 'react';
 
 export default function AttendanceCalendar({
   currentMonth,
@@ -17,7 +17,6 @@ export default function AttendanceCalendar({
         .year(cur.year)
         .date(cur.day)
         .format('YYYY-MM-DD');
-      console.log(date);
       return {
         ...acc,
         [date]: {
@@ -62,7 +61,7 @@ export default function AttendanceCalendar({
       initialDate={dayjs().format('YYYY-MM-DD')}
       firstDay={1}
       markedDates={markedDates}
-      onMonthChange={month => {
+      onMonthChange={(month) => {
         setCurrentMonth(dayjs(month.dateString).format('YYYY-MM'));
       }}
       theme={{
@@ -71,7 +70,7 @@ export default function AttendanceCalendar({
         textDayFontSize: 13,
         textDayFontWeight: '700',
       }}
-      renderArrow={direction => {
+      renderArrow={(direction) => {
         return direction === 'left' ? (
           <ChevronLeftIcon width={20} height={20} />
         ) : (

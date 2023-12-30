@@ -23,6 +23,13 @@ export const WORK_STATUS = {
   '5': 'Trễ',
 };
 
+export const WORK_STATUS_OFFICE = {
+  1: 'Đã giao',
+  2: 'Đang làm',
+  3: 'Đã xong',
+  4: 'Trễ',
+};
+
 export const LIST_TIME_FILTER = [
   {
     label: 'Tháng này',
@@ -110,7 +117,7 @@ export const BANK_LIST = [
     label: '(Ngân hàng Ngoại thương Việt Nam) Vietcombank',
     value: '(Ngân hàng Ngoại thương Việt Nam) Vietcombank',
   },
-  {label: '(Ngân hàng Á Châu) ACB', value: '(Ngân hàng Á Châu) ACB'},
+  { label: '(Ngân hàng Á Châu) ACB', value: '(Ngân hàng Á Châu) ACB' },
   {
     label: '(Ngân hàng Sài Gòn Thương Tín) Sacombank',
     value: '(Ngân hàng Sài Gòn Thương Tín) Sacombank',
@@ -139,9 +146,12 @@ export const BANK_LIST = [
     label: '(Ngân hàng Tiên Phong) TPBank',
     value: '(Ngân hàng Tiên Phong) TPBank',
   },
-  {label: '(Ngân hàng Phương Đông) OCB', value: '(Ngân hàng Phương Đông) OCB'},
-  {label: '(Ngân hàng Quốc tế) VIB', value: '(Ngân hàng Quốc tế) VIB'},
-  {label: '(Ngân hàng Nam Á) NamABank', value: '(Ngân hàng Nam Á) NamABank'},
+  {
+    label: '(Ngân hàng Phương Đông) OCB',
+    value: '(Ngân hàng Phương Đông) OCB',
+  },
+  { label: '(Ngân hàng Quốc tế) VIB', value: '(Ngân hàng Quốc tế) VIB' },
+  { label: '(Ngân hàng Nam Á) NamABank', value: '(Ngân hàng Nam Á) NamABank' },
   {
     label: '(Ngân hàng Phát triển Thành phố Hồ Chí Minh) HDBank',
     value: '(Ngân hàng Phát triển Thành phố Hồ Chí Minh) HDBank',
@@ -150,18 +160,21 @@ export const BANK_LIST = [
     label: '(Ngân hàng Thương mại Cổ phần Sài Gòn - Hà Nội) SHB',
     value: '(Ngân hàng Thương mại Cổ phần Sài Gòn - Hà Nội) SHB',
   },
-  {label: '(Ngân hàng Đông Á) SeABank', value: '(Ngân hàng Đông Á) SeABank'},
-  {label: '(Ngân hàng An Bình) ABBank', value: '(Ngân hàng An Bình) ABBank'},
-  {label: '(Ngân hàng Sài Gòn) SCB', value: '(Ngân hàng Sài Gòn) SCB'},
-  {label: '(Ngân hàng Tiên Phong) TPB', value: '(Ngân hàng Tiên Phong) TPB'},
-  {label: '(Ngân hàng Bắc Á) BacABank', value: '(Ngân hàng Bắc Á) BacABank'},
+  { label: '(Ngân hàng Đông Á) SeABank', value: '(Ngân hàng Đông Á) SeABank' },
+  { label: '(Ngân hàng An Bình) ABBank', value: '(Ngân hàng An Bình) ABBank' },
+  { label: '(Ngân hàng Sài Gòn) SCB', value: '(Ngân hàng Sài Gòn) SCB' },
+  { label: '(Ngân hàng Tiên Phong) TPB', value: '(Ngân hàng Tiên Phong) TPB' },
+  { label: '(Ngân hàng Bắc Á) BacABank', value: '(Ngân hàng Bắc Á) BacABank' },
   {
     label: '(Ngân hàng Dầu khí Toàn cầu) GPBank',
     value: '(Ngân hàng Dầu khí Toàn cầu) GPBank',
   },
-  {label: '(Ngân hàng Phương Đông) OCB', value: '(Ngân hàng Phương Đông) OCB'},
-  {label: '(Ngân hàng Quốc dân) NCB', value: '(Ngân hàng Quốc dân) NCB'},
-  {label: '(Ngân hàng Bảo Việt) BVB', value: '(Ngân hàng Bảo Việt) BVB'},
+  {
+    label: '(Ngân hàng Phương Đông) OCB',
+    value: '(Ngân hàng Phương Đông) OCB',
+  },
+  { label: '(Ngân hàng Quốc dân) NCB', value: '(Ngân hàng Quốc dân) NCB' },
+  { label: '(Ngân hàng Bảo Việt) BVB', value: '(Ngân hàng Bảo Việt) BVB' },
   {
     label: '(Ngân hàng Thương mại Cổ phần Việt Nam Cộng Thành) PVcomBank',
     value: '(Ngân hàng Thương mại Cổ phần Việt Nam Cộng Thành) PVcomBank',
@@ -170,12 +183,12 @@ export const BANK_LIST = [
     label: '(Ngân hàng Thương mại Cổ phần Sài Gòn - Hà Nội) SHB',
     value: '(Ngân hàng Thương mại Cổ phần Sài Gòn - Hà Nội) SHB',
   },
-  {label: '(Ngân hàng Nam Á) NamABank', value: '(Ngân hàng Nam Á) NamABank'},
-  {label: '(Ngân hàng An Bình) ABBank', value: '(Ngân hàng An Bình) ABBank'},
-  {label: '(Ngân hàng Tiên Phong) TPB', value: '(Ngân hàng Tiên Phong) TPB'},
-  {label: '(Ngân hàng Á Châu) ACB', value: '(Ngân hàng Á Châu) ACB'},
-  {label: '(Ngân hàng Quốc tế) VIB', value: '(Ngân hàng Quốc tế) VIB'},
-  {label: '(Ngân hàng Đông Á) SeABank', value: '(Ngân hàng Đông Á) SeABank'},
+  { label: '(Ngân hàng Nam Á) NamABank', value: '(Ngân hàng Nam Á) NamABank' },
+  { label: '(Ngân hàng An Bình) ABBank', value: '(Ngân hàng An Bình) ABBank' },
+  { label: '(Ngân hàng Tiên Phong) TPB', value: '(Ngân hàng Tiên Phong) TPB' },
+  { label: '(Ngân hàng Á Châu) ACB', value: '(Ngân hàng Á Châu) ACB' },
+  { label: '(Ngân hàng Quốc tế) VIB', value: '(Ngân hàng Quốc tế) VIB' },
+  { label: '(Ngân hàng Đông Á) SeABank', value: '(Ngân hàng Đông Á) SeABank' },
   {
     label: '(Ngân hàng Bảo Việt) BAOVIET Bank',
     value: '(Ngân hàng Bảo Việt) BAOVIET Bank',
@@ -200,10 +213,13 @@ export const BANK_LIST = [
     label: '(Ngân hàng Tiên Phong) TPBank',
     value: '(Ngân hàng Tiên Phong) TPBank',
   },
-  {label: '(Ngân hàng Phương Đông) OCB', value: '(Ngân hàng Phương Đông) OCB'},
-  {label: '(Ngân hàng Hàng Hải) MSB', value: '(Ngân hàng Hàng Hải) MSB'},
-  {label: '(Ngân hàng Quốc dân) NCB', value: '(Ngân hàng Quốc dân) NCB'},
-  {label: '(Ngân hàng Bảo Việt) BVB', value: '(Ngân hàng Bảo Việt) BVB'},
+  {
+    label: '(Ngân hàng Phương Đông) OCB',
+    value: '(Ngân hàng Phương Đông) OCB',
+  },
+  { label: '(Ngân hàng Hàng Hải) MSB', value: '(Ngân hàng Hàng Hải) MSB' },
+  { label: '(Ngân hàng Quốc dân) NCB', value: '(Ngân hàng Quốc dân) NCB' },
+  { label: '(Ngân hàng Bảo Việt) BVB', value: '(Ngân hàng Bảo Việt) BVB' },
   {
     label: '(Ngân hàng TNHH Một thành viên Shinhan) Shinhan Bank Vietnam',
     value: '(Ngân hàng TNHH Một thành viên Shinhan) Shinhan Bank Vietnam',

@@ -5,14 +5,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import TabBlock from '../../components/work/TabBlock.tsx';
-import {useEffect, useMemo, useState} from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import AddIcon from '../../assets/img/add.svg';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
-import {fs_12_400, fs_14_400, text_black} from '../../assets/style.ts';
+import { fs_12_400, fs_14_400, text_black } from '../../assets/style.ts';
 import TimeFilterModal from '../../components/common/modal/TimeFilterModal.tsx';
 import WorkStatusFilterModal from '../../components/common/modal/WorkStatusFilterModal.tsx';
 import {
@@ -20,15 +20,15 @@ import {
   LIST_WORK_STATUS_FILTER,
   WORK_STATUS_COLOR,
 } from '../../assets/constant.ts';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
-import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 import PlusButtonModal from '../../components/work/PlusButtonModal.tsx';
 import MonthPickerModal from '../../components/common/modal/MonthPickerModal.tsx';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 import ListDepartmentModal from '../../components/home/manager-tab/ListDepartmentModal.tsx';
 
 const columns = [
@@ -63,9 +63,9 @@ const columns = [
     width: 0.15,
   },
 ];
-export default function Work({navigation}: any) {
+export default function Work({ navigation }: any) {
   const {
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
   const [statusValue, setStatusValue] = useState(LIST_WORK_STATUS_FILTER[0]);
   const [currentMonth, setCurrentMonth] = useState({
@@ -76,15 +76,8 @@ export default function Work({navigation}: any) {
   const [isOpenStatusSelect, setIsOpenStatusSelect] = useState(false);
   const [currentTab, setCurrentTab] = useState(0);
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
-  const [addButtonPosition, setAddButtonPosition] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
-  // const [currentWorkTab, setCurrentWorkTab] = useState(0);
   const {
-    data: {listKeyWorkData, listNonKeyWorkData, listAriseWorkData} = {
+    data: { listKeyWorkData, listNonKeyWorkData, listAriseWorkData } = {
       listKeyWorkData: [],
       listNonKeyWorkData: [],
       listAriseWorkData: [],
@@ -119,8 +112,7 @@ export default function Work({navigation}: any) {
             let totalToday = 0;
             if (listLog.length > 0) {
               const listTodayLog = listLog.filter(
-                (log: any) =>
-                  log.reported_date === dayjs().format('YYYY-MM-DD'),
+                (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD')
               );
               listTodayLog.forEach((log: any) => {
                 let temp = log.manager_quantity
@@ -171,8 +163,7 @@ export default function Work({navigation}: any) {
             let totalToday = 0;
             if (listLog.length > 0) {
               const listTodayLog = listLog.filter(
-                (log: any) =>
-                  log.reported_date === dayjs().format('YYYY-MM-DD'),
+                (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD')
               );
               listTodayLog.forEach((log: any) => {
                 let temp = log.manager_quantity
@@ -227,7 +218,7 @@ export default function Work({navigation}: any) {
           let totalToday = 0;
           if (listLog.length > 0) {
             const listTodayLog = listLog.filter(
-              (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD'),
+              (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD')
             );
             listTodayLog.forEach((log: any) => {
               let temp = log.manager_quantity
@@ -283,7 +274,8 @@ export default function Work({navigation}: any) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: 10,
-          }}>
+          }}
+        >
           <View style={styles.content}>
             {/*{userInfo && userInfo.role === 'admin' && (*/}
             {/*  <AdminTabBlock*/}
@@ -297,7 +289,8 @@ export default function Work({navigation}: any) {
                 style={styles.dropdown}
                 onPress={() => {
                   setIsOpenStatusSelect(true);
-                }}>
+                }}
+              >
                 <Text style={[text_black, fs_14_400]}>{statusValue.label}</Text>
                 <DropdownIcon width={20} height={20} />
               </TouchableOpacity>
@@ -306,7 +299,8 @@ export default function Work({navigation}: any) {
                 style={styles.dropdown}
                 onPress={() => {
                   setIsOpenTimeSelect(true);
-                }}>
+                }}
+              >
                 <Text style={[text_black, fs_14_400]}>
                   {currentMonth.month + 1}/{currentMonth.year}
                 </Text>
@@ -320,27 +314,20 @@ export default function Work({navigation}: any) {
                 canShowMore={true}
               />
             </View>
-            <TouchableOpacity
-              onLayout={({nativeEvent}) => {
-                setAddButtonPosition({
-                  x: nativeEvent.layout.x,
-                  y: nativeEvent.layout.y,
-                  width: nativeEvent.layout.width,
-                  height: nativeEvent.layout.height,
-                });
-              }}
-              style={styles.align_end}
-              onPress={() => setIsOpenPlusButton(true)}>
-              <AddIcon width={32} height={32} />
-              <PlusButtonModal
-                visible={isOpenPlusButton}
-                setVisible={setIsOpenPlusButton}
-                position={addButtonPosition}
-                navigation={navigation}
-              />
-            </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <TouchableOpacity
+          style={styles.align_end}
+          onPress={() => setIsOpenPlusButton(true)}
+        >
+          <AddIcon width={32} height={32} />
+          <PlusButtonModal
+            visible={isOpenPlusButton}
+            setVisible={setIsOpenPlusButton}
+            navigation={navigation}
+          />
+        </TouchableOpacity>
         <WorkStatusFilterModal
           visible={isOpenStatusSelect}
           setVisible={setIsOpenStatusSelect}
@@ -362,6 +349,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#F4F4F4',
+    position: 'relative',
   },
   content: {
     gap: 10,
@@ -399,7 +387,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.25)',
   },
   align_end: {
-    alignSelf: 'flex-end',
-    paddingRight: 15,
+    position: 'absolute',
+    bottom: 10,
+    right: 15,
+    zIndex: 2,
   },
 });

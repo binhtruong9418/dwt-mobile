@@ -16,10 +16,10 @@ import WorkProgressBlock from '../manager-tab/WorkProgressBlock.tsx';
 import DropdownIcon from '../../../assets/img/dropdown-icon.svg';
 import LockIcon from '../../../assets/img/lock-icon.svg';
 import ReportAndProposeBlock from '../manager-tab/ReportAndProposeBlock.tsx';
-import {useConnection} from '../../../redux/connection';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../../api/service/dwtApi.ts';
-import {useState} from 'react';
+import { useConnection } from '../../../redux/connection';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../../api/service/dwtApi.ts';
+import { useState } from 'react';
 import ListDepartmentModal from '../manager-tab/ListDepartmentModal.tsx';
 import PrimaryLoading from '../../common/loading/PrimaryLoading.tsx';
 import WorkOfficeManagerTable from '../manager-tab/WorkOfficeManagerTable.tsx';
@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
 import AddIcon from '../../../assets/img/add.svg';
 import PlusButtonModal from '../../work/PlusButtonModal.tsx';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import BehaviorBlock from '../home-tab/BehaviorBlock.tsx';
 
 export default function OfficeTabContainer({
@@ -35,7 +35,7 @@ export default function OfficeTabContainer({
   rewardAndPunishData,
 }: any) {
   const {
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
 
   const navigation = useNavigation();
@@ -52,19 +52,16 @@ export default function OfficeTabContainer({
   const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
 
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
-  const [addButtonPosition, setAddButtonPosition] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
 
-  const {data: listDepartment = []} = useQuery(['listDepartment'], async () => {
-    const res = await dwtApi.getListDepartment();
-    return res.data;
-  });
+  const { data: listDepartment = [] } = useQuery(
+    ['listDepartment'],
+    async () => {
+      const res = await dwtApi.getListDepartment();
+      return res.data;
+    }
+  );
 
-  const {data: dailyReportDepartmentData = {}} = useQuery(
+  const { data: dailyReportDepartmentData = {} } = useQuery(
     ['listDailyReportDepartment'],
     async () => {
       const res = await dwtApi.getDailyReportDepartment();
@@ -74,11 +71,11 @@ export default function OfficeTabContainer({
       enabled:
         !!userInfo &&
         !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
-    },
+    }
   );
 
   const {
-    data: {listWorkOffice, workSummary} = {
+    data: { listWorkOffice, workSummary } = {
       listWorkOffice: [],
       workSummary: {
         done: 0,
@@ -113,7 +110,7 @@ export default function OfficeTabContainer({
           (item: any) =>
             item.work_status === 3 ||
             item.work_status === 2 ||
-            item.work_status === 4,
+            item.work_status === 4
         ).length,
       };
       return {
@@ -125,7 +122,7 @@ export default function OfficeTabContainer({
       enabled:
         !!userInfo &&
         !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
-    },
+    }
   );
 
   if (isLoadingWorkOffice) {
@@ -133,91 +130,61 @@ export default function OfficeTabContainer({
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.wrapper}>
       <ScrollView
-        style={styles.container}
-        contentContainerStyle={py20}
-        showsVerticalScrollIndicator={false}>
-        {userInfo &&
-        (userInfo.role === 'manager' || userInfo.role === 'admin') ? (
-          <View style={styles.content}>
-            <View style={styles.filter_wrapper}>
-              <TouchableOpacity
-                style={styles.dropdown}
-                onPress={() => {
-                  setIsOpenTimeSelect(true);
-                }}>
-                <Text style={[text_black, fs_12_400]}>
-                  Tháng {currentMonth.month + 1}/{currentMonth.year}
-                </Text>
-                <DropdownIcon width={20} height={20} />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.dropdown}
-                onPress={() => {
-                  setIsOpenDepartmentModal(true);
-                }}>
-                <Text style={[text_black, fs_12_400]}>
-                  {currentDepartment.label}
-                </Text>
-                <DropdownIcon width={20} height={20} />
-              </TouchableOpacity>
-            </View>
-            <WorkProgressBlock attendanceData={attendanceData} />
-
-            <ReportAndProposeBlock
-              totalDailyReport={dailyReportDepartmentData.countDailyReports}
-            />
-
-            <BehaviorBlock
-              rewardAndPunishData={rewardAndPunishData}
-              workSummary={workSummary}
-            />
-            {/*<TopUserBlock />*/}
-            <WorkOfficeManagerTable listWork={listWorkOffice} />
-
-            <TouchableOpacity
-              onLayout={({nativeEvent}) => {
-                setAddButtonPosition({
-                  x: nativeEvent.layout.x,
-                  y: nativeEvent.layout.y,
-                  width: nativeEvent.layout.width,
-                  height: nativeEvent.layout.height,
-                });
-              }}
-              style={styles.align_end}
-              onPress={() => setIsOpenPlusButton(true)}>
-              <AddIcon width={32} height={32} />
-              <PlusButtonModal
-                visible={isOpenPlusButton}
-                setVisible={setIsOpenPlusButton}
-                position={addButtonPosition}
-                navigation={navigation}
-              />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View
-            style={{
-              paddingTop: 50,
-              alignItems: 'center',
-            }}>
-            <LockIcon width={100} height={100} />
-            <Text
-              style={[
-                fs_14_400,
-                text_center,
-                text_black,
-                {
-                  marginTop: 20,
-                },
-              ]}>
-              Tính năng này bạn không có quyền truy cập
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.filter_wrapper}>
+          <TouchableOpacity
+            style={styles.dropdown}
+            onPress={() => {
+              setIsOpenTimeSelect(true);
+            }}
+          >
+            <Text style={[text_black, fs_12_400]}>
+              Tháng {currentMonth.month + 1}/{currentMonth.year}
             </Text>
-          </View>
-        )}
+            <DropdownIcon width={20} height={20} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.dropdown}
+            onPress={() => {
+              setIsOpenDepartmentModal(true);
+            }}
+          >
+            <Text style={[text_black, fs_12_400]}>
+              {currentDepartment.label}
+            </Text>
+            <DropdownIcon width={20} height={20} />
+          </TouchableOpacity>
+        </View>
+        <WorkProgressBlock attendanceData={attendanceData} />
+
+        <ReportAndProposeBlock
+          totalDailyReport={dailyReportDepartmentData.countDailyReports}
+        />
+
+        <BehaviorBlock
+          rewardAndPunishData={rewardAndPunishData}
+          workSummary={workSummary}
+        />
+        {/*<TopUserBlock />*/}
+        <WorkOfficeManagerTable listWork={listWorkOffice} />
       </ScrollView>
+
+      <TouchableOpacity
+        style={styles.align_end}
+        onPress={() => setIsOpenPlusButton(true)}
+      >
+        <AddIcon width={32} height={32} />
+        <PlusButtonModal
+          visible={isOpenPlusButton}
+          setVisible={setIsOpenPlusButton}
+          navigation={navigation}
+        />
+      </TouchableOpacity>
       {isOpenDepartmentModal && (
         <ListDepartmentModal
           currentDepartment={currentDepartment}
@@ -247,22 +214,17 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  banner: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-  container: {
     position: 'relative',
   },
   content: {
     gap: 15,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingBottom: 20,
   },
   filter_wrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   dropdown: {
     width: '47%',
@@ -276,6 +238,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.25)',
   },
   align_end: {
-    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 10,
+    right: 15,
+    zIndex: 2,
   },
 });

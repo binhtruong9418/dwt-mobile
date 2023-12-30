@@ -14,10 +14,10 @@ import {
   text_center,
   text_white,
 } from '../../../assets/style.ts';
-import {useMemo, useState} from 'react';
+import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../../api/service/dwtApi.ts';
 import DropdownIcon from '../../../assets/img/dropdown-icon.svg';
 import DailyCalendar from '../../daily-report/DailyCalendar.tsx';
 import PersonalReportDetail from '../../daily-report/PersonalReportDetail.tsx';
@@ -26,7 +26,9 @@ import PrimaryButton from '../../common/button/PrimaryButton.tsx';
 import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
 import CreateOrEditDailyReportModal from '../../common/modal/CreateOrEditDailyReportModal.tsx';
 import LoadingActivity from '../../common/loading/LoadingActivity.tsx';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import AddIcon from "../../../assets/img/add.svg";
+import PlusButtonModal from "../../work/PlusButtonModal.tsx";
 
 export default function ManufactureTabContainer() {
   const navigation = useNavigation();
@@ -39,26 +41,28 @@ export default function ManufactureTabContainer() {
     year: dayjs().year(),
     date: dayjs().date(),
   });
+  const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
+
   const [isOpenSelectMonth, setIsOpenSelectMonth] = useState(false);
-  const {data: productionDiaryData = {}, isLoading: loadingProductionDiary} =
+  const { data: productionDiaryData = {}, isLoading: loadingProductionDiary } =
     useQuery(
       [
         'dwtApi.getProductionDiaryPerMonth',
         currentDate.month,
         currentDate.year,
       ],
-      ({queryKey}: any) =>
+      ({ queryKey }: any) =>
         dwtApi.getProductionDiaryPerMonth({
           date: `${queryKey[2]}-${queryKey[1] + 1}`,
-        }),
+        })
     );
   // console.log('productionDiaryData', productionDiaryData);
-  const {data: listProjectLogs = []} = productionDiaryData;
+  const { data: listProjectLogs = [] } = productionDiaryData;
   const todayLogs = useMemo(() => {
     return listProjectLogs.filter(
       (item: any) =>
         item.logDate ===
-        `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
+        `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`
     );
   }, [listProjectLogs, currentDate]);
 
@@ -68,11 +72,12 @@ export default function ManufactureTabContainer() {
         style={styles.monthBox}
         onPress={() => {
           setIsOpenSelectMonth(true);
-        }}>
+        }}
+      >
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
-        <DropdownIcon width={20} height={20}/>
+        <DropdownIcon width={20} height={20} />
       </TouchableOpacity>
       <DailyCalendar
         currentDate={currentDate}
@@ -81,15 +86,14 @@ export default function ManufactureTabContainer() {
       />
       {todayLogs.length > 0 ? (
         <ScrollView style={styles.listReport}>
-          <Text style={styles.timeText}>9:30</Text>
           <FlatList
             scrollEnabled={false}
             contentContainerStyle={{
               paddingTop: 30,
               paddingBottom: 20,
             }}
-            data={todayLogs.map((item: any) => ({...item, key: item.id}))}
-            renderItem={({item}) => {
+            data={todayLogs.map((item: any) => ({ ...item, key: item.id }))}
+            renderItem={({ item }) => {
               return (
                 <TouchableOpacity
                   style={styles.boxContainer}
@@ -98,10 +102,18 @@ export default function ManufactureTabContainer() {
                     navigation.navigate('ProjectWorkDetail', {
                       data: item.project_work_id,
                     });
-                  }}>
+                  }}
+                >
                   <View style={styles.logWrapper}>
                     <View
-                      style={[styles.timeBox, {backgroundColor: '#7CB8FF'}]}>
+                      style={[
+                        styles.timeBox,
+                        {
+                          backgroundColor:
+                            item?.type === 1 ? '#C02626' : '#7CB8FF',
+                        },
+                      ]}
+                    >
                       <Text style={[fs_10_500, text_white, text_center]}>
                         {item?.user_name} ({item?.type === 1 ? 'GV' : 'TK'})
                       </Text>
@@ -111,17 +123,31 @@ export default function ManufactureTabContainer() {
                 </TouchableOpacity>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}}/>
+          <EmptyDailyReportIcon
+            style={{ alignSelf: 'center', marginTop: 50 }}
+          />
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
         </View>
       )}
+
+      <TouchableOpacity
+        style={styles.align_end}
+        onPress={() => setIsOpenPlusButton(true)}
+      >
+        <AddIcon width={32} height={32} />
+        <PlusButtonModal
+          visible={isOpenPlusButton}
+          setVisible={setIsOpenPlusButton}
+          navigation={navigation}
+        />
+      </TouchableOpacity>
 
       <MonthPickerModal
         visible={isOpenSelectMonth}
@@ -131,7 +157,7 @@ export default function ManufactureTabContainer() {
         currentMonth={currentDate}
         setCurrentMonth={setCurrentDate}
       />
-      <LoadingActivity isLoading={loadingProductionDiary}/>
+      <LoadingActivity isLoading={loadingProductionDiary} />
     </View>
   );
 }
@@ -140,6 +166,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
+    position: 'relative',
   },
   monthBox: {
     flexDirection: 'row',
@@ -173,8 +200,7 @@ const styles = StyleSheet.create({
     top: 20,
   },
   boxContainer: {
-    width: '90%',
-    alignSelf: 'center',
+    width: '100%',
   },
   logWrapper: {
     width: '100%',
@@ -199,5 +225,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingVertical: 3,
     paddingHorizontal: 5,
+  },
+  align_end: {
+    position: 'absolute',
+    bottom: 10,
+    right: 15,
+    zIndex: 2,
   },
 });

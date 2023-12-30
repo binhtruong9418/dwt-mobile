@@ -5,14 +5,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {fs_12_400, py20, text_black} from '../../../assets/style.ts';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../../api/service/dwtApi.ts';
+import { fs_12_400, py20, text_black } from '../../../assets/style.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../common/loading/PrimaryLoading.tsx';
 import AddIcon from '../../../assets/img/add.svg';
 import PlusButtonModal from '../../work/PlusButtonModal.tsx';
-import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import ReportAndProposeBlock from '../manager-tab/ReportAndProposeBlock.tsx';
 import WorkProgressBlock from '../manager-tab/WorkProgressBlock.tsx';
 import BehaviorBlock from '../home-tab/BehaviorBlock.tsx';
@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import WorkBusinessManagerTable from '../manager-tab/WorkBusinessManagerTable.tsx';
 import ListDepartmentModal from '../manager-tab/ListDepartmentModal.tsx';
 import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BusinessTabContainer({
   attendanceData,
@@ -28,12 +29,6 @@ export default function BusinessTabContainer({
 }: any) {
   const navigation = useNavigation();
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
-  const [addButtonPosition, setAddButtonPosition] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
 
   const [isOpenDepartmentModal, setIsOpenDepartmentModal] =
     useState<boolean>(false);
@@ -47,13 +42,16 @@ export default function BusinessTabContainer({
   });
   const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
 
-  const {data: listDepartment = []} = useQuery(['listDepartment'], async () => {
-    const res = await dwtApi.getListDepartment();
-    return res.data;
-  });
+  const { data: listDepartment = [] } = useQuery(
+    ['listDepartment'],
+    async () => {
+      const res = await dwtApi.getListDepartment();
+      return res.data;
+    }
+  );
 
   const {
-    data: {listWorkBusiness, workSummary} = {
+    data: { listWorkBusiness, workSummary } = {
       workSummary: {
         done: 0,
         working: 0,
@@ -69,13 +67,13 @@ export default function BusinessTabContainer({
       await dwtApi.getListWorkAriseDepartment();
 
     const listWorkDepartmentAll = Object.keys(
-      listWorkDepartmentData.data.kpi.keyByUsers,
+      listWorkDepartmentData.data.kpi.keyByUsers
     ).reduce((acc, val) => {
       return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
     }, []);
 
     const listNonKeyWorkDepartmentAll = Object.keys(
-      listWorkDepartmentData.data.kpi.nonKeyByUsers,
+      listWorkDepartmentData.data.kpi.nonKeyByUsers
     ).reduce((acc, val) => {
       return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
     }, []);
@@ -89,7 +87,7 @@ export default function BusinessTabContainer({
             ...item,
             isWorkArise: true,
           };
-        },
+        }
       ),
     ];
     const workSummary = {
@@ -103,7 +101,7 @@ export default function BusinessTabContainer({
         (item: any) =>
           item.actual_state === 4 ||
           item.actual_state === 2 ||
-          item.actual_state === 5,
+          item.actual_state === 5
       ).length,
     };
     return {
@@ -116,17 +114,18 @@ export default function BusinessTabContainer({
     return <PrimaryLoading />;
   }
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={py20}
-      showsVerticalScrollIndicator={false}>
-      <View style={styles.content}>
+    <View style={styles.wrapper}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.filter_wrapper}>
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => {
               setIsOpenTimeSelect(true);
-            }}>
+            }}
+          >
             <Text style={[text_black, fs_12_400]}>
               Tháng {currentMonth.month + 1}/{currentMonth.year}
             </Text>
@@ -137,7 +136,8 @@ export default function BusinessTabContainer({
             style={styles.dropdown}
             onPress={() => {
               setIsOpenDepartmentModal(true);
-            }}>
+            }}
+          >
             <Text style={[text_black, fs_12_400]}>
               {currentDepartment.label}
             </Text>
@@ -153,28 +153,20 @@ export default function BusinessTabContainer({
           workSummary={workSummary}
         />
         <WorkBusinessManagerTable listWork={listWorkBusiness} />
+      </ScrollView>
 
-        <TouchableOpacity
-          onLayout={({nativeEvent}) => {
-            setAddButtonPosition({
-              x: nativeEvent.layout.x,
-              y: nativeEvent.layout.y,
-              width: nativeEvent.layout.width,
-              height: nativeEvent.layout.height,
-            });
-          }}
-          style={styles.align_end}
-          onPress={() => setIsOpenPlusButton(true)}>
-          <AddIcon width={32} height={32} />
-          <PlusButtonModal
-            visible={isOpenPlusButton}
-            setVisible={setIsOpenPlusButton}
-            position={addButtonPosition}
-            navigation={navigation}
-            hasReceiveWork={true}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.align_end}
+        onPress={() => setIsOpenPlusButton(true)}
+      >
+        <AddIcon width={32} height={32} />
+        <PlusButtonModal
+          visible={isOpenPlusButton}
+          setVisible={setIsOpenPlusButton}
+          navigation={navigation}
+          hasReceiveWork={true}
+        />
+      </TouchableOpacity>
 
       {isOpenDepartmentModal && (
         <ListDepartmentModal
@@ -197,7 +189,7 @@ export default function BusinessTabContainer({
         setCurrentMonth={setCurrentMonth}
         currentMonth={currentMonth}
       />
-    </ScrollView>
+    </View>
   );
 }
 
@@ -205,25 +197,23 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  banner: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-  container: {
     position: 'relative',
   },
   content: {
     gap: 15,
     paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   align_end: {
-    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 10,
+    right: 15,
+    zIndex: 2,
   },
   filter_wrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   dropdown: {
     width: '47%',

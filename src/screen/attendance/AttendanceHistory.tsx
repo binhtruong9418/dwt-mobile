@@ -5,34 +5,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 import dayjs from 'dayjs';
-import {useState} from 'react';
-import {fs_14_400, text_black} from '../../assets/style.ts';
+import { useState } from 'react';
+import { fs_14_400, text_black } from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import DatePickerFromToModal from '../../components/common/modal/DatePickerFromToModal.tsx';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import AttendanceHistoryTable from '../../components/attendance/AttendanceHistoryTable.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 
-export default function AttendanceHistory({route, navigation}: any) {
-  const {departmentId, title} = route.params;
+export default function AttendanceHistory({ route, navigation }: any) {
+  const { departmentId, title } = route.params;
   const {
-    connection: {userInfo, currentTabManager},
+    connection: { userInfo, currentTabManager },
     onSetCurrentTabManager,
   } = useConnection();
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [isSelectDate, setIsSelectDate] = useState(false);
 
-  const {data: listAttendanceHistory = [], isLoading} = useQuery(
+  const { data: listAttendanceHistory = [], isLoading } = useQuery(
     ['listAttendanceHistoryDepartment', fromDate, toDate],
     async () => {
-      console.log(fromDate, toDate, departmentId);
       const res = await dwtApi.getAttendanceHistoryDepartment({
         datetime:
           dayjs(fromDate).format('DD/MM/YYYY') +
@@ -44,7 +43,7 @@ export default function AttendanceHistory({route, navigation}: any) {
     },
     {
       enabled: !!userInfo && !!departmentId,
-    },
+    }
   );
 
   return (
@@ -66,7 +65,8 @@ export default function AttendanceHistory({route, navigation}: any) {
             style={styles.dateSelectBox}
             onPress={() => {
               setIsSelectDate(true);
-            }}>
+            }}
+          >
             <Text style={[fs_14_400, text_black]}>
               {dayjs(fromDate).format('DD/MM/YYYY')} -{' '}
               {dayjs(toDate).format('DD/MM/YYYY')}

@@ -1,7 +1,7 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ChevronLeftIcon from '../../assets/img/chevron-left-dark.svg';
-import PropTypes, {InferProps} from 'prop-types';
-import {fs_15_700, text_black, text_center} from '../../assets/style.ts';
+import PropTypes, { InferProps } from 'prop-types';
+import { fs_15_700, text_black, text_center } from '../../assets/style.ts';
 
 export default function Header({
   title,
@@ -17,7 +17,8 @@ export default function Header({
           if (handleGoBack) {
             handleGoBack();
           }
-        }}>
+        }}
+      >
         <ChevronLeftIcon width={16} height={16} />
       </TouchableOpacity>
       <Text
@@ -25,8 +26,9 @@ export default function Header({
           fs_15_700,
           text_black,
           text_center,
-          {width: '60%', textTransform: 'uppercase'},
-        ]}>
+          { width: '60%', textTransform: 'uppercase' },
+        ]}
+      >
         {title}
       </Text>
       {rightView ? (
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
   backIcon: {
     width: '20%',
     alignItems: 'flex-start',
+    zIndex: 1,
   },
   rightIcon: {
     width: '20%',

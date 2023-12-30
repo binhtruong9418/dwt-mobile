@@ -1,7 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
-import PropTypes, {InferProps} from 'prop-types';
+import { StyleSheet, Text, View } from 'react-native';
+import PropTypes, { InferProps } from 'prop-types';
 import PrimaryTable from '../../common/table/PrimaryTable.tsx';
-import {WORK_STATUS_COLOR} from '../../../assets/constant.ts';
+import { WORK_STATUS_COLOR } from '../../../assets/constant.ts';
+import { useNavigation } from "@react-navigation/native";
 
 const columns = [
   {
@@ -28,10 +29,17 @@ const columns = [
 export default function WorkOfficeManagerTable({
   listWork,
 }: InferProps<typeof WorkOfficeManagerTable.propTypes>) {
+  const navigation = useNavigation();
   return (
     <View style={styles.wrapper}>
       <PrimaryTable
         columns={columns}
+        onRowPress={(item: any) => {
+          // @ts-ignore
+          navigation.navigate('WorkDetailOffice', {
+            data: item,
+          });
+        }}
         data={listWork.map((item: any, index: number) => {
           return {
             ...item,
@@ -42,9 +50,6 @@ export default function WorkOfficeManagerTable({
               ? // @ts-ignore
                 WORK_STATUS_COLOR[item.work_status]
               : '#FFF',
-            onRowPress: (item: any) => {
-              return;
-            },
           };
         })}
       />
