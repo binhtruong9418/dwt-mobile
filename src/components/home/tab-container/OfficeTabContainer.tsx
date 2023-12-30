@@ -70,7 +70,7 @@ export default function OfficeTabContainer({
     {
       enabled:
         !!userInfo &&
-        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
+        !!(userInfo?.role === 'admin' || userInfo?.role === 'manager'),
     }
   );
 
@@ -121,7 +121,7 @@ export default function OfficeTabContainer({
     {
       enabled:
         !!userInfo &&
-        !!(userInfo.role === 'admin' || userInfo.role === 'manager'),
+        !!(userInfo?.role === 'admin' || userInfo?.role === 'manager'),
     }
   );
 

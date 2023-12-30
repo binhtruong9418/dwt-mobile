@@ -7,7 +7,7 @@ import {
 } from '../../../assets/style.ts';
 import {useNavigation} from '@react-navigation/native';
 
-export default function RowDetail({data, isWorkArise}: any) {
+export default function WorkRowDetail({data, isWorkArise}: any) {
   const navigation = useNavigation();
   return (
     <View style={styles.wrapper}>

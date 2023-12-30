@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import RowDetail from './RowDetail.tsx';
+import RowDetail from './WorkRowDetail.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,8 +17,8 @@ export default function RowTable({
   columns,
   bgColor,
   canShowMore,
-  isWorkArise,
   onRowPress,
+    rowDetailComponent,
 }: any) {
   const [moreSectionHeight, setMoreSectionHeight] = useState(0);
   const shareValue = useRef(new Animated.Value(0)).current;
@@ -109,7 +109,7 @@ export default function RowTable({
           }}
           style={styles.moreContainer}
         >
-          <RowDetail data={item} isWorkArise={isWorkArise} />
+          {rowDetailComponent && rowDetailComponent(item)}
         </View>
       </Animated.View>
     </View>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cell: {
-    paddingVertical: 7,
+    paddingVertical: 8,
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#D9D9D9',

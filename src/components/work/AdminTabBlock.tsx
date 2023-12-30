@@ -8,25 +8,28 @@ import {
 } from 'react-native';
 import {useState} from 'react';
 import {fs_14_700, text_red, text_white} from '../../assets/style.ts';
+import {useConnection} from "../../redux/connection";
 
 export default function AdminTabBlock({
-  currentTab,
-  setCurrentTab,
   firstLabel,
   secondLabel,
 }: any) {
-  return (
+  const {
+    connection: {userInfo, currentTabManager},
+    onSetCurrentTabManager,
+  } = useConnection();
+  return (userInfo?.role === 'admin' || userInfo?.role === 'manager') ? (
     <View style={styles.wrapper}>
       <View style={[styles.toggleContainer]}>
         <TouchableOpacity
           onPress={() => {
-            setCurrentTab(0);
+            onSetCurrentTabManager(0);
           }}
-          style={[styles.toggleCircle, currentTab === 0 && styles.selected]}>
+          style={[styles.toggleCircle, currentTabManager === 0 && styles.selected]}>
           <Text
             style={[
               fs_14_700,
-              currentTab === 0 ? text_red : text_white,
+              currentTabManager === 0 ? text_red : text_white,
               {textTransform: 'uppercase'},
             ]}>
             {firstLabel || 'CÁ NHÂN'}
@@ -35,13 +38,13 @@ export default function AdminTabBlock({
 
         <TouchableOpacity
           onPress={() => {
-            setCurrentTab(1);
+            onSetCurrentTabManager(1);
           }}
-          style={[styles.toggleCircle, currentTab === 1 && styles.selected]}>
+          style={[styles.toggleCircle, currentTabManager === 1 && styles.selected]}>
           <Text
             style={[
               fs_14_700,
-              currentTab === 1 ? text_red : text_white,
+              currentTabManager === 1 ? text_red : text_white,
               {textTransform: 'uppercase'},
             ]}>
             {secondLabel || 'ĐƠN VỊ'}
@@ -49,7 +52,7 @@ export default function AdminTabBlock({
         </TouchableOpacity>
       </View>
     </View>
-  );
+  ) : null
 }
 
 const styles = StyleSheet.create({

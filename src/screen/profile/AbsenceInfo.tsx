@@ -20,8 +20,7 @@ import dayjs from "dayjs";
 
 export default function AbsenceInfo({navigation}: any) {
     const {
-        connection: {userInfo, currentTabManager},
-        onSetCurrentTabManager,
+        connection: {currentTabManager},
     } = useConnection();
     const [absentType, setAbsentType] = useState(LIST_ABSENCE_TYPE[0]);
     const [isOpenFilterModal, setIsOpenFilterModal] = useState(false);
@@ -31,7 +30,7 @@ export default function AbsenceInfo({navigation}: any) {
         isLoading: isLoadingListAbsence,
         refetch: refetchListAbsence,
     } = useQuery(['getListAbsence', absentType.value, currentTabManager], async ({queryKey}) => {
-        if(queryKey[2] === 'manager' ||  queryKey[2] === 'admin') {
+        if (queryKey[2] === 'manager' || queryKey[2] === 'admin') {
             const res = await dwtApi.getAllAbsenceManager({
                 absent_type: Number(queryKey[1])
             });
@@ -48,13 +47,9 @@ export default function AbsenceInfo({navigation}: any) {
 
     return (
         <SafeAreaView style={styles.wrapper}>
-            {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
-                <AdminTabBlock
-                    currentTab={currentTabManager}
-                    setCurrentTab={onSetCurrentTabManager}
-                    secondLabel={'Quản lý'}
-                />
-            )}
+            <AdminTabBlock
+                secondLabel={'Quản lý'}
+            />
             <Header
                 title={'Nghỉ & Phép'}
                 handleGoBack={() => navigation.navigate('Profile')}

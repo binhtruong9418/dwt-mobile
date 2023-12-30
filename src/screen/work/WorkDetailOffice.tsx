@@ -76,8 +76,16 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
           quantity: item?.targetLogDetails[0]?.kpiKeys[0]?.quantity,
         };
       }),
+        reportLogs: workDetailData?.targetLogs?.map((item: any) => {
+            return {
+                ...item,
+                date: item.reportedDate,
+                note: item?.targetLogDetails[0]?.note,
+                file: item?.targetLogDetails[0]?.files,
+            };
+        })
     };
-  }, [workDetailData, data.isWorkArise]);
+  }, [workDetailData]);
 
   useRefreshOnFocus(refetch);
 
@@ -224,6 +232,31 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
             data={workDetail.targetLogs}
           />
         </View>
+          <View style={styles.commentBlock}>
+              <Text style={[fs_15_700, text_red]}>
+                  DANH SÁCH BÁO CÁO CÔNG VIỆC
+              </Text>
+              <WorkReportTable
+                  columns={[
+                      {
+                          title: 'Ngày báo cáo',
+                          key: 'date',
+                          width: 0.3,
+                      },
+                      {
+                          title: 'Nội dung báo cáo',
+                          key: 'note',
+                          width: 0.5,
+                      },
+                      {
+                          title: 'File',
+                          key: 'file',
+                          width: 0.2,
+                      },
+                  ]}
+                  data={workDetail.reportLogs}
+              />
+          </View>
       </ScrollView>
     </SafeAreaView>
   );

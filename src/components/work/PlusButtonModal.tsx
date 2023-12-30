@@ -65,11 +65,13 @@ export default function PlusButtonModal({
           <NoticeIcon width={20} height={20} />
           <Text style={[fs_15_500, text_black]}>Đề xuất</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => {
+            navigation.navigate('WorkStorage');
+        }}>
           <ReceiveWorkIcon width={20} height={20} />
           <Text style={[fs_15_500, text_black]}>Nhận việc</Text>
         </TouchableOpacity>
-        {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
+        {(userInfo?.role === 'admin' || userInfo?.role === 'manager') &&
           hasReceiveWork && (
             <TouchableOpacity
               style={styles.item}

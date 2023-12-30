@@ -13,7 +13,6 @@ import CloseIcon from '../../../assets/img/close-icon.svg';
 import PrimaryCheckbox from '../../common/checkbox/PrimaryCheckbox.tsx';
 import {useState} from 'react';
 import PrimaryButton from '../../common/button/PrimaryButton.tsx';
-import {LIST_TIME_FILTER} from '../../../assets/constant.ts';
 export default function ListDepartmentModal({
   visible,
   setVisible,
@@ -80,7 +79,7 @@ export default function ListDepartmentModal({
               );
             }}
             keyExtractor={item => item.value}
-            ItemSeparatorComponent={() => <View style={{height: 10}} />}
+            ItemSeparatorComponent={() => <View style={{height: 15}} />}
           />
           <PrimaryButton
             onPress={handleSaveValue}

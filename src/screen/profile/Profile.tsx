@@ -82,6 +82,7 @@ const listMenu = [
 export default function Profile({navigation}: any) {
     const {
         onSetUserInfo,
+        onSetCurrentTabManager,
         connection: {userInfo},
     } = useConnection();
     const [isOpenUploadAvatar, setIsOpenUploadAvatar] = useState(false);
@@ -96,6 +97,7 @@ export default function Profile({navigation}: any) {
         await dwtApi.logout();
         await AsyncStorage.removeItem('accessToken');
         onSetUserInfo(null);
+        onSetCurrentTabManager(0);
         navigation.navigate('Login');
     };
 

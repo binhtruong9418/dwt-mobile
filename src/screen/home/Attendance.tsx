@@ -33,8 +33,7 @@ import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
 export default function Attendance({ navigation }: any) {
   const {
-    connection: { userInfo, currentTabManager },
-    onSetCurrentTabManager,
+    connection: { userInfo }
   } = useConnection();
   const [isOpenCheckSuccessModal, setIsOpenCheckSuccessModal] = useState(false);
   const [checkInOutTime, setCheckInOutTime] = useState('--:--');
@@ -60,7 +59,7 @@ export default function Attendance({ navigation }: any) {
       }
     },
     {
-      enabled: !!userInfo && !!userInfo.id,
+      enabled: !!userInfo && !!userInfo?.id,
     }
   );
 
@@ -121,24 +120,11 @@ export default function Attendance({ navigation }: any) {
     refetchCheckInOut();
   });
 
-  // if (
-  //   isLoadingCheckInOut ||
-  //   isLoadingAttendance ||
-  //   isLoadingAttendanceMonthData
-  // ) {
-  //   return <PrimaryLoading />;
-  // }
-
   return (
-    userInfo && (
       <SafeAreaView style={styles.wrapper}>
-        {(userInfo.role === 'admin' || userInfo.role === 'manager') && (
           <AdminTabBlock
-            currentTab={currentTabManager}
-            setCurrentTab={onSetCurrentTabManager}
             secondLabel={'Quản lý'}
           />
-        )}
         <Header title={'CHẤM CÔNG'} handleGoBack={() => navigation.goBack()} />
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
           <Text style={[fs_15_400, text_red, text_center]}>
@@ -162,7 +148,7 @@ export default function Attendance({ navigation }: any) {
             ]}
           >
             <Text style={[fs_15_700, text_black]}>BẢNG CHẤM CÔNG</Text>
-            <View
+            <TouchableOpacity
               style={{
                 paddingHorizontal: 10,
                 paddingVertical: 5,
@@ -171,9 +157,12 @@ export default function Attendance({ navigation }: any) {
                 borderColor: '#DD0013',
                 borderWidth: 1,
               }}
+              onPress={() => {
+                navigation.navigate('AddAbsence');
+              }}
             >
               <Text style={[fs_12_500, text_red]}>+ Đơn nghỉ</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <AttendanceCalendar
@@ -235,7 +224,6 @@ export default function Attendance({ navigation }: any) {
           description={`Chấm công thành công lúc ${checkInOutTime}`}
         />
       </SafeAreaView>
-    )
   );
 }
 const styles = StyleSheet.create({
