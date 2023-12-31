@@ -46,7 +46,7 @@ jobs:
     - name: Create and push tag
       run: |
         git tag -a v${{ github.run_number }} -m "Release v${{ github.run_number }}"
-        git push origin v${{ github.run_number }}
+        git push origin v${{ github.run_number }} --follow-tags -u "${{ secrets.GH_TOKEN }}"
 
     - name: Create Release
       id: create_release
