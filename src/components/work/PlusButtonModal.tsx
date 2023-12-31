@@ -59,6 +59,7 @@ export default function PlusButtonModal({
         <TouchableOpacity
           style={styles.item}
           onPress={() => {
+            setVisible(false)
             navigation.navigate('Propose');
           }}
         >
@@ -66,6 +67,7 @@ export default function PlusButtonModal({
           <Text style={[fs_15_500, text_black]}>Đề xuất</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={() => {
+          setVisible(false)
             navigation.navigate('WorkStorage');
         }}>
           <ReceiveWorkIcon width={20} height={20} />
@@ -75,7 +77,8 @@ export default function PlusButtonModal({
           hasReceiveWork && (
             <TouchableOpacity
               style={styles.item}
-              onPress={() => {
+            onPress={() => {
+                setVisible(false)
                 navigation.navigate('AddWorkArise');
               }}
             >
