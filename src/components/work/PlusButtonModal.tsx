@@ -74,7 +74,7 @@ export default function PlusButtonModal(
                             style={styles.item}
                             onPress={() => {
                                 setVisible(false)
-                                navigation.navigate('ReceiveWork');
+                                navigation.navigate('WorkStorage');
                             }}
                         >
                             <ReceiveWorkIcon width={20} height={20}/>

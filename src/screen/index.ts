@@ -30,3 +30,4 @@ export {default as WorkDetailDepartmentScreen} from './work/WorkDetailDepartment
 export {default as WorkDetailOfficeScreen} from './work/WorkDetailOffice.tsx';
 export {default as AddAbsenceScreen} from './absence/AddAbsence.tsx';
 export {default as MeetingDetailScreen} from './meeting/MeetingDetail.tsx';
+export {default as ComingSoonScreen} from './coming-soon/ComingSoon.tsx';

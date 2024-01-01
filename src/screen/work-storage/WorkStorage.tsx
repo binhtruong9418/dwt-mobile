@@ -134,7 +134,7 @@ export default function WorkStorage({navigation}: any) {
           }}
         >
           <Text style={[text_black, fs_14_400]}>
-            Tháng {currentDate.month + 1}
+            {currentDate.month + 1}/{currentDate.year}
           </Text>
           <DropdownIcon width={20} height={20}/>
         </TouchableOpacity>
