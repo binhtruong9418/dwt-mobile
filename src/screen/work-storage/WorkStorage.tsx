@@ -81,7 +81,7 @@ export default function WorkStorage({navigation}: any) {
     params: {
       page: 1,
       limit: 10,
-      actualState: 'all',
+      actualState: 'changer_status',
       month: `${currentDate.month + 1}/${currentDate.year}`,
       createdBy: listCurrentUser.join(','),
     }
