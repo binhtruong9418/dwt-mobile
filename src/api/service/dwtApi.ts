@@ -4,11 +4,11 @@ import axios from 'axios';
 export const dwtApi = {
   login: async (email: string, password: string): Promise<any> => {
     const url = 'auth/login';
-    return await axiosClient.post(url, { email, password });
+    return await axiosClient.post(url, {email, password});
   },
   forgetPassword: async (phone: string): Promise<any> => {
     const url = 'forget-password';
-    return await axiosClient.post(url, { phone });
+    return await axiosClient.post(url, {phone});
   },
   logout: async () => {
     const url = 'auth/logout';
@@ -69,7 +69,7 @@ export const dwtApi = {
 
   getOfficeWork: async (params = {}): Promise<any> => {
     const url = 'mobile/office-diary';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //API lấy thông tin Ngày công, Đã nghỉ / vắng, Dự kiến bù - tăng ca(Lấy data theo token đăng nhập)
@@ -93,7 +93,7 @@ export const dwtApi = {
   //API lấy danh sách công việc của cá nhân ( key, nonkey)
   getListWork: async (params = {}): Promise<any> => {
     const url = 'business-standard-history/personal';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   getWorkDetail: async (
@@ -133,19 +133,19 @@ export const dwtApi = {
   //API lấy danh sách công việc của đơn vị ( key, nonkey)
   getListWorkDepartment: async (params = {}): Promise<any> => {
     const url = 'business-standard-history/department';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //API lấy danh sách công việc phát sinh của cá nhân
   getListWorkArise: async (params = {}): Promise<any> => {
     const url = 'business-standard-work-arise/user-report';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //API lấy danh sách công việc phát sinh của đơn vị
   getListWorkAriseDepartment: async (params = {}): Promise<any> => {
     const url = 'business-standard-work-arise/admin-report';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //API thêm báo cáo cá nhân(Non key, key)
@@ -173,7 +173,7 @@ export const dwtApi = {
 
   getDailyReportDepartment: async (params = {}): Promise<any> => {
     const url = 'daily-report/department';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   addWorkArise: async (data: any): Promise<any> => {
@@ -183,7 +183,7 @@ export const dwtApi = {
 
   getSalaryHistory: async (params = {}): Promise<any> => {
     const url = 'salary-history';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
   getSalaryById: async (id: number): Promise<any> => {
     const url = 'salary-history/detail/' + id;
@@ -191,7 +191,7 @@ export const dwtApi = {
   },
   getPersonalDailyReport: async (params = {}): Promise<any> => {
     const url = 'daily-report/personal';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
   createPersonalDailyReport: async (data: any): Promise<any> => {
     const url = 'daily-report/store';
@@ -200,7 +200,7 @@ export const dwtApi = {
   getDepartmentDailyReport: async (params = {}): Promise<any> => {
     const url = 'daily-report/department';
     console.log(params);
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   // Cham cong
@@ -235,24 +235,24 @@ export const dwtApi = {
   //API lấy tổng quan chấm công theo phòng ban
   getAttendanceSummaryDepartment: async (params = {}): Promise<any> => {
     const url = 'attendances/department/search';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //API lấy lịch sử chấm công theo phòng ban
   getAttendanceHistoryDepartment: async (params = {}): Promise<any> => {
     const url = 'attendances';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //daily-report báo cáo ngày
   getDailyReportPersonalPerMonth: async (params = {}): Promise<any> => {
     const url = 'daily-report/personal-by-month';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
   //trang home -> tab quản lý -> sub tab sản xuất:  nhật ký sản xuất ( cái này ngày xưa entity là project work logs) mà giờ đổi thành production diary
   getProductionDiaryPerMonth: async (params = {}): Promise<any> => {
     const url = 'mobile/production-diary/by-month';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
   // trang home -> tab quản lý -> sub tab sản xuất bấm vào 1 cái log
   getProductionDiaryDetail: async (id: number): Promise<any> => {
@@ -266,13 +266,13 @@ export const dwtApi = {
   },
   getAllPropose: async (params = {}): Promise<any> => {
     const url = 'quick-reports';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   //API nghi phep
   getAllAbsencePersonal: async (params = {}): Promise<any> => {
     const url = 'mobile/leave-request/self';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
   },
 
   createAbsence: async (data: any): Promise<any> => {
@@ -282,6 +282,18 @@ export const dwtApi = {
 
   getAllAbsenceManager: async (params = {}): Promise<any> => {
     const url = 'mobile/leave-request/manager';
-    return await axiosClient.get(url, { params });
+    return await axiosClient.get(url, {params});
+  },
+  //API KHO VIỆC
+  //BE provide work storages api with three different endpoints for 3 roles: admin, manager, user
+  //each endpoint has same params so we will create a function to call all of them
+  getListJobs: async (role: 'manager' | 'admin' | 'user' = 'user', params = {}): Promise<any> => {
+    const url = '/list-job/' + role;
+    return await axiosClient.get(url, {params});
+  },
+  //nhận viêệc
+  acceptJob: async (jobId: any): Promise<any> => {
+    const url = `/list-job/accept-job/${jobId}`
+    return await axiosClient.put(url);
   }
 };
