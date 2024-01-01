@@ -69,7 +69,6 @@ export default function PrimaryTable(
                     ) : null
                 }
                 keyExtractor={(item, index) => index.toString()}
-                ItemSeparatorComponent={() => <View style={{height: 2}}/>}
             />
         </View>
     );

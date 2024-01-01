@@ -2,11 +2,11 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import PropTypes, { InferProps } from 'prop-types';
 export default function LoadingActivity({ isLoading }: InferProps<typeof LoadingActivity.propTypes>) {
   return (
-    isLoading && (
+    isLoading ? (
       <View style={styles.wrapper}>
         <ActivityIndicator size="large" color="#DC3545" />
       </View>
-    )
+    ) : null
   );
 }
 

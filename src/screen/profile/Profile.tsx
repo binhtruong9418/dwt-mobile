@@ -8,15 +8,15 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import ChevronLeft from '../../assets/img/chevron-left-dark.svg';
 import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useConnection } from '../../redux/connection';
-import { dwtApi } from '../../api/service/dwtApi.ts';
+import {useConnection} from '../../redux/connection';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 import NoAvatarIcon from '../../assets/img/no-avatar.svg';
 import CameraAvatarIcon from '../../assets/img/camera-avatar.svg';
-import { useQuery } from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {
     fs_12_400,
     fs_14_400,
@@ -32,8 +32,8 @@ import StarFillIcon from '../../assets/img/star-fill.svg';
 import StarIcon from '../../assets/img/star.svg';
 import BoxIcon from '../../assets/img/profile/box.svg';
 import ChevronRightProfileIcon from '../../assets/img/profile/chevron-right-profile.svg';
-import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
-import React, { useEffect, useState } from 'react';
+import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import React, {useEffect, useState} from 'react';
 import UploadAvatarModal from '../../components/profile/UploadAvatarModal.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
@@ -44,49 +44,54 @@ import VersionCheck from 'react-native-version-check';
 const listMenu = [
     {
         name: 'Thông tin cá nhân',
-        icon: <FontAwesome5Icon name={'user'} color={'#CA1F24'} size={20} />,
+        icon: <FontAwesome5Icon name={'user'} color={'#CA1F24'} size={20}/>,
         screen: 'UserInfo',
     },
     {
+        name: 'Họp giao ban',
+        icon: <FontAwesome5Icon name={'plus'} color={'#CA1F24'} size={20}/>,
+        screen: 'MeetingInfo',
+    },
+    {
         name: 'Quá trình công tác',
-        icon: <FontAwesome5Icon name={'edit'} color={'#CA1F24'} size={20} />,
+        icon: <FontAwesome5Icon name={'edit'} color={'#CA1F24'} size={20}/>,
         screen: 'WorkInfo',
     },
     {
         name: 'Lịch sử lương',
-        icon: <FontAwesome5Icon name={'coins'} color={'#CA1F24'} size={20} />,
+        icon: <FontAwesome5Icon name={'coins'} color={'#CA1F24'} size={20}/>,
         screen: 'SalaryInfo',
     },
     {
         name: 'Trang bị & Đào tạo',
-        icon: <BoxIcon width={20} height={20} color={'#CA1F24'} />,
+        icon: <BoxIcon width={20} height={20} color={'#CA1F24'}/>,
         screen: 'EducationInfo',
     },
     {
         name: 'Khen & Vi phạm',
-        icon: <FontAwesome5Icon name={'star'} color={'#CA1F24'} size={20} />,
+        icon: <FontAwesome5Icon name={'star'} color={'#CA1F24'} size={20}/>,
         screen: 'RewardAndPunishInfo',
     },
     {
         name: 'Nghỉ & Phép',
-        icon: <FontAwesome5Icon name={'minus'} color={'#CA1F24'} size={20} />,
+        icon: <FontAwesome5Icon name={'minus'} color={'#CA1F24'} size={20}/>,
         screen: 'AbsenceInfo',
     },
     {
         name: 'Cập nhật mật khẩu',
-        icon: <FontAwesome5Icon name={'cog'} color={'#CA1F24'} size={20} />,
+        icon: <FontAwesome5Icon name={'cog'} color={'#CA1F24'} size={20}/>,
         screen: 'SettingInfo',
     },
 ];
 
-export default function Profile({ navigation }: any) {
+export default function Profile({navigation}: any) {
     const {
         onSetUserInfo,
         onSetCurrentTabManager,
-        connection: { userInfo },
+        connection: {userInfo},
     } = useConnection();
     const [isOpenUploadAvatar, setIsOpenUploadAvatar] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [currentVersion, setCurrentVersion] = useState('1.0.0');
 
@@ -149,7 +154,7 @@ export default function Profile({ navigation }: any) {
     useRefreshOnFocus(refetch);
 
     if (isLoadingUserData) {
-        return <PrimaryLoading />;
+        return <PrimaryLoading/>;
     }
     return (
         userData && (
@@ -160,11 +165,11 @@ export default function Profile({ navigation }: any) {
                     onPress={() => {
                         navigation.goBack();
                     }}>
-                    <ChevronLeft width={16} height={16} />
+                    <ChevronLeft width={16} height={16}/>
                 </TouchableOpacity>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 10 }}>
+                    contentContainerStyle={{paddingBottom: 10}}>
                     <View style={styles.avatarContainer}>
                         <View
                             style={{
@@ -176,7 +181,7 @@ export default function Profile({ navigation }: any) {
                             }}>
                             {userData?.avatar ? (
                                 <Image
-                                    source={{ uri: userData?.avatar }}
+                                    source={{uri: userData?.avatar}}
                                     style={{
                                         width: 90,
                                         height: 90,
@@ -184,7 +189,7 @@ export default function Profile({ navigation }: any) {
                                     }}
                                 />
                             ) : (
-                                <NoAvatarIcon width={90} height={90} />
+                                <NoAvatarIcon width={90} height={90}/>
                             )}
                         </View>
                         <TouchableOpacity
@@ -192,7 +197,7 @@ export default function Profile({ navigation }: any) {
                             onPress={() => {
                                 setIsOpenUploadAvatar(true);
                             }}>
-                            <CameraAvatarIcon width={30} height={30} />
+                            <CameraAvatarIcon width={30} height={30}/>
                         </TouchableOpacity>
                     </View>
                     <Text
@@ -221,13 +226,13 @@ export default function Profile({ navigation }: any) {
 
                     <View style={styles.ratingContainer}>
                         <View style={styles.starContainer}>
-                            <StarFillIcon width={16} height={16} />
-                            <StarFillIcon width={16} height={16} />
-                            <StarFillIcon width={16} height={16} />
-                            <StarFillIcon width={16} height={16} />
-                            <StarIcon width={16} height={16} />
+                            <StarFillIcon width={16} height={16}/>
+                            <StarFillIcon width={16} height={16}/>
+                            <StarFillIcon width={16} height={16}/>
+                            <StarFillIcon width={16} height={16}/>
+                            <StarIcon width={16} height={16}/>
                         </View>
-                        <Text style={[fs_12_400, text_black, { marginLeft: 10 }]}>4.5</Text>
+                        <Text style={[fs_12_400, text_black, {marginLeft: 10}]}>4.5</Text>
                     </View>
 
                     <View style={styles.twoBoxContainer}>
@@ -248,7 +253,7 @@ export default function Profile({ navigation }: any) {
                         </View>
                     </View>
 
-                    <View style={styles.divider} />
+                    <View style={styles.divider}/>
 
                     <View>
                         {listMenu.map((item, index) => (
@@ -260,18 +265,18 @@ export default function Profile({ navigation }: any) {
                                         data: userData,
                                     })
                                 }>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     <View
                                         style={{
                                             width: 20,
                                         }}>
                                         {item.icon}
                                     </View>
-                                    <Text style={[fs_14_500, text_black, { marginLeft: 10 }]}>
+                                    <Text style={[fs_14_500, text_black, {marginLeft: 10}]}>
                                         {item.name}
                                     </Text>
                                 </View>
-                                <ChevronRightProfileIcon width={16} height={16} />
+                                <ChevronRightProfileIcon width={16} height={16}/>
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -286,7 +291,7 @@ export default function Profile({ navigation }: any) {
                         text={'Cập nhật phiên bản mới nhất'}
                         buttonStyle={styles.buttonStyle}
                     />
-                    <Text style={[fs_12_400, text_gray, text_center, { marginTop: 10 }]}>
+                    <Text style={[fs_12_400, text_gray, text_center, {marginTop: 10}]}>
                         Phiên bản {currentVersion}
                     </Text>
                 </ScrollView>
@@ -296,7 +301,7 @@ export default function Profile({ navigation }: any) {
                     handleUploadAvatar={handleUploadAvatar}
                 />
 
-                <LoadingActivity isLoading={isLoading} />
+                <LoadingActivity isLoading={isLoading}/>
 
                 <ToastSuccessModal
                     visible={isSuccess}
