@@ -164,7 +164,7 @@ export default function BusinessTabContainer({
           visible={isOpenPlusButton}
           setVisible={setIsOpenPlusButton}
           navigation={navigation}
-          hasReceiveWork={true}
+          hasGiveWork={true}
         />
       </TouchableOpacity>
 

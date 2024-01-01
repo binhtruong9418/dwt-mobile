@@ -1,12 +1,3 @@
-export const WorkStatusColor = {
-    all: '#FFF',
-    delivered: '#FFF',
-    working: '#FFB822',
-    done: '#89B6FA',
-    tested: '#03D87F',
-    late: '#F5325C',
-};
-
 export const WORK_STATUS_COLOR = {
     '1': '#FFF',
     '2': '#FFB822',
