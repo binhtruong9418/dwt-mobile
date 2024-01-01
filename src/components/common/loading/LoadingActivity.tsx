@@ -1,5 +1,6 @@
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-export default function LoadingActivity({isLoading}: any) {
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import PropTypes, { InferProps } from 'prop-types';
+export default function LoadingActivity({ isLoading }: InferProps<typeof LoadingActivity.propTypes>) {
   return (
     isLoading && (
       <View style={styles.wrapper}>
@@ -24,3 +25,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 });
+
+LoadingActivity.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+};

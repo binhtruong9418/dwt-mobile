@@ -66,6 +66,7 @@ export default function UserInfo({navigation}: any) {
       const transferInformation = JSON.parse(
         res.data?.transfer_information || '{}',
       );
+      console.log(transferInformation)
       setEditUserInfo({
         name: res.data?.name,
         phone: res.data?.phone,
@@ -99,13 +100,6 @@ export default function UserInfo({navigation}: any) {
 
     try {
       setIsLoading(true);
-      console.log(
-        JSON.stringify({
-          bank_name: editUserInfo?.bank_name,
-          bank_number: editUserInfo?.bank_number,
-          receiver_name: editUserInfo?.receiver_name,
-        }),
-      );
       const res = await dwtApi.updateUserById(userInfo.id, {
         name: editUserInfo?.name,
         phone: editUserInfo?.phone,
@@ -385,6 +379,9 @@ export default function UserInfo({navigation}: any) {
                   mode={'modal'}
                   style={{
                     width: '100%',
+                  }}
+                  containerStyle={{
+                    height: 600
                   }}
                   itemTextStyle={[text_black, fs_14_500]}
                   selectedTextStyle={[

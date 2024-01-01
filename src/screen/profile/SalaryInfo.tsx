@@ -168,7 +168,7 @@ export default function SalaryInfo({navigation}: any) {
         visible={isOpenMonthSelect}
         setVisible={setIsOpenMonthSelect}
         currentMonth={currentMonth}
-        setCurrenMonth={setCurrentMonth}
+        setCurrentMonth={setCurrentMonth}
       />
     </SafeAreaView>
   );

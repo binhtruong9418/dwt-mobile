@@ -1,15 +1,16 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {getDaysInMonth} from '../../utils';
-import PropTypes, {InferProps} from 'prop-types';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { getDaysInMonth } from '../../utils';
+import PropTypes, { InferProps } from 'prop-types';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
+import dayjs from 'dayjs';
 
 export default function DailyCalendar({
-                                        currentDate,
-                                        setCurrentDate,
-                                        listUserReports,
-                                        listProjectLogs,
-                                      }: InferProps<typeof DailyCalendar.propTypes>) {
+  currentDate,
+  setCurrentDate,
+  listUserReports,
+  listProjectLogs,
+}: InferProps<typeof DailyCalendar.propTypes>) {
   const haveLog = (item: any) => {
     if (listUserReports) {
       return !!listUserReports.find(
@@ -28,6 +29,10 @@ export default function DailyCalendar({
     return false;
   };
 
+  const today = dayjs().date();
+  const initialScrollOffset = (today > 7) ? (today) * 45 : 0;
+
+
   return (
     <View
       style={{
@@ -41,11 +46,15 @@ export default function DailyCalendar({
           borderBottomColor: '#D0D0D0',
           borderBottomWidth: 1,
         }}
+        contentOffset={{
+          x: initialScrollOffset,
+          y: 0,
+        }}
         showsHorizontalScrollIndicator={false}
         data={getDaysInMonth(currentDate.month, currentDate.year)}
         horizontal={true}
-        ItemSeparatorComponent={() => <View style={{width: 10}}/>}
-        renderItem={({item}) => {
+        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+        renderItem={({ item }) => {
           return (
             <TouchableOpacity
               onPress={() => {
@@ -65,7 +74,7 @@ export default function DailyCalendar({
               <Text style={styles.date}>{item.date}</Text>
               {
                 // Show mark if current date has report
-                haveLog(item) && <View style={styles.marked}/>
+                haveLog(item) && <View style={styles.marked} />
               }
             </TouchableOpacity>
           );

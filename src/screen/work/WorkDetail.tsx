@@ -6,6 +6,7 @@ import SummaryReportBlock from '../../components/work/SummaryReportBlock.tsx';
 import {
   fs_15_400,
   fs_15_700,
+  row_between,
   text_black,
   text_red,
 } from '../../assets/style.ts';
@@ -18,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
+import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 
 export default function WorkDetail({ route, navigation }: any) {
   const { data } = route.params;
@@ -63,8 +65,8 @@ export default function WorkDetail({ route, navigation }: any) {
         workDetailData.type === 2
           ? 'Liên tục'
           : workDetailData.type === 3
-          ? 'Đạt giá trị'
-          : '1 lần';
+            ? 'Đạt giá trị'
+            : '1 lần';
       target = workDetailData.targets;
     }
     return {
@@ -74,7 +76,7 @@ export default function WorkDetail({ route, navigation }: any) {
       workerName: workDetailData.username,
       workStatus: workDetailData.actual_state
         ? // @ts-ignore
-          WORK_STATUS[workDetailData.actual_state.toString()]
+        WORK_STATUS[workDetailData.actual_state.toString()]
         : WORK_STATUS['1'],
       totalWorkingHours: workDetailData.total_working_hours,
       unitName: workDetailData.unit_name,
@@ -103,6 +105,7 @@ export default function WorkDetail({ route, navigation }: any) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      <AdminTabBlock secondLabel='QUẢN LÝ' />
       <Header
         title="CHI TIẾT KẾ HOẠCH"
         handleGoBack={() => {
@@ -176,7 +179,7 @@ export default function WorkDetail({ route, navigation }: any) {
 
         <View style={styles.commentBlock}>
           <Text style={[fs_15_700, text_red]}>
-            NHẬN XÉT NHIỆM VỤ CỦA TRƯỞNG BỘ PHẬN
+            Ý KIẾN QUẢN LÝ
           </Text>
           <View style={styles.inputBox}>
             <TextInput
@@ -184,31 +187,33 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputContent,
                 text_black,
                 fs_15_400,
+                userInfo?.role !== 'manager' &&
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={workDetail?.managerComment || ''}
+              placeholder={workDetail?.managerComment || 'Nhập nội dung'}
               multiline={true}
-              editable={false}
+              editable={userInfo?.role === 'manager'}
             />
             <TextInput
               style={[
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
+                userInfo?.role !== 'manager' &&
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={workDetail?.managerKpi || ''}
+              placeholder={workDetail?.managerKpi || 'Điểm KPI'}
               keyboardType="numeric"
-              editable={false}
+              editable={userInfo?.role === 'manager'}
             />
           </View>
         </View>
 
         <View style={styles.commentBlock}>
           <Text style={[fs_15_700, text_red]}>
-            NHẬN XÉT NHIỆM VỤ CỦA KIỂM SOÁT
+            Ý KIẾN KIỂM SOÁT
           </Text>
           <View style={styles.inputBox}>
             <TextInput
@@ -216,30 +221,35 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputContent,
                 text_black,
                 fs_15_400,
+                userInfo?.role !== 'admin' &&
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={workDetail?.adminComment || ''}
+              placeholder={workDetail?.adminComment || 'Nhập nội dung'}
               multiline={true}
-              editable={false}
+              editable={userInfo?.role === 'admin'}
             />
             <TextInput
               style={[
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
+                userInfo?.role !== 'admin' &&
                 styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
-              placeholder={workDetail.adminKpi || ''}
+              placeholder={workDetail?.adminKpi || 'Điểm KPI'}
               keyboardType="numeric"
-              editable={false}
+              inputMode='numeric'
+              editable={userInfo?.role === 'admin'}
             />
           </View>
         </View>
 
         <View style={styles.commentBlock}>
-          <Text style={[fs_15_700, text_red]}>DANH SÁCH BÁO CÁO CÔNG VIỆC</Text>
+          <View style={row_between}>
+            <Text style={[fs_15_700, text_red]}>DANH SÁCH BÁO CÁO CÔNG VIỆC</Text>
+          </View>
           <WorkReportTable
             columns={[
               {
@@ -293,7 +303,6 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
     gap: 6,
     width: '100%',
   },
