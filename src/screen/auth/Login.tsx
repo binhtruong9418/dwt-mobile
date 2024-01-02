@@ -57,7 +57,7 @@ const Login = ({navigation}: any) => {
     } catch (error: any) {
       console.log(error);
       if (error.status === 401) {
-        setPasswordError('Mật khẩu không đúng');
+        setPasswordError('Tài khoản hoặc mật khẩu không đúng');
       }
     } finally {
       setIsLoading(false);
