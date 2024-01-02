@@ -82,12 +82,13 @@ export default function WorkProgressBlock({
           <View style={[styles.col_chart, { alignItems: 'center' }]}>
             <View style={{ height: 60, justifyContent: 'center' }}>
               <TouchableOpacity
+                  hitSlop={10}
                 style={{
-                  paddingVertical: 3,
+                  paddingVertical: 5,
                   backgroundColor: '#C02626',
                   width: '100%',
                   borderRadius: 5,
-                  paddingHorizontal: 5,
+                  paddingHorizontal: 7,
                 }}
                 onPress={() => {
                   // @ts-ignore
