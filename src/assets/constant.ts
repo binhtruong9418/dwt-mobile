@@ -1,3 +1,7 @@
+export const LIST_FACTORY_DEPARTMENT = [
+    14, 57, 56, 16, 17, 59, 66, 60, 21, 67, 61, 62, 63, 15
+]
+
 export const WORK_STATUS_COLOR = {
     '1': '#FFF',
     '2': '#FFB822',

@@ -17,28 +17,30 @@ export default function HomeHeader({navigation}: any) {
           <SearchIcon width={20} height={20} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} onPress={() => {
+            navigation.navigate('News');
+        }}>
           <NotiIcon width={20} height={20} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{
-            width: 35,
-            height: 35,
-            borderRadius: 999,
-          }}
-          onPress={() => {
-            navigation.navigate('Profile');
-          }}>
+            style={{
+              width: 35,
+              height: 35,
+              borderRadius: 999,
+            }}
+            onPress={() => {
+              navigation.navigate('Profile');
+            }}>
           {userInfo?.avatar ? (
-            <Image
-              source={{uri: userInfo?.avatar}}
-              width={35}
-              height={35}
-              borderRadius={999}
-            />
+              <Image
+                  source={{uri: userInfo?.avatar}}
+                  width={35}
+                  height={35}
+                  borderRadius={999}
+              />
           ) : (
-            <AvatarIcon width={35} height={35} />
+              <AvatarIcon width={35} height={35} />
           )}
         </TouchableOpacity>
       </View>

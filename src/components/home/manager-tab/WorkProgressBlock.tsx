@@ -19,10 +19,12 @@ import MeetingIcon from '../../../assets/img/meeting-icon.svg';
 import PropTypes, { InferProps } from 'prop-types';
 import { padStart } from '../../../utils';
 import ResultChart from './ResultChart.tsx';
+import {useNavigation} from "@react-navigation/native";
 
 export default function WorkProgressBlock({
   attendanceData,
 }: InferProps<typeof WorkProgressBlock.propTypes>) {
+    const navigation = useNavigation();
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
@@ -53,7 +55,7 @@ export default function WorkProgressBlock({
         </View>
 
         <View style={[styles.row, w_full, styles.mb4]}>
-          <View style={[styles.row_gap3, { width: '70%' }]}>
+          <View style={[styles.row_gap3, { width: '75%' }]}>
             <ClockOtIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>

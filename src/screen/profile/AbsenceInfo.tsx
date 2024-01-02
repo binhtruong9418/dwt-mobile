@@ -9,7 +9,6 @@ import AllowIcon from "../../assets/img/absence/allow.svg";
 import WorkIcon from "../../assets/img/absence/work.svg";
 import {LIST_ABSENCE_TYPE, LIST_ABSENCE_TYPE_COLOR} from "../../assets/constant.ts";
 import AddIcon from "../../assets/img/add.svg";
-import PlusButtonModal from "../../components/work/PlusButtonModal.tsx";
 import AbsenceTypeFilterModal from "../../components/common/modal/AbsenceTypeFilterModal.tsx";
 import AdminTabBlock from "../../components/work/AdminTabBlock.tsx";
 import {useConnection} from "../../redux/connection";
@@ -34,12 +33,24 @@ export default function AbsenceInfo({navigation}: any) {
             const res = await dwtApi.getAllAbsenceManager({
                 absent_type: Number(queryKey[1])
             });
-            return res.data;
+            return await Promise.all(res.data.map(async (item: any) => {
+                const resUser = await dwtApi.getUserById(item.user_id);
+                return {
+                    ...item,
+                    user_name: resUser.data.name
+                }
+            }))
         } else {
             const res = await dwtApi.getAllAbsencePersonal({
                 absent_type: Number(queryKey[1])
             });
-            return res.data;
+            return await Promise.all(res.data.map(async (item: any) => {
+                const resUser = await dwtApi.getUserById(item.user_id);
+                return {
+                    ...item,
+                    user_name: resUser.data.name
+                }
+            }))
         }
     });
 
@@ -87,11 +98,22 @@ export default function AbsenceInfo({navigation}: any) {
                             </View>
                             <View style={[styles.rightItem]}>
                                 <View style={[styles.gap5, {flex: 0.4}]}>
+                                    {
+                                        currentTabManager === 1 && (
+                                            <Text style={[fs_14_400, text_gray]}>Tên:</Text>
+
+                                        )
+                                    }
                                     <Text style={[fs_14_400, text_gray]}>Loại nghỉ:</Text>
                                     <Text style={[fs_14_400, text_gray]}>Ngày áp dụng:</Text>
                                     <Text style={[fs_14_400, text_gray]}>Lý do nghỉ:</Text>
                                 </View>
                                 <View style={[styles.gap5, {flex: 0.6}]}>
+                                    {
+                                        currentTabManager === 1 && (
+                                            <Text style={[fs_14_400, text_black]}>{item.user_name}</Text>
+                                        )
+                                    }
                                     <Text style={[fs_14_400, text_black]}>{LIST_ABSENCE_TYPE[item.type].label}</Text>
                                     <Text style={[fs_14_400, text_black]}>{item.date}</Text>
                                     <Text style={[fs_14_400, text_black]}>{item.note}</Text>

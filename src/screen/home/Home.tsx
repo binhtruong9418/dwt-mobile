@@ -14,105 +14,113 @@ import HomeTabContainer from '../../components/home/tab-container/HomeTabContain
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import OfficeTabContainer from '../../components/home/tab-container/OfficeTabContainer.tsx';
 import ManufactureTabContainer from '../../components/home/tab-container/ManufactureTabContainer.tsx';
+import {LIST_FACTORY_DEPARTMENT} from "../../assets/constant.ts";
+import HomeTabFactoryContainer from "../../components/home/tab-container/HomeTabFactoryContainer.tsx";
 
 export default function Home({navigation}: any) {
-  const {
-    connection: {userInfo, currentTabManager},
-  } = useConnection();
-  const [currentMenuTab, setCurrentMenuTab] = useState(0);
-  const {
-    data: {checkInTime, checkOutTime} = {},
-    isLoading: isLoadingAttendanceDay,
-    refetch: refetchAttendanceDay,
-  } = useQuery(['getAttendanceByDate'], async () => {
-    const currentDate = new Date();
-    const dateDay = dayjs(currentDate).format('YYYY-MM-DD');
-    try {
-      const res = await dwtApi.getAttendanceByDate(userInfo.id, dateDay);
-      if (res.status === 200) {
-        return {
-          checkInTime: res.data.checkIn,
-          checkOutTime: res.data.checkOut,
-        };
-      }
-    } catch {
-      return {
-        checkInTime: null,
-        checkOutTime: null,
-      };
+    const {
+        connection: {userInfo, currentTabManager},
+    } = useConnection();
+    const [currentMenuTab, setCurrentMenuTab] = useState(0);
+    const {
+        data: {checkInTime, checkOutTime} = {},
+        isLoading: isLoadingAttendanceDay,
+        refetch: refetchAttendanceDay,
+    } = useQuery(['getAttendanceByDate'], async () => {
+        const currentDate = new Date();
+        const dateDay = dayjs(currentDate).format('YYYY-MM-DD');
+        try {
+            const res = await dwtApi.getAttendanceByDate(userInfo.id, dateDay);
+            if (res.status === 200) {
+                return {
+                    checkInTime: res.data.checkIn,
+                    checkOutTime: res.data.checkOut,
+                };
+            }
+        } catch {
+            return {
+                checkInTime: null,
+                checkOutTime: null,
+            };
+        }
+    });
+
+    const {
+        data: attendanceData,
+        isLoading: isLoadingAttendance,
+        refetch: refetchAttendanceData,
+    } = useQuery(['getAttendanceInfo'], async () => {
+        const res = await dwtApi.getAttendanceInfo();
+        return res.data;
+    });
+
+    const {
+        data: rewardAndPunishData,
+        isLoading: isLoadingReward,
+        refetch: refetchRewardAndPunish,
+    } = useQuery(['getRewardAndPunish'], async () => {
+        const response = await dwtApi.getRewardAndPunish();
+        return response.data;
+    });
+
+    useRefreshOnFocus(() => {
+        refetchAttendanceDay();
+        refetchAttendanceData();
+        refetchRewardAndPunish();
+    });
+
+
+    if (isLoadingAttendance || isLoadingReward || isLoadingAttendanceDay) {
+        return <PrimaryLoading/>;
     }
-  });
 
-  const {
-    data: attendanceData,
-    isLoading: isLoadingAttendance,
-    refetch: refetchAttendanceData,
-  } = useQuery(['getAttendanceInfo'], async () => {
-    const res = await dwtApi.getAttendanceInfo();
-    return res.data;
-  });
-
-  const {
-    data: rewardAndPunishData,
-    isLoading: isLoadingReward,
-    refetch: refetchRewardAndPunish,
-  } = useQuery(['getRewardAndPunish'], async () => {
-    const response = await dwtApi.getRewardAndPunish();
-    return response.data;
-  });
-
-  useRefreshOnFocus(() => {
-    refetchAttendanceDay();
-    refetchAttendanceData();
-    refetchRewardAndPunish();
-  });
-
-  if (isLoadingAttendance || isLoadingReward || isLoadingAttendanceDay) {
-    return <PrimaryLoading />;
-  }
-
-  return (
-    userInfo && (
-      <SafeAreaView style={styles.wrapper}>
-        <HomeHeader navigation={navigation} />
-        <AdminTabBlock secondLabel={'Quản lý'} />
-        {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
-          currentTabManager === 1 && (
-            <TabBlock
-              currentTab={currentMenuTab}
-              setCurrentTab={setCurrentMenuTab}
-            />
-          )}
-        {currentTabManager === 0 ? (
-          <HomeTabContainer
-            attendanceData={attendanceData}
-            checkInTime={checkInTime}
-            checkOutTime={checkOutTime}
-            rewardAndPunishData={rewardAndPunishData}
-          />
-        ) : currentMenuTab === 0 && currentTabManager === 1 ? (
-          <OfficeTabContainer
-            attendanceData={attendanceData}
-            rewardAndPunishData={rewardAndPunishData}
-          />
-        ) : currentMenuTab === 1 && currentTabManager === 1 ? (
-          <BusinessTabContainer
-            attendanceData={attendanceData}
-            checkInTime={checkInTime}
-            checkOutTime={checkOutTime}
-            rewardAndPunishData={rewardAndPunishData}
-          />
-        ) : currentMenuTab === 2 && currentTabManager === 1 ? (
-          <ManufactureTabContainer />
-        ) : null}
-      </SafeAreaView>
-    )
-  );
+    return (
+        userInfo && (
+            <SafeAreaView style={styles.wrapper}>
+                <HomeHeader navigation={navigation}/>
+                <AdminTabBlock secondLabel={'Quản lý'}/>
+                {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
+                    currentTabManager === 1 && (
+                        <TabBlock
+                            currentTab={currentMenuTab}
+                            setCurrentTab={setCurrentMenuTab}
+                        />
+                    )}
+                {currentTabManager === 0 ? (
+                    LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (
+                        <HomeTabFactoryContainer
+                            navigation={navigation}
+                        />
+                    ) : (
+                        <HomeTabContainer
+                            attendanceData={attendanceData}
+                            checkInTime={checkInTime}
+                            checkOutTime={checkOutTime}
+                            rewardAndPunishData={rewardAndPunishData}
+                        />)
+                ) : currentMenuTab === 0 && currentTabManager === 1 ? (
+                    <OfficeTabContainer
+                        attendanceData={attendanceData}
+                        rewardAndPunishData={rewardAndPunishData}
+                    />
+                ) : currentMenuTab === 1 && currentTabManager === 1 ? (
+                    <BusinessTabContainer
+                        attendanceData={attendanceData}
+                        checkInTime={checkInTime}
+                        checkOutTime={checkOutTime}
+                        rewardAndPunishData={rewardAndPunishData}
+                    />
+                ) : currentMenuTab === 2 && currentTabManager === 1 ? (
+                    <ManufactureTabContainer/>
+                ) : null}
+            </SafeAreaView>
+        )
+    );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+    wrapper: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
 });
