@@ -1,13 +1,17 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   fs_13_400,
   fs_13_700,
   text_black,
   text_center,
 } from '../../../assets/style.ts';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function WorkRowDetail({data, isWorkArise}: any) {
+export default function WorkRowDetail({
+  data,
+  isWorkArise,
+  isDepartment,
+}: any) {
   const navigation = useNavigation();
   return (
     <View style={styles.wrapper}>
@@ -56,18 +60,28 @@ export default function WorkRowDetail({data, isWorkArise}: any) {
             navigation.navigate('WorkListReport', {
               data: data,
             });
-          }}>
+          }}
+        >
           <Text style={[fs_13_400, text_black]}>Tiến trình</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            // @ts-ignore
-            navigation.navigate('WorkDetail', {
-              data: data,
-            });
-          }}>
+            if (isDepartment) {
+              // @ts-ignore
+              navigation.navigate('WorkDetailDepartment', {
+                data: data,
+                managerWorkId: data.business_standard_id,
+              });
+            } else {
+              // @ts-ignore
+              navigation.navigate('WorkDetail', {
+                data: data,
+              });
+            }
+          }}
+        >
           <Text style={[fs_13_400, text_black]}>Xem chi tiết</Text>
         </TouchableOpacity>
 
@@ -79,7 +93,8 @@ export default function WorkRowDetail({data, isWorkArise}: any) {
               data: data,
               isWorkArise: isWorkArise,
             });
-          }}>
+          }}
+        >
           <Text style={[fs_13_400, text_black]}>Báo cáo</Text>
         </TouchableOpacity>
       </View>

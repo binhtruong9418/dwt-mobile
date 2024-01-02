@@ -21,6 +21,7 @@ import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
 export default function WorkDetailDepartment({ route, navigation }: any) {
   const { data, managerWorkId } = route.params;
+  console.log(data, managerWorkId);
   const {
     connection: { userInfo },
   } = useConnection();
@@ -48,6 +49,8 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
       enabled: !!userInfo && !!data.id && !!userInfo.id,
     }
   );
+
+  console.log(workDetailData)
 
   const workDetail = useMemo(() => {
     let listLogs = [];
@@ -169,7 +172,7 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
             },
             {
               label: 'Điểm KPI tạm tính',
-              value: workDetail?.totalTmpKpi || '',
+              value: workDetail?.totalTmpKpi,
             },
           ]}
         />

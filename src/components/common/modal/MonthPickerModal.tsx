@@ -16,14 +16,14 @@ import {
   text_white,
 } from '../../../assets/style.ts';
 import CloseIcon from '../../../assets/img/close-icon.svg';
-import {useState} from 'react';
+import { useState } from 'react';
 import 'dayjs/locale/vi';
 import PrimaryButton from '../button/PrimaryButton.tsx';
-import {ReactNativeModal} from 'react-native-modal';
+import { ReactNativeModal } from 'react-native-modal';
 import dayjs from 'dayjs';
 import ChevronLeftCalendarIcon from '../../../assets/img/chevron-left-calendar.svg';
 import ChevronRightCalendarIcon from '../../../assets/img/chevron-right-calendar.svg';
-import {padStart} from '../../../utils';
+import { padStart } from '../../../utils';
 export default function MonthPickerModal({
   setVisible,
   visible,
@@ -61,15 +61,17 @@ export default function MonthPickerModal({
       isVisible={visible}
       onBackdropPress={() => {
         setVisible(false);
-      }}>
+      }}
+    >
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={[fs_14_700, text_red, text_center]}>LỌC THỜI GIAN</Text>
+          <Text style={[fs_14_700, text_red, text_center]}>CHỌN THỜI GIAN</Text>
           <Pressable
             hitSlop={10}
             onPress={() => {
               setVisible(false);
-            }}>
+            }}
+          >
             <CloseIcon width={20} height={20} style={styles.closeIcon} />
           </Pressable>
         </View>
@@ -81,15 +83,18 @@ export default function MonthPickerModal({
               {
                 marginBottom: 15,
               },
-            ]}>
+            ]}
+          >
             <TouchableOpacity
               hitSlop={10}
               onPress={() => {
                 setDateSelect({
                   ...dateSelect,
                   year: dateSelect.year - 1,
+                  month: 11,
                 });
-              }}>
+              }}
+            >
               <ChevronLeftCalendarIcon width={25} height={25} />
             </TouchableOpacity>
             <Text style={[fs_16_700, text_black, text_center]}>
@@ -100,8 +105,10 @@ export default function MonthPickerModal({
                 setDateSelect({
                   ...dateSelect,
                   year: dateSelect.year + 1,
+                  month: 0,
                 });
-              }}>
+              }}
+            >
               <ChevronRightCalendarIcon width={25} height={25} />
             </TouchableOpacity>
           </View>
@@ -123,13 +130,15 @@ export default function MonthPickerModal({
                       ...dateSelect,
                       month: index,
                     });
-                  }}>
+                  }}
+                >
                   <Text
                     style={[
                       fs_12_700,
                       dateSelect.month === index ? text_white : text_black,
                       text_center,
-                    ]}>
+                    ]}
+                  >
                     Tháng {padStart(item.toString(), 2, '0')}
                   </Text>
                 </TouchableOpacity>

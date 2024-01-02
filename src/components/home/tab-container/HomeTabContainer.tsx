@@ -11,6 +11,7 @@ import AddIcon from '../../../assets/img/add.svg';
 import PlusButtonModal from '../../work/PlusButtonModal.tsx';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useRefreshOnFocus } from '../../../hook/useRefeshOnFocus.ts';
 
 export default function HomeTabContainer({
   attendanceData,
@@ -38,6 +39,7 @@ export default function HomeTabContainer({
       departmentKpi: 0,
     },
     isLoading: isLoadingWork,
+    refetch: refetchWork,
   } = useQuery(['getListWorkBusiness'], async () => {
     const resPersonal = await dwtApi.getWorkListAndPoint();
     const listWorkPersonal = [
@@ -95,6 +97,8 @@ export default function HomeTabContainer({
       departmentKpi: resPersonal.data.departmentKPI.monthOverview.totalWork,
     };
   });
+
+  useRefreshOnFocus(refetchWork);
 
   if (isLoadingWork) {
     return <PrimaryLoading />;

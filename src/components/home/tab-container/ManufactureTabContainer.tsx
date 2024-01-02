@@ -66,9 +66,8 @@ export default function ManufactureTabContainer() {
     );
   }, [listProjectLogs, currentDate]);
 
-
   const today = dayjs().date();
-  const initialScrollOffset = (today > 7) ? (today) * 45 : 0;
+  const initialScrollOffset = today > 7 ? today * 45 : 0;
 
   return (
     <View style={styles.wrapper}>
@@ -126,7 +125,7 @@ export default function ManufactureTabContainer() {
                         {item?.user_name} ({item?.type === 1 ? 'GV' : 'TK'})
                       </Text>
                     </View>
-                    <Text style={[fs_12_400, text_black]}>{item?.content}</Text>
+                    <Text style={[fs_12_400, text_black]}>• {item?.content}</Text>
                   </View>
                 </TouchableOpacity>
               );

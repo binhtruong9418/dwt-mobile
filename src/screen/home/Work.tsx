@@ -5,28 +5,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import TabBlock from '../../components/work/TabBlock.tsx';
-import {useMemo, useState} from 'react';
+import { useMemo, useState } from 'react';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import AddIcon from '../../assets/img/add.svg';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
-import {fs_14_400, text_black} from '../../assets/style.ts';
+import { fs_14_400, text_black } from '../../assets/style.ts';
 import WorkStatusFilterModal from '../../components/common/modal/WorkStatusFilterModal.tsx';
 import {
   LIST_WORK_STATUS_FILTER,
   WORK_STATUS_COLOR,
 } from '../../assets/constant.ts';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
-import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 import PlusButtonModal from '../../components/work/PlusButtonModal.tsx';
 import MonthPickerModal from '../../components/common/modal/MonthPickerModal.tsx';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 import ListDepartmentModal from '../../components/home/manager-tab/ListDepartmentModal.tsx';
 import WorkRowDetail from '../../components/common/table/WorkRowDetail.tsx';
 
@@ -62,9 +62,9 @@ const columns = [
     width: 0.15,
   },
 ];
-export default function Work({navigation}: any) {
+export default function Work({ navigation }: any) {
   const {
-    connection: {userInfo, currentTabManager},
+    connection: { userInfo, currentTabManager },
   } = useConnection();
   const [statusValue, setStatusValue] = useState(LIST_WORK_STATUS_FILTER[0]);
   const [currentMonth, setCurrentMonth] = useState({
@@ -82,7 +82,7 @@ export default function Work({navigation}: any) {
     label: 'Phòng ban',
   });
 
-  const {data: listDepartment = []} = useQuery(
+  const { data: listDepartment = [] } = useQuery(
     ['listDepartment'],
     async () => {
       const res = await dwtApi.getListDepartment();
@@ -92,31 +92,38 @@ export default function Work({navigation}: any) {
       enabled:
         !!userInfo &&
         (userInfo.role === 'admin' || userInfo.role === 'manager'),
-    },
+    }
   );
 
   const {
-    data: {listKeyWorkData, listNonKeyWorkData, listAriseWorkData} = {
+    data: { listKeyWorkData, listNonKeyWorkData, listAriseWorkData } = {
       listKeyWorkData: [],
       listNonKeyWorkData: [],
       listAriseWorkData: [],
     },
     isLoading: isLoadingWorkPersonal,
     refetch: refetchWorkPersonal,
-  } = useQuery(['getListWorkPersonal', currentMonth], async () => {
-    const keyWorkRes = await dwtApi.getListWork({
-      date: `${currentMonth.year}-${currentMonth.month + 1}`,
-    });
-    const arisWorkRes = await dwtApi.getListWorkArise({
-      date: `${currentMonth.year}-${currentMonth.month + 1}`,
-    });
+  } = useQuery(
+    ['getListWorkPersonal', currentMonth],
+    async () => {
+      console.log('run personal')
+      const keyWorkRes = await dwtApi.getListWork({
+        date: `${currentMonth.year}-${currentMonth.month + 1}`,
+      });
+      const arisWorkRes = await dwtApi.getListWorkArise({
+        date: `${currentMonth.year}-${currentMonth.month + 1}`,
+      });
 
-    return {
-      listKeyWorkData: keyWorkRes.data.kpi.keys,
-      listNonKeyWorkData: keyWorkRes.data.kpi.noneKeys,
-      listAriseWorkData: arisWorkRes.data.businessStandardWorkAriseAll,
-    };
-  });
+      return {
+        listKeyWorkData: keyWorkRes.data.kpi.keys,
+        listNonKeyWorkData: keyWorkRes.data.kpi.noneKeys,
+        listAriseWorkData: arisWorkRes.data.businessStandardWorkAriseAll,
+      };
+    },
+    {
+      enabled: currentTabManager === 0,
+    }
+  );
 
   const {
     data: {
@@ -133,6 +140,7 @@ export default function Work({navigation}: any) {
   } = useQuery(
     ['getListWorkDepartment', currentDepartment, currentMonth],
     async () => {
+      console.log('run department')
       const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
         department_id:
           currentDepartment.value === 0 ? undefined : currentDepartment.value,
@@ -146,13 +154,13 @@ export default function Work({navigation}: any) {
         });
 
       const listKeyWorkDepartmentAll = Object.keys(
-        listWorkDepartmentData.data.kpi.keyByUsers,
+        listWorkDepartmentData.data.kpi.keyByUsers
       ).reduce((acc, val) => {
         return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
       }, []);
 
       const listNonKeyWorkDepartmentAll = Object.keys(
-        listWorkDepartmentData.data.kpi.nonKeyByUsers,
+        listWorkDepartmentData.data.kpi.nonKeyByUsers
       ).reduce((acc, val) => {
         return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
       }, []);
@@ -169,7 +177,7 @@ export default function Work({navigation}: any) {
         !!userInfo &&
         (userInfo.role === 'admin' || userInfo.role === 'manager') &&
         currentTabManager === 1,
-    },
+    }
   );
 
   const tableData = useMemo(() => {
@@ -183,8 +191,7 @@ export default function Work({navigation}: any) {
             let totalToday = 0;
             if (listLog.length > 0) {
               const listTodayLog = listLog.filter(
-                (log: any) =>
-                  log.reported_date === dayjs().format('YYYY-MM-DD'),
+                (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD')
               );
               listTodayLog.forEach((log: any) => {
                 let temp = log.manager_quantity
@@ -239,8 +246,7 @@ export default function Work({navigation}: any) {
             let totalToday = 0;
             if (listLog.length > 0) {
               const listTodayLog = listLog.filter(
-                (log: any) =>
-                  log.reported_date === dayjs().format('YYYY-MM-DD'),
+                (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD')
               );
               listTodayLog.forEach((log: any) => {
                 let temp = log.manager_quantity
@@ -299,7 +305,7 @@ export default function Work({navigation}: any) {
           let totalToday = 0;
           if (listLog.length > 0) {
             const listTodayLog = listLog.filter(
-              (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD'),
+              (log: any) => log.reported_date === dayjs().format('YYYY-MM-DD')
             );
             listTodayLog.forEach((log: any) => {
               let temp = log.manager_quantity
@@ -357,13 +363,15 @@ export default function Work({navigation}: any) {
       <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}>
+        contentContainerStyle={styles.content}
+      >
         <View style={styles.filter_wrapper}>
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => {
               setIsOpenStatusSelect(true);
-            }}>
+            }}
+          >
             <Text style={[text_black, fs_14_400]}>{statusValue.label}</Text>
             <DropdownIcon width={20} height={20} />
           </TouchableOpacity>
@@ -372,7 +380,8 @@ export default function Work({navigation}: any) {
             style={[styles.dropdown]}
             onPress={() => {
               setIsOpenTimeSelect(true);
-            }}>
+            }}
+          >
             <Text style={[text_black, fs_14_400]}>
               {currentMonth.month + 1}/{currentMonth.year}
             </Text>
@@ -390,8 +399,9 @@ export default function Work({navigation}: any) {
             ]}
             onPress={() => {
               setIsOpenSelectDepartment(true);
-            }}>
-            <Text style={[text_black, fs_14_400, {width: '80%'}]}>
+            }}
+          >
+            <Text style={[text_black, fs_14_400, { width: '80%' }]}>
               {currentDepartment.label}
             </Text>
             <DropdownIcon width={20} height={20} />
@@ -402,19 +412,21 @@ export default function Work({navigation}: any) {
           columns={columns}
           canShowMore={true}
           rowDetailComponent={(item: any) => {
-            return <WorkRowDetail data={item} isWorkArise={currentTab === 2} />;
+            return <WorkRowDetail data={item} isWorkArise={currentTab === 2} isDepartment={currentTabManager === 1} />;
           }}
         />
       </ScrollView>
 
       <TouchableOpacity
         style={styles.align_end}
-        onPress={() => setIsOpenPlusButton(true)}>
+        onPress={() => setIsOpenPlusButton(true)}
+      >
         <AddIcon width={32} height={32} />
         <PlusButtonModal
           visible={isOpenPlusButton}
           setVisible={setIsOpenPlusButton}
           navigation={navigation}
+          hasGiveWork={currentTabManager === 1}
         />
       </TouchableOpacity>
       <WorkStatusFilterModal

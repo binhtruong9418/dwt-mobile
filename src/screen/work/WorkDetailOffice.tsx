@@ -47,6 +47,47 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
   );
 
   const workDetail = useMemo(() => {
+    if (data.isWorkArise) {
+      return {
+        name: workDetailData?.name,
+        desc: workDetailData?.description,
+        workerName: workDetailData?.userName,
+        startDate: workDetailData?.startDate,
+        deadline: workDetailData?.deadline,
+        workPerComplete: `${workDetailData?.manDay ?? 0} giờ (${
+          workDetailData?.kpiTmp ?? 1
+        } KPI)`,
+        criteria: workDetailData?.criteria,
+        totalExpected: `${workDetailData?.criteria_required} ${workDetailData?.unit_name}`,
+        totalExpectedKpi: workDetailData?.expected_kpi,
+        workStatus: workDetailData.actual_state
+          ? // @ts-ignore
+            WORK_STATUS_OFFICE[workDetailData?.actual_state]
+          : WORK_STATUS_OFFICE[1],
+        totalReport: workDetailData?.count_report,
+        totalCompletedValue: `${workDetailData?.keysPassed} / ${workDetailData?.criteria_required}`,
+        totalWorker: workDetailData?.users ? workDetailData?.users.length : 0,
+        totalTmpKpi: workDetailData?.kpiValue,
+        managerComment: workDetailData?.managerComment,
+        managerKpi: workDetailData?.managerManDay,
+        targetLogs: workDetailData?.report_task_logs?.map((item: any) => {
+          return {
+            ...item,
+            date: item.report_date,
+            criteria: item?.kpi_keys[0]?.name,
+            quantity: item?.kpi_keys[0]?.quantity,
+          };
+        }),
+        reportLogs: workDetailData?.report_task_logs?.map((item: any) => {
+          return {
+            ...item,
+            date: item.report_date,
+            note: item?.note,
+            file: item?.files,
+          };
+        }),
+      };
+    }
     return {
       name: workDetailData?.target?.name,
       workType: workDetailData.name,
@@ -54,7 +95,9 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
       workerName: workDetailData?.user_name,
       startDate: workDetailData?.startDate,
       deadline: workDetailData?.deadline,
-      workPerComplete: `${workDetailData?.manday} giờ (${workDetailData?.kpiTmp} KPI)`,
+      workPerComplete: `${workDetailData?.manday ?? 0} giờ (${
+        workDetailData?.kpiTmp
+      } KPI)`,
       criteria: workDetailData?.criteria,
       totalExpected: `${workDetailData?.criteria_required} ${workDetailData?.unit_name}`,
       totalExpectedKpi: workDetailData?.expected_kpi,
@@ -76,16 +119,16 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
           quantity: item?.targetLogDetails[0]?.kpiKeys[0]?.quantity,
         };
       }),
-        reportLogs: workDetailData?.targetLogs?.map((item: any) => {
-            return {
-                ...item,
-                date: item.reportedDate,
-                note: item?.targetLogDetails[0]?.note,
-                file: item?.targetLogDetails[0]?.files,
-            };
-        })
+      reportLogs: workDetailData?.targetLogs?.map((item: any) => {
+        return {
+          ...item,
+          date: item.reportedDate,
+          note: item?.targetLogDetails[0]?.note,
+          file: item?.targetLogDetails[0]?.files,
+        };
+      }),
     };
-  }, [workDetailData]);
+  }, [workDetailData, data.isWorkArise]);
 
   useRefreshOnFocus(refetch);
 
@@ -232,31 +275,29 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
             data={workDetail.targetLogs}
           />
         </View>
-          <View style={styles.commentBlock}>
-              <Text style={[fs_15_700, text_red]}>
-                  DANH SÁCH BÁO CÁO CÔNG VIỆC
-              </Text>
-              <WorkReportTable
-                  columns={[
-                      {
-                          title: 'Ngày báo cáo',
-                          key: 'date',
-                          width: 0.3,
-                      },
-                      {
-                          title: 'Nội dung báo cáo',
-                          key: 'note',
-                          width: 0.5,
-                      },
-                      {
-                          title: 'File',
-                          key: 'file',
-                          width: 0.2,
-                      },
-                  ]}
-                  data={workDetail.reportLogs}
-              />
-          </View>
+        <View style={styles.commentBlock}>
+          <Text style={[fs_15_700, text_red]}>DANH SÁCH BÁO CÁO CÔNG VIỆC</Text>
+          <WorkReportTable
+            columns={[
+              {
+                title: 'Ngày báo cáo',
+                key: 'date',
+                width: 0.3,
+              },
+              {
+                title: 'Nội dung báo cáo',
+                key: 'note',
+                width: 0.5,
+              },
+              {
+                title: 'File',
+                key: 'file',
+                width: 0.2,
+              },
+            ]}
+            data={workDetail.reportLogs}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

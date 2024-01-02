@@ -63,23 +63,23 @@ export default function AddWorkArise({ navigation }: any) {
     }
   );
 
-  const { data: listUserData = {}, isLoading: isLoadingListUser } = useQuery(
+  const { data: listUser = [], isLoading: isLoadingListUser } = useQuery(
     ['listUser'],
     async () => {
       if (userInfo.role === 'manager') {
-        return await dwtApi.getListAllUser();
+        const response = await dwtApi.getListUserDepartment(
+          userInfo?.department_id
+        );
+        return response.data.data;
       } else {
-        return await dwtApi.getListUserDepartment(userInfo.department_id);
+        const response = await dwtApi.getListAllUser();
+        return response.data;
       }
     },
     {
       enabled: !!userInfo,
     }
   );
-
-  const listUser = useMemo(() => {
-    return listUserData?.data?.data || [];
-  }, [listUserData]);
 
   const handleAddWorkArise = async () => {
     if (!name) {

@@ -1,8 +1,8 @@
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import PropTypes, {InferProps} from 'prop-types';
-import {fs_15_400, text_black} from '../../../assets/style.ts';
+import { StyleSheet } from 'react-native';
+import PropTypes, { InferProps } from 'prop-types';
+import { fs_15_400, text_black } from '../../../assets/style.ts';
 
 export default function PrimaryDropdown({
   data,
@@ -17,16 +17,17 @@ export default function PrimaryDropdown({
     <Dropdown
       style={[dropdownStyle]}
       itemTextStyle={[text_black, fs_15_400]}
-      selectedTextStyle={[text_black, fs_15_400, styles.pl3, {...textStyle}]}
+      selectedTextStyle={[text_black, fs_15_400, styles.pl3, { ...textStyle }]}
       data={data}
       labelField="label"
       valueField="value"
       value={value}
       maxHeight={200}
-      onChange={item => {
+      onChange={(item) => {
         changeValue(item.value);
       }}
       search={isSearch || false}
+      inputSearchStyle={[text_black, fs_15_400]}
       searchPlaceholder={'Tìm kiếm'}
       placeholder={placeholder || 'Chọn'}
       placeholderStyle={[text_black, fs_15_400]}
