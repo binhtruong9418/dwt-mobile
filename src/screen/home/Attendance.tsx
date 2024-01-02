@@ -33,7 +33,7 @@ import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
 export default function Attendance({ navigation }: any) {
   const {
-    connection: { userInfo }
+    connection: { userInfo },
   } = useConnection();
   const [isOpenCheckSuccessModal, setIsOpenCheckSuccessModal] = useState(false);
   const [checkInOutTime, setCheckInOutTime] = useState('--:--');
@@ -121,109 +121,107 @@ export default function Attendance({ navigation }: any) {
   });
 
   return (
-      <SafeAreaView style={styles.wrapper}>
-          <AdminTabBlock
-            secondLabel={'Quản lý'}
-          />
-        <Header title={'CHẤM CÔNG'} handleGoBack={() => navigation.goBack()} />
-        <ScrollView contentContainerStyle={styles.contentContainerStyle}>
-          <Text style={[fs_15_400, text_red, text_center]}>
-            Ngày {dayjs().format('DD/MM/YYYY')}
-          </Text>
-          <CheckWorkBlock
-            checkIn={checkInOutData?.checkIn}
-            checkOut={checkInOutData?.checkOut}
-            handleCheckIn={handleCheckIn}
-            handleCheckOut={handleCheckOut}
-          />
-          <View
-            style={[
-              row_between,
-              mt10,
-              {
-                paddingBottom: 10,
-                borderBottomColor: '#D9D9D9',
-                borderBottomWidth: 1,
-              },
-            ]}
-          >
-            <Text style={[fs_15_700, text_black]}>BẢNG CHẤM CÔNG</Text>
-            <TouchableOpacity
-              style={{
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-                borderRadius: 8,
-                backgroundColor: '#FFF',
-                borderColor: '#DD0013',
-                borderWidth: 1,
-              }}
-              onPress={() => {
-                navigation.navigate('AddAbsence');
-              }}
-            >
-              <Text style={[fs_12_500, text_red]}>+ Đơn nghỉ</Text>
-            </TouchableOpacity>
-          </View>
-
-          <AttendanceCalendar
-            attendanceMonthData={attendanceMonthData}
-            currentMonth={currentMonth}
-            setCurrentMonth={setCurrentMonth}
-          />
-
-          <View
-            style={[
-              row_between,
-              mt10,
-              {
-                paddingBottom: 10,
-                borderBottomColor: '#D9D9D9',
-                borderBottomWidth: 1,
-              },
-            ]}
-          >
-            <Text style={[fs_15_700, text_black]}>THỐNG KÊ THÁNG</Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('AttendanceSummary');
-              }}
-              hitSlop={10}
-            >
-              <Text
-                style={[
-                  fs_14_400,
-                  {
-                    color: 'rgba(0, 112, 255, 0.71)',
-                  },
-                ]}
-              >
-                {'Bảng công >'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.boxContainer}>
-            <View style={styles.box}>
-              <Text style={[fs_15_400, text_black]}>Tổng công</Text>
-              <Text style={[fs_15_400, text_black]}>
-                {attendanceData.calcDaysWork}/{attendanceData.allDaysWork}
-              </Text>
-            </View>
-            <View style={styles.box}>
-              <Text style={[fs_15_400, text_black]}>Nghỉ / Vắng</Text>
-              <Text style={[fs_15_400, text_black]}>
-                {attendanceData.numAbsent}
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
-        <ToastSuccessModal
-          visible={isOpenCheckSuccessModal}
-          handlePressOk={() => {
-            setIsOpenCheckSuccessModal(false);
-          }}
-          description={`Chấm công thành công lúc ${checkInOutTime}`}
+    <SafeAreaView style={styles.wrapper}>
+      <AdminTabBlock secondLabel={'Quản lý'} />
+      <Header title={'CHẤM CÔNG'} handleGoBack={() => navigation.goBack()} />
+      <ScrollView contentContainerStyle={styles.contentContainerStyle}>
+        <Text style={[fs_15_400, text_red, text_center]}>
+          Ngày {dayjs().format('DD/MM/YYYY')}
+        </Text>
+        <CheckWorkBlock
+          checkIn={checkInOutData?.checkIn}
+          checkOut={checkInOutData?.checkOut}
+          handleCheckIn={handleCheckIn}
+          handleCheckOut={handleCheckOut}
         />
-      </SafeAreaView>
+        <View
+          style={[
+            row_between,
+            mt10,
+            {
+              paddingBottom: 10,
+              borderBottomColor: '#D9D9D9',
+              borderBottomWidth: 1,
+            },
+          ]}
+        >
+          <Text style={[fs_15_700, text_black]}>BẢNG CHẤM CÔNG</Text>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 8,
+              backgroundColor: '#FFF',
+              borderColor: '#DD0013',
+              borderWidth: 1,
+            }}
+            onPress={() => {
+              navigation.navigate('AddAbsence');
+            }}
+          >
+            <Text style={[fs_12_500, text_red]}>+ Đơn nghỉ</Text>
+          </TouchableOpacity>
+        </View>
+
+        <AttendanceCalendar
+          attendanceMonthData={attendanceMonthData}
+          currentMonth={currentMonth}
+          setCurrentMonth={setCurrentMonth}
+        />
+
+        <View
+          style={[
+            row_between,
+            mt10,
+            {
+              paddingBottom: 10,
+              borderBottomColor: '#D9D9D9',
+              borderBottomWidth: 1,
+            },
+          ]}
+        >
+          <Text style={[fs_15_700, text_black]}>THỐNG KÊ THÁNG</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AttendanceSummary');
+            }}
+            hitSlop={10}
+          >
+            <Text
+              style={[
+                fs_14_400,
+                {
+                  color: 'rgba(0, 112, 255, 0.71)',
+                },
+              ]}
+            >
+              {'Bảng công >'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.boxContainer}>
+          <View style={styles.box}>
+            <Text style={[fs_15_400, text_black]}>Tổng công</Text>
+            <Text style={[fs_15_400, text_black]}>
+              {attendanceData?.calcDaysWork}/{attendanceData?.allDaysWork}
+            </Text>
+          </View>
+          <View style={styles.box}>
+            <Text style={[fs_15_400, text_black]}>Nghỉ / Vắng</Text>
+            <Text style={[fs_15_400, text_black]}>
+              {attendanceData?.numAbsent}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+      <ToastSuccessModal
+        visible={isOpenCheckSuccessModal}
+        handlePressOk={() => {
+          setIsOpenCheckSuccessModal(false);
+        }}
+        description={`Chấm công thành công lúc ${checkInOutTime}`}
+      />
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

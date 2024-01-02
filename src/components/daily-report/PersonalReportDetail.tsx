@@ -14,7 +14,7 @@ export default function PersonalReportDetail({data}: any) {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'flex-start',
+        justifyContent: 'space-between'
       }}>
       {
         //today log
@@ -43,7 +43,8 @@ export default function PersonalReportDetail({data}: any) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: '100%',
+    width: '85%',
+    alignSelf: 'flex-end',
     backgroundColor: '#F4F4F4',
     borderRadius: 12,
     elevation: 5,

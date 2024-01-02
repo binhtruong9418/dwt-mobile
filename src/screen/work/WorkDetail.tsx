@@ -56,17 +56,17 @@ export default function WorkDetail({ route, navigation }: any) {
     let workType = 'Đạt giá trị';
     let target = 0;
     if (data.isWorkArise) {
-      listLogs = workDetailData.business_standard_arise_logs;
+      listLogs = workDetailData?.business_standard_arise_logs ?? [];
       workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
       target = workDetailData.quantity;
     } else {
-      listLogs = workDetailData.business_standard_report_logs;
+      listLogs = workDetailData?.business_standard_report_logs ?? [];
       workType =
         workDetailData.type === 2
           ? 'Liên tục'
           : workDetailData.type === 3
-            ? 'Đạt giá trị'
-            : '1 lần';
+          ? 'Đạt giá trị'
+          : '1 lần';
       target = workDetailData.targets;
     }
     return {
@@ -76,7 +76,7 @@ export default function WorkDetail({ route, navigation }: any) {
       workerName: workDetailData.username,
       workStatus: workDetailData.actual_state
         ? // @ts-ignore
-        WORK_STATUS[workDetailData.actual_state.toString()]
+          WORK_STATUS[workDetailData.actual_state.toString()]
         : WORK_STATUS['1'],
       totalWorkingHours: workDetailData.total_working_hours,
       unitName: workDetailData.unit_name,
@@ -105,7 +105,7 @@ export default function WorkDetail({ route, navigation }: any) {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <AdminTabBlock secondLabel='QUẢN LÝ' />
+      <AdminTabBlock secondLabel="QUẢN LÝ" />
       <Header
         title="CHI TIẾT KẾ HOẠCH"
         handleGoBack={() => {
@@ -178,17 +178,14 @@ export default function WorkDetail({ route, navigation }: any) {
         />
 
         <View style={styles.commentBlock}>
-          <Text style={[fs_15_700, text_red]}>
-            Ý KIẾN QUẢN LÝ
-          </Text>
+          <Text style={[fs_15_700, text_red]}>Ý KIẾN QUẢN LÝ</Text>
           <View style={styles.inputBox}>
             <TextInput
               style={[
                 styles.inputContent,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'manager' &&
-                styles.disableInput,
+                userInfo?.role !== 'manager' && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.managerComment || 'Nhập nội dung'}
@@ -200,8 +197,7 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'manager' &&
-                styles.disableInput,
+                userInfo?.role !== 'manager' && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.managerKpi || 'Điểm KPI'}
@@ -212,17 +208,14 @@ export default function WorkDetail({ route, navigation }: any) {
         </View>
 
         <View style={styles.commentBlock}>
-          <Text style={[fs_15_700, text_red]}>
-            Ý KIẾN KIỂM SOÁT
-          </Text>
+          <Text style={[fs_15_700, text_red]}>Ý KIẾN KIỂM SOÁT</Text>
           <View style={styles.inputBox}>
             <TextInput
               style={[
                 styles.inputContent,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'admin' &&
-                styles.disableInput,
+                userInfo?.role !== 'admin' && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.adminComment || 'Nhập nội dung'}
@@ -234,13 +227,12 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'admin' &&
-                styles.disableInput,
+                userInfo?.role !== 'admin' && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.adminKpi || 'Điểm KPI'}
               keyboardType="numeric"
-              inputMode='numeric'
+              inputMode="numeric"
               editable={userInfo?.role === 'admin'}
             />
           </View>
@@ -248,7 +240,9 @@ export default function WorkDetail({ route, navigation }: any) {
 
         <View style={styles.commentBlock}>
           <View style={row_between}>
-            <Text style={[fs_15_700, text_red]}>DANH SÁCH BÁO CÁO CÔNG VIỆC</Text>
+            <Text style={[fs_15_700, text_red]}>
+              DANH SÁCH BÁO CÁO CÔNG VIỆC
+            </Text>
           </View>
           <WorkReportTable
             columns={[

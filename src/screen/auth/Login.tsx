@@ -1,19 +1,21 @@
-import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 import Logo from '../../assets/img/logo.svg';
-import {useState} from 'react';
+import { useState } from 'react';
 import UsernameInput from '../../components/common/input/UsernameInput.tsx';
 import PasswordInput from '../../components/common/input/PasswordInput.tsx';
-import {fs_14_400, text_black, text_red} from '../../assets/style.ts';
+import { fs_14_400, text_black, text_red } from '../../assets/style.ts';
 import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {validateEmail, validatePhone} from '../../utils';
-import {useConnection} from '../../redux/connection';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { validateEmail, validatePhone } from '../../utils';
+import { useConnection } from '../../redux/connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { dwtApi } from '../../api/service/dwtApi.ts';
+import {useQueryClient} from "@tanstack/react-query";
 
-const {width} = Dimensions.get('window');
-const Login = ({navigation}: any) => {
-  const {onSetUserInfo} = useConnection();
+const { width } = Dimensions.get('window');
+const Login = ({ navigation }: any) => {
+  const { onSetUserInfo } = useConnection();
+  const queryClient = useQueryClient();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [usernameError, setUsernameError] = useState<string>('');
@@ -46,18 +48,20 @@ const Login = ({navigation}: any) => {
       setIsLoading(true);
       const response = await dwtApi.login(
         username.trim().toLowerCase(),
-        password.trim(),
+        password.trim()
       );
       if (response.status === 200) {
         await AsyncStorage.setItem('accessToken', response.data.token);
         onSetUserInfo(response.data.user);
+
+        await queryClient.resetQueries();
         navigation.navigate('HomePage');
         setPassword('');
       }
     } catch (error: any) {
       console.log(error);
       if (error.status === 401) {
-        setPasswordError('Mật khẩu không đúng');
+        setPasswordError('Tài khoản hoặc mật khẩu không đúng');
       }
     } finally {
       setIsLoading(false);
@@ -83,7 +87,8 @@ const Login = ({navigation}: any) => {
           onPress={() => {
             navigation.navigate('ForgotPassword');
           }}
-          hitSlop={8}>
+          hitSlop={8}
+        >
           <Text style={[fs_14_400, text_black]}>Quên mật khẩu</Text>
         </Pressable>
         <PrimaryButton

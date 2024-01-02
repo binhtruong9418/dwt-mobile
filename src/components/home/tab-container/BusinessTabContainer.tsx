@@ -22,6 +22,7 @@ import WorkBusinessManagerTable from '../manager-tab/WorkBusinessManagerTable.ts
 import ListDepartmentModal from '../manager-tab/ListDepartmentModal.tsx';
 import MonthPickerModal from '../../common/modal/MonthPickerModal.tsx';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRefreshOnFocus } from '../../../hook/useRefeshOnFocus.ts';
 
 export default function BusinessTabContainer({
   attendanceData,
@@ -61,54 +62,68 @@ export default function BusinessTabContainer({
       listWorkBusiness: [],
     },
     isLoading: isLoadingWork,
-  } = useQuery(['getListWorkBusinessManager'], async () => {
-    const listWorkDepartmentData = await dwtApi.getListWorkDepartment();
-    const listWorkAriseDepartmentData =
-      await dwtApi.getListWorkAriseDepartment();
+    refetch: refetchWork,
+  } = useQuery(
+    ['getListWorkBusinessManager', currentDepartment, currentMonth],
+    async ({ queryKey }) => {
+      const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
+        department_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
+        date: `${queryKey[2].year}-${queryKey[2].month + 1}`,
+      });
+      const listWorkAriseDepartmentData =
+        await dwtApi.getListWorkAriseDepartment({
+          department_id:
+            queryKey[1].value === 0 ? undefined : queryKey[1].value,
+          date: `${queryKey[2].year}-${queryKey[2].month + 1}`,
+        });
 
-    const listWorkDepartmentAll = Object.keys(
-      listWorkDepartmentData.data.kpi.keyByUsers
-    ).reduce((acc, val) => {
-      return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
-    }, []);
+      const listWorkDepartmentAll = Object.keys(
+        listWorkDepartmentData.data.kpi.keyByUsers
+      ).reduce((acc, val) => {
+        return acc.concat(listWorkDepartmentData.data.kpi.keyByUsers[val]);
+      }, []);
 
-    const listNonKeyWorkDepartmentAll = Object.keys(
-      listWorkDepartmentData.data.kpi.nonKeyByUsers
-    ).reduce((acc, val) => {
-      return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
-    }, []);
+      const listNonKeyWorkDepartmentAll = Object.keys(
+        listWorkDepartmentData.data.kpi.nonKeyByUsers
+      ).reduce((acc, val) => {
+        return acc.concat(listWorkDepartmentData.data.kpi.nonKeyByUsers[val]);
+      }, []);
 
-    const listWorkDepartment = [
-      ...listWorkDepartmentAll,
-      ...listNonKeyWorkDepartmentAll,
-      ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll.map(
-        (item: any) => {
-          return {
-            ...item,
-            isWorkArise: true,
-          };
-        }
-      ),
-    ];
-    const workSummary = {
-      done: listWorkDepartment.filter((item: any) => item.actual_state === 3)
-        .length,
-      working: listWorkDepartment.filter((item: any) => item.actual_state === 2)
-        .length,
-      late: listWorkDepartment.filter((item: any) => item.actual_state === 5)
-        .length,
-      total: listWorkDepartment.filter(
-        (item: any) =>
-          item.actual_state === 4 ||
-          item.actual_state === 2 ||
-          item.actual_state === 5
-      ).length,
-    };
-    return {
-      workSummary,
-      listWorkBusiness: listWorkDepartment,
-    };
-  });
+      const listWorkDepartment = [
+        ...listWorkDepartmentAll,
+        ...listNonKeyWorkDepartmentAll,
+        ...listWorkAriseDepartmentData.data.businessStandardWorkAriseAll.map(
+          (item: any) => {
+            return {
+              ...item,
+              isWorkArise: true,
+            };
+          }
+        ),
+      ];
+      const workSummary = {
+        done: listWorkDepartment.filter((item: any) => item.actual_state === 3)
+          .length,
+        working: listWorkDepartment.filter(
+          (item: any) => item.actual_state === 2
+        ).length,
+        late: listWorkDepartment.filter((item: any) => item.actual_state === 5)
+          .length,
+        total: listWorkDepartment.filter(
+          (item: any) =>
+            item.actual_state === 4 ||
+            item.actual_state === 2 ||
+            item.actual_state === 5
+        ).length,
+      };
+      return {
+        workSummary,
+        listWorkBusiness: listWorkDepartment,
+      };
+    }
+  );
+
+  useRefreshOnFocus(refetchWork);
 
   if (isLoadingWork) {
     return <PrimaryLoading />;

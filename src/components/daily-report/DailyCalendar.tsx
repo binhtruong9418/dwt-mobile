@@ -1,9 +1,8 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { getDaysInMonth } from '../../utils';
-import PropTypes, { InferProps } from 'prop-types';
-import { useQuery } from '@tanstack/react-query';
-import { dwtApi } from '../../api/service/dwtApi.ts';
-import dayjs from 'dayjs';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {getDaysInMonth} from '../../utils';
+import PropTypes, {InferProps} from 'prop-types';
+import {useEffect, useMemo} from "react";
+import dayjs from "dayjs";
 
 export default function DailyCalendar({
   currentDate,
@@ -16,28 +15,28 @@ export default function DailyCalendar({
       return !!listUserReports.find(
         (report: any) =>
           report?.date_report ===
-          `${currentDate.year}-${currentDate.month + 1}-${item.date}`,
+          `${currentDate.year}-${currentDate.month + 1}-${item.date}`
       );
     }
     if (listProjectLogs) {
       return !!listProjectLogs.find(
         (log: any) =>
           log?.logDate ===
-          `${currentDate.year}-${currentDate.month + 1}-${item.date}`,
+          `${currentDate.year}-${currentDate.month + 1}-${item.date}`
       );
     }
     return false;
   };
 
   const today = dayjs().date();
-  const initialScrollOffset = (today > 7) ? (today) * 45 : 0;
-
+  const initialScrollOffset = today > 7 ? today * 45 : 0;
 
   return (
     <View
       style={{
         paddingHorizontal: 15,
-      }}>
+      }}
+    >
       <FlatList
         contentContainerStyle={{
           paddingBottom: 10,
@@ -67,7 +66,8 @@ export default function DailyCalendar({
                 currentDate.date === item.date
                   ? styles.selectedItem
                   : styles.item
-              }>
+              }
+            >
               <Text style={styles.day}>
                 {item.day !== 0 ? 'Thứ ' + (item.day + 1) : 'CN'}
               </Text>

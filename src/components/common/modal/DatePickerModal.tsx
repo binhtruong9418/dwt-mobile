@@ -45,7 +45,7 @@ export default function DatePickerModal({
       }}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={[fs_14_700, text_red, text_center]}>LỌC THỜI GIAN</Text>
+          <Text style={[fs_14_700, text_red, text_center]}>CHỌN THỜI GIAN</Text>
           <Pressable
             hitSlop={10}
             onPress={() => {

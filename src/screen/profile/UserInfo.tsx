@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {
   fs_10_400,
@@ -20,20 +20,20 @@ import {
   text_red,
   text_white,
 } from '../../assets/style.ts';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
-import {useConnection} from '../../redux/connection';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
+import { useConnection } from '../../redux/connection';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import dayjs from 'dayjs';
-import React, {useState} from 'react';
-import {Dropdown} from 'react-native-element-dropdown';
+import React, { useState } from 'react';
+import { Dropdown } from 'react-native-element-dropdown';
 import DatePickerModal from '../../components/common/modal/DatePickerModal.tsx';
-import {BANK_LIST} from '../../assets/constant.ts';
-import {showToast} from '../../utils';
+import { BANK_LIST } from '../../assets/constant.ts';
+import { showToast } from '../../utils';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 
-export default function UserInfo({navigation}: any) {
+export default function UserInfo({ navigation }: any) {
   const [editUserInfo, setEditUserInfo] = useState({
     name: '',
     phone: '',
@@ -53,7 +53,7 @@ export default function UserInfo({navigation}: any) {
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const {
     onSetUserInfo,
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
   const {
     data: userData = {},
@@ -64,9 +64,9 @@ export default function UserInfo({navigation}: any) {
     async () => {
       const res = await dwtApi.getUserById(userInfo.id);
       const transferInformation = JSON.parse(
-        res.data?.transfer_information || '{}',
+        res.data?.transfer_information || '{}'
       );
-      console.log(transferInformation)
+      console.log(transferInformation);
       setEditUserInfo({
         name: res.data?.name,
         phone: res.data?.phone,
@@ -83,8 +83,8 @@ export default function UserInfo({navigation}: any) {
       return res.data;
     },
     {
-      enabled: !!userInfo.id,
-    },
+      enabled: !!userInfo || !!userInfo.id,
+    }
   );
 
   const handleSave = async () => {
@@ -107,7 +107,7 @@ export default function UserInfo({navigation}: any) {
         released_from: editUserInfo?.released_from,
         release_date: editUserInfo?.release_date,
         dob: editUserInfo?.dob,
-        sex: editUserInfo?.sex,
+        sex: Number(editUserInfo?.sex),
         permanent_address: editUserInfo?.permanent_address,
         transfer_information: {
           bank_name: editUserInfo?.bank_name,
@@ -146,7 +146,8 @@ export default function UserInfo({navigation}: any) {
         />
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingVertical: 10}}>
+          contentContainerStyle={{ paddingVertical: 10 }}
+        >
           <View style={styles.rowContainer}>
             <View style={styles.rowItem}>
               <Text style={[fs_10_400, text_gray]}>Mã nhân viên</Text>
@@ -184,15 +185,16 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.name}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, name: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, name: text })
                 }
               />
             </View>
 
             <Pressable
               style={styles.rowItem}
-              onPress={() => setIsOpenSelectBirthday(true)}>
+              onPress={() => setIsOpenSelectBirthday(true)}
+            >
               <Text style={[fs_10_400, text_gray]}>Ngày sinh</Text>
               <Text style={[fs_14_500, text_black]}>
                 {userData?.dob && dayjs(editUserInfo?.dob).format('DD-MM-YYYY')}
@@ -201,7 +203,7 @@ export default function UserInfo({navigation}: any) {
 
             <View style={styles.rowItem}>
               <Text style={[fs_10_400, text_gray]}>Giới tính</Text>
-              <View style={{height: 20, justifyContent: 'center'}}>
+              <View style={{ height: 20, justifyContent: 'center' }}>
                 <Dropdown
                   style={{
                     width: 100,
@@ -228,8 +230,8 @@ export default function UserInfo({navigation}: any) {
                   valueField="value"
                   value={editUserInfo?.sex}
                   maxHeight={200}
-                  onChange={item => {
-                    setEditUserInfo({...editUserInfo, sex: item.value});
+                  onChange={(item) => {
+                    setEditUserInfo({ ...editUserInfo, sex: item.value });
                   }}
                   iconStyle={{
                     display: 'none',
@@ -253,8 +255,8 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.phone}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, phone: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, phone: text })
                 }
               />
             </View>
@@ -272,8 +274,8 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.id_card}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, id_card: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, id_card: text })
                 }
               />
             </View>
@@ -291,8 +293,8 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.released_from}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, released_from: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, released_from: text })
                 }
               />
             </View>
@@ -301,7 +303,8 @@ export default function UserInfo({navigation}: any) {
               style={styles.rowItem}
               onPress={() => {
                 setIsOpenSelectReleaseDate(true);
-              }}>
+              }}
+            >
               <Text style={[fs_10_400, text_gray]}>Ngày cấp</Text>
               <Text style={[fs_14_500, text_black]}>
                 {editUserInfo?.release_date &&
@@ -322,8 +325,8 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.permanent_address}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, permanent_address: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, permanent_address: text })
                 }
               />
             </View>
@@ -346,8 +349,8 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.receiver_name}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, receiver_name: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, receiver_name: text })
                 }
               />
             </View>
@@ -365,8 +368,8 @@ export default function UserInfo({navigation}: any) {
                   },
                 ]}
                 value={editUserInfo?.bank_number}
-                onChangeText={text =>
-                  setEditUserInfo({...editUserInfo, bank_number: text})
+                onChangeText={(text) =>
+                  setEditUserInfo({ ...editUserInfo, bank_number: text })
                 }
               />
             </View>
@@ -374,14 +377,15 @@ export default function UserInfo({navigation}: any) {
             <View style={styles.rowItem}>
               <Text style={[fs_10_400, text_gray]}>Ngân hàng</Text>
               <View
-                style={{height: 20, justifyContent: 'center', width: '80%'}}>
+                style={{ height: 20, justifyContent: 'center', width: '80%' }}
+              >
                 <Dropdown
                   mode={'modal'}
                   style={{
                     width: '100%',
                   }}
                   containerStyle={{
-                    height: 600
+                    height: 600,
                   }}
                   itemTextStyle={[text_black, fs_14_500]}
                   selectedTextStyle={[
@@ -396,8 +400,8 @@ export default function UserInfo({navigation}: any) {
                   valueField="value"
                   value={editUserInfo?.bank_name}
                   maxHeight={200}
-                  onChange={item => {
-                    setEditUserInfo({...editUserInfo, bank_name: item.value});
+                  onChange={(item) => {
+                    setEditUserInfo({ ...editUserInfo, bank_name: item.value });
                   }}
                   searchPlaceholder={'Tìm kiếm ngân hàng'}
                   search

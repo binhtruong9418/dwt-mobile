@@ -17,13 +17,13 @@ import DailyCalendar from './DailyCalendar.tsx';
 import PersonalReportDetail from './PersonalReportDetail.tsx';
 import PrimaryButton from '../common/button/PrimaryButton.tsx';
 import MonthPickerModal from '../common/modal/MonthPickerModal.tsx';
-import {useState} from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import LoadingActivity from '../common/loading/LoadingActivity.tsx';
 import EmptyDailyReportIcon from '../../assets/img/empty-daily-report.svg';
 import CreateOrEditDailyReportModal from '../common/modal/CreateOrEditDailyReportModal.tsx';
-import {useQuery} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export default function PersonalReport({}) {
   const [currentDate, setCurrentDate] = useState<{
@@ -51,17 +51,21 @@ export default function PersonalReport({}) {
     refetch: reFetchUseReport,
   } = useQuery(
     ['dwtApi.getDailyReportPersonalPerMonth', currentDate],
-    ({queryKey}: any) =>
+    ({ queryKey }: any) =>
       dwtApi.getDailyReportPersonalPerMonth({
         date_report: `${queryKey[1].year}-${queryKey[1].month + 1}`,
-      }),
+      })
   );
-  const {data: userDailyReports = []} = userDailyReportData;
-  const todayReport = userDailyReports.find(
-    (item: any) =>
-      item.date_report ===
-      `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
-  );
+  const { data: userDailyReports = [] } = userDailyReportData;
+
+  const todayReport = userDailyReports.find((item: any) => {
+    const itemDate = dayjs(item?.date_report);
+    return (
+      itemDate.month() === currentDate.month &&
+      itemDate.year() === currentDate.year &&
+      itemDate.date() === currentDate.date
+    );
+  });
 
   return (
     <View style={styles.wrapper}>
@@ -69,7 +73,8 @@ export default function PersonalReport({}) {
         style={styles.monthBox}
         onPress={() => {
           setIsOpenSelectMonth(true);
-        }}>
+        }}
+      >
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
@@ -82,7 +87,6 @@ export default function PersonalReport({}) {
       />
       {todayReport ? (
         <ScrollView style={styles.listReport}>
-          <Text style={styles.timeText}>9:30</Text>
           <FlatList
             scrollEnabled={false}
             contentContainerStyle={{
@@ -107,19 +111,21 @@ export default function PersonalReport({}) {
                   ]
                 : []
             }
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return (
                 <View style={styles.boxContainer}>
                   <PersonalReportDetail data={item} />
                 </View>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}} />}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />
+          <EmptyDailyReportIcon
+            style={{ alignSelf: 'center', marginTop: 50 }}
+          />
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
@@ -202,7 +208,6 @@ const styles = StyleSheet.create({
     top: 20,
   },
   boxContainer: {
-    width: '85%',
-    alignSelf: 'flex-end',
+    width: '100%',
   },
 });

@@ -15,6 +15,7 @@ import {ReactNativeModal} from 'react-native-modal';
 import {dwtApi} from "../../../api/service/dwtApi.ts";
 import LoadingActivity from "../loading/LoadingActivity.tsx";
 import {longPressHandlerName} from "react-native-gesture-handler/lib/typescript/handlers/LongPressGestureHandler";
+import dayjs from "dayjs";
 
 export default function CreateOrEditDailyReportModal(
     {
@@ -29,11 +30,12 @@ export default function CreateOrEditDailyReportModal(
     const [isLoading, setIsLoading] = useState(false);
     const handleUpdateDailyReport = async () => {
         try {
+
             setIsLoading(true);
             const payload = {
                 today_work_note: todayReport,
                 yesterday_work_note: yesterdayReport,
-                date_report: `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
+                date_report: dayjs(`${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`).format('YYYY-MM-DD'),
             }
             await dwtApi.createPersonalDailyReport(payload);
             setVisible(false);

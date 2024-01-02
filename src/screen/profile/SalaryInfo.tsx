@@ -1,25 +1,31 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {
   fs_12_400,
   fs_14_400,
-  fs_14_500,
+  fs_14_500, fs_16_400,
   text_black,
   text_gray,
 } from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
-import {useState} from 'react';
+import { useState } from 'react';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
+import { useQuery } from '@tanstack/react-query';
+import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import SalaryItemIcon from '../../assets/img/salary-item-icon.svg';
 import dayjs from 'dayjs';
 import MonthPickerModal from '../../components/common/modal/MonthPickerModal.tsx';
-import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
+import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
-export default function SalaryInfo({navigation}: any) {
+export default function SalaryInfo({ navigation }: any) {
   const [isOpenMonthSelect, setIsOpenMonthSelect] = useState(false);
   const [currentMonth, setCurrentMonth] = useState({
     month: dayjs().month(),
@@ -31,8 +37,11 @@ export default function SalaryInfo({navigation}: any) {
     data: listSalary = [],
     isLoading: isLoadingListSalary,
     refetch: refetchListSalary,
-  } = useQuery(['listSalary'], async () => {
-    const res = await dwtApi.getSalaryHistory();
+  } = useQuery(['listSalary', salaryMode, currentMonth], async () => {
+    const res = await dwtApi.getSalaryHistory({
+      status_f: salaryMode === 0 ? undefined : salaryMode,
+      time_f: `${currentMonth.month + 1}-${currentMonth.year}`,
+    });
     const listSalaryHistories = res.data.data;
     for (let i = 0; i < listSalaryHistories.length; i++) {
       const salaryId = listSalaryHistories[i].id;
@@ -42,10 +51,9 @@ export default function SalaryInfo({navigation}: any) {
     return listSalaryHistories;
   });
 
-
   useRefreshOnFocus(refetchListSalary);
   if (isLoadingListSalary) {
-    return <PrimaryLoading/>;
+    return <PrimaryLoading />;
   }
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -59,11 +67,12 @@ export default function SalaryInfo({navigation}: any) {
           style={styles.dropdown}
           onPress={() => {
             setIsOpenMonthSelect(true);
-          }}>
+          }}
+        >
           <Text style={[text_black, fs_14_400]}>
             {currentMonth.month + 1}/{currentMonth.year}
           </Text>
-          <DropdownIcon width={20} height={20}/>
+          <DropdownIcon width={20} height={20} />
         </TouchableOpacity>
 
         <PrimaryDropdown
@@ -95,7 +104,7 @@ export default function SalaryInfo({navigation}: any) {
         />
       </View>
       <View style={styles.countSalaryBox}>
-        <Text>{listSalary.length} phiếu lương</Text>
+        <Text style={[fs_16_400, text_gray]}>{listSalary.length} phiếu lương</Text>
       </View>
       <FlatList
         data={listSalary}
@@ -104,7 +113,7 @@ export default function SalaryInfo({navigation}: any) {
           paddingBottom: 10,
         }}
         keyExtractor={(item: any) => item.id}
-        renderItem={({item}: any) => {
+        renderItem={({ item }: any) => {
           return (
             <TouchableOpacity
               style={[
@@ -118,17 +127,20 @@ export default function SalaryInfo({navigation}: any) {
                 navigation.navigate('SalaryDetail', {
                   id: item.id,
                 });
-              }}>
+              }}
+            >
               <View
                 style={{
                   flexDirection: 'row',
                   gap: 10,
-                }}>
-                <SalaryItemIcon width={30} height={30}/>
+                }}
+              >
+                <SalaryItemIcon width={30} height={30} />
                 <View
                   style={{
                     gap: 5,
-                  }}>
+                  }}
+                >
                   <Text style={[fs_14_400, text_black]}>
                     Phiếu lương tháng {item.month}/{item.year}
                   </Text>
@@ -145,7 +157,8 @@ export default function SalaryInfo({navigation}: any) {
                 style={{
                   alignItems: 'flex-end',
                   justifyContent: 'space-between',
-                }}>
+                }}
+              >
                 <Text style={[fs_14_500, text_black]}>
                   {item?.salaryDetail?.totalSalary?.toLocaleString()}
                 </Text>
@@ -155,14 +168,15 @@ export default function SalaryInfo({navigation}: any) {
                     {
                       color: '#679AE6',
                     },
-                  ]}>
+                  ]}
+                >
                   Xem chi tiết
                 </Text>
               </View>
             </TouchableOpacity>
           );
         }}
-        ItemSeparatorComponent={() => <View style={styles.divider}/>}
+        ItemSeparatorComponent={() => <View style={styles.divider} />}
       />
       <MonthPickerModal
         visible={isOpenMonthSelect}

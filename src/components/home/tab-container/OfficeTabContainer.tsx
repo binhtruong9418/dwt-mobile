@@ -29,6 +29,7 @@ import AddIcon from '../../../assets/img/add.svg';
 import PlusButtonModal from '../../work/PlusButtonModal.tsx';
 import { useNavigation } from '@react-navigation/native';
 import BehaviorBlock from '../home-tab/BehaviorBlock.tsx';
+import {useRefreshOnFocus} from "../../../hook/useRefeshOnFocus.ts";
 
 export default function OfficeTabContainer({
   attendanceData,
@@ -125,6 +126,8 @@ export default function OfficeTabContainer({
     }
   );
 
+  useRefreshOnFocus(refetchWorkOffice)
+
   if (isLoadingWorkOffice) {
     return <PrimaryLoading />;
   }
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: 15,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     paddingBottom: 20,
   },
   filter_wrapper: {
