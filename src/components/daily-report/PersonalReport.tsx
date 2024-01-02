@@ -57,11 +57,18 @@ export default function PersonalReport({}) {
       }),
   );
   const {data: userDailyReports = []} = userDailyReportData;
+
   const todayReport = userDailyReports.find(
-    (item: any) =>
-      item.date_report ===
-      `${currentDate.year}-${currentDate.month + 1}-${currentDate.date}`,
+    (item: any) => {
+      const itemDate = dayjs(item?.date_report);
+      return (
+        itemDate.month() === currentDate.month &&
+        itemDate.year() === currentDate.year &&
+        itemDate.date() === currentDate.date
+      );
+    }
   );
+
 
   return (
     <View style={styles.wrapper}>
@@ -73,7 +80,7 @@ export default function PersonalReport({}) {
         <Text style={[fs_15_700, text_black]}>
           Tháng {currentDate.month + 1}
         </Text>
-        <DropdownIcon width={20} height={20} />
+        <DropdownIcon width={20} height={20}/>
       </TouchableOpacity>
       <DailyCalendar
         currentDate={currentDate}
@@ -92,34 +99,34 @@ export default function PersonalReport({}) {
             data={
               todayReport
                 ? [
-                    {
-                      key: 1,
-                      text: todayReport?.today_work_note ?? '',
-                      label: 'Hôm nay',
-                      time: dayjs(todayReport?.created_at).format('HH:mm'),
-                    },
-                    {
-                      key: 2,
-                      text: todayReport?.yesterday_work_note ?? '',
-                      label: 'Hôm qua',
-                      time: dayjs(todayReport?.created_at).format('HH:mm'),
-                    },
-                  ]
+                  {
+                    key: 1,
+                    text: todayReport?.today_work_note ?? '',
+                    label: 'Hôm nay',
+                    time: dayjs(todayReport?.created_at).format('HH:mm'),
+                  },
+                  {
+                    key: 2,
+                    text: todayReport?.yesterday_work_note ?? '',
+                    label: 'Hôm qua',
+                    time: dayjs(todayReport?.created_at).format('HH:mm'),
+                  },
+                ]
                 : []
             }
             renderItem={({item}) => {
               return (
                 <View style={styles.boxContainer}>
-                  <PersonalReportDetail data={item} />
+                  <PersonalReportDetail data={item}/>
                 </View>
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: 20}} />}
+            ItemSeparatorComponent={() => <View style={{height: 20}}/>}
           />
         </ScrollView>
       ) : (
         <View>
-          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}} />
+          <EmptyDailyReportIcon style={{alignSelf: 'center', marginTop: 50}}/>
           <Text style={[fs_12_400, text_black, text_center]}>
             Bạn chưa có báo cáo.
           </Text>
@@ -160,7 +167,7 @@ export default function PersonalReport({}) {
         currentDate={currentDate}
         onSuccess={reFetchUseReport}
       />
-      <LoadingActivity isLoading={loadingUserReport} />
+      <LoadingActivity isLoading={loadingUserReport}/>
     </View>
   );
 }
