@@ -178,11 +178,46 @@ export default function Menu({ navigation }: any) {
         </View>
         <ScrollView
           contentContainerStyle={styles.content}
-          onLayout={(e) => {
-            setBoxWidth(e.nativeEvent.layout.width);
-          }}
         >
+
           <View style={styles.boxContainer}>
+            <Text style={[fs_15_700, text_black, text_center]}>CÔNG VIỆC</Text>
+            <View style={styles.box}>
+              {congviecData.map((item, index) => (
+                  <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.boxIcon,
+                        {
+                          width: boxWidth / 4 - 20,
+                          height: boxWidth / 4 - 20,
+                        },
+                      ]}
+                      onPress={() => {
+                        navigation.navigate(item.path);
+                      }}
+                  >
+                    {item.icon}
+                    <Text
+                        style={[
+                          fs_10_400,
+                          text_red,
+                          text_center,
+                          {
+                            marginTop: 5,
+                          },
+                        ]}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={styles.boxContainer}
+                onLayout={(e) => {
+                  setBoxWidth(e.nativeEvent.layout.width);
+                }}>
             <Text style={[fs_15_700, text_black, text_center]}>HÀNH CHÍNH</Text>
             <View style={styles.box}>
               {hanhchinhData.map((item, index) => (
@@ -217,40 +252,6 @@ export default function Menu({ navigation }: any) {
             </View>
           </View>
 
-          <View style={styles.boxContainer}>
-            <Text style={[fs_15_700, text_black, text_center]}>CÔNG VIỆC</Text>
-            <View style={styles.box}>
-              {congviecData.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.boxIcon,
-                    {
-                      width: boxWidth / 4 - 20,
-                      height: boxWidth / 4 - 20,
-                    },
-                  ]}
-                  onPress={() => {
-                    navigation.navigate(item.path);
-                  }}
-                >
-                  {item.icon}
-                  <Text
-                    style={[
-                      fs_10_400,
-                      text_red,
-                      text_center,
-                      {
-                        marginTop: 5,
-                      },
-                    ]}
-                  >
-                    {item.name}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
 
           <View style={styles.boxContainer}>
             <Text style={[fs_15_700, text_black, text_center]}>KINH DOANH</Text>
