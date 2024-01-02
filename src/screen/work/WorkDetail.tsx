@@ -50,7 +50,6 @@ export default function WorkDetail({ route, navigation }: any) {
       enabled: !!userInfo && !!data.id && !!userInfo.id,
     }
   );
-  console.log(userInfo.id, data.id);
 
   const workDetail = useMemo(() => {
     let listLogs = [];

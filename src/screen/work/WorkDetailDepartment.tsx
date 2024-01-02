@@ -21,7 +21,7 @@ import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
 export default function WorkDetailDepartment({ route, navigation }: any) {
   const { data, managerWorkId } = route.params;
-  console.log(data, managerWorkId);
+  console.log(data.id, managerWorkId);
   const {
     connection: { userInfo },
   } = useConnection();
@@ -50,18 +50,18 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
     }
   );
 
-  console.log(workDetailData)
-
   const workDetail = useMemo(() => {
     let listLogs = [];
     let workType = 'Đạt giá trị';
     let target = 0;
+    let totalReport = 0;
     if (data.isWorkArise) {
-      listLogs = workDetailData.business_standard_arise_logs;
+      listLogs = workDetailData?.business_standard_arise_logs || [];
       workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
       target = workDetailData.quantity;
+      totalReport = workDetailData.total_reports;
     } else {
-      listLogs = workDetailData.business_standard_report_logs;
+      listLogs = workDetailData?.business_standard_report_logs ?? [];
       workType =
         workDetailData.type === 2
           ? 'Liên tục'
@@ -69,6 +69,7 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
           ? 'Đạt giá trị'
           : '1 lần';
       target = workDetailData.targets;
+        totalReport = workDetailData.count_report;
     }
     return {
       name: workDetailData.name,
@@ -83,7 +84,7 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
       unitName: workDetailData.unit_name,
       target: target,
       totalKpiExpect: workDetailData.kpi_expected,
-      totalReport: workDetailData.count_report,
+      totalReport: totalReport,
       totalCompletedValue: workDetailData.achieved_value,
       totalPercent: workDetailData.percent,
       totalTmpKpi: workDetailData.kpi_tmp,

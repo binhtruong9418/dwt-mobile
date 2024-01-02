@@ -106,7 +106,7 @@ export default function Work({ navigation }: any) {
   } = useQuery(
     ['getListWorkPersonal', currentMonth],
     async () => {
-      console.log('run personal')
+      console.log('run personal');
       const keyWorkRes = await dwtApi.getListWork({
         date: `${currentMonth.year}-${currentMonth.month + 1}`,
       });
@@ -140,7 +140,7 @@ export default function Work({ navigation }: any) {
   } = useQuery(
     ['getListWorkDepartment', currentDepartment, currentMonth],
     async () => {
-      console.log('run department')
+      console.log('run department');
       const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
         department_id:
           currentDepartment.value === 0 ? undefined : currentDepartment.value,
@@ -412,7 +412,13 @@ export default function Work({ navigation }: any) {
           columns={columns}
           canShowMore={true}
           rowDetailComponent={(item: any) => {
-            return <WorkRowDetail data={item} isWorkArise={currentTab === 2} isDepartment={currentTabManager === 1} />;
+            return (
+              <WorkRowDetail
+                data={item}
+                isWorkArise={currentTab === 2}
+                isDepartment={currentTabManager === 1}
+              />
+            );
           }}
         />
       </ScrollView>
