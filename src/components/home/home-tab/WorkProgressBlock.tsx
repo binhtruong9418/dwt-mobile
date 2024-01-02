@@ -60,7 +60,7 @@ export default function WorkProgressBlock({
         </View>
 
         <View style={[styles.row, w_full]}>
-          <View style={[styles.row_gap3, { width: '75%' }]}>
+          <View style={[styles.row_gap3, { width: '70%' }]}>
             <ClockOtIcon width={16} height={16} />
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
