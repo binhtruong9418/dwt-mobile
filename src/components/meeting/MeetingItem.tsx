@@ -28,7 +28,7 @@ export default function MeetingItem({item}: any) {
 
                 <TouchableOpacity
                     onPress={() => {
-                        if(item.status !== 0) {
+                        if (item.status !== 0) {
                             setIsMore(!isMore);
                         }
                     }}
@@ -38,16 +38,22 @@ export default function MeetingItem({item}: any) {
                 </TouchableOpacity>
             </View>
             {
-                isMore && item?.reports?.length > 0 &&  (
+                isMore && (
                     <View style={styles.detail}>
-                        <View style={styles.detailText}>
-                            <Text style={[fs_12_400, text_black]}>Vấn đề tồn đọng: Chưa có catalog</Text>
-                            <Text style={[fs_12_400, text_black]}>Giải quyết: Thiết kế</Text>
-                            <Text style={[fs_12_400, text_black]}>Người đảm nhiệm: Nguyễn Văn A</Text>
-                        </View>
+                        {
+                            item?.reports?.length > 0 && (
+                                <View style={styles.detailText}>
+                                    <Text style={[fs_12_400, text_black]}>Vấn đề tồn đọng: Chưa có catalog</Text>
+                                    <Text style={[fs_12_400, text_black]}>Giải quyết: Thiết kế</Text>
+                                    <Text style={[fs_12_400, text_black]}>Người đảm nhiệm: Nguyễn Văn A</Text>
+                                </View>
+                            )
+                        }
                         <TouchableOpacity style={styles.detailButton} onPress={() => {
                             // @ts-ignore
-                            navigation.navigate('MeetingDetail')
+                            navigation.navigate('MeetingDetail', {
+                                meetingid: item?.id
+                            })
                         }}>
                             <Text style={[fs_12_400, text_red]}>Xem biên bản</Text>
                         </TouchableOpacity>

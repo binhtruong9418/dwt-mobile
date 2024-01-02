@@ -25,7 +25,6 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
     connection: { userInfo },
   } = useConnection();
 
-  console.log(date)
   const {
     data: workDetailData = {},
     isLoading: isLoadingWorkDetail,
@@ -50,50 +49,52 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
     }
   );
 
+  console.log(userInfo)
   console.log('workDetailData', workDetailData)
+
   const workDetail = useMemo(() => {
     let listLogs = [];
     let workType = 'Đạt giá trị';
     let target = 0;
     let totalReport = 0;
     if (data.isWorkArise) {
-      listLogs = workDetailData?.business_standard_arise_logs || [];
-      workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
-      target = workDetailData.quantity;
-      totalReport = workDetailData.total_reports;
+      listLogs = workDetailData?.business_standard_arise_logs ?? [];
+      workType = workDetailData?.type === 2 ? 'Đạt giá trị' : '1 lần';
+      target = workDetailData?.quantity;
+      totalReport = workDetailData?.total_reports;
     } else {
       listLogs = workDetailData?.business_standard_report_logs ?? [];
       workType =
-        workDetailData.type === 2
+        workDetailData?.type === 2
           ? 'Liên tục'
-          : workDetailData.type === 3
+          : workDetailData?.type === 3
           ? 'Đạt giá trị'
           : '1 lần';
-      target = workDetailData.targets;
-        totalReport = workDetailData.count_report;
+      target = workDetailData?.targets;
+        totalReport = workDetailData?.count_report;
     }
     return {
-      name: workDetailData.name,
-      desc: workDetailData.desc,
+      name: workDetailData?.name,
+      desc: workDetailData?.desc,
       workType: workType,
-      workerName: workDetailData.username,
-      workStatus: workDetailData.actual_state
+      workerName: workDetailData?.username,
+      workStatus: workDetailData?.actual_state
         ? // @ts-ignore
-          WORK_STATUS[workDetailData.actual_state.toString()]
+          WORK_STATUS[workDetailData?.actual_state.toString()]
         : WORK_STATUS['1'],
-      totalWorkingHours: workDetailData.total_working_hours,
-      unitName: workDetailData.unit_name,
+      totalWorkingHours: workDetailData?.total_working_hours,
+      unitName: workDetailData?.unit_name,
       target: target,
-      totalKpiExpect: workDetailData.kpi_expected,
+      totalKpiExpect: workDetailData?.kpi_expected,
       totalReport: totalReport,
-      totalCompletedValue: workDetailData.achieved_value,
-      totalPercent: workDetailData.percent,
-      totalTmpKpi: workDetailData.kpi_tmp,
+      totalCompletedValue: workDetailData?.achieved_value,
+      totalPercent: workDetailData?.percent,
+      totalTmpKpi: workDetailData?.kpi_tmp,
       listLogs: listLogs,
-      adminComment: workDetailData.admin_comment,
-      adminKpi: workDetailData.admin_kpi,
-      managerComment: workDetailData.comment,
-      managerKpi: workDetailData.kpi,
+      adminComment: workDetailData?.admin_comment,
+      adminKpi: workDetailData?.admin_kpi,
+      managerComment: workDetailData?.comment,
+      managerKpi: workDetailData?.kpi,
     };
   }, [workDetailData, data.isWorkArise]);
 

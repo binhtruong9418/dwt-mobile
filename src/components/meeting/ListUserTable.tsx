@@ -21,7 +21,7 @@ export default function ListUserTable({data, headerTitle}: any) {
                 </TouchableOpacity>
             </View>
             {
-                isMore && (
+                isMore && data && data.length > 0 && (
                     <PrimaryTable
                         data={data.map((item: any, index: number) => {
                             return {

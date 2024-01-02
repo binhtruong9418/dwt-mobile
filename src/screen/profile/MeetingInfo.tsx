@@ -4,7 +4,7 @@ import Header from '../../components/header/Header.tsx';
 import {useMemo, useState} from 'react';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
-import {fs_15_700, text_black} from "../../assets/style.ts";
+import {fs_12_500, fs_15_700, text_black, text_gray} from "../../assets/style.ts";
 import DropdownIcon from "../../assets/img/dropdown-icon.svg";
 import dayjs from "dayjs";
 import MonthPickerModal from "../../components/common/modal/MonthPickerModal.tsx";
@@ -46,12 +46,15 @@ export default function MeetingInfo({navigation}: any) {
     const listMeeting = useMemo(() => {
         return listMeetingData.filter((item: any) => {
             const hasJoin =  item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
-                || item?.leader_id === userInfo?.id || item?.secretary_id === userInfo?.id
-                || userInfo?.role === 'admin';
+                || (
+                    (item?.leader_id === userInfo?.id ||
+                        item?.secretary_id === userInfo?.id ||
+                        userInfo?.role === 'admin')
+                    && currentTabManager === 1);
             const isToday = dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
             return hasJoin && isToday;
         })
-    }, [listMeetingData, currentDate])
+    }, [listMeetingData, currentDate, currentTabManager])
 
     if(isLoadingListMeeting) {
         return <PrimaryLoading/>
@@ -81,12 +84,23 @@ export default function MeetingInfo({navigation}: any) {
                         listMeeting={listMeeting}
                     />
                 </View>
+
+                {
+                    userInfo?.role === 'admin' || userInfo?.role === 'manager' && (
+                        <View style={styles.totalReportBox}>
+                            <Text style={[fs_12_500, text_gray]}>
+                                {listMeeting.length} cuộc họp
+                            </Text>
+                        </View>
+                    )
+                }
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                     data={listMeeting}
                     contentContainerStyle={{
                         paddingBottom: 20,
+                        paddingTop: 10,
                     }}
                     renderItem={({item}) => {
                         return (
@@ -141,12 +155,16 @@ const styles = StyleSheet.create({
     },
     top: {
         paddingHorizontal: 15,
-        marginBottom: 20,
     },
     align_end: {
         position: 'absolute',
         bottom: 10,
         right: 15,
         zIndex: 2,
+    },
+    totalReportBox: {
+        backgroundColor: '#F7F7F7',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
     },
 });

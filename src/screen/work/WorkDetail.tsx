@@ -57,12 +57,12 @@ export default function WorkDetail({ route, navigation }: any) {
     let target = 0;
     let totalReport = 0;
     if (data.isWorkArise) {
-      listLogs = workDetailData?.business_standard_arise_logs ?? [];
+      listLogs = workDetailData?.business_standard_arise_logs;
       workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
       target = workDetailData.quantity;
         totalReport = workDetailData.total_reports;
     } else {
-      listLogs = workDetailData?.business_standard_report_logs ?? [];
+      listLogs = workDetailData?.business_standard_report_logs;
       workType =
         workDetailData.type === 2
           ? 'Liên tục'

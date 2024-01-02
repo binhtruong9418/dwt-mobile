@@ -6,7 +6,7 @@ export default function InformationBox({listText, headerTitle, hasDot, textStyle
         <View style={styles.wrapper}>
             <Text style={[fs_15_700, text_red]}>{headerTitle}</Text>
             <View style={styles.content}>
-                {listText.map((item: any, index: number) => {
+                {listText && listText.length > 0 && listText.map((item: any, index: number) => {
                     return (
                         <Text style={textStyle} key={index}>
                             {
