@@ -11,6 +11,7 @@ export default function WorkRowDetail({
   data,
   isWorkArise,
   isDepartment,
+    date
 }: any) {
   const navigation = useNavigation();
   return (
@@ -73,11 +74,15 @@ export default function WorkRowDetail({
               navigation.navigate('WorkDetailDepartment', {
                 data: data,
                 managerWorkId: data.business_standard_id,
+                date: date,
+                routeGoBack: 'Work'
               });
             } else {
               // @ts-ignore
               navigation.navigate('WorkDetail', {
                 data: data,
+                date: date,
+                routeGoBack: 'Work'
               });
             }
           }}

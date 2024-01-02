@@ -56,6 +56,11 @@ export const dwtApi = {
     return await axiosClient.get(url);
   },
 
+  getDepartmentById: async (id: string): Promise<any> => {
+    const url = `departments/${id}`;
+    return await axiosClient.get(url);
+  },
+
   //API lấy thông tin chấm công cá nhân theo ngày
   getAttendanceByDate: async (userId: string, date: string): Promise<any> => {
     const url = 'attendances/personal/search';
@@ -295,5 +300,16 @@ export const dwtApi = {
   acceptJob: async (jobId: any): Promise<any> => {
     const url = `/list-job/accept-job/${jobId}`
     return await axiosClient.put(url);
+  },
+
+  //API HOP giao ban
+  getListMeeting: async (params = {}): Promise<any> => {
+    const url = '/mobile/meeting/list';
+    return await axiosClient.get(url, {params});
+  },
+
+  getMeetingById: async (id: number): Promise<any> => {
+    const url = `/mobile/meeting/show/${id}`;
+    return await axiosClient.get(url);
   }
 };

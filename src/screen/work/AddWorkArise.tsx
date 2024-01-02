@@ -87,11 +87,6 @@ export default function AddWorkArise({ navigation }: any) {
       return;
     }
 
-    if (currentWorker === 0) {
-      showToast('Vui lòng chọn người đảm nhiệm');
-      return;
-    }
-
     if (currentUnit === 0) {
       showToast('Vui lòng chọn đơn vị tính');
       return;
@@ -133,7 +128,7 @@ export default function AddWorkArise({ navigation }: any) {
         start_time: dayjs(fromDate).format('YYYY-MM-DD'),
         end_time: dayjs(toDate).format('YYYY-MM-DD'),
         unit_id: currentUnit,
-        user_id: currentWorker,
+        user_id: currentWorker === 0 ? undefined : currentWorker,
         created_by: userInfo.id,
         updated_by: userInfo.id,
       };
@@ -222,7 +217,7 @@ export default function AddWorkArise({ navigation }: any) {
 
         <View style={styles.inputBox}>
           <Text style={[fs_15_700, text_black]}>
-            Người đảm nhiệm <Text style={text_red}>*</Text>:
+            Người đảm nhiệm:
           </Text>
           <PrimaryDropdown
             data={listUser.map((user: any) => {

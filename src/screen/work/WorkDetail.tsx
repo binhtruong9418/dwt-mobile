@@ -22,9 +22,9 @@ import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 
 export default function WorkDetail({ route, navigation }: any) {
-  const { data } = route.params;
+  const { data, date, routeGoBack } = route.params;
   const {
-    connection: { userInfo },
+    connection: { userInfo, currentTabManager },
   } = useConnection();
 
   const {
@@ -35,14 +35,14 @@ export default function WorkDetail({ route, navigation }: any) {
     ['workDetail', data.id],
     async ({ queryKey }: any) => {
       if (data.isWorkArise) {
-        const res = await dwtApi.getWorkAriseDetail(queryKey[1]);
+        const res = await dwtApi.getWorkAriseDetail(queryKey[1], date);
         const usernameData = await dwtApi.getUserById(res.data.user_id);
         return {
           ...res.data,
           username: usernameData.data.name,
         };
       } else {
-        const res = await dwtApi.getWorkDetail(queryKey[1], userInfo.id);
+        const res = await dwtApi.getWorkDetail(queryKey[1], userInfo.id, date);
         return res.data;
       }
     },
@@ -55,10 +55,12 @@ export default function WorkDetail({ route, navigation }: any) {
     let listLogs = [];
     let workType = 'Đạt giá trị';
     let target = 0;
+    let totalReport = 0;
     if (data.isWorkArise) {
       listLogs = workDetailData?.business_standard_arise_logs ?? [];
       workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
       target = workDetailData.quantity;
+        totalReport = workDetailData.total_reports;
     } else {
       listLogs = workDetailData?.business_standard_report_logs ?? [];
       workType =
@@ -68,6 +70,7 @@ export default function WorkDetail({ route, navigation }: any) {
           ? 'Đạt giá trị'
           : '1 lần';
       target = workDetailData.targets;
+        totalReport = workDetailData.count_report;
     }
     return {
       name: workDetailData.name,
@@ -82,7 +85,7 @@ export default function WorkDetail({ route, navigation }: any) {
       unitName: workDetailData.unit_name,
       target: target,
       totalKpiExpect: workDetailData.kpi_expected,
-      totalReport: workDetailData.count_report,
+      totalReport: totalReport,
       totalCompletedValue: workDetailData.achieved_value,
       totalPercent: workDetailData.percent,
       totalTmpKpi: workDetailData.kpi_tmp,
@@ -109,7 +112,7 @@ export default function WorkDetail({ route, navigation }: any) {
       <Header
         title="CHI TIẾT KẾ HOẠCH"
         handleGoBack={() => {
-          navigation.goBack();
+          navigation.navigate(routeGoBack);
         }}
       />
       <ScrollView
@@ -185,24 +188,24 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputContent,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'manager' && styles.disableInput,
+                  (userInfo?.role !== 'manager' || currentTabManager === 0) && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.managerComment || 'Nhập nội dung'}
               multiline={true}
-              editable={userInfo?.role === 'manager'}
+              editable={userInfo?.role === 'manager' && currentTabManager === 1}
             />
             <TextInput
               style={[
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'manager' && styles.disableInput,
+                  (userInfo?.role !== 'manager' || currentTabManager === 0) && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.managerKpi || 'Điểm KPI'}
               keyboardType="numeric"
-              editable={userInfo?.role === 'manager'}
+              editable={userInfo?.role === 'manager' && currentTabManager === 1}
             />
           </View>
         </View>
@@ -215,25 +218,25 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputContent,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'admin' && styles.disableInput,
+                  (userInfo?.role !== 'admin' || currentTabManager === 0) && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.adminComment || 'Nhập nội dung'}
               multiline={true}
-              editable={userInfo?.role === 'admin'}
+              editable={userInfo?.role === 'admin' && currentTabManager === 1}
             />
             <TextInput
               style={[
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
-                userInfo?.role !== 'admin' && styles.disableInput,
+                  (userInfo?.role !== 'admin' || currentTabManager === 0) && styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.adminKpi || 'Điểm KPI'}
               keyboardType="numeric"
               inputMode="numeric"
-              editable={userInfo?.role === 'admin'}
+              editable={userInfo?.role === 'admin' && currentTabManager === 1}
             />
           </View>
         </View>

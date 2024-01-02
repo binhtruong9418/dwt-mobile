@@ -9,6 +9,7 @@ export const validateEmail = (email: string) => {
     );
 };
 
+
 export const validatePhone = (phone: string): boolean => {
   const phoneNumberRegex = /^(0|84)\d{9,10}$/;
   return phoneNumberRegex.test(phone);
@@ -54,6 +55,10 @@ export const getDaysInMonth = (month: number, year: number) => {
     date.setDate(date.getDate() + 1);
   }
   return days;
+};
+
+export const getMonthFormat = (month: number, year: number) => {
+    return `${year}-${padStart(month.toString(), 2, '0')}`;
 };
 
 export const capitalizeWords = (sentence: string) => {

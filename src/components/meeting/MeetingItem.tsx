@@ -4,26 +4,33 @@ import ChevronDownIcon from "../../assets/img/chevron-down.svg";
 import {useState} from "react";
 import {fs_12_400, fs_12_700, row_between, text_black, text_gray, text_red} from "../../assets/style.ts";
 import {useNavigation} from "@react-navigation/native";
+import dayjs from "dayjs";
+import {useQuery} from "@tanstack/react-query";
+import {dwtApi} from "../../api/service/dwtApi.ts";
 
 export default function MeetingItem({item}: any) {
     const navigation = useNavigation();
     const [isMore, setIsMore] = useState<boolean>(false);
+    const startTime = item?.start_time && dayjs(item?.start_time?.split(' ')[0]).format('DD/MM/YYYY')
+        + ' ' + (item?.start_time?.split(' ')[1]).substring(0, 5)
     return (
         <View
             style={[styles.item]}
         >
             <View style={[styles.content, {
-                backgroundColor: '#FEF3F5'
+                backgroundColor: item?.status === 0 ? '#D4F3D5' : '#FEF3F5'
             }]}>
                 <View style={styles.gap3}>
-                    <Text style={[fs_12_700, text_black]}>Kế hoạch kinh doanh tháng 12</Text>
-                    <Text style={[fs_12_400, text_gray]}> • Thời gian: 01/12/2023 08:00</Text>
-                    <Text style={[fs_12_400, text_gray]}> • Phòng ban: Kinh doanh 1</Text>
+                    <Text style={[fs_12_700, text_black]}>{item?.title}</Text>
+                    <Text style={[fs_12_400, text_gray]}> • Thời gian: {startTime}</Text>
+                    <Text style={[fs_12_400, text_gray]}> • Phòng ban: {item?.departement?.name}</Text>
                 </View>
 
                 <TouchableOpacity
                     onPress={() => {
-                        setIsMore(!isMore);
+                        if(item.status !== 0) {
+                            setIsMore(!isMore);
+                        }
                     }}
                     hitSlop={10}
                 >
@@ -31,7 +38,7 @@ export default function MeetingItem({item}: any) {
                 </TouchableOpacity>
             </View>
             {
-                isMore && (
+                isMore && item?.reports?.length > 0 &&  (
                     <View style={styles.detail}>
                         <View style={styles.detailText}>
                             <Text style={[fs_12_400, text_black]}>Vấn đề tồn đọng: Chưa có catalog</Text>

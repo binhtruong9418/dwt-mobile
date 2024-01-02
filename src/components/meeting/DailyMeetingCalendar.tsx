@@ -10,29 +10,23 @@ import PropTypes, { InferProps } from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import dayjs from 'dayjs';
-import { useMemo } from "react";
+import {useCallback, useMemo} from "react";
 
 export default function DailyMeetingCalendar({
   currentDate,
   setCurrentDate,
+    listMeeting
 }: InferProps<typeof DailyMeetingCalendar.propTypes>) {
-  // const haveLog = (item: any) => {
-  //     if (listUserReports) {
-  //         return !!listUserReports.find(
-  //             (report: any) =>
-  //                 report?.date_report ===
-  //                 `${currentDate.year}-${currentDate.month + 1}-${item.date}`,
-  //         );
-  //     }
-  //     if (listProjectLogs) {
-  //         return !!listProjectLogs.find(
-  //             (log: any) =>
-  //                 log?.logDate ===
-  //                 `${currentDate.year}-${currentDate.month + 1}-${item.date}`,
-  //         );
-  //     }
-  //     return false;
-  // };
+  const haveLog = (item: any) => {
+      if (listMeeting) {
+          return !!listMeeting.find(
+              (meeting: any) =>
+                  meeting?.start_time.split(' ')[0] ===
+                  dayjs().month(currentDate?.month).year(currentDate?.year).date(item?.date).format('YYYY-MM-DD')
+          );
+      }
+      return false;
+  }
 
   const today = dayjs().date();
   const initialScrollOffset = today > 7 ? today * 45 : 0;
@@ -76,7 +70,7 @@ export default function DailyMeetingCalendar({
               <Text style={styles.date}>{item.date}</Text>
               {
                 // Show mark if current date has report
-                <View style={styles.marked} />
+                haveLog(item) && <View style={styles.marked} />
               }
             </TouchableOpacity>
           );
@@ -134,4 +128,5 @@ DailyMeetingCalendar.propTypes = {
     date: PropTypes.number.isRequired,
   }).isRequired,
   setCurrentDate: PropTypes.func.isRequired,
+  listMeeting: PropTypes.array.isRequired,
 };

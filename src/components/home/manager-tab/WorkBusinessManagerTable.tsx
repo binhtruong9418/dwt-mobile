@@ -28,6 +28,7 @@ const columns = [
 ];
 export default function WorkBusinessManagerTable({
   listWork,
+    date
 }: InferProps<typeof WorkBusinessManagerTable.propTypes>) {
   const navigation = useNavigation();
   return (
@@ -39,6 +40,8 @@ export default function WorkBusinessManagerTable({
           navigation.navigate('WorkDetailDepartment', {
             data: item,
             managerWorkId: item.business_standard_id,
+            date: date,
+            routeGoBack: 'Home',
           });
         }}
         data={listWork.map((item: any, index: number) => {
@@ -78,4 +81,5 @@ const styles = StyleSheet.create({
 
 WorkBusinessManagerTable.propTypes = {
   listWork: PropTypes.array.isRequired,
+  date: PropTypes.string.isRequired,
 };

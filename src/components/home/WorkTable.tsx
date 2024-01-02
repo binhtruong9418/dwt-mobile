@@ -4,6 +4,7 @@ import PropTypes, { InferProps } from 'prop-types';
 import PrimaryTable from '../common/table/PrimaryTable.tsx';
 import { WORK_STATUS_COLOR } from '../../assets/constant.ts';
 import { useNavigation } from '@react-navigation/native';
+import dayjs from "dayjs";
 
 const columns = [
   {
@@ -31,12 +32,13 @@ export default function WorkTable({
   listWork,
 }: InferProps<typeof WorkTable.propTypes>) {
   const navigation = useNavigation();
+  const date = dayjs().format('YYYY-MM')
   return (
     <PrimaryTable
       columns={columns}
       onRowPress={(item: any) => {
         // @ts-ignore
-        navigation.navigate('WorkDetail', { data: item });
+        navigation.navigate('WorkDetail', { data: item, date: date, routeGoBack: 'Home' });
       }}
       data={listWork.map((item: any, index: number) => {
         return {

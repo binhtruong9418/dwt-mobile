@@ -20,28 +20,28 @@ import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
 export default function WorkDetailDepartment({ route, navigation }: any) {
-  const { data, managerWorkId } = route.params;
-  console.log(data.id, managerWorkId);
+  const { data, managerWorkId, date, routeGoBack } = route.params;
   const {
     connection: { userInfo },
   } = useConnection();
 
+  console.log(date)
   const {
     data: workDetailData = {},
     isLoading: isLoadingWorkDetail,
     refetch,
   } = useQuery(
-    ['workDetailDepartment', data.id],
+    ['workDetailDepartment', data.id, date],
     async ({ queryKey }: any) => {
       if (data.isWorkArise) {
-        const res = await dwtApi.getWorkAriseDetail(queryKey[1]);
+        const res = await dwtApi.getWorkAriseDetail(queryKey[1], queryKey[2]);
         const usernameData = await dwtApi.getUserById(res.data.user_id);
         return {
           ...res.data,
           username: usernameData.data.name,
         };
       } else {
-        const res = await dwtApi.getWorkDetail(managerWorkId, userInfo.id);
+        const res = await dwtApi.getWorkDetail(managerWorkId, userInfo.id, queryKey[2]);
         return res.data;
       }
     },
@@ -50,6 +50,7 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
     }
   );
 
+  console.log('workDetailData', workDetailData)
   const workDetail = useMemo(() => {
     let listLogs = [];
     let workType = 'Đạt giá trị';
@@ -110,7 +111,7 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
       <Header
         title="CHI TIẾT KẾ HOẠCH"
         handleGoBack={() => {
-          navigation.goBack();
+          navigation.navigate(routeGoBack);
         }}
       />
       <ScrollView

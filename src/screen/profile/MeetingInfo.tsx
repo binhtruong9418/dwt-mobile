@@ -1,11 +1,9 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
-import PersonalReport from '../../components/daily-report/PersonalReport.tsx';
-import DepartmentReport from '../../components/daily-report/DepartmentReport.tsx';
 import {fs_15_700, text_black} from "../../assets/style.ts";
 import DropdownIcon from "../../assets/img/dropdown-icon.svg";
 import dayjs from "dayjs";
@@ -14,10 +12,13 @@ import DailyMeetingCalendar from "../../components/meeting/DailyMeetingCalendar.
 import MeetingItem from "../../components/meeting/MeetingItem.tsx";
 import AddIcon from "../../assets/img/add.svg";
 import PlusButtonModal from "../../components/work/PlusButtonModal.tsx";
+import {useQuery} from "@tanstack/react-query";
+import {dwtApi} from "../../api/service/dwtApi.ts";
+import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
 
 export default function MeetingInfo({navigation}: any) {
     const {
-        connection: {currentTabManager},
+        connection: {currentTabManager, userInfo},
     } = useConnection();
 
     const [currentDate, setCurrentDate] = useState<{
@@ -31,6 +32,30 @@ export default function MeetingInfo({navigation}: any) {
     });
     const [isOpenSelectMonth, setIsOpenSelectMonth] = useState(false);
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
+
+    const {
+        data: listMeetingData = [],
+        isLoading: isLoadingListMeeting,
+    } = useQuery(['listMeeting', currentDate.month, currentDate.year], async ({queryKey}) => {
+        const res = await dwtApi.getListMeeting({
+            date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
+        });
+        return res.data;
+    })
+
+    const listMeeting = useMemo(() => {
+        return listMeetingData.filter((item: any) => {
+            const hasJoin =  item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
+                || item?.leader_id === userInfo?.id || item?.secretary_id === userInfo?.id
+                || userInfo?.role === 'admin';
+            const isToday = dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
+            return hasJoin && isToday;
+        })
+    }, [listMeetingData, currentDate])
+
+    if(isLoadingListMeeting) {
+        return <PrimaryLoading/>
+    }
 
     return (
         <SafeAreaView style={styles.wrapper}>
@@ -53,11 +78,16 @@ export default function MeetingInfo({navigation}: any) {
                     <DailyMeetingCalendar
                         currentDate={currentDate}
                         setCurrentDate={setCurrentDate}
+                        listMeeting={listMeeting}
                     />
                 </View>
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
-                    data={[1, 2]}
+                    showsVerticalScrollIndicator={false}
+                    data={listMeeting}
+                    contentContainerStyle={{
+                        paddingBottom: 20,
+                    }}
                     renderItem={({item}) => {
                         return (
                             <MeetingItem item={item}/>
@@ -99,6 +129,7 @@ const styles = StyleSheet.create({
     },
     content: {
         paddingTop: 10,
+        flex: 1,
     },
     monthBox: {
         flexDirection: 'row',

@@ -29,6 +29,7 @@ import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
 import { useConnection } from '../../redux/connection';
 import ListDepartmentModal from '../../components/home/manager-tab/ListDepartmentModal.tsx';
 import WorkRowDetail from '../../components/common/table/WorkRowDetail.tsx';
+import {getMonthFormat} from "../../utils";
 
 const columns = [
   {
@@ -417,6 +418,7 @@ export default function Work({ navigation }: any) {
                 data={item}
                 isWorkArise={currentTab === 2}
                 isDepartment={currentTabManager === 1}
+                date={getMonthFormat(currentMonth.month + 1, currentMonth.year)}
               />
             );
           }}
