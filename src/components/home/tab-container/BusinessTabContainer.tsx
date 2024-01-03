@@ -69,13 +69,13 @@ export default function BusinessTabContainer({
         async ({queryKey}) => {
             const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
                 department_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
-                date: `${queryKey[2].year}-${queryKey[2].month + 1}`,
+                date: getMonthFormat(queryKey[2].month + 1, queryKey[2].year),
             });
             const listWorkAriseDepartmentData =
                 await dwtApi.getListWorkAriseDepartment({
                     department_id:
                         queryKey[1].value === 0 ? undefined : queryKey[1].value,
-                    date: `${queryKey[2].year}-${queryKey[2].month + 1}`,
+                    date: getMonthFormat(queryKey[2].month + 1, queryKey[2].year),
                 });
 
             const listWorkDepartmentAll = Object.keys(

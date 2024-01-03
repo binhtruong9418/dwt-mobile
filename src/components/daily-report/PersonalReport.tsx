@@ -98,15 +98,17 @@ export default function PersonalReport({}) {
                 ? [
                     {
                       key: 1,
-                      text: todayReport?.today_work_note ?? '',
-                      label: 'Hôm nay',
-                      time: dayjs(todayReport?.created_at).format('HH:mm'),
-                    },
-                    {
-                      key: 2,
                       text: todayReport?.yesterday_work_note ?? '',
                       label: 'Hôm qua',
                       time: dayjs(todayReport?.created_at).format('HH:mm'),
+                      todayType: 0
+                    },
+                    {
+                      key: 2,
+                      text: todayReport?.today_work_note ?? '',
+                      label: 'Hôm nay',
+                      time: dayjs(todayReport?.created_at).format('HH:mm'),
+                      todayType: 1
                     },
                   ]
                 : []

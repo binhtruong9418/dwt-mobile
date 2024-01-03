@@ -15,14 +15,14 @@ export default function DailyCalendar({
       return !!listUserReports.find(
         (report: any) =>
           report?.date_report ===
-          `${currentDate.year}-${currentDate.month + 1}-${item.date}`
+          dayjs().year(currentDate.year).month(currentDate.month).date(item.date).format('YYYY-MM-DD')
       );
     }
     if (listProjectLogs) {
       return !!listProjectLogs.find(
         (log: any) =>
           log?.logDate ===
-          `${currentDate.year}-${currentDate.month + 1}-${item.date}`
+            dayjs().year(currentDate.year).month(currentDate.month).date(item.date).format('YYYY-MM-DD')
       );
     }
     return false;

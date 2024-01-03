@@ -26,7 +26,7 @@ export default function PersonalReportDetail({data}: any) {
         )
       }
       <View style={styles.wrapper}>
-        <View style={[styles.timeBox, {backgroundColor: '#C02626'}]}>
+        <View style={[styles.timeBox, {backgroundColor: data.todayType === 0 ? '#C02626' : '#38BDF8'}]}>
           <Text style={[fs_10_500, text_white, text_center]}>
             {data?.label ?? ''}
           </Text>

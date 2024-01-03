@@ -27,7 +27,7 @@ export default function SalaryDetail({route, navigation}: any) {
   const {data: salaryInfo, isLoading: isLoadingSalary} = useQuery(
     ['salaryDetail'],
     async () => {
-      const res = await dwtApi.getSalaryById(2);
+      const res = await dwtApi.getSalaryById(id);
       return res.data;
     },
     {
@@ -91,7 +91,7 @@ export default function SalaryDetail({route, navigation}: any) {
                   marginTop: 5,
                 },
               ]}>
-              Thời gian chi trả {salaryInfo?.salary_history?.pay_day}
+              Thời gian chi trả {dayjs(salaryInfo?.salary_history?.pay_day).format('DD/MM/YYYY')}
             </Text>
           </View>
 
@@ -109,7 +109,8 @@ export default function SalaryDetail({route, navigation}: any) {
                 // justifyContent: 'center',
                 alignItems: 'center',
                 marginTop: 5,
-                gap: 5,
+                // gap: 5,
+                paddingHorizontal: 10,
               }}>
               <SalaryItemIcon width={30} height={30}/>
               <View style={{
@@ -161,7 +162,7 @@ export default function SalaryDetail({route, navigation}: any) {
               ]}>
               Phiếu lương
             </Text>
-            <View style={styles.table}>
+            <View>
               {/* Header */}
               <View style={[styles.row]}>
                 <View style={styles.cell}>

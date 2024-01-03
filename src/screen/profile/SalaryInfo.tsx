@@ -45,7 +45,7 @@ export default function SalaryInfo({ navigation }: any) {
     const listSalaryHistories = res.data.data;
     for (let i = 0; i < listSalaryHistories.length; i++) {
       const salaryId = listSalaryHistories[i].id;
-      const salaryDetail = await dwtApi.getSalaryById(2);
+      const salaryDetail = await dwtApi.getSalaryById(salaryId);
       listSalaryHistories[i].salaryDetail = salaryDetail.data;
     }
     return listSalaryHistories;

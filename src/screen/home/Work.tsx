@@ -106,13 +106,12 @@ export default function Work({navigation}: any) {
         refetch: refetchWorkPersonal,
     } = useQuery(
         ['getListWorkPersonal', currentMonth],
-        async () => {
-            console.log('run personal');
+        async ({queryKey}: any) => {
             const keyWorkRes = await dwtApi.getListWork({
-                date: `${currentMonth.year}-${currentMonth.month + 1}`,
+                date: getMonthFormat(queryKey[1].month + 1, queryKey[1].year),
             });
             const arisWorkRes = await dwtApi.getListWorkArise({
-                date: `${currentMonth.year}-${currentMonth.month + 1}`,
+                date: getMonthFormat(queryKey[1].month + 1, queryKey[1].year),
             });
 
             return {
@@ -140,18 +139,18 @@ export default function Work({navigation}: any) {
         refetch: refetchWorkDepartment,
     } = useQuery(
         ['getListWorkDepartment', currentDepartment, currentMonth],
-        async () => {
+        async ({queryKey}) => {
             console.log('run department');
             const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
                 department_id:
                     currentDepartment.value === 0 ? undefined : currentDepartment.value,
-                date: `${currentMonth.year}-${currentMonth.month + 1}`,
+                date: getMonthFormat(queryKey[2].month + 1, queryKey[2].year),
             });
             const listWorkAriseDepartmentData =
                 await dwtApi.getListWorkAriseDepartment({
                     department_id:
                         currentDepartment.value === 0 ? undefined : currentDepartment.value,
-                    date: `${currentMonth.year}-${currentMonth.month + 1}`,
+                    date: getMonthFormat(queryKey[2].month + 1, queryKey[2].year),
                 });
 
             const listKeyWorkDepartmentAll = Object.keys(
