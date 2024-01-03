@@ -279,12 +279,8 @@ export default function AddWorkArise({ navigation }: any) {
                   value: 1,
                 },
                 {
-                  label: 'Liên tục',
-                  value: 2,
-                },
-                {
                   label: 'Đạt giá trị',
-                  value: 3,
+                  value: 2,
                 },
               ]}
               value={currentType}

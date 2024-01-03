@@ -20,10 +20,13 @@ export default function DailyMeetingCalendar(
     }: InferProps<typeof DailyMeetingCalendar.propTypes>) {
     const haveLog = (item: any) => {
         return listMeeting.find(
-            (meeting: any) =>
-                meeting?.start_time.split(' ')[0] ===
-                dayjs().month(currentDate?.month).year(currentDate?.year)
-                    .date(item?.date).format('YYYY-MM-DD')
+            (meeting: any, index: number) => {
+                const haveData = meeting?.start_time.split(' ')[0] ===
+                    dayjs().month(currentDate?.month).year(currentDate?.year)
+                        .date(item?.date).format('YYYY-MM-DD')
+                // console.log(haveData, index)
+                return haveData
+            }
         );
     }
 

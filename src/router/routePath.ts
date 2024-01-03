@@ -27,7 +27,12 @@ import {
   ProposeScreen,
   AddProposeScreen,
   WorkDetailDepartmentScreen,
-  WorkDetailOfficeScreen, AddAbsenceScreen, MeetingInfoScreen, MeetingDetailScreen, ComingSoonScreen,
+  WorkDetailOfficeScreen,
+  AddAbsenceScreen,
+  MeetingInfoScreen,
+  MeetingDetailScreen,
+  ComingSoonScreen,
+  DailyFactoryReportScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -170,5 +175,9 @@ export const navigatorPath = [
   {
     name: 'ComingSoon',
     component: ComingSoonScreen,
+  },
+  {
+    name: 'DailyFactoryReport',
+    component: DailyFactoryReportScreen,
   }
 ];

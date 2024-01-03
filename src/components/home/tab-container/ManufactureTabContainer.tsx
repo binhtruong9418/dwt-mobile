@@ -30,7 +30,7 @@ import {useNavigation} from '@react-navigation/native';
 import AddIcon from "../../../assets/img/add.svg";
 import PlusButtonModal from "../../work/PlusButtonModal.tsx";
 
-export default function ManufactureTabContainer() {
+export default function ManufactureTabContainer({setCurrentMenuTab}: any) {
   const navigation = useNavigation();
   const [currentDate, setCurrentDate] = useState<{
     month: number;
@@ -71,9 +71,6 @@ export default function ManufactureTabContainer() {
     })
   }, [listProjectLogs, currentDate]);
 
-  const today = dayjs().date();
-  const initialScrollOffset = today > 7 ? today * 45 : 0;
-
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
@@ -99,10 +96,6 @@ export default function ManufactureTabContainer() {
             contentContainerStyle={{
               paddingTop: 30,
               paddingBottom: 20,
-            }}
-            contentOffset={{
-              x: initialScrollOffset,
-              y: 0,
             }}
             data={todayLogs.map((item: any) => ({...item, key: item.id}))}
             renderItem={({item}) => {

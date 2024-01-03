@@ -40,23 +40,30 @@ export default function MeetingInfo({navigation}: any) {
         const res = await dwtApi.getListMeeting({
             date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
         });
-        return res.data;
+        return res?.data?.data;
     })
 
-    const listMeeting = useMemo(() => {
-        return listMeetingData.filter((item: any) => {
-            const hasJoin =  item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
-                || (
-                    (item?.leader_id === userInfo?.id ||
-                        item?.secretary_id === userInfo?.id ||
-                        userInfo?.role === 'admin')
-                    && currentTabManager === 1);
-            const isToday = dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
-            return hasJoin && isToday;
+    const {listMeetingToday, listMeetingAll} = useMemo(() => {
+            const listMeetingAll =  listMeetingData.filter((item: any) => {
+                const hasJoin = item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
+                    || (
+                        (item?.leader_id === userInfo?.id ||
+                            item?.secretary_id === userInfo?.id ||
+                            userInfo?.role === 'admin')
+                        && currentTabManager === 1);
+                // const isToday = dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
+                return hasJoin;
+            })
+        const listMeetingToday = listMeetingAll.filter((item: any) => {
+            return dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
         })
+        return {
+            listMeetingToday,
+            listMeetingAll
+        }
     }, [listMeetingData, currentDate, currentTabManager])
 
-    if(isLoadingListMeeting) {
+    if (isLoadingListMeeting) {
         return <PrimaryLoading/>
     }
 
@@ -81,7 +88,7 @@ export default function MeetingInfo({navigation}: any) {
                     <DailyMeetingCalendar
                         currentDate={currentDate}
                         setCurrentDate={setCurrentDate}
-                        listMeeting={listMeeting}
+                        listMeeting={listMeetingAll}
                     />
                 </View>
 
@@ -89,7 +96,7 @@ export default function MeetingInfo({navigation}: any) {
                     userInfo?.role === 'admin' || userInfo?.role === 'manager' && (
                         <View style={styles.totalReportBox}>
                             <Text style={[fs_12_500, text_gray]}>
-                                {listMeeting.length} cuộc họp
+                                {listMeetingAll.length} cuộc họp
                             </Text>
                         </View>
                     )
@@ -97,7 +104,7 @@ export default function MeetingInfo({navigation}: any) {
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
-                    data={listMeeting}
+                    data={listMeetingToday}
                     contentContainerStyle={{
                         paddingBottom: 20,
                         paddingTop: 10,

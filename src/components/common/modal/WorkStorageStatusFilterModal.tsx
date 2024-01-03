@@ -66,8 +66,8 @@ export default function WorkStorageStatusFilterModal(
                                 styles.row,
                                 index === 0 && styles.borderTopBottom,
                                 {
-                                    backgroundColor: item.value === -1 ? '#FFF' :
-                                        WORK_STORAGE_STATUS_COLOR[item.value],
+                                    backgroundColor:
+                                        WORK_STORAGE_STATUS_COLOR[item.value as keyof typeof WORK_STORAGE_STATUS_COLOR],
                                 },
                             ]}>
                             <PrimaryCheckbox

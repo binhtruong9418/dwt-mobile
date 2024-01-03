@@ -90,6 +90,7 @@ export default function Home({navigation}: any) {
                     LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (
                         <HomeTabFactoryContainer
                             navigation={navigation}
+                            setCurrentMenuTab={setCurrentMenuTab}
                         />
                     ) : (
                         <HomeTabContainer
@@ -111,7 +112,7 @@ export default function Home({navigation}: any) {
                         rewardAndPunishData={rewardAndPunishData}
                     />
                 ) : currentMenuTab === 2 && currentTabManager === 1 ? (
-                    <ManufactureTabContainer/>
+                    <ManufactureTabContainer setCurrentMenuTab={setCurrentMenuTab}/>
                 ) : null}
             </SafeAreaView>
         )

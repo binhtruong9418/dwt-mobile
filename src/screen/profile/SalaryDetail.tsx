@@ -51,15 +51,16 @@ export default function SalaryDetail({route, navigation}: any) {
             marginTop: 30,
           }}>
           <View style={styles.box}>
+
             <Text
-              style={[
-                text_center,
-                text_black,
-                {
-                  fontSize: 26,
-                  fontWeight: '700',
-                },
-              ]}>
+                style={[
+                  text_center,
+                  text_black,
+                  {
+                    fontSize: 26,
+                    fontWeight: '700',
+                  },
+                ]}>
               {salaryInfo?.totalSalary?.toLocaleString()}
             </Text>
 

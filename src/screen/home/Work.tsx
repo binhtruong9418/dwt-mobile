@@ -140,7 +140,6 @@ export default function Work({navigation}: any) {
     } = useQuery(
         ['getListWorkDepartment', currentDepartment, currentMonth],
         async ({queryKey}) => {
-            console.log('run department');
             const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
                 department_id:
                     currentDepartment.value === 0 ? undefined : currentDepartment.value,

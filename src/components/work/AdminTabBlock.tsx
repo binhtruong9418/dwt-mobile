@@ -47,7 +47,7 @@ export default function AdminTabBlock({
               currentTabManager === 1 ? text_red : text_white,
               {textTransform: 'uppercase'},
             ]}>
-            {secondLabel || 'ĐƠN VỊ'}
+            {secondLabel || 'QUẢN LÝ'}
           </Text>
         </TouchableOpacity>
       </View>

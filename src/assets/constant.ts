@@ -13,42 +13,43 @@ export const WORK_STATUS_COLOR = {
 export const WORK_STORAGE_STATUS = [
     {
         label: 'Tất cả',
-        value: -1,
+        value: 'all',
     },
     {
         label: 'Chưa nhận',
-        value: 0,
+        value: 'changer_status',
     },
     {
         label: 'Đã giao',
-        value: 1,
+        value: '1',
     },
     {
         label: 'Đang làm',
-        value: 2,
+        value: '2',
     },
     {
         label: 'Đã xong',
-        value: 3,
+        value: '3',
     },
     {
         label: 'Đã nghiệm thu',
-        value: 4,
+        value: '4',
     },
     {
         label: 'Trễ',
-        value: 5,
+        value: '5',
     },
 ];
 
-export const WORK_STORAGE_STATUS_COLOR = [
-    '#FEF4A5',
-    '#F5F5F5',
-    '#FFB822',
-    '#89B6FA',
-    '#03D87F',
-    '#F5325C',
-];
+export const WORK_STORAGE_STATUS_COLOR = {
+    'all': '#FFF',
+    'changer_status': '#FEF4A5',
+    '1': '#F5F5F5',
+    '2':'#FFB822',
+    '3': '#89B6FA',
+    '4':'#03D87F',
+    '5':'#F5325C',
+};
 
 export const WORK_STATUS = {
     '1': 'Đã giao',

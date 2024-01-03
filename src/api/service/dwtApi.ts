@@ -40,6 +40,10 @@ export const dwtApi = {
     return await axiosClient.get(url);
   },
 
+  searchUser: async (params = {}): Promise<any> => {
+    const url = 'users';
+    return await axiosClient.get(url, {params});
+  },
   //API lấy danh sách nhân viên của văn phòng
   getListUserDepartment: async (departmentId: string): Promise<any> => {
     const url = 'users';
@@ -259,11 +263,27 @@ export const dwtApi = {
     const url = 'mobile/production-diary/by-month';
     return await axiosClient.get(url, {params});
   },
+
+  getProductionPersonalDiaryByMonth: async (params = {}): Promise<any> => {
+    const url = 'mobile/production-diary/personal-by-month';
+    return await axiosClient.get(url, {params});
+  },
+
+  getListWorkFactoryBySelf: async (params = {}): Promise<any> => {
+    const url = 'mobile/production-diary/list-work-of-assignee-by-self';
+    return await axiosClient.get(url, {params});
+  },
   // trang home -> tab quản lý -> sub tab sản xuất bấm vào 1 cái log
   getProductionDiaryDetail: async (id: number): Promise<any> => {
     const url = `mobile/production-diary/project-work-detail/${id}`;
     return await axiosClient.get(url);
   },
+
+  createProductionReport: async (data: any) => {
+    const url = 'mobile/production-diary/store-log';
+    return await axiosClient.post(url, data);
+  },
+
 
   createNewPropose: async (data: any): Promise<any> => {
     const url = 'quick-reports';
@@ -293,6 +313,7 @@ export const dwtApi = {
   //BE provide work storages api with three different endpoints for 3 roles: admin, manager, user
   //each endpoint has same params so we will create a function to call all of them
   getListJobs: async (role: 'manager' | 'admin' | 'user' = 'user', params = {}): Promise<any> => {
+    console.log(role)
     const url = '/list-job/' + role;
     return await axiosClient.get(url, {params});
   },
