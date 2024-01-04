@@ -54,6 +54,8 @@ export default function CreateFactoryDailyReportModal(
             })
             if(response.status === 200) {
                 showToast('Báo cáo thành công')
+                setNote('')
+                setCurrentWork('')
                 setVisible(false)
                 refetchListData && await refetchListData()
             }

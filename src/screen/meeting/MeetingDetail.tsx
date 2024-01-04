@@ -1,7 +1,7 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {useState} from 'react';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import MeetingInformation from "../../components/meeting/MeetingInformation.tsx";

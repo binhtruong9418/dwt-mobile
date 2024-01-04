@@ -5,7 +5,7 @@ export default function WorkDetailBlock({data}: any) {
   return (
     <View style={styles.wrapper}>
       {data.map((item: any, index: number) => {
-        return (
+        return item.label && (
           <View style={styles.row} key={index}>
             <View style={styles.left}>
               <Text style={[fs_15_700, text_black]}>{item.label}:</Text>

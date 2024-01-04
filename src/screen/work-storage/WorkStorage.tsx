@@ -2,7 +2,7 @@ import {Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {useMemo, useState} from 'react';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
 import {fs_14_400, text_black} from "../../assets/style.ts";
 import DropdownIcon from "../../assets/img/dropdown-icon.svg";

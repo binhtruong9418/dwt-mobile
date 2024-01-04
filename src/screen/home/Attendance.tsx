@@ -28,7 +28,7 @@ import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import AttendanceCalendar from '../../components/attendance/AttendanceCalendar.tsx';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 
 export default function Attendance({ navigation }: any) {

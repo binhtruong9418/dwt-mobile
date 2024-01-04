@@ -16,8 +16,8 @@ import DatePickerFromToModal from '../../components/common/modal/DatePickerFromT
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
-import ListDepartmentModal from '../../components/home/manager-tab/ListDepartmentModal.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
+import ListDepartmentModal from '../../components/home/manager-component/ListDepartmentModal.tsx';
 
 export default function AttendanceSummary({navigation}: any) {
     const {

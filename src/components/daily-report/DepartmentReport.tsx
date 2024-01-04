@@ -9,7 +9,7 @@ import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import {useState} from 'react';
 import dayjs from 'dayjs';
 import DatePickerModal from '../common/modal/DatePickerModal.tsx';
-import ListDepartmentModal from '../home/manager-tab/ListDepartmentModal.tsx';
+import ListDepartmentModal from '../home/manager-component/ListDepartmentModal.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import UserReportDetail from './UserReportDetail.tsx';

@@ -17,7 +17,7 @@ import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import AttendanceHistoryTable from '../../components/attendance/AttendanceHistoryTable.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 
 export default function AttendanceHistory({route, navigation}: any) {
     const {departmentId, title} = route.params;

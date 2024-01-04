@@ -53,9 +53,6 @@ export default function UserFilterMultipleModal(
             swipeDirection={'down'}
             backdropTransitionInTiming={200}
             backdropTransitionOutTiming={200}
-            onSwipeComplete={() => {
-                setVisible(false);
-            }}
             style={styles.wrapper}
             isVisible={visible}
             onBackdropPress={() => {
@@ -96,7 +93,7 @@ export default function UserFilterMultipleModal(
                                     textStyle={styles.text}
                                     iconStyle={styles.radius}
                                     innerIconStyle={styles.radius}
-                                    onPress={() => handleChangeCheck(item?.value)}
+                                    onPress={() => handleChangeCheck(item)}
                                 />
                             );
                         }}

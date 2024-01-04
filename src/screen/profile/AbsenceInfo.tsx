@@ -10,7 +10,7 @@ import WorkIcon from "../../assets/img/absence/work.svg";
 import {LIST_ABSENCE_TYPE, LIST_ABSENCE_TYPE_COLOR} from "../../assets/constant.ts";
 import AddIcon from "../../assets/img/add.svg";
 import AbsenceTypeFilterModal from "../../components/common/modal/AbsenceTypeFilterModal.tsx";
-import AdminTabBlock from "../../components/work/AdminTabBlock.tsx";
+import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
 import {useConnection} from "../../redux/connection";
 import {useQuery} from "@tanstack/react-query";
 import {dwtApi} from "../../api/service/dwtApi.ts";

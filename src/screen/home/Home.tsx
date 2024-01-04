@@ -9,13 +9,17 @@ import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import TabBlock from '../../components/home/TabBlock.tsx';
 import {useState} from 'react';
-import BusinessTabContainer from '../../components/home/tab-container/BusinessTabContainer.tsx';
-import HomeTabContainer from '../../components/home/tab-container/HomeTabContainer.tsx';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
-import OfficeTabContainer from '../../components/home/tab-container/OfficeTabContainer.tsx';
-import ManufactureTabContainer from '../../components/home/tab-container/ManufactureTabContainer.tsx';
-import {LIST_FACTORY_DEPARTMENT} from "../../assets/constant.ts";
-import HomeTabFactoryContainer from "../../components/home/tab-container/HomeTabFactoryContainer.tsx";
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
+import {LIST_BUSINESS_DEPARTMENT, LIST_FACTORY_DEPARTMENT, LIST_OFFICE_DEPARTMENT} from "../../assets/constant.ts";
+import UserBusiness from "../../components/home/user/UserBusiness.tsx";
+import UserOffice from "../../components/home/user/UserOffice.tsx";
+import UserFactory from "../../components/home/user/UserFactory.tsx";
+import ManagerBusiness from "../../components/home/manager/ManagerBusiness.tsx";
+import ManagerOffice from "../../components/home/manager/ManagerOffice.tsx";
+import ManagerFactory from "../../components/home/manager/ManagerFactory.tsx";
+import AdminBusiness from "../../components/home/admin/AdminBusiness.tsx";
+import AdminOffice from "../../components/home/admin/AdminOffice.tsx";
+import AdminFactory from "../../components/home/admin/AdminFactory.tsx";
 
 export default function Home({navigation}: any) {
     const {
@@ -79,41 +83,109 @@ export default function Home({navigation}: any) {
             <SafeAreaView style={styles.wrapper}>
                 <HomeHeader navigation={navigation}/>
                 <AdminTabBlock secondLabel={'Quản lý'}/>
-                {(userInfo.role === 'admin' || userInfo.role === 'manager') &&
+                {
+                    userInfo?.role === 'admin' &&
                     currentTabManager === 1 && (
                         <TabBlock
                             currentTab={currentMenuTab}
                             setCurrentTab={setCurrentMenuTab}
                         />
-                    )}
-                {currentTabManager === 0 ? (
-                    LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (
-                        <HomeTabFactoryContainer
-                            navigation={navigation}
-                            setCurrentMenuTab={setCurrentMenuTab}
-                        />
+                    )
+                }
+                {
+                    currentTabManager === 0 ? (
+                        LIST_BUSINESS_DEPARTMENT.includes(userInfo.departement_id) ? (
+                            <UserBusiness
+                                attendanceData={attendanceData}
+                                checkInTime={checkInTime}
+                                checkOutTime={checkOutTime}
+                                rewardAndPunishData={rewardAndPunishData}
+                            />
+                        ) : LIST_OFFICE_DEPARTMENT.includes(userInfo.departement_id) ? (
+                            <UserOffice
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                                checkInTime={checkInTime}
+                                checkOutTime={checkOutTime}
+                            />
+                        ) : LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (
+                            <UserFactory
+                                navigation={navigation}
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                                checkInTime={checkInTime}
+                                checkOutTime={checkOutTime}
+                            />
+                        ) : null
+                    ) : userInfo?.role === 'admin' ? (
+                        currentMenuTab === 0 ? (
+                            <AdminOffice
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                                navigation={navigation}
+                            />
+                        ) : currentMenuTab === 1 ? (
+                            <AdminBusiness
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                            />
+                        ) : currentMenuTab === 2 ? (
+                            <AdminFactory
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                                navigation={navigation}
+                            />
+                        ) : null
                     ) : (
-                        <HomeTabContainer
-                            attendanceData={attendanceData}
-                            checkInTime={checkInTime}
-                            checkOutTime={checkOutTime}
-                            rewardAndPunishData={rewardAndPunishData}
-                        />)
-                ) : currentMenuTab === 0 && currentTabManager === 1 ? (
-                    <OfficeTabContainer
-                        attendanceData={attendanceData}
-                        rewardAndPunishData={rewardAndPunishData}
-                    />
-                ) : currentMenuTab === 1 && currentTabManager === 1 ? (
-                    <BusinessTabContainer
-                        attendanceData={attendanceData}
-                        checkInTime={checkInTime}
-                        checkOutTime={checkOutTime}
-                        rewardAndPunishData={rewardAndPunishData}
-                    />
-                ) : currentMenuTab === 2 && currentTabManager === 1 ? (
-                    <ManufactureTabContainer setCurrentMenuTab={setCurrentMenuTab}/>
-                ) : null}
+                        LIST_BUSINESS_DEPARTMENT.includes(userInfo.departement_id) ? (
+                            <ManagerBusiness
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                            />
+                        ) : LIST_OFFICE_DEPARTMENT.includes(userInfo.departement_id) ? (
+                            <ManagerOffice
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                                navigation={navigation}
+                            />
+                        ) : LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (
+                            <ManagerFactory
+                                attendanceData={attendanceData}
+                                rewardAndPunishData={rewardAndPunishData}
+                                navigation={navigation}
+                            />
+                        ) : null
+                    )
+                }
+
+                {/*{currentTabManager === 0 ? (*/}
+                {/*    LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (*/}
+                {/*        <HomeTabFactoryContainer*/}
+                {/*            navigation={navigation}*/}
+                {/*            setCurrentMenuTab={setCurrentMenuTab}*/}
+                {/*        />*/}
+                {/*    ) : (*/}
+                {/*        <UserBusiness*/}
+                {/*            attendanceData={attendanceData}*/}
+                {/*            checkInTime={checkInTime}*/}
+                {/*            checkOutTime={checkOutTime}*/}
+                {/*            rewardAndPunishData={rewardAndPunishData}*/}
+                {/*        />)*/}
+                {/*) : currentMenuTab === 0 && currentTabManager === 1 ? (*/}
+                {/*    <OfficeTabContainer*/}
+                {/*        attendanceData={attendanceData}*/}
+                {/*        rewardAndPunishData={rewardAndPunishData}*/}
+                {/*    />*/}
+                {/*) : currentMenuTab === 1 && currentTabManager === 1 ? (*/}
+                {/*    <BusinessTabContainer*/}
+                {/*        attendanceData={attendanceData}*/}
+                {/*        checkInTime={checkInTime}*/}
+                {/*        checkOutTime={checkOutTime}*/}
+                {/*        rewardAndPunishData={rewardAndPunishData}*/}
+                {/*    />*/}
+                {/*) : currentMenuTab === 2 && currentTabManager === 1 ? (*/}
+                {/*    <ManufactureTabContainer setCurrentMenuTab={setCurrentMenuTab}/>*/}
+                {/*) : null}*/}
             </SafeAreaView>
         )
     );

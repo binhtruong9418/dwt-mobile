@@ -1,6 +1,57 @@
 export const LIST_FACTORY_DEPARTMENT = [
-    14, 57, 56, 16, 17, 59, 66, 60, 21, 67, 61, 62, 63, 15
+    14,
+    15,
+    16,
+    17,
+    21,
+    59,
+    60,
+    66,
+    67,
+    57,
+    56,
+    61,
+    62,
+    63,
 ]
+
+export const LIST_OFFICE_DEPARTMENT = [
+    77,
+    2,
+    3,
+    10,
+    58,
+    36,
+    44,
+    46,
+    68,
+    69,
+    70,
+    71,
+    47,
+    55,
+    72,
+    73,
+    64,
+    65
+]
+
+export const LIST_BUSINESS_DEPARTMENT = [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    75
+]
+
+export const WORK_OFFICE_STATUS_COLOR = {
+    '1': '#FFF',
+    '2': '#FFB822',
+    '3': '#89B6FA',
+    '4': '#F5325C',
+};
 
 export const WORK_STATUS_COLOR = {
     '1': '#FFF',
@@ -45,10 +96,10 @@ export const WORK_STORAGE_STATUS_COLOR = {
     'all': '#FFF',
     'changer_status': '#FEF4A5',
     '1': '#F5F5F5',
-    '2':'#FFB822',
+    '2': '#FFB822',
     '3': '#89B6FA',
-    '4':'#03D87F',
-    '5':'#F5325C',
+    '4': '#03D87F',
+    '5': '#F5325C',
 };
 
 export const WORK_STATUS = {
@@ -65,6 +116,29 @@ export const WORK_STATUS_OFFICE = {
     3: 'Đã xong',
     4: 'Trễ',
 };
+
+export const LIST_WORK_OFFICE_STATUS_FILTER = [
+    {
+        label: 'Tất cả trạng thái',
+        value: '0',
+    },
+    {
+        label: 'Đã giao',
+        value: '1',
+    },
+    {
+        label: 'Đang làm',
+        value: '2',
+    },
+    {
+        label: 'Đã xong',
+        value: '3',
+    },
+    {
+        label: 'Trễ',
+        value: '4',
+    },
+];
 
 export const LIST_WORK_STATUS_FILTER = [
     {

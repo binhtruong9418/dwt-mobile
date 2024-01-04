@@ -49,9 +49,6 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
     }
   );
 
-  console.log(userInfo)
-  console.log('workDetailData', workDetailData)
-
   const workDetail = useMemo(() => {
     let listLogs = [];
     let workType = 'Đạt giá trị';

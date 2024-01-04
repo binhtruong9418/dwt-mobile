@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import { useConnection } from '../../redux/connection';
 import Header from '../../components/header/Header.tsx';
 import { useMemo, useState } from 'react';

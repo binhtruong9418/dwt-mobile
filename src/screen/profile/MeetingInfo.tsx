@@ -2,7 +2,7 @@ import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import {useMemo, useState} from 'react';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
 import {fs_12_500, fs_15_700, text_black, text_gray} from "../../assets/style.ts";
 import DropdownIcon from "../../assets/img/dropdown-icon.svg";

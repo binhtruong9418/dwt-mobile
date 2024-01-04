@@ -76,8 +76,12 @@ export const dwtApi = {
     });
   },
 
-  getOfficeWork: async (params = {}): Promise<any> => {
+  getOfficeWorkDepartment: async (params = {}): Promise<any> => {
     const url = 'mobile/office-diary';
+    return await axiosClient.get(url, {params});
+  },
+  getOfficeWorkPersonal: async (params = {}): Promise<any> => {
+    const url = 'mobile/office-diary/self';
     return await axiosClient.get(url, {params});
   },
 

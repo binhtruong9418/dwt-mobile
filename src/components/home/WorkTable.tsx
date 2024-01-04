@@ -18,12 +18,12 @@ const columns = [
     width: 0.4,
   },
   {
-    key: 'business_standard_quantity_display',
+    key: 'amount',
     title: 'Số lượng',
     width: 0.25,
   },
   {
-    key: 'business_standard_score_tmp',
+    key: 'kpi',
     title: 'NS/KPI',
     width: 0.25,
   },

@@ -19,7 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
-import AdminTabBlock from '../../components/work/AdminTabBlock.tsx';
+import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 
 export default function WorkDetail({ route, navigation }: any) {
   const { data, date, routeGoBack } = route.params;
