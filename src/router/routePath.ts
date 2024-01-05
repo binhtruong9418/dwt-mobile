@@ -32,7 +32,7 @@ import {
   MeetingInfoScreen,
   MeetingDetailScreen,
   ComingSoonScreen,
-  UserFactoryWorkDayScreen,
+  UserFactoryWorkDayScreen, WorkOfficeListReportScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 
@@ -179,5 +179,9 @@ export const navigatorPath = [
   {
     name: 'UserFactoryWorkDay',
     component: UserFactoryWorkDayScreen,
+  },
+  {
+    name: 'WorkOfficeListReport',
+    component: WorkOfficeListReportScreen,
   }
 ];

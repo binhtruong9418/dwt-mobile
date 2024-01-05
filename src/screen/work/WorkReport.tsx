@@ -251,7 +251,6 @@ export default function WorkReport({ route, navigation }: any) {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                // alignItems: 'flex-end',
               }}
             >
               <View
@@ -269,7 +268,10 @@ export default function WorkReport({ route, navigation }: any) {
                     styles.input,
                     text_black,
                     fs_15_400,
-                    (data.type !== 3 && !(data.isWorkArise && data.type === 2)) && styles.disable,
+                    !(
+                      data.type === 3 ||
+                      (data.isWorkArise && data.type === 2)
+                    ) && styles.disable,
                   ]}
                   placeholderTextColor={'#787878'}
                   placeholder={

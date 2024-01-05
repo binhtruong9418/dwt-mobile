@@ -16,7 +16,7 @@ import { useConnection } from '../../redux/connection';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import NoAvatarIcon from '../../assets/img/no-avatar.svg';
 import CameraAvatarIcon from '../../assets/img/camera-avatar.svg';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   fs_12_400,
   fs_14_400,
@@ -33,7 +33,7 @@ import StarIcon from '../../assets/img/star.svg';
 import BoxIcon from '../../assets/img/profile/box.svg';
 import ChevronRightProfileIcon from '../../assets/img/profile/chevron-right-profile.svg';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import UploadAvatarModal from '../../components/profile/UploadAvatarModal.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
@@ -90,7 +90,6 @@ export default function Profile({ navigation }: any) {
     onSetCurrentTabManager,
     connection: { userInfo },
   } = useConnection();
-  const queryClient = useQueryClient();
   const [isOpenUploadAvatar, setIsOpenUploadAvatar] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -133,6 +132,21 @@ export default function Profile({ navigation }: any) {
     }
   );
 
+  const {
+    data: listSalary = [],
+    isLoading: isLoadingSalary,
+    refetch: refetchSalary,
+  } = useQuery(['listSalary'], async () => {
+    const res = await dwtApi.getSalaryHistory();
+    return res?.data?.salaryHistory?.data;
+  });
+
+  const totalSalary = useMemo(() => {
+    return listSalary.reduce((total: number, salary: any) => {
+      return total + salary?.totalRealSalary;
+    }, 0);
+  }, [listSalary]);
+
   const handleUploadAvatar = async (images: any) => {
     try {
       setIsOpenUploadAvatar(false);
@@ -153,9 +167,12 @@ export default function Profile({ navigation }: any) {
     }
   };
 
-  useRefreshOnFocus(refetch);
+  useRefreshOnFocus(() => {
+    refetch();
+    refetchSalary();
+  });
 
-  if (isLoadingUserData) {
+  if (isLoadingUserData || isLoadingSalary) {
     return <PrimaryLoading />;
   }
   return (
@@ -256,7 +273,7 @@ export default function Profile({ navigation }: any) {
             <View style={styles.box}>
               <Text style={[fs_12_400, text_gray]}>Lượng tạm tính</Text>
               <Text style={[fs_25_700, text_black]}>
-                {userData.salary_fund && userData.salary_fund.toLocaleString()}
+                {totalSalary.toLocaleString()}
               </Text>
             </View>
           </View>

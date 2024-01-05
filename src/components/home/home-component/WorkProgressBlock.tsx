@@ -55,7 +55,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Đã nghỉ / vắng</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
-            {Number(attendanceData.countLate)}
+            {attendanceData.numAbsent}
           </Text>
         </View>
 
@@ -65,7 +65,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
           <Text style={[fs_12_400, text_red]}>
-            {Number(attendanceData.expectedOT)}
+            {attendanceData.expectedOT}
           </Text>
         </View>
 

@@ -17,7 +17,7 @@ import {
   text_red,
   text_white,
 } from '../../assets/style.ts';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useConnection } from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
@@ -97,7 +97,7 @@ export default function AddWorkArise({ navigation }: any) {
       return;
     }
 
-    if (quantity === '' || quantity === '0') {
+    if (currentType === 2 && (quantity === '' || quantity === '0')) {
       showToast('Vui lòng nhập số lượng');
       return;
     }
@@ -123,7 +123,7 @@ export default function AddWorkArise({ navigation }: any) {
         name: name,
         desc: description,
         working_hours: workingHour,
-        quantity: quantity,
+        quantity: currentType === 1 ? 1 : Number(quantity),
         type: currentType,
         start_time: dayjs(fromDate).format('YYYY-MM-DD'),
         end_time: dayjs(toDate).format('YYYY-MM-DD'),
@@ -168,6 +168,12 @@ export default function AddWorkArise({ navigation }: any) {
     handleClearData();
     navigation.goBack();
   };
+
+  useEffect(() => {
+    if (currentType === 1) {
+      setQuantity('1');
+    }
+  }, [currentType]);
 
   if (isLoadingListUnit || isLoadingListUser) {
     return <PrimaryLoading />;
@@ -216,9 +222,7 @@ export default function AddWorkArise({ navigation }: any) {
         </View>
 
         <View style={styles.inputBox}>
-          <Text style={[fs_15_700, text_black]}>
-            Người đảm nhiệm:
-          </Text>
+          <Text style={[fs_15_700, text_black]}>Người đảm nhiệm:</Text>
           <PrimaryDropdown
             data={listUser.map((user: any) => {
               return {
@@ -295,12 +299,20 @@ export default function AddWorkArise({ navigation }: any) {
               Số lượng <Text style={text_red}>*</Text>:
             </Text>
             <TextInput
-              style={[styles.input, text_black, fs_15_400]}
+              style={[
+                styles.input,
+                text_black,
+                fs_15_400,
+                {
+                  backgroundColor: currentType === 1 ? '#D9D9D9' : '#FFF',
+                },
+              ]}
               placeholderTextColor={'#787878'}
               inputMode={'numeric'}
               keyboardType={'numeric'}
               value={quantity}
               onChangeText={setQuantity}
+              editable={currentType === 1 ? false : true}
             />
           </View>
         </View>

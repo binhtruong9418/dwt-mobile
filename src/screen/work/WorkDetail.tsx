@@ -20,6 +20,7 @@ import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
+import dayjs from "dayjs";
 
 export default function WorkDetail({ route, navigation }: any) {
   const { data, date, routeGoBack } = route.params;
@@ -60,7 +61,7 @@ export default function WorkDetail({ route, navigation }: any) {
       listLogs = workDetailData?.business_standard_arise_logs;
       workType = workDetailData.type === 2 ? 'Đạt giá trị' : '1 lần';
       target = workDetailData.quantity;
-        totalReport = workDetailData.total_reports;
+      totalReport = workDetailData.total_reports;
     } else {
       listLogs = workDetailData?.business_standard_report_logs;
       workType =
@@ -70,7 +71,7 @@ export default function WorkDetail({ route, navigation }: any) {
           ? 'Đạt giá trị'
           : '1 lần';
       target = workDetailData.targets;
-        totalReport = workDetailData.count_report;
+      totalReport = workDetailData.count_report;
     }
     return {
       name: workDetailData.name,
@@ -188,7 +189,8 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputContent,
                 text_black,
                 fs_15_400,
-                  (userInfo?.role !== 'manager' || currentTabManager === 0) && styles.disableInput,
+                (userInfo?.role !== 'manager' || currentTabManager === 0) &&
+                  styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.managerComment || 'Nhập nội dung'}
@@ -200,7 +202,8 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
-                  (userInfo?.role !== 'manager' || currentTabManager === 0) && styles.disableInput,
+                (userInfo?.role !== 'manager' || currentTabManager === 0) &&
+                  styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.managerKpi || 'Điểm KPI'}
@@ -218,7 +221,8 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputContent,
                 text_black,
                 fs_15_400,
-                  (userInfo?.role !== 'admin' || currentTabManager === 0) && styles.disableInput,
+                (userInfo?.role !== 'admin' || currentTabManager === 0) &&
+                  styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.adminComment || 'Nhập nội dung'}
@@ -230,7 +234,8 @@ export default function WorkDetail({ route, navigation }: any) {
                 styles.inputGrade,
                 text_black,
                 fs_15_400,
-                  (userInfo?.role !== 'admin' || currentTabManager === 0) && styles.disableInput,
+                (userInfo?.role !== 'admin' || currentTabManager === 0) &&
+                  styles.disableInput,
               ]}
               placeholderTextColor={'#787878'}
               placeholder={workDetail?.adminKpi || 'Điểm KPI'}
@@ -270,15 +275,22 @@ export default function WorkDetail({ route, navigation }: any) {
                 width: 3 / 11,
               },
             ]}
-            data={workDetail.listLogs.map((item: any) => {
-              return {
-                ...item,
-                date: item.reported_date || '',
-                value: item.quantity,
-                dateDone: item.updated_date,
-                valueDone: item.manager_quantity,
-              };
-            })}
+            data={workDetail.listLogs
+              .map((item: any) => {
+                return {
+                  ...item,
+                  date: dayjs(item.reported_date).format('DD/MM/YYYY') || '',
+                  value: item.quantity,
+                  dateDone: item.updated_date,
+                  valueDone: item.manager_quantity,
+                };
+              })
+              .sort((a: any, b: any) => {
+                return (
+                  dayjs(b?.reported_date).unix() -
+                  dayjs(a?.reported_date).unix()
+                );
+              })}
           />
         </View>
       </ScrollView>

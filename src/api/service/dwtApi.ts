@@ -34,6 +34,11 @@ export const dwtApi = {
     return await axiosClient.get(url);
   },
 
+  getUnitById: async (id: number): Promise<any> => {
+    const url = `units/${id}`;
+    return await axiosClient.get(url);
+  },
+
   //API laaysys danh sách tất cả nhân viên
   getListAllUser: async (): Promise<any> => {
     const url = 'users/all';

@@ -18,12 +18,15 @@ import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
+import dayjs from "dayjs";
 
 export default function WorkDetailDepartment({ route, navigation }: any) {
   const { data, managerWorkId, date, routeGoBack } = route.params;
   const {
     connection: { userInfo },
   } = useConnection();
+
+  console.log(managerWorkId, userInfo.id, data.isWorkArise);
 
   const {
     data: workDetailData = {},
@@ -40,7 +43,11 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
           username: usernameData.data.name,
         };
       } else {
-        const res = await dwtApi.getWorkDetail(managerWorkId, userInfo.id, queryKey[2]);
+        const res = await dwtApi.getWorkDetail(
+          managerWorkId,
+          userInfo.id,
+          queryKey[2]
+        );
         return res.data;
       }
     },
@@ -68,7 +75,7 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
           ? 'Đạt giá trị'
           : '1 lần';
       target = workDetailData?.targets;
-        totalReport = workDetailData?.count_report;
+      totalReport = workDetailData?.count_report;
     }
     return {
       name: workDetailData?.name,
@@ -266,15 +273,22 @@ export default function WorkDetailDepartment({ route, navigation }: any) {
                 width: 3 / 11,
               },
             ]}
-            data={workDetail.listLogs.map((item: any) => {
-              return {
-                ...item,
-                date: item.reported_date || '',
-                value: item.quantity,
-                dateDone: item.updated_date,
-                valueDone: item.manager_quantity,
-              };
-            })}
+            data={workDetail.listLogs
+              .map((item: any) => {
+                return {
+                  ...item,
+                  date: dayjs(item.reported_date).format('DD/MM/YYYY') || '',
+                  value: item.quantity,
+                  dateDone: item.updated_date,
+                  valueDone: item.manager_quantity,
+                };
+              })
+              .sort((a: any, b: any) => {
+                return (
+                  dayjs(b?.reported_date).unix() -
+                  dayjs(a?.reported_date).unix()
+                );
+              })}
           />
         </View>
       </ScrollView>

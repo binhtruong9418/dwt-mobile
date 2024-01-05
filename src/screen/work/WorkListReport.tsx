@@ -1,21 +1,25 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
-import {Calendar} from 'react-native-calendars/';
-import {LocaleConfig} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars/';
 import dayjs from 'dayjs';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import ChevronLeftIcon from '../../assets/img/chevron-left-calendar.svg';
 import ChevronRightIcon from '../../assets/img/chevron-right-calendar.svg';
-import {fs_13_400, row_between, text_gray} from '../../assets/style.ts';
+import { fs_13_400, row_between, text_gray } from '../../assets/style.ts';
+import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
 
-export default function WorkListReport({route, navigation}: any) {
-  const {data} = route.params;
-  const listLogs = data.business_standard_report_logs
-    ? data.business_standard_report_logs
-    : data.business_standard_arise_logs
+export default function WorkListReport({ route, navigation }: any) {
+  const { data } = route.params;
+  const listLogs = data.isWorkArise
     ? data.business_standard_arise_logs
-    : [];
+    : data.business_standard_report_logs;
   const initialDate = dayjs(new Date()).format('YYYY-MM-DD');
   const [markedDates, setMarkedDates] = useState<any>({});
   useEffect(() => {
@@ -49,10 +53,10 @@ export default function WorkListReport({route, navigation}: any) {
     setMarkedDates(markedDates);
   }, [data]);
   const handleChangeDay = (day: any) => {
-    const listMarkedDates = {...markedDates};
+    const listMarkedDates = { ...markedDates };
     const date = dayjs(day).format('YYYY-MM-DD');
     if (!listMarkedDates[date]) {
-      Object.keys(listMarkedDates).forEach(key => {
+      Object.keys(listMarkedDates).forEach((key) => {
         listMarkedDates[key] = {
           ...listMarkedDates[key],
           selected: false,
@@ -65,7 +69,7 @@ export default function WorkListReport({route, navigation}: any) {
         selectedTextColor: '#FFF',
       };
     } else {
-      Object.keys(listMarkedDates).forEach(key => {
+      Object.keys(listMarkedDates).forEach((key) => {
         listMarkedDates[key] = {
           ...listMarkedDates[key],
           selected: false,
@@ -83,6 +87,7 @@ export default function WorkListReport({route, navigation}: any) {
   };
   return (
     <SafeAreaView style={styles.wrapper}>
+      <AdminTabBlock />
       <Header
         title="TIẾN TRÌNH"
         handleGoBack={() => {
@@ -95,14 +100,14 @@ export default function WorkListReport({route, navigation}: any) {
           initialDate={initialDate}
           firstDay={1}
           markedDates={markedDates}
-          onDayPress={day => handleChangeDay(day.dateString)}
+          onDayPress={(day) => handleChangeDay(day.dateString)}
           theme={{
             dayTextColor: '#000',
             todayTextColor: '#DC3545',
             textDayFontSize: 13,
             textDayFontWeight: '500',
           }}
-          renderArrow={direction => {
+          renderArrow={(direction) => {
             return direction === 'left' ? (
               <ChevronLeftIcon width={20} height={20} />
             ) : (
@@ -114,11 +119,22 @@ export default function WorkListReport({route, navigation}: any) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}
           data={listLogs}
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
+            const reportDate = item.reported_date;
+            const formatDate =
+              'Thứ ' +
+              (dayjs(reportDate).day() + 1) +
+              ', Ngày ' +
+              dayjs(reportDate).date() +
+              ' tháng ' +
+              (dayjs(reportDate).month() + 1) +
+              ' năm ' +
+              dayjs(reportDate).year();
             return (
               <TouchableOpacity
-                onPress={() => handleChangeDay(item.reported_date)}>
-                <Text style={styles.title}>{item.reported_date}</Text>
+                onPress={() => handleChangeDay(item.reported_date)}
+              >
+                <Text style={styles.title}>{formatDate}</Text>
                 <View style={row_between}>
                   <Text style={styles.description}>{item.note}</Text>
                   <Text style={[fs_13_400, text_gray]}>{item.quantity}</Text>
@@ -127,7 +143,7 @@ export default function WorkListReport({route, navigation}: any) {
             );
           }}
           keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={() => <View style={{height: 10}} />}
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         />
       </View>
     </SafeAreaView>

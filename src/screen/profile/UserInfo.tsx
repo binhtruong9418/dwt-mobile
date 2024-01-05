@@ -66,7 +66,6 @@ export default function UserInfo({ navigation }: any) {
       const transferInformation = JSON.parse(
         res.data?.transfer_information || '{}'
       );
-      console.log(transferInformation);
       setEditUserInfo({
         name: res.data?.name,
         phone: res.data?.phone,
@@ -75,7 +74,7 @@ export default function UserInfo({ navigation }: any) {
         release_date: res.data?.release_date,
         dob: res.data?.dob,
         permanent_address: res.data?.permanent_address,
-        sex: res.data?.sex,
+        sex: res.data?.sex === 1 ? '1' : '0',
         bank_name: transferInformation?.bank_name,
         bank_number: transferInformation?.bank_number,
         receiver_name: transferInformation?.receiver_name,
@@ -219,11 +218,11 @@ export default function UserInfo({ navigation }: any) {
                   data={[
                     {
                       label: 'Nam',
-                      value: '0',
+                      value: '1',
                     },
                     {
                       label: 'Nữ',
-                      value: '1',
+                      value: '0',
                     },
                   ]}
                   labelField="label"

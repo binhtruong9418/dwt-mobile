@@ -1,13 +1,13 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import SmallLogo from '../../assets/img/small-logo.svg';
 import SearchIcon from '../../assets/img/search-icon.svg';
 import NotiIcon from '../../assets/img/noti-icon.svg';
 import AvatarIcon from '../../assets/img/avatar.svg';
-import {useConnection} from '../../redux/connection';
+import { useConnection } from '../../redux/connection';
 
-export default function HomeHeader({navigation}: any) {
+export default function HomeHeader({ navigation }: any) {
   const {
-    connection: {userInfo},
+    connection: { userInfo },
   } = useConnection();
   return (
     <View style={styles.wrapper}>
@@ -17,30 +17,34 @@ export default function HomeHeader({navigation}: any) {
           <SearchIcon width={20} height={20} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton} onPress={() => {
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => {
             navigation.navigate('News');
-        }}>
+          }}
+        >
           <NotiIcon width={20} height={20} />
         </TouchableOpacity>
 
         <TouchableOpacity
-            style={{
-              width: 35,
-              height: 35,
-              borderRadius: 999,
-            }}
-            onPress={() => {
-              navigation.navigate('Profile');
-            }}>
+          style={{
+            width: 35,
+            height: 35,
+            borderRadius: 999,
+          }}
+          onPress={() => {
+            navigation.navigate('Profile');
+          }}
+        >
           {userInfo?.avatar ? (
-              <Image
-                  source={{uri: userInfo?.avatar}}
-                  width={35}
-                  height={35}
-                  borderRadius={999}
-              />
+            <Image
+              source={{ uri: userInfo?.avatar }}
+              width={35}
+              height={35}
+              borderRadius={999}
+            />
           ) : (
-              <AvatarIcon width={35} height={35} />
+            <AvatarIcon width={35} height={35} />
           )}
         </TouchableOpacity>
       </View>

@@ -24,6 +24,7 @@ import LoadingActivity from '../common/loading/LoadingActivity.tsx';
 import EmptyDailyReportIcon from '../../assets/img/empty-daily-report.svg';
 import CreateOrEditDailyReportModal from '../common/modal/CreateOrEditDailyReportModal.tsx';
 import { useQuery } from '@tanstack/react-query';
+import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
 
 export default function PersonalReport({}) {
   const [currentDate, setCurrentDate] = useState<{
@@ -66,6 +67,8 @@ export default function PersonalReport({}) {
       itemDate.date() === currentDate.date
     );
   });
+
+  useRefreshOnFocus(reFetchUseReport)
 
   return (
     <View style={styles.wrapper}>
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     paddingVertical: 12,
     marginHorizontal: 20,
-    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 8,
   },
   listReport: {
