@@ -26,8 +26,12 @@ import dayjs from 'dayjs';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 import YearPickerModal from "../../components/common/modal/YearPickerModal.tsx";
 import SalarySummaryIcon from "../../assets/img/salary-summary.svg";
+import {useConnection} from "../../redux/connection";
+import {LIST_BUSINESS_DEPARTMENT} from "../../assets/constant.ts";
+import ComingSoonScreenComponent from "../../components/coming-soon/ComingSoonScreenComponent.tsx";
 
 export default function SalaryInfo({ navigation }: any) {
+    const {connection: {userInfo}} = useConnection();
   const [isOpenYearSelect, setIsOpenYearSelect] = useState(false);
   const [currentYear, setCurrentYear] = useState(dayjs().year());
   const [salaryMode, setSalaryMode] = useState(0);
@@ -48,6 +52,8 @@ export default function SalaryInfo({ navigation }: any) {
       listSalaryHistories[i].salaryDetail = salaryDetail.data;
     }
     return listSalaryHistories;
+  }, {
+      enabled: !!userInfo && LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)
   });
 
   const totalSummary = useMemo(() => {
@@ -59,6 +65,10 @@ export default function SalaryInfo({ navigation }: any) {
   }, [listSalary]);
 
   useRefreshOnFocus(refetchListSalary);
+
+  if(!LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)) {
+      return <ComingSoonScreenComponent navigation={navigation}/>
+  }
 
   if (isLoadingListSalary) {
     return <PrimaryLoading />;

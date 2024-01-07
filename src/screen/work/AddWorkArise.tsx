@@ -68,7 +68,7 @@ export default function AddWorkArise({ navigation }: any) {
     async () => {
       if (userInfo.role === 'manager') {
         const response = await dwtApi.getListUserDepartment(
-          userInfo?.department_id
+          userInfo?.departement_id
         );
         return response.data.data;
       } else {

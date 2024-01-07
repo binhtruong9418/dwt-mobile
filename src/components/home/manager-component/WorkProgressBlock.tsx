@@ -41,7 +41,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Ngày công</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
-            {attendanceData.calcDaysWork}/{attendanceData.allDaysWork}
+            {Number(attendanceData.calcDaysWork).toFixed(2)}/{attendanceData.allDaysWork}
           </Text>
         </View>
 

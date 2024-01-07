@@ -13,6 +13,8 @@ import { useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRefreshOnFocus } from '../../../hook/useRefeshOnFocus.ts';
 import WorkOfficeManagerTable from "../manager-component/WorkOfficeManagerTable.tsx";
+import MainTarget from "../MainTarget.tsx";
+import dayjs from "dayjs";
 
 export default function UserOffice({
   attendanceData,
@@ -31,6 +33,21 @@ export default function UserOffice({
     const resPersonal = await dwtApi.getOfficeWorkPersonal();
     return resPersonal.data;
   });
+
+
+  const {
+    data: mainTargetData,
+  } = useQuery(['mainTargetOffice'], async () => {
+    const res: any =  await dwtApi.getMainTarget();
+    return res[1]
+  })
+
+  const {
+    data: tmpMainTargetData,
+  } = useQuery(['tmpMainTargetOffice'], async () => {
+    const res: any =  await dwtApi.getTotalTmpMainTarget('office', dayjs().format('YYYY-MM'));
+    return res?.data
+  })
 
   const {
     listWorkPersonal = [],
@@ -87,8 +104,8 @@ export default function UserOffice({
           }),
         },
         workSummary,
-        userKpi: userKpiData.monthOverview.totalWork,
-        departmentKpi: departmentKpiData.monthOverview.totalWork,
+        userKpi: userKpiData.totalWork,
+        departmentKpi: departmentKpiData.totalWork,
       };
     } else {
       return {
@@ -109,6 +126,13 @@ export default function UserOffice({
   }
   return (
     <View style={styles.wrapper}>
+      <View style={{
+        paddingHorizontal: 15,
+        paddingVertical: 10
+      }}>
+
+        <MainTarget tmpAmount={tmpMainTargetData?.countFinish} name={mainTargetData?.name} value={mainTargetData?.amount} unit={mainTargetData?.unit}  />
+      </View>
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}

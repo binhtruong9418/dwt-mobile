@@ -54,7 +54,7 @@ export const dwtApi = {
     const url = 'users';
     return await axiosClient.get(url, {
       params: {
-        department_id: departmentId,
+        departement_id: departmentId,
       },
     });
   },
@@ -177,6 +177,17 @@ export const dwtApi = {
     return await axiosClient.post(url, data);
   },
 
+  //API nghiệm thu công việc
+  approveWorkBusiness: async (data: any): Promise<any> => {
+    const url = '/business-standard-history/report-log-update';
+    return await axiosClient.put(url, data);
+  },
+
+  approveWorkAriseBussiness: async (data: any): Promise<any> => {
+    const url = '/business-standard-work-arise/report-log-update';
+    return await axiosClient.put(url, data);
+  },
+
   uploadFile: async (data: any): Promise<any> => {
     const url = 'https://report.sweetsica.com/api/report/upload';
     const formData = new FormData();
@@ -289,8 +300,18 @@ export const dwtApi = {
   },
 
   createProductionReport: async (data: any) => {
-    const url = 'mobile/production-diary/store-log';
+    const url = 'mobile/production-diary-v2/store-log';
     return await axiosClient.post(url, data);
+  },
+
+  getMechanicRuleReport: async (params = {}): Promise<any> => {
+    const url = 'mobile/production-diary-v2/mechanic-rule-report';
+    return await axiosClient.get(url, {params});
+  },
+
+  getFactoryPersonalResult: async (params = {}): Promise<any> => {
+    const url = 'mechanic/get-result';
+    return await axiosClient.get(url, {params});
   },
 
 
@@ -341,5 +362,44 @@ export const dwtApi = {
   getMeetingById: async (id: number): Promise<any> => {
     const url = `/mobile/meeting/show/${id}`;
     return await axiosClient.get(url);
-  }
+  },
+
+  getMainTarget: async () => {
+    const url = '/main-target';
+    return await axiosClient.get(url);
+  },
+
+  getTotalTmpMainTarget: async (group: 'office' | 'mechanic' | 'business', date: string) => {
+    const url = `/mobile/statistic/${group}`;
+    return await axiosClient.get(url, {
+      params: {
+        date: date,
+      },
+    });
+  },
+
+  createOfficeAriseReport: async (data: any): Promise<any> => {
+    const url = '/report-tasks-logs';
+    return await axiosClient.post(url, data);
+  },
+
+  createOfficeTargetLog: async (data: any): Promise<any> => {
+    const url = '/target-logs';
+    return await axiosClient.post(url, data);
+  },
+
+  createOfficeTargetLogDetail: async (data: any): Promise<any> => {
+    const url = '/target-log-details';
+    return await axiosClient.post(url, data);
+  },
+
+  editOfficeTargetLogDetail: async (id: number, data: any): Promise<any> => {
+    const url = `/target-log-details/${id}`;
+    return await axiosClient.put(url, data);
+  },
+
+  editOfficeAriseReport: async (id: number, data: any): Promise<any> => {
+    const url = `/report-tasks-logs/${id}`;
+    return await axiosClient.put(url, data);
+  },
 };

@@ -67,3 +67,32 @@ export const capitalizeWords = (sentence: string) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
+
+
+export const getTotalTempSalary = (salaryInfo: any) => {
+  let salaryTmpData = {
+    basicSalary: 0,
+    performanceSalary: 0,
+    allowance: 0,
+    salaryTitle: 0,
+    totalSalary: 0,
+  };
+  const salaryRate = salaryInfo?.salary_history?.salary_rate;
+  salaryTmpData.basicSalary =
+      (salaryInfo?.basic_salary * salaryRate * salaryInfo?.days_work) /
+      salaryInfo?.all_days_work || 0;
+  salaryTmpData.performanceSalary =
+      (salaryInfo?.salary_history?.performance_salary *
+          salaryInfo?.kpi?.tmpTotalKPI) /
+      salaryInfo?.kpi?.expectTotalKPI || 0;
+  salaryTmpData.allowance =
+      (salaryInfo?.salary_history?.allowance * salaryInfo?.days_work) /
+      salaryInfo?.all_days_work || 0;
+  salaryTmpData.salaryTitle = salaryInfo?.salary_history?.salary_title || 0;
+  salaryTmpData.totalSalary =
+      salaryTmpData.basicSalary +
+      salaryTmpData.performanceSalary +
+      salaryTmpData.allowance +
+      salaryTmpData.salaryTitle;
+    return salaryTmpData.totalSalary
+}

@@ -63,6 +63,12 @@ export default function CreateOrEditDailyReportModal({
     setTodayReport(isEdit.today_work_note);
     setYesterdayReport(isEdit.yesterday_work_note);
   }, [currentDate, isEdit, visible]);
+
+  const handleClose = () => {
+    setVisible(false);
+    setTodayReport('');
+    setYesterdayReport('');
+  }
   return (
     <ReactNativeModal
       animationInTiming={200}
@@ -72,14 +78,10 @@ export default function CreateOrEditDailyReportModal({
       swipeDirection={'down'}
       backdropTransitionInTiming={200}
       backdropTransitionOutTiming={200}
-      onSwipeComplete={() => {
-        setVisible(false);
-      }}
+      onSwipeComplete={handleClose}
       style={styles.wrapper}
       isVisible={visible}
-      onBackdropPress={() => {
-        setVisible(false);
-      }}
+      onBackdropPress={handleClose}
     >
       <View style={styles.container}>
         <View style={styles.header}>
@@ -88,9 +90,7 @@ export default function CreateOrEditDailyReportModal({
           </Text>
           <Pressable
             hitSlop={10}
-            onPress={() => {
-              setVisible(false);
-            }}
+            onPress={handleClose}
           >
             <CloseIcon width={20} height={20} style={styles.closeIcon} />
           </Pressable>

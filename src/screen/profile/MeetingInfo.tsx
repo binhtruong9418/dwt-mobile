@@ -40,20 +40,20 @@ export default function MeetingInfo({navigation}: any) {
         const res = await dwtApi.getListMeeting({
             date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
         });
-        return res?.data?.data;
+        return res?.data;
     })
 
     const {listMeetingToday, listMeetingAll} = useMemo(() => {
             const listMeetingAll =  listMeetingData.filter((item: any) => {
-                const hasJoin = item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
+                console.log(userInfo?.role)
+                return item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
                     || (
                         (item?.leader_id === userInfo?.id ||
                             item?.secretary_id === userInfo?.id ||
                             userInfo?.role === 'admin')
                         && currentTabManager === 1);
-                // const isToday = dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
-                return hasJoin;
             })
+        console.log(listMeetingAll)
         const listMeetingToday = listMeetingAll.filter((item: any) => {
             return dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
         })
@@ -69,9 +69,7 @@ export default function MeetingInfo({navigation}: any) {
 
     return (
         <SafeAreaView style={styles.wrapper}>
-            <AdminTabBlock
-                secondLabel={'Quản lý'}
-            />
+            <AdminTabBlock />
             <Header title={'DANH SÁCH CUỘC HỌP'} handleGoBack={() => navigation.goBack()}/>
             <View style={styles.content}>
                 <View style={styles.top}>

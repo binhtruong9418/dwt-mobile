@@ -44,7 +44,7 @@ export default function AdminBusiness({
       const res = await dwtApi.getListMeeting({
         date: dayjs().format('MM/YYYY'),
       });
-      return res?.data?.total;
+      return res?.data?.length;
     },
     {
       enabled: !!userInfo,

@@ -21,6 +21,7 @@ import UserFilterModal from "../../common/modal/UserFilterModal.tsx";
 import {LIST_OFFICE_DEPARTMENT} from "../../../assets/constant.ts";
 import DailyCalendar from "../../daily-report/DailyCalendar.tsx";
 import EmptyDailyReportIcon from '../../../assets/img/empty-daily-report.svg';
+import MainTarget from "../MainTarget.tsx";
 
 export default function ManagerFactory(
     {
@@ -62,17 +63,19 @@ export default function ManagerFactory(
         }
     );
 
-    const {
-        data: totalMeeting = 0
-    } = useQuery(['totalMeetingHome'], async () => {
-        const res = await dwtApi.getListMeeting({
-            date: dayjs().format('MM/YYYY'),
-            department_id: userInfo?.departement_id,
-        });
-        return res?.data?.total;
-    }, {
-        enabled: !!userInfo
-    })
+    const {data: totalMeeting = 0} = useQuery(
+        ['totalMeetingHome'],
+        async () => {
+            const res = await dwtApi.getListMeeting({
+                date: dayjs().format('MM/YYYY'),
+                departement: userInfo?.departement_id,
+            });
+            return res?.data?.length;
+        },
+        {
+            enabled: !!userInfo,
+        }
+    );
 
     const {
         data: totalPropose = 0
@@ -83,6 +86,20 @@ export default function ManagerFactory(
         return res?.data?.total;
     })
 
+    const {
+        data: mainTargetData,
+    } = useQuery(['mainTargetFactory'], async () => {
+        const res: any = await dwtApi.getMainTarget();
+        return res[2]
+    })
+
+
+    const {
+        data: tmpMainTargetData,
+    } = useQuery(['tmpMainTargetFactory'], async () => {
+        const res: any = await dwtApi.getTotalTmpMainTarget('mechanic', dayjs().format('YYYY-MM'));
+        return res?.data
+    })
 
     const {
         data: {pages = []} = {},
@@ -146,10 +163,19 @@ export default function ManagerFactory(
     }
     return (
         <View style={styles.wrapper}>
+            <View style={{
+                paddingHorizontal: 15,
+                paddingVertical: 10
+            }}>
+
+                <MainTarget tmpAmount={tmpMainTargetData?.sum} name={mainTargetData?.name}
+                            value={mainTargetData?.amount} unit={mainTargetData?.unit}/>
+            </View>
             <ScrollView
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}
             >
+
                 {/*<View style={styles.filter_wrapper}>*/}
                 {/*    <TouchableOpacity*/}
                 {/*        style={styles.dropdown}*/}

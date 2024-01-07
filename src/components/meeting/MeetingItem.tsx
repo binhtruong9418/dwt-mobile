@@ -41,13 +41,15 @@ export default function MeetingItem({item}: any) {
                 isMore && (
                     <View style={styles.detail}>
                         {
-                            item?.reports?.length > 0 && (
-                                <View style={styles.detailText}>
-                                    <Text style={[fs_12_400, text_black]}>Vấn đề tồn đọng: Chưa có catalog</Text>
-                                    <Text style={[fs_12_400, text_black]}>Giải quyết: Thiết kế</Text>
-                                    <Text style={[fs_12_400, text_black]}>Người đảm nhiệm: Nguyễn Văn A</Text>
-                                </View>
-                            )
+                            item?.reports?.length > 0 && item?.reports.map((item: any) => {
+                                return (
+                                    <View style={styles.detailText}>
+                                        <Text style={[fs_12_400, text_black]}>Vấn đề tồn đọng: {item?.problem}</Text>
+                                        <Text style={[fs_12_400, text_black]}>Giải quyết: {item?.solution}</Text>
+                                        <Text style={[fs_12_400, text_black]}>Người đảm nhiệm: {item?.user?.name}</Text>
+                                    </View>
+                                )
+                            })
                         }
                         <TouchableOpacity style={styles.detailButton} onPress={() => {
                             // @ts-ignore
@@ -95,6 +97,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#D9D9D9',
         paddingVertical: 10,
+        gap: 5,
     },
     detailButton: {
         paddingVertical: 10,

@@ -1,16 +1,7 @@
-import {
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
-import {useQuery} from '@tanstack/react-query';
-import {dwtApi} from '../../api/service/dwtApi.ts';
 import dayjs from 'dayjs';
-import {useCallback, useMemo} from "react";
 
 export default function DailyMeetingCalendar(
     {
@@ -21,17 +12,15 @@ export default function DailyMeetingCalendar(
     const haveLog = (item: any) => {
         return listMeeting.find(
             (meeting: any, index: number) => {
-                const haveData = meeting?.start_time.split(' ')[0] ===
+                return meeting?.start_time.split(' ')[0] ===
                     dayjs().month(currentDate?.month).year(currentDate?.year)
                         .date(item?.date).format('YYYY-MM-DD')
-                // console.log(haveData, index)
-                return haveData
             }
         );
     }
 
     const today = dayjs().date();
-    const initialScrollOffset = today > 7 ? today * 45 : 0;
+    const initialScrollOffset = today > 5 ? today * 45 : 0;
 
     return (
         <View>

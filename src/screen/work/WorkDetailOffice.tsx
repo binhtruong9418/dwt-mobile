@@ -114,15 +114,15 @@ export default function WorkDetailOffice({route, navigation}: any) {
             targetLogs: workDetailData?.targetLogs?.map((item: any) => {
                 return {
                     ...item,
-                    date: item.reportedDate,
+                    date: dayjs(item.reportedDate).format('DD/MM/YYYY'),
                     criteria: item?.targetLogDetails[0]?.kpiKeys[0]?.name,
-                    quantity: item?.targetLogDetails[0]?.kpiKeys[0]?.pivot?.quantity,
+                    quantity: item?.targetLogDetails[0]?.kpiKeys[0]?.quantity,
                 };
             }),
             reportLogs: workDetailData?.targetLogs?.map((item: any) => {
                 return {
                     ...item,
-                    date: item.reportedDate,
+                    date: dayjs(item.reportedDate).format('DD/MM/YYYY'),
                     note: item?.targetLogDetails[0]?.note,
                     file: item?.targetLogDetails[0]?.files,
                 };

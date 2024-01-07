@@ -39,14 +39,17 @@ export default function WorkStorageRowDetail({ data }: any) {
         </Text>
       </View>
 
-      <View style={styles.row}>
-        <Text style={[fs_13_700, text_black, styles.title]}>
-          Người đảm nhiệm:
-        </Text>
-        <Text style={[fs_13_400, text_black, styles.value]}>
-          {data?.created_by?.name ?? ""}
-        </Text>
-      </View>
+      {
+        data?.user &&
+          <View style={styles.row}>
+            <Text style={[fs_13_700, text_black, styles.title]}>
+              Người đảm nhiệm:
+            </Text>
+            <Text style={[fs_13_400, text_black, styles.value]}>
+              {data?.user?.name ?? ""}
+            </Text>
+          </View>
+      }
 
       <View style={styles.row}>
         <Text style={[fs_13_700, text_black, styles.title]}>Mục tiêu:</Text>

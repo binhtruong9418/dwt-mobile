@@ -61,6 +61,7 @@ export default function WorkReport({ route, navigation }: any) {
     }
   };
 
+
   const handlePressOk = () => {
     setQuantity('');
     setNote('');

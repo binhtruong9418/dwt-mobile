@@ -32,9 +32,15 @@ import {
   MeetingInfoScreen,
   MeetingDetailScreen,
   ComingSoonScreen,
-  UserFactoryWorkDayScreen, WorkOfficeListReportScreen,
+  UserFactoryWorkDayScreen,
+  WorkOfficeListReportScreen,
+  WorkReportEditScreen,
+  WorkOfficeReportScreen,
+  WorkOfficeReportEditScreen, WorkOfficeAriseReportScreen, WorkOfficeAriseReportEditScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
+import WorkOfficeReport from "../screen/work/WorkOfficeReport.tsx";
+import WorkOfficeReportEdit from "../screen/work/WorkOfficeReportEdit.tsx";
 
 export const routePath = [
   {
@@ -183,5 +189,25 @@ export const navigatorPath = [
   {
     name: 'WorkOfficeListReport',
     component: WorkOfficeListReportScreen,
+  },
+  {
+    name: 'WorkReportEdit',
+    component: WorkReportEditScreen,
+  },
+  {
+    name: 'WorkOfficeReport',
+    component: WorkOfficeReportScreen,
+  },
+  {
+    name: 'WorkOfficeReportEdit',
+    component: WorkOfficeReportEditScreen,
+  },
+  {
+    name: 'WorkOfficeAriseReport',
+    component: WorkOfficeAriseReportScreen,
+  },
+  {
+    name: 'WorkOfficeAriseReportEdit',
+    component: WorkOfficeAriseReportEditScreen,
   }
 ];

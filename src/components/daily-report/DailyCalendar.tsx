@@ -29,7 +29,7 @@ export default function DailyCalendar({
   };
 
   const today = dayjs().date();
-  const initialScrollOffset = today > 7 ? today * 45 : 0;
+  const initialScrollOffset = today > 5 ? today * 45 : 0;
 
   return (
     <View

@@ -45,7 +45,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Ngày công</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
-            {attendanceData.calcDaysWork}/{attendanceData.allDaysWork}
+            {Number(attendanceData.calcDaysWork).toFixed(2)}/{attendanceData.allDaysWork}
           </Text>
         </View>
 
@@ -55,7 +55,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Đã nghỉ / vắng</Text>
           </View>
           <Text style={[fs_12_400, text_black]}>
-            {attendanceData.numAbsent}
+            {Number(attendanceData.numAbsent).toFixed(2)}
           </Text>
         </View>
 
@@ -65,7 +65,7 @@ export default function WorkProgressBlock({
             <Text style={[fs_12_400, text_black]}>Dự kiến bù - tăng ca</Text>
           </View>
           <Text style={[fs_12_400, text_red]}>
-            {attendanceData.expectedOT}
+            {Number(attendanceData.expectedOT).toFixed(2)}
           </Text>
         </View>
 

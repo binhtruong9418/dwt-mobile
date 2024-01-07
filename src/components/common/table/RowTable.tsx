@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 0.5,
     borderColor: '#D9D9D9',
-    flex: 1,
   },
   cell: {
     paddingVertical: 8,

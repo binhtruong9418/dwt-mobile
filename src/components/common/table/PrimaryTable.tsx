@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        flex: 1,
     },
     cell: {
         paddingVertical: 8,

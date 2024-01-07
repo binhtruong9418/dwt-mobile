@@ -19,7 +19,7 @@ export default function WorkListReport({ route, navigation }: any) {
   const { data } = route.params;
   const listLogs = data.isWorkArise
     ? data.business_standard_arise_logs
-    : data.business_standard_report_logs;
+    : data.business_standard_report_logs || [];
   const initialDate = dayjs(new Date()).format('YYYY-MM-DD');
   const [markedDates, setMarkedDates] = useState<any>({});
   useEffect(() => {
@@ -85,6 +85,7 @@ export default function WorkListReport({ route, navigation }: any) {
     }
     setMarkedDates(listMarkedDates);
   };
+  console.log(data)
   return (
     <SafeAreaView style={styles.wrapper}>
       <AdminTabBlock />
@@ -132,7 +133,15 @@ export default function WorkListReport({ route, navigation }: any) {
               dayjs(reportDate).year();
             return (
               <TouchableOpacity
-                onPress={() => handleChangeDay(item.reported_date)}
+                onPress={() => {
+                    navigation.navigate('WorkReportEdit', {
+                        data: {
+                            ...item,
+                            ...data,
+                        },
+                        isWorkArise: data.isWorkArise,
+                    });
+                }}
               >
                 <Text style={styles.title}>{formatDate}</Text>
                 <View style={row_between}>

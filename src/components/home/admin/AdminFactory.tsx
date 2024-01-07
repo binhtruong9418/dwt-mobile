@@ -58,16 +58,18 @@ export default function AdminFactory(
         }
     );
 
-    const {
-        data: totalMeeting = 0
-    } = useQuery(['totalMeetingHome'], async () => {
-        const res = await dwtApi.getListMeeting({
-            date: dayjs().format('MM/YYYY'),
-        });
-        return res?.data?.total;
-    }, {
-        enabled: !!userInfo
-    })
+    const { data: totalMeeting = 0 } = useQuery(
+        ['totalMeetingHome'],
+        async () => {
+            const res = await dwtApi.getListMeeting({
+                date: dayjs().format('MM/YYYY'),
+            });
+            return res?.data?.length;
+        },
+        {
+            enabled: !!userInfo,
+        }
+    );
 
     const {
         data: totalPropose = 0

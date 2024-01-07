@@ -39,7 +39,9 @@ export default function ProjectWorkDetail({ route, navigation }: any) {
       }
     });
 
-    return logsByDate;
+    return logsByDate.sort((a, b) => {
+        return dayjs(b?.logDate).valueOf() - dayjs(a?.logDate).valueOf();
+    });
   }, [projectWorkDetail]);
   return (
     <SafeAreaView style={styles.wrapper}>

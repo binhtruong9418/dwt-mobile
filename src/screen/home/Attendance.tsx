@@ -203,13 +203,13 @@ export default function Attendance({ navigation }: any) {
           <View style={styles.box}>
             <Text style={[fs_15_400, text_black]}>Tổng công</Text>
             <Text style={[fs_15_400, text_black]}>
-              {attendanceData?.calcDaysWork}/{attendanceData?.allDaysWork}
+              {Number(attendanceData?.calcDaysWork).toFixed(2)}/{attendanceData?.allDaysWork}
             </Text>
           </View>
           <View style={styles.box}>
             <Text style={[fs_15_400, text_black]}>Nghỉ / Vắng</Text>
             <Text style={[fs_15_400, text_black]}>
-              {attendanceData?.numAbsent}
+              {Number(attendanceData?.numAbsent).toFixed(2)}
             </Text>
           </View>
         </View>

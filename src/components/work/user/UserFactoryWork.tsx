@@ -1,55 +1,29 @@
+import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  fs_10_500,
-  fs_12_400,
   fs_12_700,
   fs_14_400,
   fs_14_700,
-  fs_15_400,
   fs_15_700,
   text_black,
   text_center,
   text_red,
   text_white,
 } from '../../../assets/style.ts';
-import { useMemo, useState } from 'react';
+import {useState} from 'react';
 import AddIcon from "../../../assets/img/add.svg";
 import PlusButtonModal from "../../work/PlusButtonModal.tsx";
-import { useConnection } from '../../../redux/connection';
-import { useQuery } from '@tanstack/react-query';
-import { dwtApi } from '../../../api/service/dwtApi.ts';
+import {useConnection} from '../../../redux/connection';
+import {useQuery} from '@tanstack/react-query';
+import {dwtApi} from '../../../api/service/dwtApi.ts';
 import dayjs from "dayjs";
 import PrimaryLoading from "../../common/loading/PrimaryLoading.tsx";
-import { useRefreshOnFocus } from '../../../hook/useRefeshOnFocus.ts';
+import {useRefreshOnFocus} from '../../../hook/useRefeshOnFocus.ts';
 import HomeHeader from "../../home/HomeHeader.tsx";
 import FactoryReportDetail from "../../home/home-component/FactoryReportDetail.tsx";
 import ChevronLeftIcon from "../../../assets/img/chevron-left-dark.svg";
 
-const summaryData = [
-  {
-    label: 'Tổng KPI tạm tính',
-    value: '10',
-    unit: ' KPI',
-  },
-  {
-    label: 'Tổng tiền tạm tính',
-    value: '4.000.000',
-    unit: ' đ',
-  },
-  {
-    label: 'Tổng số báo cáo',
-    value: '4',
-    unit: '/24',
-  },
-];
 export default function UserFactoryWork({ navigation }: any) {
+  const {connection: {userInfo}} = useConnection();
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
 
   const {
@@ -63,6 +37,37 @@ export default function UserFactoryWork({ navigation }: any) {
     });
     return response.data;
   });
+
+  const {
+    data: personalFactoryResult = {}
+  } = useQuery(['personalFactoryResult'], async () => {
+    const date = dayjs().format('YYYY-MM');
+    return await dwtApi.getFactoryPersonalResult({
+      date: date,
+      user_id: userInfo?.id,
+    });
+  }, {
+    enabled: !!userInfo
+  });
+
+
+  const summaryData = [
+    {
+      label: 'Tổng KPI tạm tính',
+      value: personalFactoryResult.total_kpi ?? 0,
+      unit: ' KPI',
+    },
+    {
+      label: 'Tổng tiền tạm tính',
+      value: personalFactoryResult.total_vnd ?? 0,
+      unit: ' đ',
+    },
+    {
+      label: 'Tổng số báo cáo',
+      value: listFactoryReport.length ?? 0,
+      unit: '',
+    },
+  ];
 
   useRefreshOnFocus(refetch);
 

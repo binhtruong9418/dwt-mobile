@@ -59,7 +59,10 @@ export default function WorkOfficeRowDetail({
           onPress={() => {
             // @ts-ignore
             navigation.navigate('WorkOfficeListReport', {
-              data: data,
+              data: {
+                ...data,
+                isWorkArise: isWorkArise,
+              },
             });
           }}
         >
@@ -71,7 +74,10 @@ export default function WorkOfficeRowDetail({
           onPress={() => {
             // @ts-ignore
             navigation.navigate('WorkDetailOffice', {
-              data: data,
+              data: {
+                ...data,
+                isWorkArise: isWorkArise,
+              },
               routeGoBack: 'Work',
             });
           }}
@@ -83,11 +89,18 @@ export default function WorkOfficeRowDetail({
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
+              if(isWorkArise) {
+                // @ts-ignore
+                navigation.navigate('WorkOfficeAriseReport', {
+                  data: data,
+                });
+                return;
+              } else {
               // @ts-ignore
-              navigation.navigate('WorkReport', {
+              navigation.navigate('WorkOfficeReport', {
                 data: data,
-                isWorkArise: isWorkArise,
               });
+              }
             }}
           >
             <Text style={[fs_13_700, text_red]}>Báo cáo</Text>

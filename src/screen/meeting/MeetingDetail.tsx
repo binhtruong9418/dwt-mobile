@@ -77,14 +77,14 @@ export default function MeetingDetail({route, navigation}: any) {
                             value: meetingDetailData?.leader?.name,
                         },
                         {
-                            label: 'Thư ký:',
+                            label: 'Thư ký',
                             value: meetingDetailData?.secretary?.name,
                         }
                     ]}
                 />
                 <ListUserTable
-                    data={meetingDetailData?.participants &&
-                        meetingDetailData?.participants?.map((item: any) => item?.name)}
+                    data={meetingDetailData?.participants ?
+                        meetingDetailData?.participants?.map((item: any) => item?.name) : []}
                     headerTitle={'THÀNH VIÊN THAM GIA'}
                 />
 
@@ -133,11 +133,11 @@ export default function MeetingDetail({route, navigation}: any) {
                         </TouchableOpacity>
                     </View>
                     <PrimaryTable
-                        data={meetingDetailData?.report?.map((item: any) => {
+                        data={meetingDetailData?.reports?.map((item: any) => {
                             return {
                                 problem: item?.problem,
-                                solve: item?.solve,
-                                responsible: item?.responsible?.name,
+                                solve: item?.solution,
+                                responsible: item?.user?.name,
                             }
                         })}
                         columns={[

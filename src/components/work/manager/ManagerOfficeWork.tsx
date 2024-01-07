@@ -148,14 +148,7 @@ export default function ManagerOfficeWork({ navigation }: any) {
 
       return {
         listTargetWorkData: res.data.departmentKpi.targetDetails,
-        listAriseWorkData: res.data.departmentKpi.reportTasks.map(
-          (item: any) => {
-            return {
-              ...item,
-              isWorkArise: true,
-            };
-          }
-        ),
+        listAriseWorkData: res.data.departmentKpi.reportTasks,
       };
     }
   );
@@ -200,14 +193,15 @@ export default function ManagerOfficeWork({ navigation }: any) {
                 ? // @ts-ignore
                   WORK_OFFICE_STATUS_COLOR[work.work_status]
                 : '#FFF',
+              isWorkArise: true,
             };
           })
           .filter((work: any) => {
             if (statusValue.value === '0') {
               return true;
             }
-            if (work?.actual_state) {
-              return work.actual_state.toString() === statusValue.value;
+            if (work?.work_status) {
+              return work.work_status.toString() === statusValue.value;
             }
             return false;
           });
