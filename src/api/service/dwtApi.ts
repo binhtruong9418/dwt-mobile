@@ -59,6 +59,15 @@ export const dwtApi = {
     });
   },
 
+  getListChildrenDepartment: async (departmentId: string): Promise<any> => {
+    const url = `/department-group/get-child-department`;
+    return await axiosClient.get(url, {
+        params: {
+          department_id: departmentId,
+        },
+    });
+  },
+
   //API lấy danh sách doanh nghiệp
   getListDepartment: async (): Promise<any> => {
     const url = 'departments/all';
@@ -359,6 +368,11 @@ export const dwtApi = {
     return await axiosClient.get(url, {params});
   },
 
+  getListMeetingPersonal: async (params = {}): Promise<any> => {
+    const url = '/mobile/meeting/listIndividual';
+    return await axiosClient.get(url, {params});
+  },
+
   getMeetingById: async (id: number): Promise<any> => {
     const url = `/mobile/meeting/show/${id}`;
     return await axiosClient.get(url);
@@ -402,4 +416,9 @@ export const dwtApi = {
     const url = `/report-tasks-logs/${id}`;
     return await axiosClient.put(url, data);
   },
+
+  getListCustomer: async (params = {}): Promise<any> => {
+    const url = '/mobile/customer/list';
+    return await axiosClient.get(url, {params});
+  }
 };

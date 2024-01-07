@@ -36,31 +36,32 @@ export default function MeetingInfo({navigation}: any) {
     const {
         data: listMeetingData = [],
         isLoading: isLoadingListMeeting,
-    } = useQuery(['listMeeting', currentDate.month, currentDate.year], async ({queryKey}) => {
-        const res = await dwtApi.getListMeeting({
-            date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
-        });
-        return res?.data;
+    } = useQuery(['listMeeting', currentDate.month, currentDate.year, currentTabManager], async ({queryKey}) => {
+
+        if(queryKey[3] === 1) {
+                const res = await dwtApi.getListMeeting({
+                    date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
+                });
+                if(userInfo?.role === 'manager') {
+                    const listChildrenDepartment = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
+                    return res?.data?.filter((item: any) => {
+                        return listChildrenDepartment?.data?.includes(item?.departement_id);
+                    });
+                }
+                return res?.data;
+        } else {
+            const res = await dwtApi.getListMeetingPersonal({
+                date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
+            });
+            return res?.data;
+        }
     })
 
-    const {listMeetingToday, listMeetingAll} = useMemo(() => {
-            const listMeetingAll =  listMeetingData.filter((item: any) => {
-                console.log(userInfo?.role)
-                return item?.participants?.map((item: any) => item?.id).includes(userInfo?.id)
-                    || (
-                        (item?.leader_id === userInfo?.id ||
-                            item?.secretary_id === userInfo?.id ||
-                            userInfo?.role === 'admin')
-                        && currentTabManager === 1);
-            })
-        console.log(listMeetingAll)
-        const listMeetingToday = listMeetingAll.filter((item: any) => {
+    const listMeetingToday = useMemo(() => {
+        return listMeetingData.filter((item: any) => {
             return dayjs(item?.start_time.split(' ')[0]).date() === currentDate.date;
         })
-        return {
-            listMeetingToday,
-            listMeetingAll
-        }
+
     }, [listMeetingData, currentDate, currentTabManager])
 
     if (isLoadingListMeeting) {
@@ -86,7 +87,7 @@ export default function MeetingInfo({navigation}: any) {
                     <DailyMeetingCalendar
                         currentDate={currentDate}
                         setCurrentDate={setCurrentDate}
-                        listMeeting={listMeetingAll}
+                        listMeeting={listMeetingData}
                     />
                 </View>
 
@@ -94,7 +95,7 @@ export default function MeetingInfo({navigation}: any) {
                     userInfo?.role === 'admin' || userInfo?.role === 'manager' && (
                         <View style={styles.totalReportBox}>
                             <Text style={[fs_12_500, text_gray]}>
-                                {listMeetingAll.length} cuộc họp
+                                {listMeetingData.length} cuộc họp
                             </Text>
                         </View>
                     )

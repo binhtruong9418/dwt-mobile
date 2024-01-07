@@ -72,13 +72,15 @@ export default function ManagerOffice(
     })
 
     const {data: listDepartment = []} = useQuery(
-        ['listDepartmentOffice'],
+        ['listDepartmentOffice', userInfo?.departement_id],
         async () => {
             const res = await dwtApi.getListDepartment();
+            const listChildrenDepartment = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
+
             return res.data.filter((item: any) =>
-                LIST_OFFICE_DEPARTMENT.includes(item.id)
+                listChildrenDepartment?.data?.includes(item.id)
             );
-        }
+        }, {enabled: !!userInfo}
     );
 
     const {data: totalReport = 0} = useQuery(

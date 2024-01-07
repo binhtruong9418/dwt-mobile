@@ -93,7 +93,7 @@ const kinhdoanhData = [
   {
     name: 'Khách hàng',
     icon: <KhachHangIcon width={30} height={30} />,
-    path: 'ComingSoon',
+    path: 'Customer',
   },
   {
     name: 'Bán hàng',

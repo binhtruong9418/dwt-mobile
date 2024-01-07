@@ -38,3 +38,5 @@ export {default as WorkOfficeReportScreen} from './work/WorkOfficeReport.tsx';
 export {default as WorkOfficeReportEditScreen} from './work/WorkOfficeReportEdit.tsx';
 export {default as WorkOfficeAriseReportScreen} from './work/WorkOfficeAriseReport.tsx';
 export {default as WorkOfficeAriseReportEditScreen} from './work/WorkOfficeAriseReportEdit.tsx';
+export {default as CustomerScreen} from './customer/Customer.tsx';
+export {default as AddCustomerScreen} from './customer/AddCustomer.tsx';
