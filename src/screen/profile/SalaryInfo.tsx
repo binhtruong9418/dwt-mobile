@@ -76,8 +76,6 @@ export default function SalaryInfo({ navigation }: any) {
     return total;
   }, [listSalary]);
 
-  console.log(windowWidth);
-
   useRefreshOnFocus(refetchListSalary);
 
   if (!LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)) {
@@ -152,7 +150,7 @@ export default function SalaryInfo({ navigation }: any) {
                 styles.item,
                 {
                   backgroundColor:
-                    item.paid_salary === 1 ? '#FFF8C3' : '#CCF4D3',
+                    item.paid_salary === 2 ? '#FFF8C3' : '#CCF4D3',
                 },
               ]}
               onPress={() => {

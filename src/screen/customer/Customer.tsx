@@ -76,63 +76,66 @@ export default function Customer({navigation}: any) {
                 />
             </View>
             <View style={styles.content}>
-                <ScrollView
-                    horizontal={true}
-                    contentContainerStyle={styles.filter_wrapper}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    <TouchableOpacity
-                        style={[styles.dropdown, {width: 120}]}
-                        onPress={() => {
-                            setIsOpenClassify(true);
-                        }}>
-                        <Text style={[text_black, fs_14_400]}>{classify.label}</Text>
-                        <DropdownIcon width={20} height={20}/>
-                    </TouchableOpacity>
+                <View>
+                    <ScrollView
+                        horizontal={true}
+                        contentContainerStyle={styles.filter_wrapper}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        <TouchableOpacity
+                            style={[styles.dropdown, {width: 120}]}
+                            onPress={() => {
+                                setIsOpenClassify(true);
+                            }}>
+                            <Text style={[text_black, fs_14_400]}>{classify.label}</Text>
+                            <DropdownIcon width={20} height={20}/>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={[styles.dropdown, {width: 120}]}
-                        onPress={() => {
-                            setIsOpenAddressSelect(true);
-                        }}>
-                        <Text style={[text_black, fs_14_400]}>
-                            {address.label}
-                        </Text>
-                        <DropdownIcon width={20} height={20}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.dropdown, {width: 120}]}
-                        onPress={() => {
-                            setIsOpenProcessSelect(true);
-                        }}>
-                        <Text style={[text_black, fs_14_400]}>
-                            {process.label}
-                        </Text>
-                        <DropdownIcon width={20} height={20}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.dropdown, {width: 120}]}
-                        onPress={() => {
-                            setIsOpenCustomerTypeSelect(true);
-                        }}>
-                        <Text style={[text_black, fs_14_400]}>
-                            {customerType.label}
-                        </Text>
-                        <DropdownIcon width={20} height={20}/>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.dropdown, {width: 120}]}
+                            onPress={() => {
+                                setIsOpenAddressSelect(true);
+                            }}>
+                            <Text style={[text_black, fs_14_400]}>
+                                {address.label}
+                            </Text>
+                            <DropdownIcon width={20} height={20}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.dropdown, {width: 120}]}
+                            onPress={() => {
+                                setIsOpenProcessSelect(true);
+                            }}>
+                            <Text style={[text_black, fs_14_400]}>
+                                {process.label}
+                            </Text>
+                            <DropdownIcon width={20} height={20}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.dropdown, {width: 120}]}
+                            onPress={() => {
+                                setIsOpenCustomerTypeSelect(true);
+                            }}>
+                            <Text style={[text_black, fs_14_400]}>
+                                {customerType.label}
+                            </Text>
+                            <DropdownIcon width={20} height={20}/>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={[styles.dropdown, {width: 200}]}
-                        onPress={() => {
-                            setIsOpenSelectDate(true);
-                        }}>
-                        <Text style={[text_black, fs_14_400]}>
-                            {dayjs(fromDate).format('DD/MM/YYYY')} -{' '}
-                            {dayjs(toDate).format('DD/MM/YYYY')}
-                        </Text>
-                        <DropdownIcon width={20} height={20}/>
-                    </TouchableOpacity>
-                </ScrollView>
+                        <TouchableOpacity
+                            style={[styles.dropdown, {width: 200}]}
+                            onPress={() => {
+                                setIsOpenSelectDate(true);
+                            }}>
+                            <Text style={[text_black, fs_14_400]}>
+                                {dayjs(fromDate).format('DD/MM/YYYY')} -{' '}
+                                {dayjs(toDate).format('DD/MM/YYYY')}
+                            </Text>
+                            <DropdownIcon width={20} height={20}/>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+
                 <FlatList
                     data={listCustomer}
                     renderItem={({item}) => {

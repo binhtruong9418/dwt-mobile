@@ -136,7 +136,7 @@ export default function SalaryDetail({ route, navigation }: any) {
                   fs_12_700,
                 ]}
               >
-                {salaryInfo?.salary_history?.paid_salary === 1
+                {salaryInfo?.salary_history?.paid_salary === 2
                   ? 'Đã chi trả'
                   : 'Chưa chi trả'}
               </Text>
