@@ -5136,6 +5136,11 @@ react-native-version-check@^3.4.7:
     lodash.pick "^4.4.0"
     semver "^6.1.1"
 
+react-native-vision-camera@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-3.7.0.tgz#acec4c0491b06b02e84749a20fc112aedc75e16d"
+  integrity sha512-+QvoNXc6QPBVhJjI+uBIWOUOBuno9n+jGLDjgoqtwBkG9GBEsysTwB8ajZCo48H+MQkACmBsnNvObzzpjK6JeA==
+
 react-native@0.73.1:
   version "0.73.1"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.73.1.tgz"

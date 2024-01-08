@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Pressable,
   StyleSheet,
   Text,
@@ -18,19 +19,28 @@ import CloseIcon from '../../../assets/img/close-icon.svg';
 import FileIcon from '../../../assets/img/file-icon.svg';
 import GaleryIcon from '../../../assets/img/galery-icon.svg';
 import CameraIcon from '../../../assets/img/camera-icon.svg';
-import {useCallback, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import {
   launchCamera,
   launchImageLibrary,
   MediaType,
 } from 'react-native-image-picker';
+import {Camera, useCameraDevice, useCameraFormat} from "react-native-vision-camera";
+import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
+
+
+const {width: windowWidth} = Dimensions.get('window');
 
 export default function UploadFileModal({
   visible,
   setVisible,
   handleUploadFile,
 }: InferProps<typeof UploadFileModal.propTypes>) {
+  const device = useCameraDevice('back')
+
+  const camera = useRef<Camera>(null)
+  const [isActiveCamera, setIsActiveCamera] = useState(false)
   const handleSelectFile = async () => {
     try {
       const response = await DocumentPicker.pick({
@@ -70,32 +80,30 @@ export default function UploadFileModal({
     }
   };
 
-  const handleTakePhoto = async () => {
-    const options = {
-      mediaType: 'photo' as MediaType,
-      includeBase64: false,
-      presentationStyle: 'fullScreen' as PresentationStyle,
-    };
-
-    const result = await launchCamera(options);
-    if (result.didCancel) {
-      console.log('User cancelled image picker');
-    } else if (result.errorCode) {
-      console.log('ImagePicker Error: ', result.errorMessage);
-    } else {
-      if (result?.assets) {
-        handleUploadFile(
-          result?.assets.map((image: any) => {
-            return {
-              ...image,
-              name: image.fileName,
-              size: image.fileSize,
-            };
-          }),
-        );
-      }
+  const handleOpenCamera = async () => {
+    const hasCameraPermission = await Camera.requestCameraPermission()
+    if (!hasCameraPermission) {
+      return
     }
+    setIsActiveCamera(true)
   };
+
+  const handleTakePhoto = async () => {
+    const photo: any = await camera.current?.takePhoto({
+      qualityPrioritization: 'balanced',
+      flash: 'auto',
+    })
+    console.log(photo)
+    if (photo) {
+      const now = new Date().getTime()
+      handleUploadFile([{
+        uri: 'file://' + photo?.path,
+        name: 'Ảnh_' + now + '.jpg',
+        type: 'image/jpeg',
+      }])
+    }
+    setIsActiveCamera(false)
+  }
   return (
     <ReactNativeModal
       animationInTiming={200}
@@ -135,12 +143,43 @@ export default function UploadFileModal({
             <Text style={[fs_15_400, text_black]}>Chọn ảnh</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.row} onPress={handleTakePhoto}>
+          <TouchableOpacity style={styles.row} onPress={handleOpenCamera}>
             <CameraIcon width={24} height={24} />
             <Text style={[fs_15_400, text_black]}>Sử dụng máy ảnh</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View>{
+        isActiveCamera && (
+            <View
+                style={{
+                  flex: 1,
+                  backgroundColor: 'black',
+                  ...StyleSheet.absoluteFillObject,
+                }}>
+              <Camera
+                  ref={camera}
+                  photo={true}
+                  // @ts-ignore
+                  device={
+                    device
+                  }
+                  isActive={true}
+                  style={{flex: 1}}
+              />
+              <Pressable
+                  hitSlop={10}
+                  style={styles.closeCameraIcon}
+                  onPress={() => {
+                    setIsActiveCamera(false);
+                  }}>
+                <FontAwesome6Icon name={'xmark'} color={'#FFF'} size={20}/>
+              </Pressable>
+              <TouchableOpacity style={styles.buttonCamera} onPress={handleTakePhoto}>
+                <FontAwesome6Icon name={'camera'} size={24} color={'white'}/>
+              </TouchableOpacity>
+            </View>
+        )
+    }
     </ReactNativeModal>
   );
 }
@@ -178,6 +217,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  buttonCamera: {
+    borderRadius: 999,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: '#fff',
+    padding: 10,
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    bottom: 30,
+    left: windowWidth / 2 - 25,
+  },
+  closeCameraIcon: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
 });
 
