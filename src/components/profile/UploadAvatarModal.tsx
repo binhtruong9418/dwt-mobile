@@ -69,6 +69,7 @@ export default function UploadAvatarModal({
       console.log('ImagePicker Error: ', result.errorMessage);
     } else {
       if (result?.assets) {
+        console.log(result?.assets, 'result?.assets')
         handleUploadAvatar(
           result?.assets.map((image: any) => {
             return {

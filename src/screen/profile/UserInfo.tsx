@@ -32,6 +32,7 @@ import { BANK_LIST } from '../../assets/constant.ts';
 import { showToast } from '../../utils';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
+import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
 
 export default function UserInfo({ navigation }: any) {
   const [editUserInfo, setEditUserInfo] = useState({
@@ -60,9 +61,9 @@ export default function UserInfo({ navigation }: any) {
     isLoading: isLoadingUser,
     refetch,
   } = useQuery(
-    ['getUserInfo', userInfo.id],
+    ['getUserInfo', userInfo?.id],
     async () => {
-      const res = await dwtApi.getUserById(userInfo.id);
+      const res = await dwtApi.getUserById(userInfo?.id);
       const transferInformation = JSON.parse(
         res.data?.transfer_information || '{}'
       );
@@ -74,7 +75,7 @@ export default function UserInfo({ navigation }: any) {
         release_date: res.data?.release_date,
         dob: res.data?.dob,
         permanent_address: res.data?.permanent_address,
-        sex: res.data?.sex === 1 ? '1' : '0',
+        sex: res.data?.sex?.toString(),
         bank_name: transferInformation?.bank_name,
         bank_number: transferInformation?.bank_number,
         receiver_name: transferInformation?.receiver_name,
@@ -82,9 +83,10 @@ export default function UserInfo({ navigation }: any) {
       return res.data;
     },
     {
-      enabled: !!userInfo || !!userInfo.id,
+      enabled: !!userInfo && !!userInfo?.id,
     }
   );
+
 
   const handleSave = async () => {
     if (editUserInfo?.name === '') {
@@ -100,6 +102,7 @@ export default function UserInfo({ navigation }: any) {
     try {
       setIsLoading(true);
       const res = await dwtApi.updateUserById(userInfo.id, {
+        ...userInfo,
         name: editUserInfo?.name,
         phone: editUserInfo?.phone,
         id_card: editUserInfo?.id_card,
@@ -126,6 +129,8 @@ export default function UserInfo({ navigation }: any) {
       setIsLoading(false);
     }
   };
+
+  useRefreshOnFocus(refetch)
 
   if (isLoadingUser) {
     return <PrimaryLoading />;
@@ -286,9 +291,9 @@ export default function UserInfo({ navigation }: any) {
                   fs_14_500,
                   text_black,
                   {
-                    flex: 1,
                     textAlign: 'right',
                     paddingVertical: 0,
+                    flex: 1,
                   },
                 ]}
                 value={editUserInfo?.released_from}

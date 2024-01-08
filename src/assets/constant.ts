@@ -92,6 +92,89 @@ export const WORK_STORAGE_STATUS = [
     },
 ];
 
+
+export const LIST_CLASSIFY_CUSTOMER_STATUS_FILTER = [
+    {
+        value: 'all',
+        label: 'Tất cả',
+        color: '#FFFFFF'
+    },
+    {
+        value: 'Tiềm năng',
+        label: 'Tiềm năng',
+        color: '#D4F3D5',
+    },
+    {
+        value: 'Đang chăm sóc',
+        label: 'Đang chăm sóc',
+        color: '#F9F2CE',
+    },
+    {
+        value: 'Đang hợp tác',
+        label: 'Đang hợp tác',
+        color: '#89B6FA',
+    },
+    {
+        value: 'Đã chấm dứt',
+        label: 'Đã chấm dứt',
+        color: '#DC354591',
+    }
+]
+
+export const LIST_PROCESS_CUSTOMER_STATUS_FILTER = [
+    {
+        value: 'all',
+        label: 'Tất cả',
+    },
+    {
+        value: 'Trinh sát',
+        label: 'Trinh sát',
+    },
+    {
+        value: 'Cơ hội',
+        label: 'Cơ hội',
+    },
+    {
+        value: 'Khách hàng',
+        label: 'Khách hàng',
+    },
+    {
+        value: 'Đơn hàng',
+        label: 'Đơn hàng',
+    },
+    {
+        value: 'Giao hàng',
+        label: 'Giao hàng',
+    },
+    {
+        value: 'CSKH',
+        label: 'CSKH',
+    }
+]
+
+export const LIST_CUSTOMER_TYPE_FILTER = [
+    {
+        value: 'all',
+        label: 'Tất cả',
+    },
+    {
+        value: 'Khách hàng lẻ',
+        label: 'Khách hàng lẻ',
+    },
+    {
+        value: 'Khách đại lý',
+        label: 'Khách đại lý',
+    },
+    {
+        label: 'Khách dự án',
+        value: 'Khách dự án',
+    },
+    {
+        label: 'Loại khác',
+        value: 'Loại khác',
+    }
+]
+
 export const WORK_STORAGE_STATUS_COLOR = {
     'all': '#FFF',
     'changer_status': '#FEF4A5',
@@ -370,3 +453,4 @@ export const BANK_LIST = [
         value: '(Công ty Tài chính TNHH Mirae Asset) Mirae Asset Finance Vietnam',
     },
 ];
+

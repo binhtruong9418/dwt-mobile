@@ -18,6 +18,7 @@ export default function DatePickerModal({
   visible,
   currentDate,
   setCurrentDate,
+    type,
 }: any) {
   const [dateSelect, setDateSelect] = useState(currentDate || dayjs());
 
@@ -26,23 +27,8 @@ export default function DatePickerModal({
     setVisible(false);
   };
 
-  return (
-    <ReactNativeModal
-      animationInTiming={200}
-      animationOutTiming={200}
-      animationIn={'fadeInUp'}
-      animationOut={'fadeOutDown'}
-      swipeDirection={'down'}
-      backdropTransitionInTiming={200}
-      backdropTransitionOutTiming={200}
-      onSwipeComplete={() => {
-        setVisible(false);
-      }}
-      style={styles.wrapper}
-      isVisible={visible}
-      onBackdropPress={() => {
-        setVisible(false);
-      }}>
+  return visible ? (
+    <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={[fs_14_700, text_red, text_center]}>CHỌN THỜI GIAN</Text>
@@ -63,7 +49,7 @@ export default function DatePickerModal({
                 setDateSelect(dayjs(date, 'YYYY-MM-DD HH:mm'));
               }}
               locale={'vi'}
-              mode={'date'}
+              mode={type ? type : 'date'}
               firstDayOfWeek={1}
               selectedItemColor={'#CA1F24'}
               weekDaysTextStyle={styles.weekDayTextStyle}
@@ -78,8 +64,8 @@ export default function DatePickerModal({
           />
         </View>
       </View>
-    </ReactNativeModal>
-  );
+    </View>
+  ) : null
 }
 
 const styles = StyleSheet.create({
@@ -88,6 +74,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(217, 217, 217, 0.75)',
     justifyContent: 'center',
     margin: 0,
+    position: 'absolute',
+    zIndex: 999,
+    width: '100%',
+    height: '100%',
   },
   header: {
     paddingVertical: 13,

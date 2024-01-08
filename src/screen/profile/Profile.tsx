@@ -163,6 +163,7 @@ export default function Profile({navigation}: any) {
             setIsLoading(true);
             const imageUrl = await dwtApi.uploadFile(images[0]);
             const res = await dwtApi.updateUserById(userInfo.id, {
+                ...userInfo,
                 avatar: imageUrl,
             });
             if (res.status === 200) {

@@ -1,5 +1,6 @@
 import Header from '../../components/header/Header.tsx';
 import {
+    ActivityIndicator,
     FlatList,
     ScrollView,
     StyleSheet,
@@ -15,52 +16,144 @@ import {useMemo, useState} from 'react';
 import CustomerSummary from "../../components/customer/CustomerSummary.tsx";
 import CustomerItem from "../../components/customer/CustomerItem.tsx";
 import dayjs from "dayjs";
-import {useQuery} from "@tanstack/react-query";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import {dwtApi} from "../../api/service/dwtApi.ts";
 import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
+import FilterClassifyModal from "../../components/customer/FilterClassifyModal.tsx";
+import {LIST_CLASSIFY_CUSTOMER_STATUS_FILTER, LIST_PROCESS_CUSTOMER_STATUS_FILTER} from "../../assets/constant.ts";
+import FilterCityModal from "../../components/customer/FilterCityModal.tsx";
+import FilterProcessModal from "../../components/customer/FilterProcessModal.tsx";
+import FilterCustomerTypeModal from "../../components/customer/FilterCustomerTypeModal.tsx";
+import DatePickerFromToModal from "../../components/common/modal/DatePickerFromToModal.tsx";
+import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
+import {useConnection} from "../../redux/connection";
+import UserFilterModal from "../../components/common/modal/UserFilterModal.tsx";
 
 export default function Customer({navigation}: any) {
+    const {connection: {userInfo, currentTabManager}} = useConnection()
     const [classify, setClassify] = useState({
-        label: 'Tất cả',
-        value: 0,
+        label: 'Loại khách',
+        value: 'all',
     });
     const [isOpenClassify, setIsOpenClassify] = useState(false);
 
     const [address, setAddress] = useState({
-        label: 'Tất cả',
-        value: 0,
+        name: 'Tỉnh/TP',
+        code: 0,
     });
     const [isOpenAddressSelect, setIsOpenAddressSelect] = useState(false);
 
     const [process, setProcess] = useState({
-        label: 'Tất cả',
-        value: 0,
+        label: 'Giai đoạn',
+        value: 'all',
     });
 
     const [isOpenProcessSelect, setIsOpenProcessSelect] = useState(false);
 
     const [customerType, setCustomerType] = useState({
-        label: 'Tất cả',
-        value: 0,
+        label: 'Nhóm',
+        value: 'all',
     });
     const [isOpenCustomerTypeSelect, setIsOpenCustomerTypeSelect] = useState(false);
 
-    const [fromDate, setFromDate] = useState(dayjs().startOf('week'));
-    const [toDate, setToDate] = useState(dayjs());
+    const [fromDate, setFromDate] =
+        useState(dayjs().startOf('year').format('YYYY-MM-DD'));
+    const [toDate, setToDate] = useState(dayjs().format('YYYY-MM-DD'));
     const [isOpenSelectDate, setIsOpenSelectDate] = useState(false);
+
+    const [isOpenUserFilter, setIsOpenUserFilter] = useState(false);
+    const [currentUser, setCurrentUser] = useState({
+        value: 0,
+        label: 'Nhân sự thu thập',
+    });
+
 
 
     const {
-        data: customerData = {},
-    } = useQuery(['listCustomer'], async () => {
-        const res = await dwtApi.getListCustomer();
-        return res.data;
-    });
-    const {customer: {data: listCustomer = []} = {}} = customerData;
+        data: {pages: pageUser = []} = {},
+        isFetching: isFetchingListUsers,
+        hasNextPage: hasNextPageListUsers,
+        fetchNextPage: fetchNextPageListUsers,
+    } = useInfiniteQuery(
+        ['dwtApi.getListAllUser', userInfo],
+        async ({pageParam = 1, queryKey}) => {
+            const res = await dwtApi.searchUser({
+                page: pageParam,
+                limit: 10,
+                departement_id: userInfo?.role === 'admin' ? undefined : userInfo?.departement_id,
+            });
+
+            return {
+                data: res?.data?.data,
+                nextPage: pageParam + 1,
+            };
+        },
+        {
+            getNextPageParam: (lastPage, pages) => {
+                if (lastPage?.data?.length < 10) {
+                    return undefined;
+                }
+                return lastPage?.nextPage;
+            },
+            enabled: !!userInfo && currentTabManager === 1
+        }
+    );
+    const listUsers = pageUser.flatMap((page) => page.data);
+
+
+    const {
+        data: {pages: pageCustomer = []} = {},
+        isFetching: isFetchingCustomer,
+        refetch: refetchCustomer,
+        fetchNextPage: fetchNextPageCustomer,
+        hasNextPage: hasNextPageCustomer,
+    } = useInfiniteQuery(['listCustomer', classify, address, process, customerType, {
+            fromDate,
+            toDate,
+        }, currentUser],
+        async ({pageParam = 1, queryKey}: any) => {
+            const res = await dwtApi.getListCustomer({
+                classify: queryKey[1].value === 'all' ? undefined : queryKey[1].value,
+                city: queryKey[2].code === 0 ? undefined : queryKey[2].name,
+                process: queryKey[3].value === 'all' ? undefined : queryKey[3].value,
+                customer_type: queryKey[4].value === 'all' ? undefined : queryKey[4].value,
+                start_date: queryKey[5].fromDate ? dayjs(queryKey[5].fromDate).format('YYYY-MM-DD') : undefined,
+                end_date: queryKey[5].toDate ? dayjs(queryKey[5].toDate).format('YYYY-MM-DD') : undefined,
+                user_id: queryKey[6].value === 0 ? undefined : queryKey[6].value,
+                page: pageParam,
+                limit: 10,
+            });
+            return {
+                customerData: res?.data,
+                data: res?.data?.customer?.data,
+                nextPage: pageParam + 1,
+            }
+        }, {
+            getNextPageParam: lastPage => {
+                const {nextPage} = lastPage;
+                if (lastPage.data.length < 10) {
+                    return undefined;
+                }
+                return nextPage;
+            }
+        }
+    );
+    const listCustomer = pageCustomer.flatMap(page => page.data);
+    const customerData = pageCustomer[0]?.customerData;
+
+
+    useRefreshOnFocus(refetchCustomer)
+
+    //function get more data
+    const getMoreData = async () => {
+        if (hasNextPageCustomer) {
+            await fetchNextPageCustomer();
+        }
+    };
 
     return (
         <SafeAreaView style={styles.wrapper}>
-            <AdminTabBlock />
+            <AdminTabBlock/>
             <Header
                 title={'DANH SÁCH KHÁCH HÀNG'}
                 handleGoBack={() => {
@@ -83,7 +176,7 @@ export default function Customer({navigation}: any) {
                         showsHorizontalScrollIndicator={false}
                     >
                         <TouchableOpacity
-                            style={[styles.dropdown, {width: 120}]}
+                            style={[styles.dropdown, {width: 140}]}
                             onPress={() => {
                                 setIsOpenClassify(true);
                             }}>
@@ -91,13 +184,26 @@ export default function Customer({navigation}: any) {
                             <DropdownIcon width={20} height={20}/>
                         </TouchableOpacity>
 
+                        {
+                            currentTabManager === 1 && (
+                                <TouchableOpacity
+                                    style={[styles.dropdown, {width: 200}]}
+                                    onPress={() => {
+                                        setIsOpenUserFilter(true);
+                                    }}>
+                                    <Text style={[text_black, fs_14_400]}>{currentUser.label}</Text>
+                                    <DropdownIcon width={20} height={20}/>
+                                </TouchableOpacity>
+                            )
+                        }
+
                         <TouchableOpacity
-                            style={[styles.dropdown, {width: 120}]}
+                            style={[styles.dropdown, {width: 140}]}
                             onPress={() => {
                                 setIsOpenAddressSelect(true);
                             }}>
                             <Text style={[text_black, fs_14_400]}>
-                                {address.label}
+                                {address.name}
                             </Text>
                             <DropdownIcon width={20} height={20}/>
                         </TouchableOpacity>
@@ -140,7 +246,7 @@ export default function Customer({navigation}: any) {
                     data={listCustomer}
                     renderItem={({item}) => {
                         return (
-                            <CustomerItem item={item} />
+                            <CustomerItem item={item}/>
                         )
                     }}
                     keyExtractor={(item) => item.id.toString()}
@@ -148,6 +254,14 @@ export default function Customer({navigation}: any) {
                     contentContainerStyle={{
                         paddingVertical: 10,
                     }}
+                    onEndReached={getMoreData}
+                    onEndReachedThreshold={0.5}
+                    refreshing={isFetchingCustomer}
+                    ListFooterComponent={
+                        isFetchingCustomer ? (
+                            <ActivityIndicator size={'large'} color={'#3D5CFF'}/>
+                        ) : null
+                    }
                 />
             </View>
             <TouchableOpacity
@@ -157,6 +271,62 @@ export default function Customer({navigation}: any) {
                 }}>
                 <AddIcon width={32} height={32}/>
             </TouchableOpacity>
+
+            <FilterClassifyModal
+                visible={isOpenClassify}
+                setVisible={setIsOpenClassify}
+                setStatusValue={setClassify}
+                statusValue={classify}
+            />
+
+            <FilterCityModal
+                visible={isOpenAddressSelect}
+                setVisible={setIsOpenAddressSelect}
+                setCurrentCity={setAddress}
+                currentCity={address}
+            />
+
+            <FilterProcessModal
+                visible={isOpenProcessSelect}
+                setVisible={setIsOpenProcessSelect}
+                setStatusValue={setProcess}
+                statusValue={process}
+            />
+            <FilterCustomerTypeModal
+                visible={isOpenCustomerTypeSelect}
+                setVisible={setIsOpenCustomerTypeSelect}
+                setStatusValue={setCustomerType}
+                statusValue={customerType}
+            />
+            {
+                isOpenSelectDate && (
+                    <DatePickerFromToModal
+                        setVisible={setIsOpenSelectDate}
+                        fromDate={fromDate}
+                        toDate={toDate}
+                        setFromDate={setFromDate}
+                        setToDate={setToDate}
+                    />
+                )
+            }
+            <UserFilterModal
+                visible={isOpenUserFilter}
+                setVisible={setIsOpenUserFilter}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                listUser={[{
+                    value: 0,
+                    label: 'Tất cả',
+                }, ...listUsers.map((item) => {
+                    return {
+                        value: item.id,
+                        label: item.name,
+                    };
+                })]}
+                hasNextPageUser={hasNextPageListUsers}
+                fetchNextPageUser={fetchNextPageListUsers}
+                isFetchingUser={isFetchingListUsers}
+            />
         </SafeAreaView>
     );
 }
