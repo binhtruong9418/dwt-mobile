@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
@@ -16,7 +17,7 @@ import {
   text_gray,
 } from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
-import {useMemo, useState} from 'react';
+import { useMemo, useState } from 'react';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
@@ -26,35 +27,46 @@ import dayjs from 'dayjs';
 import { useRefreshOnFocus } from '../../hook/useRefeshOnFocus.ts';
 import YearPickerModal from "../../components/common/modal/YearPickerModal.tsx";
 import SalarySummaryIcon from "../../assets/img/salary-summary.svg";
-import {useConnection} from "../../redux/connection";
-import {LIST_BUSINESS_DEPARTMENT} from "../../assets/constant.ts";
+import { useConnection } from '../../redux/connection';
+import { LIST_BUSINESS_DEPARTMENT } from '../../assets/constant.ts';
 import ComingSoonScreenComponent from "../../components/coming-soon/ComingSoonScreenComponent.tsx";
 
+const { width: windowWidth } = Dimensions.get('window');
+
 export default function SalaryInfo({ navigation }: any) {
-    const {connection: {userInfo}} = useConnection();
+  const {
+    connection: { userInfo },
+  } = useConnection();
   const [isOpenYearSelect, setIsOpenYearSelect] = useState(false);
   const [currentYear, setCurrentYear] = useState(dayjs().year());
   const [salaryMode, setSalaryMode] = useState(0);
+  const [itemWidth, setItemWidth] = useState(0);
 
   const {
     data: listSalary = [],
     isLoading: isLoadingListSalary,
     refetch: refetchListSalary,
-  } = useQuery(['listSalary', salaryMode, currentYear], async () => {
-    const res = await dwtApi.getSalaryHistory({
-      status_f: salaryMode === 0 ? undefined : salaryMode,
-      year_f: currentYear,
-    });
-    const listSalaryHistories = res?.data?.salaryHistory?.data;
-    for (let i = 0; i < listSalaryHistories.length; i++) {
-      const salaryId = listSalaryHistories[i].id;
-      const salaryDetail = await dwtApi.getSalaryById(salaryId);
-      listSalaryHistories[i].salaryDetail = salaryDetail.data;
+  } = useQuery(
+    ['listSalary', salaryMode, currentYear],
+    async () => {
+      const res = await dwtApi.getSalaryHistory({
+        status_f: salaryMode === 0 ? undefined : salaryMode,
+        year_f: currentYear,
+      });
+      const listSalaryHistories = res?.data?.salaryHistory?.data;
+      for (let i = 0; i < listSalaryHistories.length; i++) {
+        const salaryId = listSalaryHistories[i].id;
+        const salaryDetail = await dwtApi.getSalaryById(salaryId);
+        listSalaryHistories[i].salaryDetail = salaryDetail.data;
+      }
+      return listSalaryHistories;
+    },
+    {
+      enabled:
+        !!userInfo &&
+        LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id),
     }
-    return listSalaryHistories;
-  }, {
-      enabled: !!userInfo && LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)
-  });
+  );
 
   const totalSummary = useMemo(() => {
     let total = 0;
@@ -64,10 +76,12 @@ export default function SalaryInfo({ navigation }: any) {
     return total;
   }, [listSalary]);
 
+  console.log(windowWidth);
+
   useRefreshOnFocus(refetchListSalary);
 
-  if(!LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)) {
-      return <ComingSoonScreenComponent navigation={navigation}/>
+  if (!LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)) {
+    return <ComingSoonScreenComponent navigation={navigation} />;
   }
 
   if (isLoadingListSalary) {
@@ -146,50 +160,48 @@ export default function SalaryInfo({ navigation }: any) {
                   id: item.id,
                 });
               }}
+              onLayout={(e) => {
+                setItemWidth(e.nativeEvent.layout.width);
+              }}
             >
+              <SalaryItemIcon width={30} height={30} />
               <View
                 style={{
-                  flexDirection: 'row',
-                  gap: 10,
+                  gap: 5,
+                  width: itemWidth - 30 - 10 - 24,
                 }}
               >
-                <SalaryItemIcon width={30} height={30} />
-                <View
-                  style={{
-                    gap: 5,
-                  }}
-                >
+                <View style={styles.rowItem}>
                   <Text style={[fs_14_400, text_black]}>
                     Phiếu lương tháng {item.month}/{item.year}
                   </Text>
+
+                  <Text style={[fs_14_500, text_black]}>
+                    {item?.salaryDetail?.totalSalary?.toLocaleString()}
+                  </Text>
+                </View>
+                <View>
                   <Text style={[fs_12_400, text_black]}>
                     Vị trí: {item.position_name}
                   </Text>
+                </View>
+                <View style={styles.rowItem}>
                   <Text style={[fs_12_400, text_gray]}>
                     Thời gian chi trả:{' '}
                     {dayjs(item.pay_day).format('DD/MM/YYYY')}
                   </Text>
+
+                  <Text
+                    style={[
+                      fs_12_400,
+                      {
+                        color: '#679AE6',
+                      },
+                    ]}
+                  >
+                    Xem chi tiết
+                  </Text>
                 </View>
-              </View>
-              <View
-                style={{
-                  alignItems: 'flex-end',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Text style={[fs_14_500, text_black]}>
-                  {item?.salaryDetail?.totalSalary?.toLocaleString()}
-                </Text>
-                <Text
-                  style={[
-                    fs_12_400,
-                    {
-                      color: '#679AE6',
-                    },
-                  ]}
-                >
-                  Xem chi tiết
-                </Text>
               </View>
             </TouchableOpacity>
           );
@@ -219,7 +231,9 @@ export default function SalaryInfo({ navigation }: any) {
               fontWeight: '700',
               color: '#C02626',
             }}
-          >{' '}{totalSummary.toLocaleString()}{' '}đ
+          >
+            {' '}
+            {totalSummary.toLocaleString()} đ
           </Text>
         </Text>
       </View>
@@ -268,13 +282,20 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 12,
     borderRadius: 6,
+    gap: 10,
+    alignItems: 'center',
+    width: '100%',
   },
   divider: {
     height: 1,
     backgroundColor: '#D9D9D9',
     marginVertical: 10,
+  },
+  rowItem: {
+    flexDirection: windowWidth < 300 ? 'column' : 'row',
+    justifyContent: 'space-between',
+    gap: windowWidth < 300 ? 5 : 0,
   },
 });

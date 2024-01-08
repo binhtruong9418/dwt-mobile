@@ -63,10 +63,10 @@ export default function SalaryDetail({ route, navigation }: any) {
     salaryTmpData.performanceSalary =
       (salaryInfo?.salary_history?.performance_salary *
         salaryInfo?.kpi?.tmpTotalKPI) /
-      salaryInfo?.kpi?.expectTotalKPI || 0;
+        salaryInfo?.kpi?.expectTotalKPI || 0;
     salaryTmpData.allowance =
       (salaryInfo?.salary_history?.allowance * salaryInfo?.days_work) /
-      salaryInfo?.all_days_work || 0
+        salaryInfo?.all_days_work || 0;
     salaryTmpData.salaryTitle = salaryInfo?.salary_history?.salary_title;
     salaryTmpData.totalSalary =
       salaryTmpData.basicSalary +
@@ -136,7 +136,9 @@ export default function SalaryDetail({ route, navigation }: any) {
                   fs_12_700,
                 ]}
               >
-                Đã chi trả
+                {salaryInfo?.salary_history?.paid_salary === 1
+                  ? 'Đã chi trả'
+                  : 'Chưa chi trả'}
               </Text>
             </View>
             <Text
