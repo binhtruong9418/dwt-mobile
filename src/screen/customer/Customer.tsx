@@ -70,35 +70,22 @@ export default function Customer({navigation}: any) {
 
 
     const {
-        data: {pages: pageUser = []} = {},
-        isFetching: isFetchingListUsers,
-        hasNextPage: hasNextPageListUsers,
-        fetchNextPage: fetchNextPageListUsers,
-    } = useInfiniteQuery(
-        ['dwtApi.getListAllUser', userInfo],
-        async ({pageParam = 1, queryKey}) => {
+        data: listUsers = [],
+    } = useQuery(
+        ['dwtApi.getListAllUser'],
+        async () => {
             const res = await dwtApi.searchUser({
-                page: pageParam,
-                limit: 10,
                 departement_id: userInfo?.role === 'admin' ? undefined : userInfo?.departement_id,
             });
 
-            return {
-                data: res?.data?.data,
-                nextPage: pageParam + 1,
-            };
+            return res?.data?.data
         },
         {
-            getNextPageParam: (lastPage, pages) => {
-                if (lastPage?.data?.length < 10) {
-                    return undefined;
-                }
-                return lastPage?.nextPage;
-            },
             enabled: !!userInfo && currentTabManager === 1
         }
     );
-    const listUsers = pageUser.flatMap((page) => page.data);
+
+    console.log(listUsers.length)
 
 
     const {
@@ -317,15 +304,12 @@ export default function Customer({navigation}: any) {
                 listUser={[{
                     value: 0,
                     label: 'Tất cả',
-                }, ...listUsers.map((item) => {
+                }, ...listUsers.map((item: any) => {
                     return {
                         value: item.id,
                         label: item.name,
                     };
                 })]}
-                hasNextPageUser={hasNextPageListUsers}
-                fetchNextPageUser={fetchNextPageListUsers}
-                isFetchingUser={isFetchingListUsers}
             />
         </SafeAreaView>
     );

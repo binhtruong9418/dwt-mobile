@@ -101,34 +101,19 @@ export default function AdminOffice({
   );
 
   const {
-    data: { pages = [] } = {},
-    isFetching: isFetchingListUsers,
-    hasNextPage: hasNextPageListUsers,
-    fetchNextPage: fetchNextPageListUsers,
-  } = useInfiniteQuery(
+    data: listUsers = [],
+  } = useQuery(
     ['dwtApi.getListAllUser', currentDepartment],
     async ({ pageParam = 1, queryKey }) => {
       const res = await dwtApi.searchUser({
-        page: pageParam,
-        limit: 10,
         departement_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
       });
 
-      return {
-        data: res?.data?.data,
-        nextPage: pageParam + 1,
-      };
-    },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (lastPage?.data?.length < 10) {
-          return undefined;
-        }
-        return lastPage?.nextPage;
-      },
+      return res?.data?.data
     }
   );
-  const listUsers = pages.flatMap((page) => page.data);
+
+  console.log(listUsers)
 
   const {
     data: managerOfficeData,
@@ -284,15 +269,18 @@ export default function AdminOffice({
         setVisible={setIsOpenUserSelect}
         currentUser={currentUserId}
         setCurrentUser={setCurrentUserId}
-        listUser={listUsers.map((item) => {
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        })}
-        isFetchingUser={isFetchingListUsers}
-        hasNextPageUser={hasNextPageListUsers}
-        fetchNextPageUser={fetchNextPageListUsers}
+        listUser={[
+          {
+            value: 0,
+            label: 'Tất cả',
+          },
+          ...listUsers.map((item: any) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          }),
+        ]}
       />
     </View>
   );

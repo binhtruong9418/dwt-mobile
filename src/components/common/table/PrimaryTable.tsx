@@ -31,7 +31,7 @@ export default function PrimaryTable(
                             style={[
                                 {
                                     flex: column.width,
-                                    backgroundColor: headerColor || '#DCE1E7',
+                                    backgroundColor: headerColor || '#DDE1E6',
                                     height: 'auto',
                                 },
                                 styles.cell,

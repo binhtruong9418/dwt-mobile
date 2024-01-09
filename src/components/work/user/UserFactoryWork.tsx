@@ -121,6 +121,8 @@ export default function UserFactoryWork({ navigation }: any) {
         </View>
         <FlatList
           data={listFactoryReport}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item }) => {
             return <FactoryReportDetail data={item} navigation={navigation} />;
           }}
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 15,
     paddingTop: 20,
+    flex: 1,
   },
   button: {
     borderRadius: 5,

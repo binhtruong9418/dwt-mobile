@@ -43,7 +43,6 @@ export default function WorkReportEdit({ route, navigation }: any) {
     const [quantity, setQuantity] = useState('');
     const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
     const [files, setFiles] = useState<any[]>([]);
-    const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
     const [
         isOpenConfirmUploadWorkReportModal,
         setIsOpenConfirmUploadWorkReportModal,
@@ -72,13 +71,12 @@ export default function WorkReportEdit({ route, navigation }: any) {
         navigation.navigate('Work');
     };
 
-    const handleCancelUploadReport = () => {
+    const handleGoBack = () => {
         setQuantity('');
         setIsCompletedAndReport(false);
         setIsCompleted(false);
         setFiles([]);
         setNote('');
-        setIsOpenCancelReportModal(false);
         navigation.navigate('Work');
     };
 
@@ -211,9 +209,7 @@ export default function WorkReportEdit({ route, navigation }: any) {
         <SafeAreaView style={styles.wrapper}>
             <Header
                 title="BÁO CÁO CÔNG VIỆC"
-                handleGoBack={() => {
-                    setIsOpenCancelReportModal(true);
-                }}
+                handleGoBack={handleGoBack}
                 rightView={
                     (userInfo?.id === data?.user_id ? (
                         <TouchableOpacity
@@ -377,20 +373,10 @@ export default function WorkReportEdit({ route, navigation }: any) {
                 visible={isOpenUploadFileModal}
                 setVisible={setIsOpenUploadFileModal}
             />
-            <ToastConfirmModal
-                visible={isOpenCancelReportModal}
-                handleCancel={handleCancelUploadReport}
-                handleOk={() => {
-                    setIsOpenCancelReportModal(false);
-                }}
-                description={'Bạn thực sự muốn hủy báo cáo?'}
-                okText={'Tiếp tục báo cáo'}
-                cancelText={'Hủy báo cáo'}
-            />
             <ToastSuccessModal
                 visible={isOpenConfirmUploadWorkReportModal}
                 handlePressOk={handlePressOk}
-                description={'Báo cáo thành công'}
+                description={'Sửa báo cáo thành công'}
             />
             <LoadingActivity isLoading={isLoading} />
         </SafeAreaView>

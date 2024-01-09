@@ -95,34 +95,17 @@ export default function ManagerOfficeWork({ navigation }: any) {
   );
 
   const {
-    data: { pages = [] } = {},
-    isFetching: isFetchingListUsers,
-    hasNextPage: hasNextPageListUsers,
-    fetchNextPage: fetchNextPageListUsers,
-  } = useInfiniteQuery(
+    data: listUsers = [],
+  } = useQuery(
     ['dwtApi.getListAllUser', currentDepartment],
-    async ({ pageParam = 1, queryKey }) => {
+    async ({queryKey }) => {
       const res = await dwtApi.searchUser({
-        page: pageParam,
-        limit: 10,
         departement_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
       });
 
-      return {
-        data: res?.data?.data,
-        nextPage: pageParam + 1,
-      };
+      return res?.data?.data
     },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (lastPage?.data?.length < 10) {
-          return undefined;
-        }
-        return lastPage?.nextPage;
-      },
-    }
   );
-  const listUsers = pages.flatMap((page) => page.data);
 
   const {
     data: { listTargetWorkData, listAriseWorkData } = {
@@ -176,7 +159,7 @@ export default function ManagerOfficeWork({ navigation }: any) {
             if (statusValue.value === '0') {
               return true;
             }
-            if (work?.actual_state) {
+            if (work?.work_status) {
               return work.work_status.toString() === statusValue.value;
             }
             return false;
@@ -326,15 +309,18 @@ export default function ManagerOfficeWork({ navigation }: any) {
         setVisible={setIsOpenUserSelect}
         currentUser={currentUserId}
         setCurrentUser={setCurrentUserId}
-        listUser={listUsers.map((item) => {
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        })}
-        isFetchingUser={isFetchingListUsers}
-        hasNextPageUser={hasNextPageListUsers}
-        fetchNextPageUser={fetchNextPageListUsers}
+        listUser={[
+          {
+            value: 0,
+            label: 'Nhân sự',
+          },
+          ...listUsers.map((item: any) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          }),
+        ]}
       />
       {isOpenDepartmentModal && (
         <ListDepartmentModal

@@ -21,7 +21,7 @@ import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import dayjs from "dayjs";
 
 export default function WorkDetailOffice({route, navigation}: any) {
-    const {data, routeGoBack} = route.params;
+    const {data} = route.params;
     const {
         connection: {userInfo},
     } = useConnection();
@@ -73,7 +73,7 @@ export default function WorkDetailOffice({route, navigation}: any) {
                 targetLogs: workDetailData?.report_task_logs?.map((item: any) => {
                     return {
                         ...item,
-                        date: item.report_date,
+                        date: dayjs(item.report_date).format('DD/MM/YYYY'),
                         criteria: item?.kpi_keys[0]?.name,
                         quantity: item?.kpi_keys[0]?.pivot?.quantity,
                     };
@@ -81,7 +81,7 @@ export default function WorkDetailOffice({route, navigation}: any) {
                 reportLogs: workDetailData?.report_task_logs?.map((item: any) => {
                     return {
                         ...item,
-                        date: item.report_date,
+                        date: dayjs(item.report_date).format('DD/MM/YYYY'),
                         note: item?.note,
                         file: item?.files,
                     };
@@ -144,7 +144,7 @@ export default function WorkDetailOffice({route, navigation}: any) {
             <Header
                 title="CHI TIẾT KẾ HOẠCH"
                 handleGoBack={() => {
-                    navigation.navigate(routeGoBack);
+                    navigation.goBack();
                 }}
             />
             <ScrollView
@@ -171,11 +171,11 @@ export default function WorkDetailOffice({route, navigation}: any) {
                         },
                         {
                             label: 'Ngày bắt đầu',
-                            value: workDetail?.startDate,
+                            value: dayjs(workDetail?.startDate).format('DD/MM/YYYY'),
                         },
                         {
                             label: 'Thời hạn',
-                            value: workDetail?.deadline,
+                            value: dayjs(workDetail?.deadline).format('DD/MM/YYYY'),
                         },
                         {
                             label: 'Giờ công 1 lượt hoàn thành',

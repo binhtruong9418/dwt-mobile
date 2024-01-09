@@ -76,9 +76,9 @@ export default function UserInfo({ navigation }: any) {
         dob: res.data?.dob,
         permanent_address: res.data?.permanent_address,
         sex: res.data?.sex?.toString(),
-        bank_name: transferInformation?.bank_name,
-        bank_number: transferInformation?.bank_number,
-        receiver_name: transferInformation?.receiver_name,
+        bank_name: transferInformation?.bank_name ?? null,
+        bank_number: transferInformation?.bank_number ?? null,
+        receiver_name: transferInformation?.receiver_name ?? null,
       });
       return res.data;
     },

@@ -54,7 +54,7 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                 const res = await dwtApi.getWorkAriseDetail(queryKey[1], queryKey[2]);
                 return {
                     ...res.data,
-                    username: res?.data?.in_charge_name,
+                    username: res?.data?.in_charge_name + ' - ' + res?.data?.in_charge_code
                 };
             } else {
                 const res = await dwtApi.getWorkDetail(
@@ -143,8 +143,9 @@ export default function WorkDetailDepartment({route, navigation}: any) {
             }
             const res = await dwtApi.addCommentWorkBusiness({
                 business_standard_id:  managerWorkId,
-                user_id: userInfo?.id,
-                reported_date: dayjs().format('YYYY-MM-DD'),
+                user_id: data?.user_report_id,
+                report_month: dayjs().month() + 1,
+                report_year: dayjs().year(),
                 comment: managerComment,
                 kpi: Number(managerKpi),
             });
@@ -157,8 +158,8 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                 const res = await dwtApi.addCommentWorkAriseBusiness(
                     data.id,
                     {
-                        admin_comment: managerComment,
-                        admin_kpi: Number(managerKpi),
+                        admin_comment: adminComment,
+                        admin_kpi: Number(adminKpi),
                         updated_by: userInfo?.id
                     }
                 );
@@ -170,9 +171,10 @@ export default function WorkDetailDepartment({route, navigation}: any) {
             const res = await dwtApi.addCommentWorkBusiness({
                 business_standard_id:  managerWorkId,
                 user_id: data.user_report_id,
-                reported_date: dayjs().format('YYYY-MM-DD'),
-                admin_comment: managerComment,
-                admin_kpi: Number(managerKpi),
+                report_month: dayjs().month() + 1,
+                report_year: dayjs().year(),
+                admin_comment: adminComment,
+                admin_kpi: Number(adminKpi),
             });
             if (res.status === 200) {
                 await refetch();
@@ -280,14 +282,18 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                         <TextInput
                             style={[styles.inputContent, text_black, fs_15_400, userInfo?.role !== 'manager' && styles.disableInput]}
                             placeholderTextColor={'#787878'}
-                            placeholder={managerComment || 'Nhập nội dung'}
+                            placeholder={'Nhập nội dung'}
+                            value={managerComment}
+                            onChangeText={setManagerComment}
                             multiline={true}
                             editable={userInfo?.role === 'manager'}
                         />
                         <TextInput
                             style={[styles.inputGrade, text_black, fs_15_400, userInfo?.role !== 'manager' && styles.disableInput]}
                             placeholderTextColor={'#787878'}
-                            placeholder={managerKpi || 'Điểm KPI'}
+                            placeholder={'Điểm KPI'}
+                            value={managerKpi?.toString()}
+                            onChangeText={setManagerKpi}
                             keyboardType="numeric"
                             editable={userInfo?.role === 'manager'}
                         />
@@ -300,14 +306,18 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                         <TextInput
                             style={[styles.inputContent, text_black, fs_15_400, userInfo?.role !== 'admin' && styles.disableInput]}
                             placeholderTextColor={'#787878'}
-                            placeholder={adminComment || 'Nhập nội dung'}
+                            placeholder={'Nhập nội dung'}
+                            value={adminComment}
+                            onChangeText={setAdminComment}
                             multiline={true}
                             editable={userInfo?.role === 'admin'}
                         />
                         <TextInput
                             style={[styles.inputGrade, text_black, fs_15_400, userInfo?.role !== 'admin' && styles.disableInput]}
                             placeholderTextColor={'#787878'}
-                            placeholder={adminKpi || 'Điểm KPI'}
+                            placeholder={'Điểm KPI'}
+                            value={adminKpi?.toString()}
+                            onChangeText={setAdminKpi}
                             keyboardType="numeric"
                             editable={userInfo?.role === 'admin'}
                         />
@@ -391,11 +401,15 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                         ]}
                         data={workDetail.listLogs
                             .map((item: any) => {
+                                const listFile = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
+                                    return file.file_name
+                                }).join(', ') : ''
+
                                 return {
                                     ...item,
                                     date: dayjs(item.reported_date).format('DD/MM/YYYY') || '',
                                     note: item.note,
-                                    file: item.file_attachment,
+                                    file: listFile,
                                 };
                             })
                             .sort((a: any, b: any) => {

@@ -82,31 +82,12 @@ export default function AdminFactory(
 
 
     const {
-        data: {pages = []} = {},
-        isFetching: isFetchingListUsers,
-        hasNextPage: hasNextPageListUsers,
-        fetchNextPage: fetchNextPageListUsers,
-    } = useInfiniteQuery(["dwtApi.getListAllUser"], async ({pageParam = 1, queryKey}) => {
-            const res = await dwtApi.searchUser({
-                page: pageParam,
-                limit: 10,
-            })
-
-            return {
-                data: res?.data?.data,
-                nextPage: pageParam + 1,
-            }
-        }, {
-            getNextPageParam: (lastPage, pages) => {
-                if (lastPage?.data?.length < 10) {
-                    return undefined
-                }
-                return lastPage?.nextPage
-            },
-        }
+        data: listUsers = [],
+    } = useQuery(["getListAllUser"], async () => {
+            const res = await dwtApi.getListAllUser()
+            return res?.data
+        },
     )
-
-    const listUsers = pages.flatMap(page => page.data);
 
     const {data: managerFactoryData = {}, isLoading: loadingProductionDiary, refetch: refetchFactoryWork} =
         useQuery(
@@ -277,15 +258,18 @@ export default function AdminFactory(
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
-                listUser={listUsers.map(item => {
-                    return {
-                        value: item.id,
-                        label: item.name,
-                    }
-                })}
-                isFetchingUser={isFetchingListUsers}
-                hasNextPageUser={hasNextPageListUsers}
-                fetchNextPageUser={fetchNextPageListUsers}
+                listUser={[
+                    {
+                        value: 0,
+                        label: 'Tất cả',
+                    },
+                    ...listUsers.map((item: any) => {
+                        return {
+                            value: item.id,
+                            label: item.name,
+                        };
+                    }),
+                ]}
             />
         </View>
     );

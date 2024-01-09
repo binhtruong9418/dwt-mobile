@@ -66,15 +66,8 @@ export default function AddWorkArise({ navigation }: any) {
   const { data: listUser = [], isLoading: isLoadingListUser } = useQuery(
     ['listUser'],
     async () => {
-      if (userInfo.role === 'manager') {
-        const response = await dwtApi.getListUserDepartment(
-          userInfo?.departement_id
-        );
-        return response.data.data;
-      } else {
         const response = await dwtApi.getListAllUser();
         return response.data;
-      }
     },
     {
       enabled: !!userInfo,

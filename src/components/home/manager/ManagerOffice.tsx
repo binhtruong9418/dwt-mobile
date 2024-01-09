@@ -122,37 +122,20 @@ export default function ManagerOffice(
     );
 
     const {
-        data: {pages = []} = {},
-        isFetching: isFetchingListUsers,
-        hasNextPage: hasNextPageListUsers,
-        fetchNextPage: fetchNextPageListUsers,
-    } = useInfiniteQuery(
+        data: listUsers = [],
+    } = useQuery(
         ['dwtApi.getListAllUser', currentDepartment],
         async ({pageParam = 1, queryKey}) => {
             const res = await dwtApi.searchUser({
-                page: pageParam,
-                limit: 10,
                 departement_id:
                     queryKey[1].value === 0
                         ? userInfo?.departement_id
                         : queryKey[1].value,
             });
 
-            return {
-                data: res?.data?.data,
-                nextPage: pageParam + 1,
-            };
+            return res?.data?.data
         },
-        {
-            getNextPageParam: (lastPage, pages) => {
-                if (lastPage?.data?.length < 10) {
-                    return undefined;
-                }
-                return lastPage?.nextPage;
-            },
-        }
     );
-    const listUsers = pages.flatMap((page) => page.data);
 
     const {
         data: managerOfficeData,
@@ -322,18 +305,15 @@ export default function ManagerOffice(
                 listUser={[
                     {
                         value: 0,
-                        label: 'Nhân sự',
+                        label: 'Tất cả',
                     },
-                    ...listUsers.map((item) => {
+                    ...listUsers.map((item: any) => {
                         return {
                             value: item.id,
                             label: item.name,
                         };
                     }),
                 ]}
-                isFetchingUser={isFetchingListUsers}
-                hasNextPageUser={hasNextPageListUsers}
-                fetchNextPageUser={fetchNextPageListUsers}
             />
         </View>
     );

@@ -4,7 +4,7 @@ import Header from '../../components/header/Header.tsx';
 import {useMemo, useState} from 'react';
 import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
-import {fs_12_500, fs_15_700, text_black, text_gray} from "../../assets/style.ts";
+import {fs_12_400, fs_12_500, fs_15_700, text_black, text_center, text_gray} from "../../assets/style.ts";
 import DropdownIcon from "../../assets/img/dropdown-icon.svg";
 import dayjs from "dayjs";
 import MonthPickerModal from "../../components/common/modal/MonthPickerModal.tsx";
@@ -15,6 +15,7 @@ import PlusButtonModal from "../../components/work/PlusButtonModal.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {dwtApi} from "../../api/service/dwtApi.ts";
 import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
+import EmptyDailyReportIcon from "../../assets/img/empty-daily-report.svg";
 
 export default function MeetingInfo({navigation}: any) {
     const {
@@ -114,6 +115,18 @@ export default function MeetingInfo({navigation}: any) {
                         )
                     }}
                     ItemSeparatorComponent={() => <View style={{height: 10}}/>}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View>
+                                <EmptyDailyReportIcon
+                                    style={{alignSelf: 'center', marginTop: 50}}
+                                />
+                                <Text style={[fs_12_400, text_black, text_center]}>
+                                    Bạn không có cuộc họp nào.
+                                </Text>
+                            </View>
+                        )
+                    }}
                 />
             </View>
 

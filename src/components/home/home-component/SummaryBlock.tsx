@@ -137,11 +137,7 @@ export default function SummaryBlock({
                   <RowSummaryItem
                     key={index}
                     text={task.name}
-                    value={
-                      task.business_standard_score_tmp
-                        ? task.business_standard_score_tmp
-                        : 0
-                    }
+                    value={task.kpi}
                   />
                 );
               })}

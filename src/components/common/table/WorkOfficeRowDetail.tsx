@@ -135,9 +135,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     borderTopColor: '#D9D9D9',
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
     borderBottomColor: '#D9D9D9',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     marginTop: 10,
   },
   button: {

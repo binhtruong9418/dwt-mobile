@@ -102,32 +102,15 @@ export default function ManagerFactory(
     })
 
     const {
-        data: {pages = []} = {},
-        isFetching: isFetchingListUsers,
-        hasNextPage: hasNextPageListUsers,
-        fetchNextPage: fetchNextPageListUsers,
-    } = useInfiniteQuery(["dwtApi.getListAllUser", userInfo?.departement_id], async ({pageParam = 1, queryKey}) => {
+        data: listUsers = [],
+    } = useQuery(["dwtApi.getListAllUser", userInfo?.departement_id], async ({queryKey}) => {
             const res = await dwtApi.searchUser({
-                page: pageParam,
-                limit: 10,
                 departement_id: queryKey[1],
             })
 
-            return {
-                data: res?.data?.data,
-                nextPage: pageParam + 1,
-            }
-        }, {
-            getNextPageParam: (lastPage, pages) => {
-                if (lastPage?.data?.length < 10) {
-                    return undefined
-                }
-                return lastPage?.nextPage
-            },
-        }
+            return res?.data?.data
+        },
     )
-
-    const listUsers = pages.flatMap(page => page.data);
 
     const {data: managerFactoryData = {}, isLoading: loadingProductionDiary, refetch: refetchFactoryWork} =
         useQuery(
@@ -307,15 +290,18 @@ export default function ManagerFactory(
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
-                listUser={listUsers.map(item => {
-                    return {
-                        value: item.id,
-                        label: item.name,
-                    }
-                })}
-                isFetchingUser={isFetchingListUsers}
-                hasNextPageUser={hasNextPageListUsers}
-                fetchNextPageUser={fetchNextPageListUsers}
+                listUser={[
+                    {
+                        value: 0,
+                        label: 'Nhân sự',
+                    },
+                    ...listUsers.map((item: any) => {
+                        return {
+                            value: item.id,
+                            label: item.name,
+                        };
+                    }),
+                ]}
             />
         </View>
     );

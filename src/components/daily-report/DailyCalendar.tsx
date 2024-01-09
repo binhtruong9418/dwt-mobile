@@ -3,6 +3,7 @@ import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
 import {useEffect, useMemo} from "react";
 import dayjs from "dayjs";
+import {useConnection} from "../../redux/connection";
 
 export default function DailyCalendar({
   currentDate,
@@ -10,6 +11,8 @@ export default function DailyCalendar({
   listUserReports,
   listProjectLogs,
 }: InferProps<typeof DailyCalendar.propTypes>) {
+
+  const {connection: {userInfo}} = useConnection();
   const haveLog = (item: any) => {
     if (listUserReports) {
       return !!listUserReports.find(
@@ -28,8 +31,10 @@ export default function DailyCalendar({
     return false;
   };
 
-  const today = dayjs().date();
-  const initialScrollOffset = today > 5 ? today * 45 : 0;
+  const initialScrollOffset = useMemo(() => {
+    const today = dayjs().date();
+    return today > 5 ? today * 45 : 0;
+  }, [dayjs().date(), userInfo]);
 
   return (
     <View

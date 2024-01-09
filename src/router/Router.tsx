@@ -84,7 +84,8 @@ const Router = () => {
       {appIsReady && firstScreen && (
         <Stack.Navigator
           screenOptions={screenOptions}
-          initialRouteName={firstScreen}>
+          initialRouteName={firstScreen}
+        >
           {routePath.map((route, index) => (
             <Stack.Screen
               key={index}

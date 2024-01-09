@@ -109,7 +109,8 @@ export default function BottomNavigator(): JSX.Element {
     <Tabs.Navigator
       screenOptions={options}
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
-      initialRouteName="Home">
+      backBehavior={'history'}
+    >
       {navigatorPath.map((route, index) => (
         <Tabs.Screen
           key={index}

@@ -62,7 +62,6 @@ export default function ManagerFactoryWork({ navigation }: any) {
         date: `${queryKey[2]}-${queryKey[1] + 1}`,
       })
   );
-  // console.log('productionDiaryData', productionDiaryData);
   const { data: listProjectLogs = [] } = productionDiaryData;
   const todayLogs = useMemo(() => {
     return listProjectLogs

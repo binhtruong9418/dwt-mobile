@@ -334,6 +334,11 @@ export const dwtApi = {
         return await axiosClient.get(url, {params});
     },
 
+    getTotalWorkFactory: async (params = {}): Promise<any> => {
+        const url = '/mobile/production-diary-v2/total-work';
+        return await axiosClient.get(url, {params});
+    },
+
 
     createNewPropose: async (data: any): Promise<any> => {
         const url = 'quick-reports';

@@ -45,6 +45,16 @@ export default function UserFactory(
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
 
     const {
+        data: totalWorkFactoryData = {},
+    } = useQuery(['totalWorkFactory'], async () => {
+        const date = dayjs().format('YYYY-MM');
+        const response = await dwtApi.getTotalWorkFactory({
+            date: date,
+        });
+        return response.data;
+    });
+
+    const {
         data: mainTargetData,
     } = useQuery(['mainTargetFactory'], async () => {
         const res: any = await dwtApi.getMainTarget();
@@ -80,7 +90,6 @@ export default function UserFactory(
 
     return (
         <View style={styles.wrapper}>
-
             <View style={styles.header}>
                 <View>
                     <Text style={[fs_15_700, text_black, text_center]}>
@@ -98,13 +107,12 @@ export default function UserFactory(
                             value={mainTargetData?.amount} unit={mainTargetData?.unit}/>
             </View>
             <ScrollView contentContainerStyle={styles.content}>
-
                 <WorkProgressBlock
                     attendanceData={attendanceData}
                     checkIn={checkInTime}
                     checkOut={checkOutTime}
-                    userKpi={0}
-                    departmentKpi={100}
+                    userKpi={totalWorkFactoryData?.personal?.totalWork ?? 0}
+                    departmentKpi={totalWorkFactoryData?.department?.totalWork ?? 0}
                 />
                 <BehaviorBlock
                     type={'factory'}
@@ -113,6 +121,9 @@ export default function UserFactory(
                 <FlatList
                     data={userFactoryData}
                     scrollEnabled={false}
+                    contentContainerStyle={{
+                        paddingBottom: 20,
+                    }}
                     renderItem={({item}) => {
                         return <FactoryReportDetail data={item} navigation={navigation}/>;
                     }}

@@ -1,7 +1,7 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import BehaviorBlock from '../home-component/BehaviorBlock.tsx';
 import WorkTable from '../WorkTable.tsx';
-import {useQuery} from '@tanstack/react-query';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../common/loading/PrimaryLoading.tsx';
 import AddIcon from '../../../assets/img/add.svg';
@@ -15,6 +15,12 @@ import WorkProgressBlock from "../manager-component/WorkProgressBlock.tsx";
 import ReportAndProposeBlock from "../manager-component/ReportAndProposeBlock.tsx";
 import WorkBusinessManagerTable from "../manager-component/WorkBusinessManagerTable.tsx";
 import MainTarget from "../MainTarget.tsx";
+import {fs_12_400, text_black} from "../../../assets/style.ts";
+import DropdownIcon from "../../../assets/img/dropdown-icon.svg";
+import ListDepartmentModal from "../manager-component/ListDepartmentModal.tsx";
+import MonthPickerModal from "../../common/modal/MonthPickerModal.tsx";
+import UserFilterModal from "../../common/modal/UserFilterModal.tsx";
+import {getMonthFormat} from "../../../utils";
 
 export default function ManagerBusiness(
     {
@@ -26,6 +32,36 @@ export default function ManagerBusiness(
     } = useConnection();
     const navigation = useNavigation();
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
+    const [isOpenDepartmentModal, setIsOpenDepartmentModal] =
+        useState<boolean>(false);
+    const [currentDepartment, setCurrentDepartment] = useState<any>({
+        value: 0,
+        label: 'Phòng ban',
+    });
+    const [currentMonth, setCurrentMonth] = useState({
+        month: dayjs().month(),
+        year: dayjs().year(),
+    });
+    const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
+    const [isOpenUserSelect, setIsOpenUserSelect] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState({
+        label: 'Nhân sự',
+        value: 0,
+    });
+
+
+
+    const {data: listDepartment = []} = useQuery(
+        ['listDepartmentBusiness', userInfo?.departement_id],
+        async () => {
+            const res = await dwtApi.getListDepartment();
+            const listChildrenDepartment = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
+
+            return res.data.filter((item: any) =>
+                listChildrenDepartment?.data?.includes(item.id)
+            );
+        }, {enabled: !!userInfo}
+    );
 
 
     const {
@@ -78,21 +114,40 @@ export default function ManagerBusiness(
         return res?.data?.total;
     });
 
+
+    const {
+        data: listUsers = [],
+    } = useQuery(
+        ['dwtApi.getListAllUser', currentDepartment],
+        async ({pageParam = 1, queryKey}) => {
+            const res = await dwtApi.searchUser({
+                departement_id:
+                    queryKey[1].value === 0
+                        ? userInfo?.departement_id
+                        : queryKey[1].value,
+            });
+
+            return res?.data?.data
+        },
+    );
+
     const {
         data: listWorkDepartment = [],
         isLoading: isLoadingWork,
         refetch: refetchWork,
     } = useQuery(
-        ['managerBusiness'],
-        async () => {
+        ['managerBusiness', currentDepartment, currentUserId, currentMonth],
+        async ({queryKey}) => {
             const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
-                department_id: userInfo?.departement_id,
-                date: dayjs().format('YYYY-MM'),
+                date: getMonthFormat(queryKey[3].month + 1, queryKey[3].year),
+                department_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
+                user_id: queryKey[2].value === 0 ? undefined : queryKey[2].value,
             });
             const listWorkAriseDepartmentData =
                 await dwtApi.getListWorkAriseDepartment({
-                    department_id: userInfo?.departement_id,
-                    date: dayjs().format('YYYY-MM'),
+                    date: getMonthFormat(queryKey[3].month + 1, queryKey[3].year),
+                    department_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
+                    user_id: queryKey[2].value === 0 ? undefined : queryKey[2].value,
                 });
 
             const listWorkDepartmentAll = Object.keys(
@@ -154,12 +209,46 @@ export default function ManagerBusiness(
     }
     return (
         <View style={styles.wrapper}>
+                <MainTarget tmpAmount={tmpMainTargetData?.sum} name={mainTargetData?.name}
+                            value={mainTargetData?.amount} unit={mainTargetData?.unit}/>
             <ScrollView
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}
             >
-                <MainTarget tmpAmount={tmpMainTargetData?.sum} name={mainTargetData?.name}
-                            value={mainTargetData?.amount} unit={mainTargetData?.unit}/>
+                <View style={styles.filter_wrapper}>
+                    <TouchableOpacity
+                        style={styles.dropdown}
+                        onPress={() => {
+                            setIsOpenTimeSelect(true);
+                        }}
+                    >
+                        <Text style={[text_black, fs_12_400]}>
+                            Tháng {currentMonth.month + 1}/{currentMonth.year}
+                        </Text>
+                        <DropdownIcon width={20} height={20}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.dropdown}
+                        onPress={() => {
+                            setIsOpenUserSelect(true);
+                        }}
+                    >
+                        <Text style={[text_black, fs_12_400]}>{currentUserId.label}</Text>
+                        <DropdownIcon width={20} height={20}/>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.dropdown}
+                        onPress={() => {
+                            setIsOpenDepartmentModal(true);
+                        }}
+                    >
+                        <Text style={[text_black, fs_12_400]}>
+                            {currentDepartment.label}
+                        </Text>
+                        <DropdownIcon width={20} height={20}/>
+                    </TouchableOpacity>
+                </View>
                 <WorkProgressBlock
                     attendanceData={attendanceData}
                     totalMeeting={totalMeeting}
@@ -191,6 +280,47 @@ export default function ManagerBusiness(
                     navigation={navigation}
                 />
             </TouchableOpacity>
+
+            {isOpenDepartmentModal && (
+                <ListDepartmentModal
+                    currentDepartment={currentDepartment}
+                    setCurrentDepartment={setCurrentDepartment}
+                    visible={isOpenDepartmentModal}
+                    setVisible={setIsOpenDepartmentModal}
+                    listDepartment={listDepartment.map((department: any) => {
+                        return {
+                            value: department.id,
+                            label: department.name,
+                        };
+                    })}
+                />
+            )}
+
+            <MonthPickerModal
+                visible={isOpenTimeSelect}
+                setVisible={setIsOpenTimeSelect}
+                setCurrentMonth={setCurrentMonth}
+                currentMonth={currentMonth}
+            />
+
+            <UserFilterModal
+                visible={isOpenUserSelect}
+                setVisible={setIsOpenUserSelect}
+                currentUser={currentUserId}
+                setCurrentUser={setCurrentUserId}
+                listUser={[
+                    {
+                        value: 0,
+                        label: 'Nhân sự',
+                    },
+                    ...listUsers.map((item: any) => {
+                        return {
+                            value: item.id,
+                            label: item.name,
+                        };
+                    }),
+                ]}
+            />
         </View>
     );
 }
@@ -212,5 +342,21 @@ const styles = StyleSheet.create({
         bottom: 10,
         right: 15,
         zIndex: 2,
+    },
+    filter_wrapper: {
+        gap: 10,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+    dropdown: {
+        width: '31%',
+        borderRadius: 5,
+        padding: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: 'rgba(0, 0, 0, 0.25)',
     },
 });

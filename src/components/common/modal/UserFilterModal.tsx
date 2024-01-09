@@ -3,16 +3,18 @@ import {
     FlatList,
     Pressable,
     StyleSheet,
-    Text,
+    Text, TextInput,
     View,
 } from 'react-native';
 import PropTypes, {InferProps} from 'prop-types';
 import {ReactNativeModal} from 'react-native-modal';
 import {fs_14_700, text_center, text_red} from '../../../assets/style.ts';
 import CloseIcon from '../../../assets/img/close-icon.svg';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import PrimaryButton from '../../common/button/PrimaryButton.tsx';
 import PrimaryCheckbox from "../checkbox/PrimaryCheckbox.tsx";
+import SearchIcon from "../../../assets/img/search-icon.svg";
+import {LIST_CITY_VN} from "../../../assets/ListCityVN.ts";
 
 export default function UserFilterModal(
     {
@@ -21,24 +23,32 @@ export default function UserFilterModal(
         currentUser,
         setCurrentUser,
         listUser,
-        fetchNextPageUser,
-        hasNextPageUser,
-        isFetchingUser,
     }: InferProps<typeof UserFilterModal.propTypes>) {
     const [currentFilter, setCurrentFilter] = useState(currentUser);
+    const [searchValue, setSearchValue] = useState('');
+    const [listCurrentUser, setListCurrentUser] = useState(listUser);
+
     const handleChangeCheck = (value: any) => {
         setCurrentFilter(value);
     };
+
     const handleSaveValue = () => {
         setCurrentUser(currentFilter);
+        setSearchValue('')
         setVisible(false);
     };
 
-    const getMoreUser = async () => {
-        if (hasNextPageUser && fetchNextPageUser) {
-            await fetchNextPageUser();
+    useEffect(() => {
+        if (searchValue) {
+            const arr = [...listUser]
+            setListCurrentUser(arr.filter((item: any) => {
+                return item.label.toLowerCase().includes(searchValue.toLowerCase());
+            }));
+        } else {
+            const arr = [...listUser]
+            setListCurrentUser(arr)
         }
-    }
+    }, [searchValue]);
     return (
         <ReactNativeModal
             animationInTiming={200}
@@ -52,6 +62,7 @@ export default function UserFilterModal(
             isVisible={visible}
             onBackdropPress={() => {
                 setVisible(false);
+                setSearchValue('')
             }}>
             <View style={styles.content}>
                 <View style={styles.header}>
@@ -71,11 +82,21 @@ export default function UserFilterModal(
                         paddingHorizontal: 20,
                         paddingVertical: 15,
                     }}>
+                    <View
+                        style={styles.input}>
+                        <SearchIcon width={20} height={20}/>
+                        <TextInput
+                            style={{padding: 0, width: '80%'}}
+                            value={searchValue}
+                            onChangeText={setSearchValue}
+                            placeholder={'Tìm kiếm'}
+                        />
+                    </View>
                     <FlatList
                         contentContainerStyle={{
                             paddingBottom: 10,
                         }}
-                        data={listUser}
+                        data={listCurrentUser}
                         renderItem={({item}) => {
                             return (
                                 <PrimaryCheckbox
@@ -87,14 +108,6 @@ export default function UserFilterModal(
                         }}
                         keyExtractor={item => item.value}
                         ItemSeparatorComponent={() => <View style={{height: 15}}/>}
-                        onEndReachedThreshold={0.5}
-                        refreshing={isFetchingUser}
-                        ListFooterComponent={
-                            isFetchingUser ? (
-                                <ActivityIndicator size={'large'} color={'#CA1F24'} />
-                            ) : null
-                        }
-                        onEndReached={getMoreUser}
                     />
                     <PrimaryButton
                         onPress={handleSaveValue}
@@ -150,6 +163,17 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 8,
     },
+    input: {
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
+        marginBottom: 10,
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    }
 });
 
 UserFilterModal.propTypes = {
@@ -158,7 +182,4 @@ UserFilterModal.propTypes = {
     currentUser: PropTypes.any.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
     listUser: PropTypes.array.isRequired,
-    fetchNextPageUser: PropTypes.func,
-    hasNextPageUser: PropTypes.bool,
-    isFetchingUser: PropTypes.bool,
 };

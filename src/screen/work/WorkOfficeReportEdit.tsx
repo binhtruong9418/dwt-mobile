@@ -26,7 +26,6 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
     const [quantity, setQuantity] = useState('');
     const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
     const [files, setFiles] = useState<any[]>([]);
-    const [isOpenCancelReportModal, setIsOpenCancelReportModal] = useState(false);
     const [
         isOpenConfirmUploadWorkReportModal,
         setIsOpenConfirmUploadWorkReportModal,
@@ -71,12 +70,11 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
         navigation.navigate('Work');
     };
 
-    const handleCancelUploadReport = () => {
+    const handleGoBack = () => {
         setQuantity('');
         setIsCompleted(false);
         setFiles([]);
         setNote('');
-        setIsOpenCancelReportModal(false);
         navigation.navigate('Work');
     };
 
@@ -134,9 +132,7 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
         <SafeAreaView style={styles.wrapper}>
             <Header
                 title="BÁO CÁO CÔNG VIỆC"
-                handleGoBack={() => {
-                    setIsOpenCancelReportModal(true);
-                }}
+                handleGoBack={handleGoBack}
                 rightView={
                     (userInfo?.id === data?.user?.id ? (
                     <TouchableOpacity
@@ -281,16 +277,6 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
                 handleUploadFile={handleUploadFile}
                 visible={isOpenUploadFileModal}
                 setVisible={setIsOpenUploadFileModal}
-            />
-            <ToastConfirmModal
-                visible={isOpenCancelReportModal}
-                handleCancel={handleCancelUploadReport}
-                handleOk={() => {
-                    setIsOpenCancelReportModal(false);
-                }}
-                description={'Bạn thực sự muốn hủy báo cáo?'}
-                okText={'Tiếp tục báo cáo'}
-                cancelText={'Hủy báo cáo'}
             />
             <ToastSuccessModal
                 visible={isOpenConfirmUploadWorkReportModal}
