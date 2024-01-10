@@ -1,4 +1,5 @@
 import {
+    Dimensions,
     ScrollView,
     StyleSheet,
     Text,
@@ -32,6 +33,7 @@ import dayjs from "dayjs";
 import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
 import ApproveWorkBusinessModal from "../../components/common/modal/ApproveWorkBusinessModal.tsx";
 
+const {width: windowWidth} = Dimensions.get('window');
 export default function WorkDetailDepartment({route, navigation}: any) {
     const {data, managerWorkId, date, routeGoBack} = route.params;
     const {
@@ -326,7 +328,9 @@ export default function WorkDetailDepartment({route, navigation}: any) {
 
                 <View style={styles.commentBlock}>
                     <View style={row_between}>
-                        <Text style={[fs_15_700, text_red]}>
+                        <Text style={[fs_15_700, text_red, windowWidth < 300 && {
+                            width: '70%'
+                        }]}>
                             DANH SÁCH TIÊU CHÍ CÔNG VIỆC
                         </Text>
                         <TouchableOpacity
@@ -405,7 +409,7 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                             .map((item: any) => {
                                 const listFile = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
                                     return file.file_name
-                                }).join(', ') : ''
+                                }).length : ''
 
                                 return {
                                     ...item,

@@ -79,11 +79,14 @@ export default function WorkDetailOffice({route, navigation}: any) {
                     };
                 }),
                 reportLogs: workDetailData?.report_task_logs?.map((item: any) => {
+                    const listFile = item?.files ?
+                        item?.files?.split(',').map((file: any) => file.split('/').pop()).join(', ')
+                        : '';
                     return {
                         ...item,
                         date: dayjs(item.report_date).format('DD/MM/YYYY'),
                         note: item?.note,
-                        file: item?.files,
+                        file: listFile,
                     };
                 }),
             };
@@ -120,11 +123,14 @@ export default function WorkDetailOffice({route, navigation}: any) {
                 };
             }),
             reportLogs: workDetailData?.targetLogs?.map((item: any) => {
+                const listFile = item?.targetLogDetails[0]?.files ?
+                    item?.targetLogDetails[0]?.files?.split(',').map((file: any) => file.split('/').pop()).join(', ')
+                    : '';
                 return {
                     ...item,
                     date: dayjs(item.reportedDate).format('DD/MM/YYYY'),
                     note: item?.targetLogDetails[0]?.note,
-                    file: item?.targetLogDetails[0]?.files,
+                    file: listFile,
                 };
             }),
         };

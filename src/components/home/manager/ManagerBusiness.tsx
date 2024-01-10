@@ -209,8 +209,14 @@ export default function ManagerBusiness(
     }
     return (
         <View style={styles.wrapper}>
+
+            <View style={{
+                paddingHorizontal: 15,
+                paddingVertical: 10
+            }}>
                 <MainTarget tmpAmount={tmpMainTargetData?.sum} name={mainTargetData?.name}
                             value={mainTargetData?.amount} unit={mainTargetData?.unit}/>
+            </View>
             <ScrollView
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}

@@ -21,6 +21,7 @@ export default function MeetingDetail({route, navigation}: any) {
         connection: {currentTabManager},
     } = useConnection();
 
+
     const {
         data: meetingDetailData = {},
         isLoading
@@ -30,6 +31,16 @@ export default function MeetingDetail({route, navigation}: any) {
     }, {
         enabled: !!meetingid
     });
+
+
+    // const {
+    //     data: listUserDepartment = []
+    // } = useQuery(['listUserDepartment', meetingDetailData?.departement_id], async ({queryKey}) => {
+    //     const res = await dwtApi.getListUserDepartment(queryKey[1]);
+    //     return res?.data?.data
+    // }, {
+    //     enabled: !!meetingDetailData
+    // })
 
 
     const startTime = meetingDetailData?.start_time && dayjs(meetingDetailData?.start_time?.split(' ')[0]).format('DD/MM/YYYY')
@@ -88,11 +99,10 @@ export default function MeetingDetail({route, navigation}: any) {
                 />
 
                 {/*<ListUserTable*/}
-                {/*    data={[*/}
-                {/*        'Nguyễn Văn A',*/}
-                {/*        'Nguyễn Văn B',*/}
-                {/*        'Nguyễn Văn C',*/}
-                {/*    ]}*/}
+                {/*    data={listUserDepartment?.filter((item: any) => {*/}
+                {/*        if(!meetingDetailData?.participants) return true;*/}
+                {/*        return !meetingDetailData?.participants?.map((item: any) => item?.id)?.includes(item?.id);*/}
+                {/*    })}*/}
                 {/*    headerTitle={'THÀNH VIÊN VẮNG'}*/}
                 {/*/>*/}
                 <InformationBox

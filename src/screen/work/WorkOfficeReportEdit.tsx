@@ -18,8 +18,8 @@ import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 import {useQuery} from "@tanstack/react-query";
 
-export default function WorkOfficeReportEdit({ route, navigation }: any) {
-    const { data } = route.params;
+export default function WorkOfficeReportEdit({route, navigation}: any) {
+    const {data} = route.params;
     const {connection: {userInfo}} = useConnection();
     const [note, setNote] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
@@ -37,10 +37,18 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
     };
 
     useEffect(() => {
-        if(data) {
+        if (data) {
             setNote(data?.target_log_details ? data?.target_log_details[0]?.note : '');
             setIsCompleted(true);
-            setFiles(data?.target_log_details[0]?.files ? data?.target_log_details[0]?.files.split(',') : []);
+            if(data?.target_log_details[0]?.files) {
+                setFiles(data?.target_log_details[0]?.files.split(',').map((item: any) => {
+                    return {
+                        name: item.split('/').pop(),
+                        uri: item,
+                    };
+                }));
+            }
+
             setQuantity(data?.target_log_details[0]?.kpi_keys[0]?.pivot?.quantity.toString());
         }
     }, [data]);
@@ -67,7 +75,7 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
         setFiles([]);
         setIsCompleted(false);
         setIsOpenConfirmUploadWorkReportModal(false);
-        navigation.navigate('Work');
+        navigation.goBack();
     };
 
     const handleGoBack = () => {
@@ -75,7 +83,7 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
         setIsCompleted(false);
         setFiles([]);
         setNote('');
-        navigation.navigate('Work');
+        navigation.goBack();
     };
 
     const handleUploadReport = async () => {
@@ -125,7 +133,7 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
     };
 
     if (!data) {
-        return <ErrorScreen text={'Không có dữ liệu'} />;
+        return <ErrorScreen text={'Không có dữ liệu'}/>;
     }
 
     return (
@@ -135,12 +143,12 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
                 handleGoBack={handleGoBack}
                 rightView={
                     (userInfo?.id === data?.user?.id ? (
-                    <TouchableOpacity
-                        style={styles.sendButton}
-                        onPress={handleUploadReport}
-                    >
-                        <Text style={[fs_15_700, text_white, text_center]}>Gửi</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.sendButton}
+                            onPress={handleUploadReport}
+                        >
+                            <Text style={[fs_15_700, text_white, text_center]}>Gửi</Text>
+                        </TouchableOpacity>
                     ) : null)
                 }
             />
@@ -245,15 +253,19 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
                         {files.map((item, index) => (
                             <View key={index} style={styles.fileBox}>
                                 <View style={styles.row_gap3}>
-                                    <ImageIcon width={20} height={20} />
+                                    <ImageIcon width={20} height={20}/>
                                     <Text style={[fs_15_400, text_black]}>{item.name}</Text>
                                 </View>
-                                <TouchableOpacity
-                                    hitSlop={10}
-                                    onPress={() => handleDeleteFile(index)}
-                                >
-                                    <TrashIcon width={20} height={20} />
-                                </TouchableOpacity>
+                                {
+                                    userInfo?.id === data?.user?.id && (
+                                        <TouchableOpacity
+                                            hitSlop={10}
+                                            onPress={() => handleDeleteFile(index)}
+                                        >
+                                            <TrashIcon width={20} height={20}/>
+                                        </TouchableOpacity>
+                                    )
+                                }
                             </View>
                         ))}
                         {
@@ -283,7 +295,7 @@ export default function WorkOfficeReportEdit({ route, navigation }: any) {
                 handlePressOk={handlePressOk}
                 description={'Báo cáo thành công'}
             />
-            <LoadingActivity isLoading={isLoading} />
+            <LoadingActivity isLoading={isLoading}/>
         </SafeAreaView>
     );
 }

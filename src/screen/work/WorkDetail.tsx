@@ -23,7 +23,7 @@ import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import dayjs from "dayjs";
 
 export default function WorkDetail({route, navigation}: any) {
-    const {data, date, routeGoBack} = route.params;
+    const {data, date} = route.params;
     const {
         connection: {userInfo, currentTabManager},
     } = useConnection();
@@ -110,7 +110,7 @@ export default function WorkDetail({route, navigation}: any) {
             <Header
                 title="CHI TIẾT KẾ HOẠCH"
                 handleGoBack={() => {
-                    navigation.navigate(routeGoBack);
+                    navigation.goBack();
                 }}
             />
             <ScrollView
@@ -312,7 +312,7 @@ export default function WorkDetail({route, navigation}: any) {
                             .map((item: any) => {
                                 const listFile = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
                                     return file.file_name
-                                }).join(', ') : ''
+                                }).length : ''
 
 
                                 return {

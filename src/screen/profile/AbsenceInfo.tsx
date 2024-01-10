@@ -77,7 +77,7 @@ export default function AbsenceInfo({ navigation }: any) {
       <AdminTabBlock secondLabel={'Quản lý'} />
       <Header
         title={'Nghỉ & Phép'}
-        handleGoBack={() => navigation.navigate('Profile')}
+        handleGoBack={() => navigation.goBack()}
       />
       <TouchableOpacity
         style={styles.dropdown}

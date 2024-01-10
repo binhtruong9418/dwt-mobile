@@ -195,9 +195,13 @@ export default function ApproveWorkBusinessModal(
                     />
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={styles.button} onPress={handleSave}>
-                        <Text style={[fs_15_700, text_white]}>Xác nhận</Text>
-                    </TouchableOpacity>
+                    {
+                        data.length > 0 && (
+                            <TouchableOpacity style={styles.button} onPress={handleSave}>
+                                <Text style={[fs_15_700, text_white]}>Xác nhận</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                 </View>
             </View>
         </ReactNativeModal>
