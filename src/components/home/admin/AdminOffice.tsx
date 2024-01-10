@@ -113,8 +113,6 @@ export default function AdminOffice({
     }
   );
 
-  console.log(listUsers)
-
   const {
     data: managerOfficeData,
     isLoading: isLoadingWork,

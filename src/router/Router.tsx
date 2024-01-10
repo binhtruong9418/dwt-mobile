@@ -8,6 +8,7 @@ import {useConnection} from '../redux/connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {dwtApi} from '../api/service/dwtApi.ts';
 import {LocaleConfig} from 'react-native-calendars';
+import NoInternetModal from "../components/internet/NoInternetModal.tsx";
 
 const Stack = createNativeStackNavigator();
 const screenOptions = {
@@ -81,6 +82,8 @@ const Router = () => {
 
   return (
     <NavigationContainer>
+
+      <NoInternetModal />
       {appIsReady && firstScreen && (
         <Stack.Navigator
           screenOptions={screenOptions}

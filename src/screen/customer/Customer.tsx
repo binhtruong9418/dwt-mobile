@@ -85,8 +85,6 @@ export default function Customer({navigation}: any) {
         }
     );
 
-    console.log(listUsers.length)
-
 
     const {
         data: {pages: pageCustomer = []} = {},

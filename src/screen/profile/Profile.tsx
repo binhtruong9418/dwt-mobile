@@ -149,6 +149,9 @@ export default function Profile({navigation}: any) {
             const monthSalary = salaryHistory.find((salary: any) => {
                 return salary.month === (dayjs().month() + 1)
             })
+            if(monthSalary === undefined) {
+                return 0;
+            }
             const salaryDetail = await dwtApi.getSalaryById(monthSalary.id);
             return getTotalTempSalary(salaryDetail.data)
         }
