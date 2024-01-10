@@ -93,7 +93,6 @@ export default function UploadFileModal({
       qualityPrioritization: 'balanced',
       flash: 'auto',
     })
-    console.log(photo)
     if (photo) {
       const now = new Date().getTime()
       handleUploadFile([{

@@ -117,7 +117,6 @@ export default function ManagerBusinessWork({ navigation }: any) {
             : queryKey[1].value
           : userInfo?.departement_id;
 
-      console.log('departmentId', departmentId);
       const listWorkDepartmentData = await dwtApi.getListWorkDepartment({
         department_id: departmentId,
         date: getMonthFormat(queryKey[2].month + 1, queryKey[2].year),
@@ -153,12 +152,6 @@ export default function ManagerBusinessWork({ navigation }: any) {
         (userInfo.role === 'admin' || userInfo.role === 'manager') &&
         currentTabManager === 1,
     }
-  );
-
-  console.log(
-    listKeyWorkDepartmentData.length,
-    listNonKeyWorkDepartmentData.length,
-    listAriseWorkDepartmentData.length
   );
 
   const tableData = useMemo(() => {
@@ -441,15 +434,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   filter_wrapper: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
+    gap: 10,
   },
   pl10: {
     paddingLeft: 10,
   },
   dropdown: {
-    minWidth: '48%',
+    width: 150,
     borderRadius: 5,
     padding: 8,
     flexDirection: 'row',

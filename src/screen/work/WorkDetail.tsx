@@ -273,10 +273,12 @@ export default function WorkDetail({route, navigation}: any) {
                                 return {
                                     ...item,
                                     date: dayjs(item.reported_date).format('DD/MM/YYYY') || '',
-                                    value: item.quantity ?? 0,
+                                    value: item.quantity,
                                     dateDone: item.updated_date ? dayjs(item.updated_date).format('DD/MM/YYYY') : '',
                                     valueDone: item.manager_quantity,
                                 };
+                            }).filter((item: any) => {
+                                return item.quantity
                             })
                             .sort((a: any, b: any) => {
                                 return (

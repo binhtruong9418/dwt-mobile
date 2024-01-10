@@ -30,7 +30,6 @@ export default function MeetingDetail({route, navigation}: any) {
     }, {
         enabled: !!meetingid
     });
-    console.log(meetingid)
 
 
     const startTime = meetingDetailData?.start_time && dayjs(meetingDetailData?.start_time?.split(' ')[0]).format('DD/MM/YYYY')

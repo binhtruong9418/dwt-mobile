@@ -85,7 +85,6 @@ export default function WorkListReport({ route, navigation }: any) {
     }
     setMarkedDates(listMarkedDates);
   };
-  console.log(data)
   return (
     <SafeAreaView style={styles.wrapper}>
       <AdminTabBlock />

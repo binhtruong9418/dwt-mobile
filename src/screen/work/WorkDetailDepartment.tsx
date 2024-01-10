@@ -370,6 +370,8 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                                     dateDone: item.updated_date ? dayjs(item.updated_date).format('DD/MM/YYYY') : '',
                                     valueDone: item.manager_quantity,
                                 };
+                            }).filter((item: any) => {
+                                return item.quantity
                             })
                             .sort((a: any, b: any) => {
                                 return (
@@ -435,6 +437,8 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                                 value: item.quantity,
                                 valueDone: item.manager_quantity,
                             };
+                        }).filter((item: any) => {
+                            return item.quantity
                         })
                         .sort((a: any, b: any) => {
                             return (
