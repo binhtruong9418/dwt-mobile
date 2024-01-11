@@ -153,35 +153,6 @@ export default function Home({ navigation }: any) {
             navigation={navigation}
           />
         ) : null}
-
-        {/*{currentTabManager === 0 ? (*/}
-        {/*    LIST_FACTORY_DEPARTMENT.includes(userInfo.departement_id) ? (*/}
-        {/*        <HomeTabFactoryContainer*/}
-        {/*            navigation={navigation}*/}
-        {/*            setCurrentMenuTab={setCurrentMenuTab}*/}
-        {/*        />*/}
-        {/*    ) : (*/}
-        {/*        <UserBusiness*/}
-        {/*            attendanceData={attendanceData}*/}
-        {/*            checkInTime={checkInTime}*/}
-        {/*            checkOutTime={checkOutTime}*/}
-        {/*            rewardAndPunishData={rewardAndPunishData}*/}
-        {/*        />)*/}
-        {/*) : currentMenuTab === 0 && currentTabManager === 1 ? (*/}
-        {/*    <OfficeTabContainer*/}
-        {/*        attendanceData={attendanceData}*/}
-        {/*        rewardAndPunishData={rewardAndPunishData}*/}
-        {/*    />*/}
-        {/*) : currentMenuTab === 1 && currentTabManager === 1 ? (*/}
-        {/*    <BusinessTabContainer*/}
-        {/*        attendanceData={attendanceData}*/}
-        {/*        checkInTime={checkInTime}*/}
-        {/*        checkOutTime={checkOutTime}*/}
-        {/*        rewardAndPunishData={rewardAndPunishData}*/}
-        {/*    />*/}
-        {/*) : currentMenuTab === 2 && currentTabManager === 1 ? (*/}
-        {/*    <ManufactureTabContainer setCurrentMenuTab={setCurrentMenuTab}/>*/}
-        {/*) : null}*/}
       </SafeAreaView>
     )
   );

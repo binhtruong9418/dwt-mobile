@@ -1,4 +1,5 @@
 import {
+    Alert,
     ScrollView,
     StyleSheet,
     Text,
@@ -25,7 +26,6 @@ import ImageIcon from '../../assets/img/image-icon.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
-import { showToast } from '../../utils';
 import { useConnection } from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import { dwtApi } from '../../api/service/dwtApi.ts';
@@ -81,13 +81,11 @@ export default function WorkOfficeAriseReport({ route, navigation }: any) {
 
     const handleUploadReport = async () => {
         if (!note) {
-            showToast('Vui lòng nhập ghi chú');
-            return;
+            return Alert.alert('Vui lòng nhập ghi chú');
         }
 
         if (isCompleted && !quantity) {
-            showToast('Vui lòng nhập giá trị');
-            return;
+            return Alert.alert('Vui lòng nhập giá trị');
         }
 
         try {
@@ -122,6 +120,7 @@ export default function WorkOfficeAriseReport({ route, navigation }: any) {
             }
         } catch (error) {
             console.log(error);
+            Alert.alert('Lỗi', "Có lỗi xảy ra, vui lòng thử lại sau")
         } finally {
             setIsLoading(false);
         }

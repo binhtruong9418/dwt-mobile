@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   StyleSheet,
   Text,
@@ -24,7 +25,6 @@ import dayjs from "dayjs";
 import { useQuery } from '@tanstack/react-query';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryDropdown from "../common/dropdown/PrimaryDropdown.tsx";
-import { showToast } from '../../utils';
 import { useConnection } from '../../redux/connection';
 import PrimaryCheckbox from "../common/checkbox/PrimaryCheckbox.tsx";
 
@@ -96,27 +96,22 @@ export default function CreateFactoryDailyReportModal({
   }, [currentWork]);
   const handleSave = async () => {
     if (!currentWork) {
-      showToast('Vui lòng chọn công việc');
-      return;
+      return Alert.alert('Vui lòng chọn công việc');
     }
     if (!note) {
-      showToast('Vui lòng nhập nội dung báo cáo');
-      return;
+      return Alert.alert('Vui lòng nhập nội dung báo cáo');
     }
 
     if (isCompleted) {
       for (let i = 0; i < listMechanicReport.length; i++) {
         if (listMechanicReport[i].type === -1) {
-          showToast('Vui lòng chọn loại báo cáo');
-          return;
+          return Alert.alert('Vui lòng chọn loại báo cáo');
         }
         if (listMechanicReport[i].mechanicRuleReport === 0) {
-          showToast('Vui lòng chọn kết quả hoàn thành');
-          return;
+          return Alert.alert('Vui lòng chọn kết quả hoàn thành');
         }
         if (listMechanicReport[i].mechanicQuantity === '') {
-          showToast('Vui lòng nhập số lượng hoàn thành');
-          return;
+          return Alert.alert('Vui lòng nhập số lượng hoàn thành');
         }
       }
     }
@@ -137,7 +132,7 @@ export default function CreateFactoryDailyReportModal({
         mechanic_reports: isCompleted ? mechanicReport : [],
       });
       if (response.status === 200) {
-        showToast('Báo cáo thành công');
+        Alert.alert('Báo cáo thành công');
         setNote('');
         setCurrentWork('');
         setIsCompleted(false);
@@ -155,7 +150,7 @@ export default function CreateFactoryDailyReportModal({
       }
     } catch (e) {
       console.log(e);
-      showToast('Báo cáo thất bại');
+      Alert.alert('Báo cáo thất bại');
     }
   };
   const handleClose = () => {

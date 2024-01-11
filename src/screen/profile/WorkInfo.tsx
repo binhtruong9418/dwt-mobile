@@ -7,7 +7,7 @@ export default function WorkInfo({navigation}: any) {
     <SafeAreaView style={styles.wrapper}>
       <Header
         title={'Quá trình công tác'}
-        handleGoBack={() => navigation.navigate('Profile')}
+        handleGoBack={() => navigation.goBack()}
       />
     </SafeAreaView>
   );

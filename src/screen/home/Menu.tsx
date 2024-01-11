@@ -32,6 +32,7 @@ import KhachHangIcon from "../../assets/img/menu/khachhang.svg";
 import BanHangIcon from "../../assets/img/menu/banhang.svg";
 import PhanAnhIcon from "../../assets/img/menu/phananh.svg";
 import CanteenIcon from "../../assets/img/menu/canteen.svg";
+import HuanLuyenIcon from "../../assets/img/menu/huanluyen.svg";
 import { useState } from 'react';
 
 const hanhchinhData = [
@@ -49,7 +50,7 @@ const hanhchinhData = [
   },
   {
     id: 3,
-    name: 'Vi phạm',
+    name: 'Khen & Phạt',
     icon: <ViPhamIcon width={30} height={30} />,
     path: 'RewardAndPunishInfo',
   },
@@ -78,9 +79,9 @@ const congviecData = [
     path: 'ComingSoon',
   },
   {
-    name: 'Đề xuất',
-    icon: <DeXuatIcon width={30} height={30} />,
-    path: 'Propose',
+    name: 'Huấn luyện',
+    icon: <HuanLuyenIcon width={30} height={30} />,
+    path: 'ComingSoon',
   },
 ];
 

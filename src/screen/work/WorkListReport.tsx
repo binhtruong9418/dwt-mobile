@@ -85,6 +85,24 @@ export default function WorkListReport({ route, navigation }: any) {
     }
     setMarkedDates(listMarkedDates);
   };
+
+  const handlePressDay = (day: string) => {
+      const itemIndex = listLogs.findIndex((item: any) => {
+            return dayjs(item.reported_date).format('YYYY-MM-DD') === day;
+      })
+    if(itemIndex !== -1) {
+        navigation.navigate('WorkReportEdit', {
+            data: {
+                ...listLogs[itemIndex],
+                ...data,
+            },
+            isWorkArise: data.isWorkArise,
+        });
+    } else {
+      handleChangeDay(day)
+    }
+  }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <AdminTabBlock />
@@ -100,7 +118,7 @@ export default function WorkListReport({ route, navigation }: any) {
           initialDate={initialDate}
           firstDay={1}
           markedDates={markedDates}
-          onDayPress={(day) => handleChangeDay(day.dateString)}
+          onDayPress={(day) => handlePressDay(day.dateString)}
           theme={{
             dayTextColor: '#000',
             todayTextColor: '#DC3545',
@@ -131,23 +149,13 @@ export default function WorkListReport({ route, navigation }: any) {
               ' năm ' +
               dayjs(reportDate).year();
             return (
-              <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('WorkReportEdit', {
-                        data: {
-                            ...item,
-                            ...data,
-                        },
-                        isWorkArise: data.isWorkArise,
-                    });
-                }}
-              >
+              <View>
                 <Text style={styles.title}>{formatDate}</Text>
                 <View style={row_between}>
                   <Text style={styles.description}>{item.note}</Text>
                   <Text style={[fs_13_400, text_gray]}>{item.quantity}</Text>
                 </View>
-              </TouchableOpacity>
+              </View>
             );
           }}
           keyExtractor={(item, index) => index.toString()}
@@ -178,6 +186,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingBottom: 30,
     marginTop: 20,
+    gap: 10,
   },
   title: {
     fontSize: 14,

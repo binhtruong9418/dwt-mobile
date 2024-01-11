@@ -35,6 +35,9 @@ export default function CreateOrEditDailyReportModal({
   const [yesterdayReport, setYesterdayReport] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const handleUpdateDailyReport = async () => {
+    if(!todayReport || !yesterdayReport) {
+        return Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+    }
     try {
       setIsLoading(true);
       const payload = {

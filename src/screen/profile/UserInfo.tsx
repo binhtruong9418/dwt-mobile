@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -29,7 +30,6 @@ import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import DatePickerModal from '../../components/common/modal/DatePickerModal.tsx';
 import { BANK_LIST } from '../../assets/constant.ts';
-import { showToast } from '../../utils';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
@@ -90,13 +90,11 @@ export default function UserInfo({ navigation }: any) {
 
   const handleSave = async () => {
     if (editUserInfo?.name === '') {
-      showToast('Vui lòng nhập đầy đủ tên');
-      return;
+      return Alert.alert('Vui lòng nhập đầy đủ tên');
     }
 
     if (editUserInfo?.phone === '') {
-      showToast('Vui lòng nhập đầy đủ số điện thoại');
-      return;
+      return Alert.alert('Vui lòng nhập đầy đủ số điện thoại');
     }
 
     try {
@@ -126,6 +124,7 @@ export default function UserInfo({ navigation }: any) {
       }
     } catch (error) {
       console.log(error);
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
       setIsLoading(false);
     }
   };

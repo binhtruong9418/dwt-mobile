@@ -86,13 +86,52 @@ export default function WorkOfficeListReport({route, navigation}: any) {
         }
         setMarkedDates(listMarkedDates);
     };
+
+    const handlePressDay = (day: string) => {
+        if(data.isWorkArise) {
+            const index = listLogs.findIndex((item: any) => {
+                const dayItem = dayjs(item.report_date).format('YYYY-MM-DD');
+                return dayItem === day;
+            });
+            if(index !== -1) {
+                // @ts-ignore
+                navigation.navigate('WorkOfficeAriseReportEdit', {
+                    data: {
+                        ...listLogs[index],
+                        name: data.name,
+                        unit_name: data.unit_name,
+                        totalTarget: data?.kpi_keys[0]?.pivot?.quantity,
+                    },
+                });
+            } else {
+                handleChangeDay(day)
+            }
+        } else {
+            const index = listLogs.findIndex((item: any) => {
+                const dayItem = dayjs(item.reportedDate).format('YYYY-MM-DD');
+                return dayItem === day;
+            });
+            if(index !== -1) {
+                // @ts-ignore
+                navigation.navigate('WorkOfficeReportEdit', {
+                    data: {
+                        ...listLogs[index],
+                        name: data.name,
+                        kpi_keys: data.kpi_keys,
+                    },
+                });
+            } else {
+                handleChangeDay(day)
+            }
+        }
+    }
     return (
         <SafeAreaView style={styles.wrapper}>
             <AdminTabBlock/>
             <Header
                 title="TIẾN TRÌNH"
                 handleGoBack={() => {
-                    navigation.navigate('Work');
+                    navigation.goBack();
                 }}
             />
             <View style={styles.content}>
@@ -101,7 +140,7 @@ export default function WorkOfficeListReport({route, navigation}: any) {
                     initialDate={initialDate}
                     firstDay={1}
                     markedDates={markedDates}
-                    onDayPress={(day) => handleChangeDay(day.dateString)}
+                    onDayPress={(day) => handlePressDay(day.dateString)}
                     theme={{
                         dayTextColor: '#000',
                         todayTextColor: '#DC3545',
@@ -134,38 +173,14 @@ export default function WorkOfficeListReport({route, navigation}: any) {
                             ' năm ' +
                             dayjs(reportDate).year();
                         return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (data.isWorkArise) {
-                                        // @ts-ignore
-                                        navigation.navigate('WorkOfficeAriseReportEdit', {
-                                            data: {
-                                                ...item,
-                                                name: data.name,
-                                                unit_name: data.unit_name,
-                                                totalTarget: data?.kpi_keys[0]?.pivot?.quantity,
-                                            },
-                                        });
-                                    } else {
-                                        // @ts-ignore
-                                        navigation.navigate('WorkOfficeReportEdit', {
-                                            data: {
-                                                ...item,
-                                                name: data.name,
-                                                kpi_keys: data.kpi_keys,
-                                            },
-                                        });
-                                    }
-                                }
-                                }
-                            >
+                            <View>
                                 <Text style={styles.title}>{formatDate}</Text>
                                 <View style={row_between}>
                                     <Text style={styles.description}>
                                         {item?.note ?? item?.target_log_details[0]?.note}
                                     </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </View>
                         );
                     }}
                     keyExtractor={(item, index) => index.toString()}
@@ -196,6 +211,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingBottom: 30,
         marginTop: 20,
+        gap: 10,
     },
     title: {
         fontSize: 14,

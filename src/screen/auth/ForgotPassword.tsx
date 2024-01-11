@@ -16,11 +16,17 @@ import ChevronLeftRed from '../../assets/img/chevron-left-red.svg';
 import {ReactNativeModal} from 'react-native-modal';
 import CheckSuccess from '../../assets/img/check-success.svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import SendOtpSuccessModal from "../../components/auth/SendOtpSuccessModal.tsx";
 
 const {width} = Dimensions.get('window');
 const ForgotPassword = ({navigation}: any) => {
   const [username, setUsername] = useState<string>('');
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
+  const handleSubmit = async () => {
+
+  }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <Logo width={width - 60} height={200} />
@@ -64,23 +70,7 @@ const ForgotPassword = ({navigation}: any) => {
           </Text>
         </Pressable>
       </View>
-      <ReactNativeModal
-        isVisible={isOpenModal}
-        onBackdropPress={() => {
-          setIsOpenModal(false);
-        }}
-        onBackButtonPress={() => {
-          setIsOpenModal(false);
-        }}
-        swipeDirection={['up']}
-        style={styles.modal}>
-        <View style={styles.modalContent}>
-          <CheckSuccess width={50} height={50} />
-          <Text style={[fs_15_500, text_black, text_center]}>
-            Mật khẩu đã cập nhật về mặc định
-          </Text>
-        </View>
-      </ReactNativeModal>
+      <SendOtpSuccessModal visible={isOpenModal} handlePressOk={() => {}} />
     </SafeAreaView>
   );
 };

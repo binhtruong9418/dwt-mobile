@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -29,7 +30,6 @@ import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
-import { showToast } from '../../utils';
 
 export default function AddWorkArise({ navigation }: any) {
   const {
@@ -76,38 +76,31 @@ export default function AddWorkArise({ navigation }: any) {
 
   const handleAddWorkArise = async () => {
     if (!name) {
-      showToast('Vui lòng nhập tên nhiệm vụ');
-      return;
+      return Alert.alert('Vui lòng nhập tên nhiệm vụ');
     }
 
     if (currentUnit === 0) {
-      showToast('Vui lòng chọn đơn vị tính');
-      return;
+      return Alert.alert('Vui lòng chọn đơn vị tính');
     }
 
     if (workingHour === '' || workingHour === '0') {
-      showToast('Vui lòng nhập giờ công');
-      return;
+      return Alert.alert('Vui lòng nhập giờ công');
     }
 
     if (currentType === 2 && (quantity === '' || quantity === '0')) {
-      showToast('Vui lòng nhập số lượng');
-      return;
+      return Alert.alert('Vui lòng nhập số lượng');
     }
 
     if (currentType === 0) {
-      showToast('Vui lòng chọn mục tiêu');
-      return;
+      return Alert.alert('Vui lòng chọn mục tiêu');
     }
 
     if (!fromDate) {
-      showToast('Vui lòng chọn thời gian bắt đầu');
-      return;
+      return Alert.alert('Vui lòng chọn thời gian bắt đầu');
     }
 
     if (!toDate) {
-      showToast('Vui lòng chọn thời gian kết thúc');
-      return;
+      return Alert.alert('Vui lòng chọn thời gian kết thúc');
     }
 
     try {
@@ -133,7 +126,7 @@ export default function AddWorkArise({ navigation }: any) {
       }
     } catch (err: any) {
       console.log(err);
-      showToast(err.message);
+      Alert.alert('Lỗi', 'Thêm việc thất bại');
       setIsLoading(false);
     }
   };

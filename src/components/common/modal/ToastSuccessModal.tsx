@@ -22,7 +22,7 @@ export default function ToastSuccessModal({
         <View style={{alignItems: 'center'}}>
           <CheckSuccess width={50} height={50} />
         </View>
-        <Text style={[fs_16_500, text_black, text_center]}> Thông báo</Text>
+        <Text style={[fs_16_500, text_black, text_center]}>Thông báo</Text>
         <Text style={[fs_14_400, text_gray, text_center, styles.description]}>
           {description}
         </Text>

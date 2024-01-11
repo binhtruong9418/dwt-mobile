@@ -1,4 +1,5 @@
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -95,6 +96,7 @@ export default function Attendance({ navigation }: any) {
       }
     } catch (error) {
       console.log(error);
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
     }
   };
   const handleCheckOut = async () => {
@@ -111,6 +113,7 @@ export default function Attendance({ navigation }: any) {
       }
     } catch (error) {
       console.log(error);
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
     }
   };
 

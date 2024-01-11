@@ -1,4 +1,4 @@
-import {FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Alert, FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import PropTypes, {InferProps} from 'prop-types';
 import {ReactNativeModal} from 'react-native-modal';
 import {
@@ -22,7 +22,6 @@ import {
     WORK_STATUS_COLOR,
 } from '../../../assets/constant.ts';
 import dayjs from "dayjs";
-import {showToast} from "../../../utils";
 import {useConnection} from "../../../redux/connection";
 import {dwtApi} from "../../../api/service/dwtApi.ts";
 
@@ -68,7 +67,7 @@ export default function ApproveWorkBusinessModal(
                 })
                 const res = await dwtApi.approveWorkAriseBussiness(requestData)
                 if (res.status === 200) {
-                    showToast('Nghiệm thu công việc thành công')
+                    Alert.alert('Nghiệm thu công việc thành công')
                     refetchData && (await refetchData())
                     setVisible(false)
                 }
@@ -84,14 +83,14 @@ export default function ApproveWorkBusinessModal(
                 })
                 const res = await dwtApi.approveWorkBusiness(requestData)
                 if (res.status === 200) {
-                    showToast('Nghiệm thu công việc thành công')
+                    Alert.alert('Nghiệm thu công việc thành công')
                     refetchData && (await refetchData())
                     setVisible(false)
                 }
             }
         } catch (err: any) {
             console.log('err', err)
-            showToast(err.message)
+            Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
         }
     }
     return (
@@ -195,9 +194,13 @@ export default function ApproveWorkBusinessModal(
                     />
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={styles.button} onPress={handleSave}>
-                        <Text style={[fs_15_700, text_white]}>Xác nhận</Text>
-                    </TouchableOpacity>
+                    {
+                        data.length > 0 && (
+                            <TouchableOpacity style={styles.button} onPress={handleSave}>
+                                <Text style={[fs_15_700, text_white]}>Xác nhận</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                 </View>
             </View>
         </ReactNativeModal>

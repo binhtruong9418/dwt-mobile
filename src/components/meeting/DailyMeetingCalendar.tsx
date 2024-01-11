@@ -2,6 +2,7 @@ import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native'
 import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
 import dayjs from 'dayjs';
+import {useRef} from "react";
 
 export default function DailyMeetingCalendar(
     {
@@ -9,6 +10,7 @@ export default function DailyMeetingCalendar(
         setCurrentDate,
         listMeeting
     }: InferProps<typeof DailyMeetingCalendar.propTypes>) {
+    const flatList = useRef<FlatList>(null);
     const haveLog = (item: any) => {
         return listMeeting.find(
             (meeting: any, index: number) => {
@@ -18,9 +20,6 @@ export default function DailyMeetingCalendar(
             }
         );
     }
-
-    const today = dayjs().date();
-    const initialScrollOffset = today > 5 ? today * 45 : 0;
 
     return (
         <View>
@@ -32,9 +31,9 @@ export default function DailyMeetingCalendar(
                     borderBottomColor: '#D0D0D0',
                     borderBottomWidth: 1,
                 }}
-                contentOffset={{
-                    x: initialScrollOffset,
-                    y: 0,
+                initialScrollIndex={dayjs().date() - 1}
+                getItemLayout={(data, index) => {
+                    return { length: 45, offset: index * 45, index };
                 }}
                 showsHorizontalScrollIndicator={false}
                 data={getDaysInMonth(currentDate.month, currentDate.year)}

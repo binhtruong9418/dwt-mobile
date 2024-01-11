@@ -1,4 +1,5 @@
 import {
+  Alert,
   Dimensions,
   Pressable,
   StyleSheet,
@@ -50,6 +51,7 @@ export default function UploadFileModal({
       handleUploadFile(response);
     } catch (err) {
       console.warn(err);
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
     }
   };
 

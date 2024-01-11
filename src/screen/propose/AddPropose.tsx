@@ -1,5 +1,6 @@
 import Header from '../../components/header/Header.tsx';
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -18,7 +19,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
-import { showToast } from '../../utils';
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
 
@@ -31,12 +31,10 @@ export default function AddPropose({ navigation }: any) {
 
   const handleSave = async () => {
     if (currentType === 0) {
-      showToast('Vui lòng chọn phân loại');
-      return;
+      return Alert.alert('Vui lòng chọn phân loại');
     }
     if (description === '') {
-      showToast('Vui lòng nhập vấn đề tồn đọng');
-      return;
+      return Alert.alert('Vui lòng nhập vấn đề tồn đọng');
     }
 
     try {
@@ -53,7 +51,7 @@ export default function AddPropose({ navigation }: any) {
     } catch (error) {
       console.log(error);
       setIsLoading(false);
-      showToast('Có lỗi xảy ra, vui lòng thử lại');
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại');
     }
   };
 

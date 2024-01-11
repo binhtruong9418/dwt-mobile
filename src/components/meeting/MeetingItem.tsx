@@ -41,9 +41,9 @@ export default function MeetingItem({item}: any) {
                 isMore && (
                     <View style={styles.detail}>
                         {
-                            item?.reports?.length > 0 && item?.reports.map((item: any) => {
+                            item?.reports?.length > 0 && item?.reports.map((item: any, index: number) => {
                                 return (
-                                    <View style={styles.detailText}>
+                                    <View style={styles.detailText} key={index}>
                                         <Text style={[fs_12_400, text_black]}>Vấn đề tồn đọng: {item?.problem}</Text>
                                         <Text style={[fs_12_400, text_black]}>Giải quyết: {item?.solution}</Text>
                                         <Text style={[fs_12_400, text_black]}>Người đảm nhiệm: {item?.user?.name}</Text>

@@ -23,7 +23,9 @@ export default function ToastConfirmModal({
   return (
     <ReactNativeModal isVisible={visible} style={styles.modal}>
       <View style={styles.modalContent}>
-        <Text style={[fs_15_700, text_black, text_center, mb20]}>
+        <Text style={[fs_15_700, text_black, text_center, mb20, {
+          width: '90%',
+        }]}>
           {description}
         </Text>
 

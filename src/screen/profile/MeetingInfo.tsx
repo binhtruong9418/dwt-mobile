@@ -102,7 +102,7 @@ export default function MeetingInfo({navigation}: any) {
                     )
                 }
                 <FlatList
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item, index) => item.id}
                     showsVerticalScrollIndicator={false}
                     data={listMeetingToday}
                     contentContainerStyle={{

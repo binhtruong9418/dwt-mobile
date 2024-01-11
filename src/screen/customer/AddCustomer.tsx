@@ -1,4 +1,5 @@
 import {
+    Alert,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -28,7 +29,7 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
-import {showToast, validatePhone} from '../../utils';
+import {validatePhone} from '../../utils';
 import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
 import DatePickerModal from "../../components/common/modal/DatePickerModal.tsx";
 import ErrorModal from "../../components/common/modal/ErrorModal.tsx";
@@ -74,34 +75,27 @@ export default function AddCustomer({navigation}: any) {
 
     const handleAddCustomer = async () => {
         if (!name) {
-            showToast('Vui lòng nhập tên khách hàng');
-            return;
+            return Alert.alert('Vui lòng nhập tên khách hàng');
         }
         if (!phone) {
-            showToast('Vui lòng nhập số điện thoại');
-            return;
+            return Alert.alert('Vui lòng nhập số điện thoại');
         }
         if (!address) {
-            showToast('Vui lòng nhập địa chỉ');
-            return;
+            return Alert.alert('Vui lòng nhập địa chỉ');
         }
         if (!note) {
-            showToast('Vui lòng nhập thông tin chào hàng');
-            return;
+            return Alert.alert('Vui lòng nhập thông tin chào hàng');
         }
         if (!creater) {
-            showToast('Vui lòng chọn nhân sự thu thập');
-            return;
+            return Alert.alert('Vui lòng chọn nhân sự thu thập');
         }
 
         if (!date) {
-            showToast('Vui lòng chọn ngày nhập');
-            return;
+            return Alert.alert('Vui lòng chọn ngày nhập');
         }
 
         if (!validatePhone(phone)) {
-            showToast('Số điện thoại không hợp lệ');
-            return;
+            return Alert.alert('Số điện thoại không hợp lệ');
         }
 
         try {

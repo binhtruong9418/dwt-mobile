@@ -170,14 +170,15 @@ export default function Profile({navigation}: any) {
                 avatar: imageUrl,
             });
             if (res.status === 200) {
-                setIsLoading(false);
                 setIsSuccess(true);
                 await refetch();
                 onSetUserInfo(res.data);
             }
         } catch (error) {
             console.log(error);
-            setIsLoading(false);
+            Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
+        } finally {
+            setIsLoading(false)
         }
     };
 
@@ -308,7 +309,9 @@ export default function Profile({navigation}: any) {
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     <View
                                         style={{
-                                            width: 20,
+                                            width: 22,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
                                         }}
                                     >
                                         {item.icon}

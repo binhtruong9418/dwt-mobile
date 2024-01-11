@@ -312,6 +312,55 @@ export const LIST_PROPOSE_STATUS = [
     },
 ];
 
+export const LIST_REWARD_AND_PUNISHMENT_STATUS = [
+    {
+        label: 'Tất cả',
+        value: 0,
+    },
+    {
+        label: 'Đã tiếp nhận',
+        value: 1,
+    },
+    {
+        label: "Đang xử lý",
+        value: 2,
+    },
+    {
+        label: "Đã xử lý",
+        value: 3,
+    },
+]
+
+export const LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR = [
+    '#FFF',
+    '#FFF',
+    '#FBF2CA',
+    '#97C8FF',
+]
+
+export const LIST_REWARD_AND_PUNISHMENT_TYPE = [
+    {
+        value: 0,
+        label: 'Tất cả',
+    },
+    {
+        value: 1,
+        label: 'Thưởng',
+    },
+    {
+        value: 2,
+        label: 'Phạt',
+    },
+    {
+        value: 3,
+        label: 'Nhắc nhở',
+    },
+    {
+        value: 4,
+        label: 'Sự cố',
+    },
+]
+
 export const BANK_LIST = [
     {
         label: '(Ngân hàng Nông nghiệp và Phát triển Nông thôn) Agribank',

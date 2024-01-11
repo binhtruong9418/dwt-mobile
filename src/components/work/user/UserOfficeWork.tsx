@@ -151,7 +151,7 @@ export default function UserOfficeWork({ navigation }: any) {
       <Header
         title={'NHẬT TRÌNH CÔNG VIỆC'}
         handleGoBack={() => {
-          navigation.goBack();
+          navigation.navigate('Home');
         }}
       />
       <TabOfficeBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />

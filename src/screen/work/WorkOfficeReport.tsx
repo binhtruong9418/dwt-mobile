@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,} from 'react-native';
+import {Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,} from 'react-native';
 import Header from '../../components/header/Header.tsx';
 import {fs_15_400, fs_15_700, text_black, text_center, text_gray, text_red, text_white,} from '../../assets/style.ts';
 import {useState} from 'react';
@@ -10,7 +10,6 @@ import ImageIcon from '../../assets/img/image-icon.svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
-import {showToast} from '../../utils';
 import {useConnection} from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import {dwtApi} from '../../api/service/dwtApi.ts';
@@ -74,13 +73,11 @@ export default function WorkOfficeReport({ route, navigation }: any) {
 
     const handleUploadReport = async () => {
         if (!note) {
-            showToast('Vui lòng nhập ghi chú');
-            return;
+            return Alert.alert('Vui lòng nhập ghi chú');
         }
 
         if (isCompleted && !quantity) {
-            showToast('Vui lòng nhập giá trị');
-            return;
+            return Alert.alert('Vui lòng nhập giá trị');
         }
 
         try {
@@ -120,6 +117,7 @@ export default function WorkOfficeReport({ route, navigation }: any) {
             }
         } catch (error) {
             console.log(error);
+            Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
         } finally {
             setIsLoading(false);
         }

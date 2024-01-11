@@ -40,7 +40,7 @@ import {
   WorkOfficeAriseReportScreen,
   WorkOfficeAriseReportEditScreen,
   CustomerScreen,
-  AddCustomerScreen,
+  AddCustomerScreen, AddRewardAndPunishScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
 import WorkOfficeReport from "../screen/work/WorkOfficeReport.tsx";
@@ -221,5 +221,9 @@ export const navigatorPath = [
   {
     name: 'AddCustomer',
     component: AddCustomerScreen
+  },
+  {
+    name: 'AddRewardAndPunish',
+    component: AddRewardAndPunishScreen
   }
 ];

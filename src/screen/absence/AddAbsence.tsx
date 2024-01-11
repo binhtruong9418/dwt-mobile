@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -29,7 +30,6 @@ import { dwtApi } from '../../api/service/dwtApi.ts';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
-import { showToast } from '../../utils';
 import { LIST_ABSENCE_TYPE } from '../../assets/constant.ts';
 import PrimaryCheckbox from "../../components/common/checkbox/PrimaryCheckbox.tsx";
 
@@ -90,12 +90,10 @@ export default function AddAbsence({ navigation }: any) {
 
   const handleSubmit = async () => {
     if (!note) {
-      showToast('Vui lòng nhập lý do nghỉ');
-      return;
+      return Alert.alert('Vui lòng nhập lý do nghỉ');
     }
     if (type === 0) {
-      showToast('Vui lòng chọn loại nghỉ');
-      return;
+      return Alert.alert('Vui lòng chọn loại nghỉ');
     }
     setIsLoading(true);
     try {
@@ -110,7 +108,7 @@ export default function AddAbsence({ navigation }: any) {
       }
     } catch (e) {
       console.log(e);
-      showToast('Có lỗi xảy ra, vui lòng thử lại sau');
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
     } finally {
       setIsLoading(false);
     }

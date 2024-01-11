@@ -248,7 +248,7 @@ export default function UserBusinessWork({ navigation }: any) {
       <Header
         title={'NHẬT TRÌNH CÔNG VIỆC'}
         handleGoBack={() => {
-          navigation.goBack();
+          navigation.navigate('Home');
         }}
       />
       <TabBlock currentTab={currentTab} setCurrentTab={setCurrentTab} />

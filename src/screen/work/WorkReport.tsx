@@ -1,4 +1,5 @@
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -25,7 +26,6 @@ import ImageIcon from '../../assets/img/image-icon.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
 import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
-import { showToast } from '../../utils';
 import { useConnection } from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
 import { dwtApi } from '../../api/service/dwtApi.ts';
@@ -84,13 +84,11 @@ export default function WorkReport({ route, navigation }: any) {
 
   const handleUploadReport = async () => {
     if (!note) {
-      showToast('Vui lòng nhập ghi chú');
-      return;
+      return Alert.alert('Vui lòng nhập ghi chú');
     }
 
     if (isCompleted && !quantity && data.type === 3) {
-      showToast('Vui lòng nhập giá trị');
-      return;
+      return Alert.alert('Vui lòng nhập giá trị');
     }
 
     if (
@@ -98,8 +96,7 @@ export default function WorkReport({ route, navigation }: any) {
       quantity &&
       Number(quantity) > Number(data.totalTarget)
     ) {
-      showToast('Giá trị không được lớn hơn mục tiêu');
-      return;
+      return Alert.alert('Giá trị không được lớn hơn mục tiêu');
     }
 
     try {
@@ -183,6 +180,7 @@ export default function WorkReport({ route, navigation }: any) {
       }
     } catch (err) {
       console.log(err);
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
     } finally {
       setIsLoading(false);
     }

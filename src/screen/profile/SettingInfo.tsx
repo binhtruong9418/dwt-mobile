@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {Alert, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import { fs_15_700, text_black, text_center, text_white } from '../../assets/style.ts';
@@ -9,7 +9,6 @@ import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx
 import { dwtApi } from '../../api/service/dwtApi.ts';
 import { useConnection } from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
-import { showToast } from '../../utils/index.ts';
 
 export default function SettingInfo({ navigation }: any) {
   const {
@@ -71,7 +70,7 @@ export default function SettingInfo({ navigation }: any) {
       }
     } catch (error: any) {
       console.log(error);
-      showToast(error.message);
+      Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,5 @@
 import {
+    Alert,
     ScrollView,
     StyleSheet,
     Text,
@@ -22,20 +23,18 @@ import PrimaryButton from '../../components/common/button/PrimaryButton.tsx';
 import UploadFileModal from '../../components/common/modal/UploadFileModal.tsx';
 import TrashIcon from '../../assets/img/trash.svg';
 import ImageIcon from '../../assets/img/image-icon.svg';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
-import ToastConfirmModal from '../../components/common/modal/ToastConfirmModal.tsx';
-import { showToast } from '../../utils';
-import { useConnection } from '../../redux/connection';
+import {useConnection} from '../../redux/connection';
 import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.tsx';
-import { dwtApi } from '../../api/service/dwtApi.ts';
+import {dwtApi} from '../../api/service/dwtApi.ts';
 import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 
-export default function WorkReportEdit({ route, navigation }: any) {
-    const { data, isWorkArise } = route.params;
+export default function WorkReportEdit({route, navigation}: any) {
+    const {data, isWorkArise} = route.params;
     const {
-        connection: { userInfo },
+        connection: {userInfo},
     } = useConnection();
     const [note, setNote] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
@@ -68,7 +67,7 @@ export default function WorkReportEdit({ route, navigation }: any) {
         setIsCompleted(false);
         setIsCompletedAndReport(false);
         setIsOpenConfirmUploadWorkReportModal(false);
-        navigation.navigate('Work');
+        navigation.goBack();
     };
 
     const handleGoBack = () => {
@@ -77,14 +76,15 @@ export default function WorkReportEdit({ route, navigation }: any) {
         setIsCompleted(false);
         setFiles([]);
         setNote('');
-        navigation.navigate('Work');
+        navigation.goBack();
     };
 
+
     useEffect(() => {
-        if(data) {
+        if (data) {
             setIsCompleted(true)
-            if(data.file_attachment) {
-                setFiles(data.file_attachment.map((item: any) => ({
+            if (data.file_attachment) {
+                setFiles(JSON.parse(data.file_attachment)?.map((item: any) => ({
                     name: item.file_name,
                     uri: item.file_path,
                 })) ?? [])
@@ -97,13 +97,11 @@ export default function WorkReportEdit({ route, navigation }: any) {
 
     const handleUploadReport = async () => {
         if (!note) {
-            showToast('Vui lòng nhập ghi chú');
-            return;
+            return Alert.alert('Vui lòng nhập ghi chú');
         }
 
         if (isCompleted && !quantity && data.type === 3) {
-            showToast('Vui lòng nhập giá trị');
-            return;
+            return Alert.alert('Vui lòng nhập giá trị');
         }
 
         if (
@@ -111,8 +109,7 @@ export default function WorkReportEdit({ route, navigation }: any) {
             quantity &&
             Number(quantity) > Number(data.totalTarget)
         ) {
-            showToast('Giá trị không được lớn hơn mục tiêu');
-            return;
+            return Alert.alert('Giá trị không được lớn hơn mục tiêu');
         }
 
         try {
@@ -196,13 +193,14 @@ export default function WorkReportEdit({ route, navigation }: any) {
             }
         } catch (err) {
             console.log(err);
+            Alert.alert('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại sau');
         } finally {
             setIsLoading(false);
         }
     };
 
     if (!data) {
-        return <ErrorScreen text={'Không có dữ liệu'} />;
+        return <ErrorScreen text={'Không có dữ liệu'}/>;
     }
 
     return (
@@ -287,10 +285,10 @@ export default function WorkReportEdit({ route, navigation }: any) {
                                         text_black,
                                         fs_15_400,
                                         (!(
-                                            data.type === 3 ||
-                                            (data.isWorkArise && data.type === 2)
-                                        ) ||
-                                        userInfo?.id !== data?.user_id && styles.disable) && styles.disable,
+                                                data.type === 3 ||
+                                                (data.isWorkArise && data.type === 2)
+                                            ) ||
+                                            userInfo?.id !== data?.user_id && styles.disable) && styles.disable,
                                     ]}
                                     placeholderTextColor={'#787878'}
                                     placeholder={
@@ -341,15 +339,19 @@ export default function WorkReportEdit({ route, navigation }: any) {
                         {files.map((item, index) => (
                             <View key={index} style={styles.fileBox}>
                                 <View style={styles.row_gap3}>
-                                    <ImageIcon width={20} height={20} />
+                                    <ImageIcon width={20} height={20}/>
                                     <Text style={[fs_15_400, text_black]}>{item.name}</Text>
                                 </View>
-                                <TouchableOpacity
-                                    hitSlop={10}
-                                    onPress={() => handleDeleteFile(index)}
-                                >
-                                    <TrashIcon width={20} height={20} />
-                                </TouchableOpacity>
+                                {
+                                    userInfo?.id === data?.user_id && (
+                                        <TouchableOpacity
+                                            hitSlop={10}
+                                            onPress={() => handleDeleteFile(index)}
+                                        >
+                                            <TrashIcon width={20} height={20}/>
+                                        </TouchableOpacity>
+                                    )
+                                }
                             </View>
                         ))}
                         {
@@ -378,7 +380,7 @@ export default function WorkReportEdit({ route, navigation }: any) {
                 handlePressOk={handlePressOk}
                 description={'Sửa báo cáo thành công'}
             />
-            <LoadingActivity isLoading={isLoading} />
+            <LoadingActivity isLoading={isLoading}/>
         </SafeAreaView>
     );
 }
