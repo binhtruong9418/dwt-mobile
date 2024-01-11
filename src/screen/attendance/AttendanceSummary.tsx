@@ -108,7 +108,7 @@ export default function AttendanceSummary({ navigation }: any) {
       <AdminTabBlock secondLabel={'Quản lý'} />
       <Header
         title={'TỔNG QUAN CHẤM CÔNG'}
-        handleGoBack={() => navigation.navigate('Attendance')}
+        handleGoBack={() => navigation.goBack()}
       />
       <View
         style={[

@@ -87,7 +87,7 @@ export default function SettingInfo({ navigation }: any) {
     <SafeAreaView style={styles.wrapper}>
       <Header
         title={'Cập nhật mật khẩu'}
-        handleGoBack={() => navigation.navigate('Profile')}
+        handleGoBack={() => navigation.goBack()}
         rightView={
           <TouchableOpacity style={styles.sendButton} onPress={handleSave}>
             <Text style={[fs_15_700, text_white, text_center]}>Lưu</Text>

@@ -72,18 +72,17 @@ export default function Customer({navigation}: any) {
     const {
         data: listUsers = [],
     } = useQuery(
-        ['dwtApi.getListAllUser'],
+        ['getListAllUser'],
         async () => {
-            const res = await dwtApi.searchUser({
-                departement_id: userInfo?.role === 'admin' ? undefined : userInfo?.departement_id,
-            });
+            const res = await dwtApi.getListAllUser();
 
-            return res?.data?.data
+            return res?.data
         },
         {
             enabled: !!userInfo && currentTabManager === 1
         }
     );
+
 
 
     const {

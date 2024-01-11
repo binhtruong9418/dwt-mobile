@@ -41,7 +41,6 @@ export default function WorkBusinessManagerTable({
             data: item,
             managerWorkId: item.business_standard_id,
             date: date,
-            routeGoBack: 'Home',
           });
         }}
         data={listWork.map((item: any, index: number) => {

@@ -92,7 +92,7 @@ export default function UserFactoryWorkDay({ navigation }: any) {
         <Header
           title={'XEM THEO NGÀY'}
           handleGoBack={() => {
-            navigation.navigate('Work');
+            navigation.goBack();
           }}
         />
       )}

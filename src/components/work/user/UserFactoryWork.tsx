@@ -82,7 +82,7 @@ export default function UserFactoryWork({ navigation }: any) {
         <TouchableOpacity
           style={{ width: '25%' }}
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.goBack();
           }}
         >
           <ChevronLeftIcon width={16} height={16} />

@@ -25,8 +25,10 @@ import EmptyDailyReportIcon from '../../assets/img/empty-daily-report.svg';
 import CreateOrEditDailyReportModal from '../common/modal/CreateOrEditDailyReportModal.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
+import {useConnection} from "../../redux/connection";
 
-export default function PersonalReport({}) {
+export default function PersonalReport() {
+    const {connection: {userInfo}} = useConnection();
     const [currentDate, setCurrentDate] = useState<{
         month: number;
         year: number;
@@ -49,9 +51,10 @@ export default function PersonalReport({}) {
     const {
         data: userDailyReportData = {},
         isLoading: loadingUserReport,
-        refetch: reFetchUseReport,
+        refetch: reFetchUserReport,
+        isSuccess: successUserReport
     } = useQuery(
-        ['dwtApi.getDailyReportPersonalPerMonth', currentDate],
+        ['dwtApi.getDailyReportPersonalPerMonth', currentDate, userInfo?.id],
         ({queryKey}: any) =>
             dwtApi.getDailyReportPersonalPerMonth({
                 date_report: `${queryKey[1].year}-${queryKey[1].month + 1}`,
@@ -68,7 +71,7 @@ export default function PersonalReport({}) {
         );
     });
 
-    useRefreshOnFocus(reFetchUseReport)
+    useRefreshOnFocus(reFetchUserReport)
 
     return (
         <View style={styles.wrapper}>
@@ -171,7 +174,7 @@ export default function PersonalReport({}) {
                         setVisible={setIsOpenCreateOrEditModal}
                         isEdit={todayReport}
                         currentDate={currentDate}
-                        onSuccess={reFetchUseReport}
+                        onSuccess={reFetchUserReport}
                     />
                 )
             }

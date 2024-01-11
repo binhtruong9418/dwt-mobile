@@ -109,7 +109,7 @@ export default function WorkListReport({ route, navigation }: any) {
       <Header
         title="TIẾN TRÌNH"
         handleGoBack={() => {
-          navigation.navigate('Work');
+          navigation.goBack();
         }}
       />
       <View style={styles.content}>

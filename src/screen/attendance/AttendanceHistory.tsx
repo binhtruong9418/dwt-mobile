@@ -50,7 +50,7 @@ export default function AttendanceHistory({ route, navigation }: any) {
       <AdminTabBlock secondLabel={'Quản lý'} />
       <Header
         title={'LỊCH SỬ CHẤM CÔNG' + ' ' + title}
-        handleGoBack={() => navigation.navigate('AttendanceSummary')}
+        handleGoBack={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.content}>
         <TouchableOpacity

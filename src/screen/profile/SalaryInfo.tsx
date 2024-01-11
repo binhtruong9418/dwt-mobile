@@ -33,7 +33,7 @@ import ComingSoonScreenComponent from "../../components/coming-soon/ComingSoonSc
 
 const { width: windowWidth } = Dimensions.get('window');
 
-export default function SalaryInfo({ navigation }: any) {
+export default function SalaryInfo({ route,  navigation }: any) {
   const {
     connection: { userInfo },
   } = useConnection();
@@ -89,7 +89,9 @@ export default function SalaryInfo({ navigation }: any) {
     <SafeAreaView style={styles.wrapper}>
       <Header
         title={'Lịch sử lương'}
-        handleGoBack={() => navigation.navigate('Profile')}
+        handleGoBack={() =>
+            navigation.goBack()
+        }
       />
 
       <View style={styles.filter_wrapper}>
@@ -175,7 +177,7 @@ export default function SalaryInfo({ navigation }: any) {
                   </Text>
 
                   <Text style={[fs_14_500, text_black]}>
-                    {item?.salaryDetail?.totalSalary?.toLocaleString()}
+                    {(item?.salaryDetail?.totalSalary * item?.salaryDetail?.salary_history?.salary_rate)?.toLocaleString()}
                   </Text>
                 </View>
                 <View>

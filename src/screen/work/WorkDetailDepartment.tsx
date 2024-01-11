@@ -35,7 +35,7 @@ import ApproveWorkBusinessModal from "../../components/common/modal/ApproveWorkB
 
 const {width: windowWidth} = Dimensions.get('window');
 export default function WorkDetailDepartment({route, navigation}: any) {
-    const {data, managerWorkId, date, routeGoBack} = route.params;
+    const {data, managerWorkId, date} = route.params;
     const {
         connection: {userInfo, currentTabManager},
     } = useConnection();
@@ -86,11 +86,18 @@ export default function WorkDetailDepartment({route, navigation}: any) {
         let workType = 'Đạt giá trị';
         let target = 0;
         let totalReport = 0;
+        let createdBy = null;
+        let workAriseTime = null;
+        let createdTime = null;
         if (data.isWorkArise) {
             listLogs = workDetailData?.business_standard_arise_logs ?? [];
             workType = workDetailData?.type === 2 ? 'Đạt giá trị' : '1 lần';
             target = workDetailData?.quantity;
             totalReport = workDetailData?.total_reports;
+            createdBy = workDetailData?.created_name + ' - ' + workDetailData?.created_code;
+            workAriseTime = dayjs(workDetailData?.start_time).format('DD/MM/YYYY') + ' - ' +
+                dayjs(workDetailData?.end_time).format('DD/MM/YYYY');
+            createdTime = dayjs(workDetailData?.created_at).format('DD/MM/YYYY');
         } else {
             listLogs = workDetailData?.business_standard_report_logs ?? [];
             workType =
@@ -107,6 +114,9 @@ export default function WorkDetailDepartment({route, navigation}: any) {
             desc: workDetailData?.desc,
             workType: workType,
             workerName: workDetailData?.username,
+            createdBy: createdBy,
+            ariseWorkTime: workAriseTime,
+            createdTime: createdTime,
             workStatus:
                 WORK_STATUS[
                     workDetailData?.actual_state?.toString() as keyof typeof WORK_STATUS
@@ -205,7 +215,7 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                 title="CHI TIẾT KẾ HOẠCH"
                 handleGoBack={() => {
                     clearData();
-                    navigation.navigate(routeGoBack);
+                    navigation.goBack();
                 }}
                 rightView={
                     <TouchableOpacity style={styles.sendButton} onPress={handleComment}>
@@ -250,6 +260,18 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                         {
                             label: 'Chỉ tiêu',
                             value: workDetail?.target,
+                        },
+                        {
+                            label: workDetail?.ariseWorkTime ? 'Thời gian' : null,
+                            value: workDetail?.ariseWorkTime,
+                        },
+                        {
+                            label: workDetail?.createdBy ? 'Người giao việc' : null,
+                            value: workDetail?.createdBy,
+                        },
+                        {
+                            label: workDetail?.createdTime ? 'Ngày giao việc' : null,
+                            value: workDetail?.createdTime,
                         },
                         {
                             label: 'Tổng KPI dự kiến',

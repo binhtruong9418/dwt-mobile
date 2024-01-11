@@ -27,7 +27,7 @@ export default function FactoryReportDetail({data, navigation}: any) {
                             data?.type === 1 ? '#C02626' : '#7CB8FF',
                     }]}>
                     <Text style={[fs_10_500, text_white, text_center]}>
-                        {data?.type === 1 ? 'Giao việc' : 'Báo cáo'}
+                        {data?.user_name} {data?.type === 1 ? '(GV)' : '(TK)'}
                     </Text>
                 </View>
                 <Text style={[fs_10_500, text_gray]}>{dayjs(data?.logDate).format('DD/MM/YYYY')}</Text>
@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     button: {
-        borderRadius: 4,
+        borderRadius: 10,
         backgroundColor: '#DD0013',
-        paddingVertical: 5,
-        width: 50,
+        paddingVertical: 3,
+        paddingHorizontal: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },

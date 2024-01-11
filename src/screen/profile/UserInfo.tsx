@@ -140,7 +140,7 @@ export default function UserInfo({ navigation }: any) {
       <SafeAreaView style={styles.wrapper}>
         <Header
           title={'Thông tin cá nhân'}
-          handleGoBack={() => navigation.navigate('Profile')}
+          handleGoBack={() => navigation.goBack()}
           rightView={
             <TouchableOpacity style={styles.sendButton} onPress={handleSave}>
               <Text style={[fs_15_700, text_white, text_center]}>Lưu</Text>

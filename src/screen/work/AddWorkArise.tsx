@@ -64,7 +64,7 @@ export default function AddWorkArise({ navigation }: any) {
   );
 
   const { data: listUser = [], isLoading: isLoadingListUser } = useQuery(
-    ['listUser'],
+    ['getListAllUser'],
     async () => {
         const response = await dwtApi.getListAllUser();
         return response.data;

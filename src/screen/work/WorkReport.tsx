@@ -69,7 +69,7 @@ export default function WorkReport({ route, navigation }: any) {
     setIsCompleted(false);
     setIsCompletedAndReport(false);
     setIsOpenConfirmUploadWorkReportModal(false);
-    navigation.navigate('Work');
+    navigation.goBack();
   };
 
   const handleCancelUploadReport = () => {
@@ -79,7 +79,7 @@ export default function WorkReport({ route, navigation }: any) {
     setFiles([]);
     setNote('');
     setIsOpenCancelReportModal(false);
-    navigation.navigate('Work');
+    navigation.goBack();
   };
 
   const handleUploadReport = async () => {

@@ -216,7 +216,7 @@ export default function ManagerOfficeWork({navigation}: any) {
             <Header
                 title={'NHẬT TRÌNH CÔNG VIỆC'}
                 handleGoBack={() => {
-                    navigation.navigate('Home');
+                    navigation.goBack();
                 }}
             />
             <TabOfficeBlock currentTab={currentTab} setCurrentTab={setCurrentTab}/>

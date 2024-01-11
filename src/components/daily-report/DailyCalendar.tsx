@@ -1,9 +1,10 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
-import {useEffect, useMemo, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import dayjs from "dayjs";
 import {useConnection} from "../../redux/connection";
+import {useFocusEffect} from "@react-navigation/native";
 
 export default function DailyCalendar(
     {
@@ -14,7 +15,6 @@ export default function DailyCalendar(
     }: InferProps<typeof DailyCalendar.propTypes>) {
 
     const {connection: {userInfo}} = useConnection();
-    const flatList = useRef<FlatList>(null);
 
     const haveLog = (item: any) => {
         if (listUserReports) {
@@ -34,6 +34,7 @@ export default function DailyCalendar(
         return false;
     };
 
+
     return (
         <View
             style={{
@@ -48,10 +49,11 @@ export default function DailyCalendar(
                     borderBottomColor: '#D0D0D0',
                     borderBottomWidth: 1,
                 }}
-                initialScrollIndex={dayjs().date() - 1}
+                initialScrollIndex={currentDate.date - 1}
                 getItemLayout={(data, index) => {
                     return { length: 45, offset: index * 45, index };
                 }}
+                initialNumToRender={dayjs().daysInMonth()}
                 showsHorizontalScrollIndicator={false}
                 data={getDaysInMonth(currentDate.month, currentDate.year)}
                 horizontal={true}

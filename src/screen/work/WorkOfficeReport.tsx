@@ -59,7 +59,7 @@ export default function WorkOfficeReport({ route, navigation }: any) {
         setFiles([]);
         setIsCompleted(false);
         setIsOpenConfirmUploadWorkReportModal(false);
-        navigation.navigate('Work');
+        navigation.goBack();
     };
 
     const handleCancelUploadReport = () => {
@@ -68,7 +68,7 @@ export default function WorkOfficeReport({ route, navigation }: any) {
         setFiles([]);
         setNote('');
         setIsOpenCancelReportModal(false);
-        navigation.navigate('Work');
+        navigation.goBack();
     };
 
     const handleUploadReport = async () => {

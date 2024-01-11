@@ -78,7 +78,6 @@ export default function WorkOfficeRowDetail({
                 ...data,
                 isWorkArise: isWorkArise,
               },
-              routeGoBack: 'Work',
             });
           }}
         >

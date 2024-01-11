@@ -58,7 +58,7 @@ export default function MeetingDetail({route, navigation}: any) {
             <AdminTabBlock
                 secondLabel={'Quản lý'}
             />
-            <Header title={'BIÊN BẢN HỌP'} handleGoBack={() => navigation.navigate('MeetingInfo')}/>
+            <Header title={'BIÊN BẢN HỌP'} handleGoBack={() => navigation.goBack()}/>
             <ScrollView contentContainerStyle={styles.content}>
                 <MeetingInformation
                     data={[

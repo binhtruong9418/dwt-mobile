@@ -76,14 +76,12 @@ export default function WorkRowDetail(
                                 data: data,
                                 managerWorkId: data.business_standard_id,
                                 date: date,
-                                routeGoBack: 'Work'
                             });
                         } else {
                             // @ts-ignore
                             navigation.navigate('WorkDetail', {
                                 data: data,
                                 date: date,
-                                routeGoBack: 'Work'
                             });
                         }
                     }}

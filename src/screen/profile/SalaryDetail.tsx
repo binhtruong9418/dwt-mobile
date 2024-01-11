@@ -97,7 +97,7 @@ export default function SalaryDetail({ route, navigation }: any) {
       <SafeAreaView style={styles.wrapper}>
         <Header
           title={`Chi tiết phiếu lương ${salaryInfo?.salary_history?.month} / ${salaryInfo?.salary_history?.year}`}
-          handleGoBack={() => navigation.navigate('SalaryInfo')}
+          handleGoBack={() => navigation.goBack()}
         />
         <ScrollView
           style={{

@@ -273,8 +273,8 @@ export default function AddCustomer({navigation}: any) {
             <DatePickerModal
                 visible={isOpenSelectFromDateModal}
                 setVisible={setOpenSelectFromDateModal}
-                dateSelect={date}
-                setDateSelect={setDate}
+                currentDate={date}
+                setCurrentDate={setDate}
                 type={'datetime'}
             />
             <ToastSuccessModal

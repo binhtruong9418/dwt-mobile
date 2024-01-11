@@ -38,7 +38,7 @@ export default function WorkTable({
       columns={columns}
       onRowPress={(item: any) => {
         // @ts-ignore
-        navigation.navigate('WorkDetail', { data: item, date: date, routeGoBack: 'Home' });
+        navigation.navigate('WorkDetail', { data: item, date: date});
       }}
       data={listWork.map((item: any, index: number) => {
         return {

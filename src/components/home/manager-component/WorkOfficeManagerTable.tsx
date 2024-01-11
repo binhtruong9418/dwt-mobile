@@ -38,7 +38,6 @@ export default function WorkOfficeManagerTable({
           // @ts-ignore
           navigation.navigate('WorkDetailOffice', {
             data: item,
-            routeGoBack: 'Home',
           });
         }}
         data={listWork.map((item: any, index: number) => {
