@@ -8,11 +8,17 @@ import dayjs from "dayjs";
 import PrimaryTable from "../../components/common/table/PrimaryTable.tsx";
 import AddIcon from "../../assets/img/add.svg";
 import {useConnection} from "../../redux/connection";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import DatePickerModal from "../../components/common/modal/DatePickerModal.tsx";
 import FilterRewardAndPunishStatusModal from "../../components/reward-and-punish/FilterRewardAndPunishStatusModal.tsx";
 import FilterRewardAndPunishTypeModal from "../../components/reward-and-punish/FilterRewardAndPunishTypeModal.tsx";
-import {LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR} from "../../assets/constant.ts";
+import {
+    LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR,
+    LIST_REWARD_AND_PUNISHMENT_TYPE,
+    LIST_REWARD_AND_PUNISHMENT_UNIT
+} from "../../assets/constant.ts";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
+import {dwtApi} from "../../api/service/dwtApi.ts";
 
 
 const columns = [
@@ -33,7 +39,7 @@ const columns = [
     },
     {
         title: 'SL',
-        key: 'amount',
+        key: 'quantity',
         width: 2 / 15,
     },
     {
@@ -43,67 +49,9 @@ const columns = [
     },
 ]
 
-const tableData = [
-    {
-        name: 'Nguyễn Văn A',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[1],
-    },
-    {
-        name: 'Nguyễn Văn B',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[3],
-    },
-    {
-        name: 'Nguyễn Văn C',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[3],
-    },
-    {
-        name: 'Nguyễn Văn D',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[2],
-    },
-    {
-        name: 'Nguyễn Văn E',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[2],
-    },
-    {
-        name: 'Nguyễn Văn F',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[1],
-    },
-    {
-        name: 'Nguyễn Văn G',
-        content: 'Đi trễ',
-        type: 'Khen thưởng',
-        amount: 1,
-        unit: 'KPI',
-        bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[2],
-    },
-]
 
 export default function RewardAndPunishInfo({navigation}: any) {
-    const {connection: {currentTabManager}} = useConnection();
+    const {connection: {currentTabManager, userInfo}} = useConnection();
     const [isOpenStatusSelect, setIsOpenStatusSelect] = useState(false);
     const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
     const [statusValue, setStatusValue] = useState({
@@ -116,6 +64,63 @@ export default function RewardAndPunishInfo({navigation}: any) {
         label: 'Loại',
         value: 0,
     });
+
+    const {
+        data: {pages = []} = {},
+        isLoading: listRewardAndPunishmentLoading,
+        isFetching: listRewardAndPunishmentFetching,
+        fetchNextPage: fetchNextListRewardAndPunishment,
+        hasNextPage: hasNextListRewardAndPunishment,
+    } = useInfiniteQuery(
+        ['listRewardAndPunishment', statusValue, typeValue, timeValue],
+        async ({pageParam = 1, queryKey}: any) => {
+            const [_, status, type, time] = queryKey;
+            const res = await dwtApi.getListRewardPunish({
+                create_at: dayjs(time).format('DD/MM/YYYY'),
+                status: status?.value === 0 ? undefined : status?.value,
+                type: type?.value === 0 ? undefined : type?.value,
+                page: pageParam,
+                limit: 10,
+            });
+            return {
+                data: res?.data?.data,
+                nextPage: pageParam + 1,
+            };
+        }, {
+            getNextPageParam: lastPage => {
+                const {nextPage} = lastPage;
+                if (lastPage.data.length < 10) {
+                    return undefined;
+                }
+                return nextPage;
+            },
+        });
+
+    const listRewardPunish = pages.flatMap(page => page.data);
+    const tableData = useMemo(() => {
+        return listRewardPunish.filter((item) => {
+            if (currentTabManager === 1) {
+                return true;
+            } else {
+                return item?.user?.id === userInfo?.id;
+            }
+        }).map((item: any) => {
+            return {
+                name: item?.user?.name,
+                content: item?.content,
+                type: LIST_REWARD_AND_PUNISHMENT_TYPE[item?.type].label,
+                quantity: item?.quantity,
+                unit: LIST_REWARD_AND_PUNISHMENT_UNIT[+item?.unit],
+                bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[+item?.status],
+            }
+        })
+    }, [listRewardPunish, userInfo]);
+
+    const getMoreData = async () => {
+        if (hasNextListRewardAndPunishment) {
+            await fetchNextListRewardAndPunishment();
+        }
+    }
     return (
         <SafeAreaView style={styles.wrapper}>
             <AdminTabBlock/>
@@ -166,6 +171,8 @@ export default function RewardAndPunishInfo({navigation}: any) {
                     <PrimaryTable
                         data={tableData}
                         columns={columns}
+                        getMoreData={getMoreData}
+                        isFetchingData={listRewardAndPunishmentFetching}
                     />
                 </View>
             </ScrollView>

@@ -234,7 +234,7 @@ export const dwtApi = {
         const url = 'salary-history';
         return await axiosClient.get(url, {params});
     },
-    getSalaryById: async (id: number): Promise<any> => {
+    getSalaryById: async (id: string): Promise<any> => {
         const url = 'salary-history/detail/' + id;
         return await axiosClient.get(url);
     },
@@ -442,4 +442,14 @@ export const dwtApi = {
         const url = '/mobile/customer/store';
         return await axiosClient.post(url, data);
     },
+
+    getListRewardPunish: async (params = {}): Promise<any> => {
+        const url = '/rewards-and-punishment';
+        return await axiosClient.get(url, {params});
+    },
+
+    createRewardPunish: async (data: any): Promise<any> => {
+        const url = '/rewards-and-punishment/store';
+        return await axiosClient.post(url, data);
+    }
 };

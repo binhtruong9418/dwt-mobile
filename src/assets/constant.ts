@@ -338,6 +338,13 @@ export const LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR = [
     '#97C8FF',
 ]
 
+export const LIST_REWARD_AND_PUNISHMENT_UNIT = [
+    'KPI',
+    'KPI',
+    'Ngày công',
+    'Tiền',
+]
+
 export const LIST_REWARD_AND_PUNISHMENT_TYPE = [
     {
         value: 0,

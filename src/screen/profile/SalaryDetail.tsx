@@ -31,9 +31,9 @@ import { useMemo } from "react";
 export default function SalaryDetail({ route, navigation }: any) {
   const { id } = route.params;
   const { data: salaryInfo, isLoading: isLoadingSalary } = useQuery(
-    ['salaryDetail'],
-    async () => {
-      const res = await dwtApi.getSalaryById(id);
+    ['salaryDetail', id],
+    async ({queryKey}) => {
+      const res = await dwtApi.getSalaryById(queryKey[1] as string);
       return res.data;
     },
     {
@@ -59,14 +59,14 @@ export default function SalaryDetail({ route, navigation }: any) {
     const salaryRate = salaryInfo?.salary_history?.salary_rate;
     salaryTmpData.basicSalary =
       (salaryInfo?.basic_salary * salaryRate * salaryInfo?.days_work) /
-      salaryInfo?.all_days_work;
+      salaryInfo?.all_days_work.toFixed(0)
     salaryTmpData.performanceSalary =
       (salaryInfo?.salary_history?.performance_salary *
         salaryInfo?.kpi?.tmpTotalKPI) /
-        salaryInfo?.kpi?.expectTotalKPI || 0;
+        salaryInfo?.kpi?.expectTotalKPI.toFixed(0) || 0;
     salaryTmpData.allowance =
       (salaryInfo?.salary_history?.allowance * salaryInfo?.days_work) /
-        salaryInfo?.all_days_work || 0;
+        salaryInfo?.all_days_work.toFixed(0) || 0;
     salaryTmpData.salaryTitle = salaryInfo?.salary_history?.salary_title;
     salaryTmpData.totalSalary =
       salaryTmpData.basicSalary +

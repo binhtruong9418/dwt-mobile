@@ -83,6 +83,7 @@ export default function ManagerOfficeWork({navigation}: any) {
         value: 0,
         label: 'Phòng ban',
     });
+    const [searchUserValue, setSearchUserValue] = useState('');
 
     const {data: listDepartment = []} = useQuery(
         ['listDepartmentOffice'],
@@ -107,15 +108,18 @@ export default function ManagerOfficeWork({navigation}: any) {
     const {
         data: listUsers = [],
     } = useQuery(
-        ['dwtApi.getListAllUser', currentDepartment],
+        ['dwtApi.getListAllUser', currentDepartment, searchUserValue],
         async ({queryKey}) => {
             const res = await dwtApi.searchUser({
                 departement_id: queryKey[1].value === 0 ? undefined : queryKey[1].value,
+                q: queryKey[2],
             });
 
             return res?.data?.data
         },
     );
+
+    console.log(listUsers.length)
 
     const {
         data: {listTargetWorkData, listAriseWorkData} = {
@@ -317,10 +321,12 @@ export default function ManagerOfficeWork({navigation}: any) {
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
                 listUser={[
                     {
                         value: 0,
-                        label: 'Nhân sự',
+                        label: 'Tất cả',
                     },
                     ...listUsers.map((item: any) => {
                         return {

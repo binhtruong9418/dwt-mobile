@@ -23,10 +23,10 @@ export default function UserFilterModal(
         currentUser,
         setCurrentUser,
         listUser,
+        searchValue,
+        setSearchValue,
     }: InferProps<typeof UserFilterModal.propTypes>) {
     const [currentFilter, setCurrentFilter] = useState(currentUser);
-    const [searchValue, setSearchValue] = useState('');
-    const [listCurrentUser, setListCurrentUser] = useState(listUser);
 
     const handleChangeCheck = (value: any) => {
         setCurrentFilter(value);
@@ -37,18 +37,6 @@ export default function UserFilterModal(
         setSearchValue('')
         setVisible(false);
     };
-
-    useEffect(() => {
-        if (searchValue) {
-            const arr = [...listUser]
-            setListCurrentUser(arr.filter((item: any) => {
-                return item.label.toLowerCase().includes(searchValue.toLowerCase());
-            }));
-        } else {
-            const arr = [...listUser]
-            setListCurrentUser(arr)
-        }
-    }, [searchValue]);
     return (
         <ReactNativeModal
             animationInTiming={200}
@@ -96,7 +84,7 @@ export default function UserFilterModal(
                         contentContainerStyle={{
                             paddingBottom: 10,
                         }}
-                        data={listCurrentUser}
+                        data={listUser}
                         renderItem={({item}) => {
                             return (
                                 <PrimaryCheckbox
@@ -182,4 +170,6 @@ UserFilterModal.propTypes = {
     currentUser: PropTypes.any.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
     listUser: PropTypes.array.isRequired,
+    searchValue: PropTypes.string.isRequired,
+    setSearchValue: PropTypes.func.isRequired,
 };

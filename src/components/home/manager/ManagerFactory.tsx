@@ -45,6 +45,7 @@ export default function ManagerFactory(
         label: 'Nhân sự',
         value: 0,
     });
+    const [searchUserValue, setSearchUserValue] = useState('');
 
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
 
@@ -103,9 +104,9 @@ export default function ManagerFactory(
 
     const {
         data: listUsers = [],
-    } = useQuery(["dwtApi.getListAllUser", userInfo?.departement_id], async ({queryKey}) => {
+    } = useQuery(["dwtApi.getListAllUser", searchUserValue], async ({queryKey}) => {
             const res = await dwtApi.searchUser({
-                departement_id: queryKey[1],
+                q: queryKey[1],
             })
 
             return res?.data?.data
@@ -290,10 +291,12 @@ export default function ManagerFactory(
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
                 listUser={[
                     {
                         value: 0,
-                        label: 'Nhân sự',
+                        label: 'Tất cả',
                     },
                     ...listUsers.map((item: any) => {
                         return {

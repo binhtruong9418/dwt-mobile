@@ -137,6 +137,5 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: '100%',
-    paddingHorizontal: 1,
   },
 });

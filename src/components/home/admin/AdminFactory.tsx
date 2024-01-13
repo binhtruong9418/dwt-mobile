@@ -41,6 +41,7 @@ export default function AdminFactory(
         label: 'Nhân sự',
         value: 0,
     });
+    const [searchUserValue, setSearchUserValue] = useState('');
 
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
 
@@ -83,14 +84,19 @@ export default function AdminFactory(
 
     const {
         data: listUsers = [],
-    } = useQuery(["getListAllUser"], async () => {
-            const res = await dwtApi.getListAllUser()
-            return res?.data
+    } = useQuery(["dwtApi.getListAllUser", searchUserValue], async ({queryKey}) => {
+            const res = await dwtApi.searchUser({
+                q: queryKey[1],
+            })
+            return res?.data?.data
         },
     )
 
-    const {data: managerFactoryData = {}, isLoading: loadingProductionDiary, refetch: refetchFactoryWork} =
-        useQuery(
+    const {
+        data: managerFactoryData = {},
+        isLoading: loadingProductionDiary,
+        refetch: refetchFactoryWork
+    } = useQuery(
             [
                 'adminFactory',
                 currentDate.month,
@@ -258,6 +264,8 @@ export default function AdminFactory(
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
                 listUser={[
                     {
                         value: 0,

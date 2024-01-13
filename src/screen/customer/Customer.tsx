@@ -66,17 +66,19 @@ export default function Customer({navigation}: any) {
         value: 0,
         label: 'Nhân sự thu thập',
     });
-
+    const [searchUserValue, setSearchUserValue] = useState('')
 
 
     const {
         data: listUsers = [],
     } = useQuery(
-        ['getListAllUser'],
-        async () => {
-            const res = await dwtApi.getListAllUser();
+        ['dwtApi.getListAllUser', searchUserValue],
+        async ({queryKey}) => {
+            const res = await dwtApi.searchUser({
+                q: queryKey[1],
+            });
 
-            return res?.data
+            return res?.data?.data
         },
         {
             enabled: !!userInfo && currentTabManager === 1
@@ -298,6 +300,8 @@ export default function Customer({navigation}: any) {
                 setVisible={setIsOpenUserFilter}
                 currentUser={currentUser}
                 setCurrentUser={setCurrentUser}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
                 listUser={[{
                     value: 0,
                     label: 'Tất cả',

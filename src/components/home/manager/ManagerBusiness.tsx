@@ -48,6 +48,7 @@ export default function ManagerBusiness(
         label: 'Nhân sự',
         value: 0,
     });
+    const [searchUserValue, setSearchUserValue] = useState('');
 
 
 
@@ -118,13 +119,14 @@ export default function ManagerBusiness(
     const {
         data: listUsers = [],
     } = useQuery(
-        ['dwtApi.getListAllUser', currentDepartment],
+        ['dwtApi.getListAllUser', currentDepartment, searchUserValue],
         async ({pageParam = 1, queryKey}) => {
             const res = await dwtApi.searchUser({
                 departement_id:
                     queryKey[1].value === 0
-                        ? userInfo?.departement_id
+                        ? undefined
                         : queryKey[1].value,
+                q: queryKey[2],
             });
 
             return res?.data?.data
@@ -314,10 +316,12 @@ export default function ManagerBusiness(
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
                 listUser={[
                     {
                         value: 0,
-                        label: 'Nhân sự',
+                        label: 'Tất cả',
                     },
                     ...listUsers.map((item: any) => {
                         return {

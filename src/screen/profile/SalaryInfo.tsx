@@ -71,7 +71,7 @@ export default function SalaryInfo({ route,  navigation }: any) {
   const totalSummary = useMemo(() => {
     let total = 0;
     listSalary.forEach((salary: any) => {
-      total += salary?.salaryDetail?.totalSalary;
+      total += salary?.salaryDetail?.totalSalary * salary?.salaryDetail?.salary_history?.salary_rate
     });
     return total;
   }, [listSalary]);

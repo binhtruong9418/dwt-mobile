@@ -114,9 +114,11 @@ const styles = StyleSheet.create({
     wrapper: {
         width: '100%',
         borderLeftColor: '#D9D9D9',
-        borderLeftWidth: 1,
+        borderLeftWidth: 0.5,
         borderRightColor: '#D9D9D9',
-        borderRightWidth: 1,
+        borderRightWidth: 0.5,
+        borderBottomColor: '#D9D9D9',
+        borderBottomWidth: 0.5,
         paddingTop: 12,
     },
     row: {

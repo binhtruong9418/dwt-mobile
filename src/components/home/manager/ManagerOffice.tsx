@@ -53,6 +53,7 @@ export default function ManagerOffice(
         label: 'Nhân sự',
         value: 0,
     });
+    const [searchUserValue, setSearchUserValue] = useState('');
 
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
 
@@ -124,13 +125,14 @@ export default function ManagerOffice(
     const {
         data: listUsers = [],
     } = useQuery(
-        ['dwtApi.getListAllUser', currentDepartment],
-        async ({pageParam = 1, queryKey}) => {
+        ['dwtApi.getListAllUser', currentDepartment, searchUserValue],
+        async ({queryKey}) => {
             const res = await dwtApi.searchUser({
                 departement_id:
                     queryKey[1].value === 0
-                        ? userInfo?.departement_id
+                        ? undefined
                         : queryKey[1].value,
+                q: queryKey[2],
             });
 
             return res?.data?.data
@@ -302,6 +304,8 @@ export default function ManagerOffice(
                 setVisible={setIsOpenUserSelect}
                 currentUser={currentUserId}
                 setCurrentUser={setCurrentUserId}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
                 listUser={[
                     {
                         value: 0,

@@ -251,7 +251,7 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                         },
                         {
                             label: 'Tổng thời gian tạm tính',
-                            value: workDetail?.totalWorkingHours ?? 0 + ' giờ',
+                            value: (workDetail?.totalWorkingHours ?? 0) + ' giờ',
                         },
                         {
                             label: 'ĐVT',
@@ -291,7 +291,7 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                         },
                         {
                             label: '% hoàn thành công việc',
-                            value: workDetail?.totalPercent ?? 0 + '%',
+                            value: ((workDetail?.totalPercent > 100 ? 100 : workDetail?.totalPercent) ?? 0) + '%',
                         },
                         {
                             label: 'Điểm KPI tạm tính',

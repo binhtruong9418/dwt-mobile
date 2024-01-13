@@ -466,6 +466,7 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     paddingHorizontal: 10,
     paddingVertical: 7,
+    color: '#000',
   },
   bgGray: {
     backgroundColor: '#F0EEEE',

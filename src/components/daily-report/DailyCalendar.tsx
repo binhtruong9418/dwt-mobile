@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {getDaysInMonth} from '../../utils';
 import PropTypes, {InferProps} from 'prop-types';
 import {useEffect, useMemo, useRef, useState} from "react";
@@ -33,6 +33,10 @@ export default function DailyCalendar(
         }
         return false;
     };
+
+    if(!listUserReports && !listProjectLogs) {
+        return <ActivityIndicator size="large" color="#DC3545" />
+    }
 
 
     return (
@@ -79,7 +83,7 @@ export default function DailyCalendar(
                             <Text style={styles.date}>{item.date}</Text>
                             {
                                 // Show mark if current date has report
-                                haveLog(item) && <View style={styles.marked}/>
+                                haveLog(item) ? <View style={styles.marked}/> : null
                             }
                         </TouchableOpacity>
                     );

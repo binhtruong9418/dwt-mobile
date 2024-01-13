@@ -42,7 +42,7 @@ export default function AddRewardAndPunish({navigation}: any) {
     const [isOpenUpWorkModalSuccess, setOpenUpWorkModalSuccess] = useState(false);
     const [isErrorModal, setIsErrorModal] = useState(false);
     // upload field
-    const [name, setName] = useState('');
+    const [userId, setUserId] = useState();
     const [description, setDescription] = useState('');
     const [type, setType] = useState('');
     const [unit, setUnit] = useState('');
@@ -63,8 +63,8 @@ export default function AddRewardAndPunish({navigation}: any) {
     );
 
     const handleAddRewardAndPunish = async () => {
-        if (!name) {
-            return Alert.alert('Vui lòng nhập tên khách hàng');
+        if (!userId) {
+            return Alert.alert('Vui lòng chọn người liên quan');
         }
         if (!description) {
             return Alert.alert('Vui lòng nhập nội dung');
@@ -79,32 +79,30 @@ export default function AddRewardAndPunish({navigation}: any) {
             return Alert.alert('Vui lòng nhập số lượng');
         }
 
-        // try {
-        //     setIsLoading(true)
-        //     const requestData = {
-        //         name,
-        //         phone,
-        //         address,
-        //         note,
-        //         user_id: Number(creater),
-        //         create_at: dayjs(date).format('YYYY-MM-DD HH:mm'),
-        //     };
-        //     const response = await dwtApi.createCustomer(requestData);
-        //     if (response.status === 200) {
-        //         setOpenUpWorkModalSuccess(true);
-        //     }
-        // } catch (err: any) {
-        //     console.log(err);
-        //     if (err.message === 'The phone has already been taken.') {
-        //         setIsErrorModal(true)
-        //     }
-        // } finally {
-        //     setIsLoading(false)
-        // }
+        try {
+            setIsLoading(true)
+            const requestData = {
+                user_id: +userId,
+                content: description,
+                quantity: amount.toString(),
+                type: type,
+                unit: unit,
+                status: 1,
+            };
+            const response = await dwtApi.createRewardPunish(requestData);
+            if (response.status === 200) {
+                setOpenUpWorkModalSuccess(true);
+            }
+        } catch (err: any) {
+            console.log(err);
+            Alert.alert('Có lỗi xảy ra, vui lòng thử lại sau');
+        } finally {
+            setIsLoading(false)
+        }
     };
 
     const handleClearData = () => {
-        setName('');
+        setUserId('');
         setUnit('');
         setType('');
         setAmount('');
@@ -156,11 +154,11 @@ export default function AddRewardAndPunish({navigation}: any) {
                         data={listUser.map((user: any) => {
                             return {
                                 label: user.name,
-                                value: user.id,
+                                value: user.id.toString(),
                             };
                         })}
-                        value={name}
-                        changeValue={setName}
+                        value={userId}
+                        changeValue={setUserId}
                         dropdownStyle={styles.dropdownStyle}
                         isSearch={true}
                     />
