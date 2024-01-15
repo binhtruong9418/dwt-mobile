@@ -1,5 +1,7 @@
 export {default as LoginScreen} from './auth/Login.tsx';
 export {default as ForgotPasswordScreen} from './auth/ForgotPassword.tsx';
+export {default as VerifyOtpScreen} from './auth/VerifyOtp.tsx';
+export {default as ResetPasswordScreen} from './auth/ResetPassword.tsx';
 export {default as HomeScreen} from './home/Home.tsx';
 export {default as WorkScreen} from './home/Work.tsx';
 export {default as AttendanceScreen} from './home/Attendance.tsx';

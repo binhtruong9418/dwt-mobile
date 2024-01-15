@@ -5053,6 +5053,13 @@ react-native-modal@^13.0.1:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
+react-native-otp-textinput@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-otp-textinput/-/react-native-otp-textinput-1.1.5.tgz#63401cac2c63b26230af1b3179952a524bb5214b"
+  integrity sha512-zV5aq5gyU54SPn5WGC8el0P1RdOEb0FiuPg9O+yBhwieDy2/ov16830KCHPG0ZNN5DErTPtzwLbrXQUdrt7tNA==
+  dependencies:
+    react "^18.2.0"
+
 react-native-reanimated@^3.4.2:
   version "3.6.1"
   resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.6.1.tgz"
@@ -5228,7 +5235,7 @@ react-test-renderer@18.2.0:
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
 
-react@18.2.0:
+react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==

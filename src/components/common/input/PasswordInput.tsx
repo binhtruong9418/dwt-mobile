@@ -15,6 +15,7 @@ export default function PasswordInput({
   errorMsg,
   label,
   placeholder,
+    ref
 }: InferProps<typeof PasswordInput.propTypes>) {
   const [hidePassword, setHidePassword] = useState<boolean>(true);
   return (
@@ -29,6 +30,7 @@ export default function PasswordInput({
             value={password}
             onChangeText={setPassword}
             secureTextEntry={hidePassword}
+            ref={ref}
           />
           <Pressable
             onPress={() => setHidePassword(!hidePassword)}
@@ -88,6 +90,7 @@ PasswordInput.propTypes = {
   errorMsg: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  ref: PropTypes.any.isRequired,
 };
 
 PasswordInput.defaultProps = {

@@ -40,11 +40,9 @@ import {
   WorkOfficeAriseReportScreen,
   WorkOfficeAriseReportEditScreen,
   CustomerScreen,
-  AddCustomerScreen, AddRewardAndPunishScreen,
+  AddCustomerScreen, AddRewardAndPunishScreen, VerifyOtpScreen, ResetPasswordScreen,
 } from '../screen';
 import BottomNavigator from './navigator/BottomNavigator.tsx';
-import WorkOfficeReport from "../screen/work/WorkOfficeReport.tsx";
-import WorkOfficeReportEdit from "../screen/work/WorkOfficeReportEdit.tsx";
 
 export const routePath = [
   {
@@ -54,6 +52,14 @@ export const routePath = [
   {
     name: 'ForgotPassword',
     component: ForgotPasswordScreen,
+  },
+  {
+    name: 'VerifyOtp',
+    component: VerifyOtpScreen,
+  },
+  {
+    name: 'ResetPassword',
+    component: ResetPasswordScreen,
   },
   {
     name: 'HomePage',

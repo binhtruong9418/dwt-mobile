@@ -322,11 +322,11 @@ export const LIST_REWARD_AND_PUNISHMENT_STATUS = [
         value: 1,
     },
     {
-        label: "Đang xử lý",
+        label: "Đã xử lý",
         value: 2,
     },
     {
-        label: "Đã xử lý",
+        label: "Đang xử lý",
         value: 3,
     },
 ]
@@ -339,10 +339,18 @@ export const LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR = [
 ]
 
 export const LIST_REWARD_AND_PUNISHMENT_UNIT = [
-    'KPI',
-    'KPI',
-    'Ngày công',
-    'Tiền',
+    {
+        label: 'KPI',
+        value: 1,
+    },
+    {
+        label: 'Ngày Công',
+        value: 2,
+    },
+    {
+        label: 'Tiền',
+        value: 3,
+    }
 ]
 
 export const LIST_REWARD_AND_PUNISHMENT_TYPE = [

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   bg_blue,
   bg_green,
@@ -10,12 +10,14 @@ import {
 } from '../../../assets/style.ts';
 import PropTypes, { InferProps } from 'prop-types';
 import { useMemo } from 'react';
+import {useNavigation} from "@react-navigation/native";
 
 export default function BehaviorBlock({
   rewardAndPunishData,
   workSummary,
   type,
 }: InferProps<typeof BehaviorBlock.propTypes>) {
+  const navigation = useNavigation();
   const totalRewardAndPunish = useMemo(() => {
     return (
       rewardAndPunishData.rewardsTotal +
@@ -24,7 +26,10 @@ export default function BehaviorBlock({
     );
   }, [rewardAndPunishData]);
   return (
-    <View style={styles.wrapper}>
+    <TouchableOpacity style={styles.wrapper} onPress={() => {
+        // @ts-ignore
+        navigation.navigate('RewardAndPunishInfo')
+    }}>
       {workSummary &&
         type !== 'factory' &&
         (workSummary.total > 0 ? (
@@ -171,7 +176,7 @@ export default function BehaviorBlock({
           </View>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

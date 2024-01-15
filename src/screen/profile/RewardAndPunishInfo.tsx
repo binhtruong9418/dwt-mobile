@@ -19,6 +19,9 @@ import {
 } from "../../assets/constant.ts";
 import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import {dwtApi} from "../../api/service/dwtApi.ts";
+import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
+import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
+import ListDepartmentModal from "../../components/home/manager-component/ListDepartmentModal.tsx";
 
 
 const columns = [
@@ -64,6 +67,28 @@ export default function RewardAndPunishInfo({navigation}: any) {
         label: 'Loại',
         value: 0,
     });
+    const [isOpenDepartmentSelect, setIsOpenDepartmentSelect] = useState(false);
+    const [departmentValue, setDepartmentValue] = useState({
+        label: 'Phòng ban',
+        value: 0,
+    });
+
+    const {
+        data: listDepartment = []
+    } = useQuery(['listDepartment'], async () => {
+        if (userInfo?.role === 'admin') {
+            const res = await dwtApi.getListDepartment();
+            return res?.data;
+        } else if (userInfo?.role === 'manager') {
+            const res = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
+            return await Promise.all(res?.data?.map(async (item: string) => {
+                const res = await dwtApi.getDepartmentById(item);
+                return res?.data;
+            }));
+        }
+    }, {
+        enabled: !!userInfo && ['manager', 'admin'].includes(userInfo?.role),
+    });
 
     const {
         data: {pages = []} = {},
@@ -71,8 +96,9 @@ export default function RewardAndPunishInfo({navigation}: any) {
         isFetching: listRewardAndPunishmentFetching,
         fetchNextPage: fetchNextListRewardAndPunishment,
         hasNextPage: hasNextListRewardAndPunishment,
+        refetch: refetchListRewardAndPunishment,
     } = useInfiniteQuery(
-        ['listRewardAndPunishment', statusValue, typeValue, timeValue],
+        ['listRewardAndPunishment', statusValue, typeValue, timeValue, departmentValue],
         async ({pageParam = 1, queryKey}: any) => {
             const [_, status, type, time] = queryKey;
             const res = await dwtApi.getListRewardPunish({
@@ -80,6 +106,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
                 status: status?.value === 0 ? undefined : status?.value,
                 type: type?.value === 0 ? undefined : type?.value,
                 page: pageParam,
+                department: departmentValue?.value === 0 ? undefined : departmentValue?.value,
                 limit: 10,
             });
             return {
@@ -110,7 +137,8 @@ export default function RewardAndPunishInfo({navigation}: any) {
                 content: item?.content,
                 type: LIST_REWARD_AND_PUNISHMENT_TYPE[item?.type].label,
                 quantity: item?.quantity,
-                unit: LIST_REWARD_AND_PUNISHMENT_UNIT[+item?.unit],
+                unit: LIST_REWARD_AND_PUNISHMENT_UNIT.find(
+                    (unit) => unit.value === +item?.unit)?.label,
                 bgColor: LIST_REWARD_AND_PUNISHMENT_STATUS_COLOR[+item?.status],
             }
         })
@@ -121,6 +149,12 @@ export default function RewardAndPunishInfo({navigation}: any) {
             await fetchNextListRewardAndPunishment();
         }
     }
+
+    useRefreshOnFocus(refetchListRewardAndPunishment)
+
+    if (listRewardAndPunishmentLoading) {
+        return <PrimaryLoading/>
+    }
     return (
         <SafeAreaView style={styles.wrapper}>
             <AdminTabBlock/>
@@ -130,11 +164,19 @@ export default function RewardAndPunishInfo({navigation}: any) {
             />
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.content}>
-                <View style={styles.filter_wrapper}>
+                contentContainerStyle={styles.content}
+            >
+                <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={[
+                        styles.filter_wrapper,
+                        currentTabManager === 1 ? {gap: 10} : {width: '100%'}
+                    ]}
+                    horizontal={true}
+                >
                     <TouchableOpacity
                         style={[styles.dropdown, {
-                            width: '38%',
+                            width: currentTabManager === 1 ? 130 : '38%',
                         }]}
                         onPress={() => {
                             setIsOpenStatusSelect(true);
@@ -145,7 +187,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
 
                     <TouchableOpacity
                         style={[styles.dropdown, {
-                            width: '25%',
+                            width: currentTabManager === 1 ? 100 : '25%',
                         }]}
                         onPress={() => {
                             setIsOpenTypeSelect(true);
@@ -156,7 +198,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
 
                     <TouchableOpacity
                         style={[styles.dropdown, {
-                            width: '33%',
+                            width: currentTabManager === 1 ? 120 : '33%',
                         }]}
                         onPress={() => {
                             setIsOpenTimeSelect(true);
@@ -166,7 +208,25 @@ export default function RewardAndPunishInfo({navigation}: any) {
                         </Text>
                         <DropdownIcon width={20} height={20}/>
                     </TouchableOpacity>
-                </View>
+
+
+                    {
+                        currentTabManager === 1 && (
+                            <TouchableOpacity
+                                style={[styles.dropdown, {
+                                    width: 150,
+                                }]}
+                                onPress={() => {
+                                    setIsOpenDepartmentSelect(true);
+                                }}>
+                                <Text style={[text_black, fs_14_400]}>
+                                    {departmentValue.label}
+                                </Text>
+                                <DropdownIcon width={20} height={20}/>
+                            </TouchableOpacity>
+                        )
+                    }
+                </ScrollView>
                 <View>
                     <PrimaryTable
                         data={tableData}
@@ -208,6 +268,13 @@ export default function RewardAndPunishInfo({navigation}: any) {
                     </TouchableOpacity>
                 )
             }
+            <ListDepartmentModal
+                visible={isOpenDepartmentSelect}
+                setVisible={setIsOpenDepartmentSelect}
+                currentDepartment={departmentValue}
+                setCurrentDepartment={setDepartmentValue}
+                listDepartment={listDepartment}
+            />
         </SafeAreaView>
     );
 }
@@ -224,8 +291,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     filter_wrapper: {
-        flexDirection: 'row',
         justifyContent: 'space-between',
+        flexDirection: 'row',
     },
     dropdown: {
         borderRadius: 5,

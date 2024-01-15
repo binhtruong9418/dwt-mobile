@@ -29,7 +29,7 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryDropdown from '../../components/common/dropdown/PrimaryDropdown.tsx';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
-import {LIST_REWARD_AND_PUNISHMENT_TYPE} from "../../assets/constant.ts";
+import {LIST_REWARD_AND_PUNISHMENT_TYPE, LIST_REWARD_AND_PUNISHMENT_UNIT} from "../../assets/constant.ts";
 
 export default function AddRewardAndPunish({navigation}: any) {
     const {
@@ -42,7 +42,7 @@ export default function AddRewardAndPunish({navigation}: any) {
     const [isOpenUpWorkModalSuccess, setOpenUpWorkModalSuccess] = useState(false);
     const [isErrorModal, setIsErrorModal] = useState(false);
     // upload field
-    const [userId, setUserId] = useState();
+    const [userId, setUserId] = useState('');
     const [description, setDescription] = useState('');
     const [type, setType] = useState('');
     const [unit, setUnit] = useState('');
@@ -113,13 +113,13 @@ export default function AddRewardAndPunish({navigation}: any) {
     const handlePressCancel = () => {
         setIsOpenCancelModal(false);
         handleClearData();
-        navigation.navigate('RewardAndPunishInfo');
+        navigation.goBack();
     };
 
     const handlePressOk = () => {
         setOpenUpWorkModalSuccess(false);
         handleClearData();
-        navigation.navigate('RewardAndPunishInfo');
+        navigation.goBack();
     };
 
     if (isLoadingListUser) {
@@ -201,20 +201,7 @@ export default function AddRewardAndPunish({navigation}: any) {
                             Đơn vị <Text style={text_red}>*</Text>:
                         </Text>
                         <PrimaryDropdown
-                            data={[
-                                {
-                                    label: 'KPI',
-                                    value: 'KPI',
-                                },
-                                {
-                                    label: 'Ngày công',
-                                    value: 'Ngày công',
-                                },
-                                {
-                                    label: 'Tiền',
-                                    value: 'Tiền',
-                                },
-                            ]}
+                            data={LIST_REWARD_AND_PUNISHMENT_UNIT}
                             value={unit}
                             changeValue={setUnit}
                             dropdownStyle={styles.dropdownStyle}

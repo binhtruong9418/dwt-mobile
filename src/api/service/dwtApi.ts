@@ -6,9 +6,9 @@ export const dwtApi = {
         const url = 'auth/login';
         return await axiosClient.post(url, {email, password});
     },
-    forgetPassword: async (phone: string): Promise<any> => {
+    forgetPassword: async (data: any): Promise<any> => {
         const url = 'forget-password';
-        return await axiosClient.post(url, {phone});
+        return await axiosClient.post(url, data);
     },
     logout: async () => {
         const url = 'auth/logout';
