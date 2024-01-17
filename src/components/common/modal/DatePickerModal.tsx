@@ -1,6 +1,7 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import {
-    fs_14_700,
+    fs_13_400,
+    fs_14_700, mb15, row_between,
     text_black,
     text_center,
     text_red,
@@ -13,17 +14,29 @@ import PrimaryButton from '../button/PrimaryButton.tsx';
 import {ReactNativeModal} from 'react-native-modal';
 import dayjs from 'dayjs';
 import PrimaryDropdown from "../dropdown/PrimaryDropdown.tsx";
+import TimeInput from "../input/TimeInput.tsx";
 
-export default function DatePickerModal({
-                                            setVisible,
-                                            visible,
-                                            currentDate,
-                                            setCurrentDate,
-                                            type,
-                                        }: any) {
+export default function DatePickerModal(
+    {
+        setVisible,
+        visible,
+        currentDate,
+        setCurrentDate,
+        type,
+    }: any) {
     const [dateSelect, setDateSelect] = useState(currentDate || dayjs());
+    const [time, setTime] = useState<string>(dayjs().format('HH:mm'));
     const handleSaveValue = () => {
-        setCurrentDate(dateSelect);
+        if (type === 'datetime') {
+            const hour = parseInt(time.split(':')[0]);
+            const minute = parseInt(time.split(':')[1]);
+            if(hour > 23 || hour < 0 || minute > 59 || minute < 0) {
+                return Alert.alert('Lỗi', 'Vui lòng chọn thời gian hợp lệ');
+            }
+            setCurrentDate(dateSelect.set('hour', hour).set('minute', minute));
+        } else {
+            setCurrentDate(dateSelect);
+        }
         setVisible(false);
     };
 
@@ -49,13 +62,21 @@ export default function DatePickerModal({
                                 setDateSelect(dayjs(date));
                             }}
                             locale={'vi'}
-                            mode={type ?? 'date'}
+                            mode={'date'}
                             firstDayOfWeek={1}
                             selectedItemColor={'#CA1F24'}
                             weekDaysTextStyle={styles.weekDayTextStyle}
                             calendarTextStyle={styles.dayTextStyle}
                             headerTextStyle={styles.headerTextStyle}
                         />
+                        {
+                            type === 'datetime' && (
+                                <View style={[row_between, mb15]}>
+                                    <Text style={[fs_13_400, text_black]}>Thời gian</Text>
+                                    <TimeInput time={time} setTime={setTime}/>
+                                </View>
+                            )
+                        }
                     </View>
                     <PrimaryButton
                         onPress={handleSaveValue}
