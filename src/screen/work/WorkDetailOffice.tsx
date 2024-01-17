@@ -12,20 +12,22 @@ import {
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
 import {useConnection} from '../../redux/connection';
 import {WORK_STATUS, WORK_STATUS_OFFICE} from '../../assets/constant.ts';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import NoDataScreen from '../../components/common/no-data/NoDataScreen.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import dayjs from "dayjs";
+import FileWebviewModal from "../../components/common/modal/FileWebviewModal.tsx";
 
 export default function WorkDetailOffice({route, navigation}: any) {
     const {data} = route.params;
     const {
         connection: {userInfo},
     } = useConnection();
-
+    const [isOpenViewFile, setIsOpenViewFile] = useState(false);
+    const [listOpenFile, setListOpenFile] = useState([]);
     const {
         data: workDetailData = {},
         isLoading: isLoadingWorkDetail,
@@ -82,11 +84,13 @@ export default function WorkDetailOffice({route, navigation}: any) {
                     const listFile = item?.files ?
                         item?.files?.split(',').map((file: any) => file.split('/').pop()).join(', ')
                         : '';
+                    console.log(item?.files)
                     return {
                         ...item,
                         date: dayjs(item.report_date).format('DD/MM/YYYY'),
                         note: item?.note,
                         file: listFile,
+                        listFileUrl: item?.files?.split(','),
                     };
                 }),
             };
@@ -126,11 +130,13 @@ export default function WorkDetailOffice({route, navigation}: any) {
                 const listFile = item?.targetLogDetails[0]?.files ?
                     item?.targetLogDetails[0]?.files?.split(',').map((file: any) => file.split('/').pop()).join(', ')
                     : '';
+                console.log(item?.targetLogDetails[0]?.files)
                 return {
                     ...item,
                     date: dayjs(item.reportedDate).format('DD/MM/YYYY'),
                     note: item?.targetLogDetails[0]?.note,
                     file: listFile,
+                    listFileUrl: item?.targetLogDetails[0]?.files?.split(','),
                 };
             }),
         };
@@ -301,10 +307,21 @@ export default function WorkDetailOffice({route, navigation}: any) {
                                 width: 0.2,
                             },
                         ]}
+                        onCellPress={(item: any) => {
+                            if (item.listFileUrl) {
+                                setListOpenFile(item.listFileUrl);
+                                setIsOpenViewFile(true)
+                            }
+                        }}
                         data={workDetail.reportLogs}
                     />
                 </View>
             </ScrollView>
+            <FileWebviewModal
+                visible={isOpenViewFile}
+                setVisible={setIsOpenViewFile}
+                listFileUrl={listOpenFile}
+            />
         </SafeAreaView>
     );
 }

@@ -26,16 +26,20 @@ export default function MeetingItem({item}: any) {
                     <Text style={[fs_12_400, text_gray]}> • Phòng ban: {item?.departement?.name}</Text>
                 </View>
 
-                <TouchableOpacity
-                    onPress={() => {
-                        if (item.status !== 0) {
-                            setIsMore(!isMore);
-                        }
-                    }}
-                    hitSlop={10}
-                >
-                    {isMore ? <ChevronUpIcon/> : <ChevronDownIcon/>}
-                </TouchableOpacity>
+                {
+                    item?.status === 1 && (
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (item.status !== 0) {
+                                    setIsMore(!isMore);
+                                }
+                            }}
+                            hitSlop={10}
+                        >
+                            {isMore ? <ChevronUpIcon/> : <ChevronDownIcon/>}
+                        </TouchableOpacity>
+                    )
+                }
             </View>
             {
                 isMore && (

@@ -32,6 +32,7 @@ import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import dayjs from "dayjs";
 import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
 import ApproveWorkBusinessModal from "../../components/common/modal/ApproveWorkBusinessModal.tsx";
+import FileWebviewModal from "../../components/common/modal/FileWebviewModal.tsx";
 
 const {width: windowWidth} = Dimensions.get('window');
 export default function WorkDetailDepartment({route, navigation}: any) {
@@ -44,6 +45,9 @@ export default function WorkDetailDepartment({route, navigation}: any) {
     const [adminKpi, setAdminKpi] = useState('');
     const [managerComment, setManagerComment] = useState('');
     const [managerKpi, setManagerKpi] = useState('');
+
+    const [isOpenViewFile, setIsOpenViewFile] = useState(false);
+    const [listOpenFile, setListOpenFile] = useState([]);
 
     const {
         data: workDetailData = {},
@@ -427,17 +431,28 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                                 width: 0.25,
                             },
                         ]}
+
+                        onCellPress={(item: any) => {
+                            if (item.listFileUrl) {
+                                setListOpenFile(item.listFileUrl);
+                                setIsOpenViewFile(true)
+                            }
+                        }}
                         data={workDetail.listLogs
                             .map((item: any) => {
                                 const listFile = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
                                     return file.file_name
                                 }).length : ''
+                                const listFileUrl = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
+                                    return file.file_path
+                                }) : null
 
                                 return {
                                     ...item,
                                     date: dayjs(item.reported_date).format('DD/MM/YYYY') || '',
                                     note: item.note,
                                     file: listFile,
+                                    listFileUrl: listFileUrl
                                 };
                             })
                             .sort((a: any, b: any) => {
@@ -474,6 +489,11 @@ export default function WorkDetailDepartment({route, navigation}: any) {
                     refetchData={refetch}
                 />
             )}
+            <FileWebviewModal
+                visible={isOpenViewFile}
+                setVisible={setIsOpenViewFile}
+                listFileUrl={listOpenFile}
+            />
         </SafeAreaView>
     );
 }

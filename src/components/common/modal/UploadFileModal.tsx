@@ -115,12 +115,12 @@ export default function UploadFileModal({
       backdropTransitionInTiming={200}
       backdropTransitionOutTiming={200}
       onSwipeComplete={() => {
-        setVisible(false);
+      setVisible(false);
       }}
       style={styles.wrapper}
       isVisible={visible}
       onBackdropPress={() => {
-        setVisible(false);
+      setVisible(false);
       }}>
       <View style={styles.content}>
         <View style={styles.header}>

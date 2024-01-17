@@ -55,7 +55,6 @@ export default function ManagerFactory(
         async () => {
             const res = await dwtApi.getDailyReportDepartment({
                 date_report: dayjs().format('YYYY-MM-DD'),
-                department_id: userInfo?.departement_id,
             });
             return res?.data?.countDailyReports;
         },
@@ -81,9 +80,7 @@ export default function ManagerFactory(
     const {
         data: totalPropose = 0
     } = useQuery(['totalProposeHome'], async () => {
-        const res = await dwtApi.getAllPropose({
-            date: dayjs().format('YYYY-MM-DD'),
-        });
+        const res = await dwtApi.getListDepartmentPropose();
         return res?.data?.total;
     })
 

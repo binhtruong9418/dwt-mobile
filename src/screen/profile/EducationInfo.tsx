@@ -6,7 +6,7 @@ export default function EducationInfo({navigation}: any) {
   return (
     <SafeAreaView style={styles.wrapper}>
       <Header
-        title={'Trang bị & Đào tạo'}
+        title={'Trang bị'}
         handleGoBack={() => navigation.goBack()}
       />
     </SafeAreaView>

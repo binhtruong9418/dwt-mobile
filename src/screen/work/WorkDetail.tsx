@@ -13,7 +13,7 @@ import {
 import WorkReportTable from '../../components/common/table/WorkReportTable.tsx';
 import {useConnection} from '../../redux/connection';
 import {WORK_STATUS} from '../../assets/constant.ts';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import NoDataScreen from '../../components/common/no-data/NoDataScreen.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
@@ -21,12 +21,15 @@ import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import dayjs from "dayjs";
+import FileWebviewModal from "../../components/common/modal/FileWebviewModal.tsx";
 
 export default function WorkDetail({route, navigation}: any) {
     const {data, date} = route.params;
     const {
         connection: {userInfo, currentTabManager},
     } = useConnection();
+    const [isOpenViewFile, setIsOpenViewFile] = useState(false);
+    const [listOpenFile, setListOpenFile] = useState([]);
 
     const {
         data: workDetailData = {},
@@ -330,18 +333,28 @@ export default function WorkDetail({route, navigation}: any) {
                                 width: 0.25,
                             },
                         ]}
+                        onCellPress={(item: any) => {
+                            if (item.listFileUrl) {
+                                setListOpenFile(item.listFileUrl);
+                                setIsOpenViewFile(true)
+                            }
+                        }}
                         data={workDetail.listLogs
                             .map((item: any) => {
                                 const listFile = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
                                     return file.file_name
                                 }).length : ''
 
+                                const listFileUrl = item.file_attachment ? (JSON.parse(item?.file_attachment)).map((file: any) => {
+                                    return file.file_path
+                                }) : null
 
                                 return {
                                     ...item,
                                     date: dayjs(item.reported_date).format('DD/MM/YYYY') || '',
                                     note: item.note,
                                     file: listFile,
+                                    listFileUrl: listFileUrl
                                 };
                             })
                             .sort((a: any, b: any) => {
@@ -353,6 +366,11 @@ export default function WorkDetail({route, navigation}: any) {
                     />
                 </View>
             </ScrollView>
+            <FileWebviewModal
+                visible={isOpenViewFile}
+                setVisible={setIsOpenViewFile}
+                listFileUrl={listOpenFile}
+            />
         </SafeAreaView>
     );
 }

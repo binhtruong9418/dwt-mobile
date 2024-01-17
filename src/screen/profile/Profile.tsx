@@ -66,12 +66,12 @@ const listMenu = [
         screen: 'SalaryInfo',
     },
     {
-        name: 'Trang bị & Đào tạo',
+        name: 'Trang bị',
         icon: <BoxIcon width={20} height={20} color={'#CA1F24'}/>,
         screen: 'EducationInfo',
     },
     {
-        name: 'Khen & Vi phạm',
+        name: 'Khen thưởng & Xử phạt',
         icon: <FontAwesome5Icon name={'star'} color={'#CA1F24'} size={20}/>,
         screen: 'RewardAndPunishInfo',
     },

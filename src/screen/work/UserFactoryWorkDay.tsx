@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {
   fs_10_500,
-  fs_12_400,
+  fs_12_400, fs_12_500,
   fs_15_700,
   text_black,
   text_center,
@@ -147,8 +147,29 @@ export default function UserFactoryWorkDay({ navigation }: any) {
                       </Text>
                     </View>
                     <Text style={[fs_12_400, text_black]}>
-                      • {item?.content}
+                      <Text style={[item?.type === 1 ? fs_12_400 : fs_12_500]}>Báo cáo: </Text>
+                      {item?.content}
                     </Text>
+                    {
+                        item?.mechanic_reports.length > 0 && (
+                            <View>
+                              <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
+                              {
+                                item?.mechanic_reports.map((report: any, index: number) => {
+                                  const name = report?.mechanic_rule_report?.accessory_name;
+                                  const mechanicUnit = report?.accessory_unit;
+                                  const amount = report?.amount;
+                                  const code = report?.mechanic_rule_report?.accessory_code;
+                                  const total = report?.total.toLocaleString();
+                                  const unit = report?.valid_unit;
+                                  return (
+                                      <Text key={report.id} style={[fs_12_400, text_black]}>   • {amount} {mechanicUnit} {name} ({code}) = {total} {unit}</Text>
+                                  )
+                                })
+                              }
+                            </View>
+                        )
+                    }
                   </View>
                 </TouchableOpacity>
               );

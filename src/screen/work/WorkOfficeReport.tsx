@@ -158,6 +158,7 @@ export default function WorkOfficeReport({ route, navigation }: any) {
                         placeholderTextColor={'#787878'}
                         placeholder={data.name}
                         editable={false}
+                        multiline={true}
                     />
                 </View>
 

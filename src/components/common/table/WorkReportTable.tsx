@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {
   fs_12_400,
   fs_12_700,
@@ -10,6 +10,7 @@ import PropTypes, {InferProps} from 'prop-types';
 export default function WorkReportTable({
   columns,
   data,
+    onCellPress,
 }: InferProps<typeof WorkReportTable.propTypes>) {
   return (
     <View style={styles.wrapper}>
@@ -41,8 +42,13 @@ export default function WorkReportTable({
             <View style={[styles.row]}>
               {columns.map((column: any, index: any) => {
                 return (
-                  <View
+                  <Pressable
                     key={index}
+                    onPress={() => {
+                        if (onCellPress) {
+                            onCellPress(item);
+                        }
+                    }}
                     style={[
                       {
                         flex: column.width,
@@ -54,7 +60,7 @@ export default function WorkReportTable({
                     <Text style={[fs_12_400, text_black, text_center]}>
                       {item[column.key]}
                     </Text>
-                  </View>
+                  </Pressable>
                 );
               })}
             </View>
@@ -86,4 +92,5 @@ WorkReportTable.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   canShowMore: PropTypes.bool,
+    onCellPress: PropTypes.func,
 };

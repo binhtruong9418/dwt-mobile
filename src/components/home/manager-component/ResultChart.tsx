@@ -22,9 +22,9 @@ const ProgressBar = ({
   );
 };
 
-export default function ResultChart({}) {
+export default function ResultChart({height = 60}) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {height: height}]}>
       <View style={styles.statistic}>
         <Text
           style={{
@@ -67,7 +67,7 @@ export default function ResultChart({}) {
           0
         </Text>
       </View>
-      <View style={styles.listLine}>
+      <View style={[styles.listLine, {height}]}>
         <View style={styles.line} />
         <View style={styles.line} />
         <View style={styles.line} />
@@ -75,9 +75,9 @@ export default function ResultChart({}) {
         <View style={styles.line} />
       </View>
       <View style={styles.gap4}>
-        <ProgressBar progress={0.3} fillColor={'#2563EB'} />
-        <ProgressBar progress={0.4} fillColor={'#38BDF8'} />
-        <ProgressBar progress={0.7} fillColor={'#DBEAFE'} />
+        <ProgressBar progress={0.3} fillColor={'#2563EB'} height={height} />
+        <ProgressBar progress={0.4} fillColor={'#38BDF8'} height={height}/>
+        <ProgressBar progress={0.7} fillColor={'#DBEAFE'} height={height}/>
       </View>
     </View>
   );
@@ -86,7 +86,6 @@ export default function ResultChart({}) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 60,
     gap: 15,
     position: 'relative',
   },
@@ -98,7 +97,6 @@ const styles = StyleSheet.create({
   listLine: {
     position: 'absolute',
     width: 65,
-    height: 60,
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'flex-end',

@@ -5,7 +5,6 @@ import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import MeetingInformation from "../../components/meeting/MeetingInformation.tsx";
-import ListUserTable from "../../components/meeting/ListUserTable.tsx";
 import InformationBox from "../../components/meeting/InformationBox.tsx";
 import {fs_15_700, text_red} from "../../assets/style.ts";
 import CircleInfoIcon from "../../assets/img/circle-info.svg";
@@ -14,12 +13,16 @@ import {useQuery} from "@tanstack/react-query";
 import {dwtApi} from "../../api/service/dwtApi.ts";
 import dayjs from "dayjs";
 import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
+import FileWebviewModal from "../../components/common/modal/FileWebviewModal.tsx";
+import ListParticipantAndAbsence from "../../components/meeting/ListParticipantAndAbsence.tsx";
 
 export default function MeetingDetail({route, navigation}: any) {
     const {meetingid} = route.params;
     const {
         connection: {currentTabManager},
     } = useConnection();
+    const [isOpenViewFile, setIsOpenViewFile] = useState(false);
+    const [listOpenFile, setListOpenFile] = useState<any[]>([]);
 
 
     const {
@@ -32,15 +35,28 @@ export default function MeetingDetail({route, navigation}: any) {
         enabled: !!meetingid
     });
 
+    const listFile = meetingDetailData?.files ? meetingDetailData?.files?.split(',').map((item: any) => {
+        return {
+            name: item.split('/').pop(),
+            uri: item,
+        }
+    }) : [];
 
-    // const {
-    //     data: listUserDepartment = []
-    // } = useQuery(['listUserDepartment', meetingDetailData?.departement_id], async ({queryKey}) => {
-    //     const res = await dwtApi.getListUserDepartment(queryKey[1]);
-    //     return res?.data?.data
-    // }, {
-    //     enabled: !!meetingDetailData
-    // })
+
+    const {
+        data: listUserDepartment = []
+    } = useQuery(['listUserDepartment', meetingDetailData?.departement_id], async ({queryKey}) => {
+        const res = await dwtApi.getListUserDepartment(queryKey[1]);
+        return res?.data?.data
+    }, {
+        enabled: !!meetingDetailData
+    })
+
+    const listUserAbsence = listUserDepartment?.filter((item: any) => {
+        return !meetingDetailData?.participants?.some((participant: any) => participant?.id === item?.id) &&
+            !(item?.id === meetingDetailData?.leader_id ||
+            item?.id === meetingDetailData?.secretary_id)
+    }) || [];
 
 
     const startTime = meetingDetailData?.start_time && dayjs(meetingDetailData?.start_time?.split(' ')[0]).format('DD/MM/YYYY')
@@ -92,19 +108,12 @@ export default function MeetingDetail({route, navigation}: any) {
                         }
                     ]}
                 />
-                <ListUserTable
-                    data={meetingDetailData?.participants ?
+                <ListParticipantAndAbsence
+                    listParticipant={meetingDetailData?.participants ?
                         meetingDetailData?.participants?.map((item: any) => item?.name) : []}
+                    listAbsence={listUserAbsence?.map((item: any) => item?.name)}
                     headerTitle={'THÀNH VIÊN THAM GIA'}
                 />
-
-                {/*<ListUserTable*/}
-                {/*    data={listUserDepartment?.filter((item: any) => {*/}
-                {/*        if(!meetingDetailData?.participants) return true;*/}
-                {/*        return !meetingDetailData?.participants?.map((item: any) => item?.id)?.includes(item?.id);*/}
-                {/*    })}*/}
-                {/*    headerTitle={'THÀNH VIÊN VẮNG'}*/}
-                {/*/>*/}
                 <InformationBox
                     headerTitle={'NỘI DUNG TRAO ĐỔI'}
                     hasDot={true}
@@ -119,9 +128,14 @@ export default function MeetingDetail({route, navigation}: any) {
                 <InformationBox
                     headerTitle={'FILE ĐÍNH KÈM'}
                     hasDot={true}
-                    listText={[
-                        'File 1',
-                    ]}
+                    listText={listFile.map((item: any) => item?.name)}
+                    onPressItem={(item: any) => {
+                        const currentFile = listFile.find((file: any) => file?.name === item);
+                        if(currentFile) {
+                            setIsOpenViewFile(true);
+                            setListOpenFile([currentFile?.uri]);
+                        }
+                    }}
                     textStyle={{
                         fontSize: 15,
                         color: '#0070FF',
@@ -169,6 +183,11 @@ export default function MeetingDetail({route, navigation}: any) {
                     />
                 </View>
             </ScrollView>
+            <FileWebviewModal
+                visible={isOpenViewFile}
+                setVisible={setIsOpenViewFile}
+                listFileUrl={listOpenFile}
+            />
         </SafeAreaView>
     );
 }

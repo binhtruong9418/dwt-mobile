@@ -43,6 +43,7 @@
     "react-native-vector-icons": "^10.0.0",
     "react-native-version-check": "^3.4.7",
     "react-native-vision-camera": "^3.7.0",
+    "react-native-webview": "^13.6.4",
     "react-redux": "^8.1.2",
     "redux": "^4.2.1"
   },

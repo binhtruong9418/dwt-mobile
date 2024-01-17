@@ -344,24 +344,28 @@ export const dwtApi = {
         const url = 'quick-reports';
         return await axiosClient.post(url, data);
     },
-    getAllPropose: async (params = {}): Promise<any> => {
-        const url = 'quick-reports';
+    getListPersonalPropose: async (params = {}): Promise<any> => {
+        const url = '/personal-report';
+        return await axiosClient.get(url, {params});
+    },
+    getListDepartmentPropose: async (params = {}): Promise<any> => {
+        const url = '/reports';
         return await axiosClient.get(url, {params});
     },
 
     //API nghi phep
-    getAllAbsencePersonal: async (params = {}): Promise<any> => {
-        const url = 'mobile/leave-request/self';
+    getAllAbsencePersonal: async (userId: string, params = {}): Promise<any> => {
+        const url = `user-leave-web/${userId}`;
         return await axiosClient.get(url, {params});
     },
 
     createAbsence: async (data: any): Promise<any> => {
-        const url = 'mobile/leave-request/store';
+        const url = 'leave-web';
         return await axiosClient.post(url, data);
     },
 
     getAllAbsenceManager: async (params = {}): Promise<any> => {
-        const url = 'mobile/leave-request/manager';
+        const url = 'leave-web';
         return await axiosClient.get(url, {params});
     },
     //API KHO VIỆC

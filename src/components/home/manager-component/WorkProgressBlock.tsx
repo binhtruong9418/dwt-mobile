@@ -20,12 +20,14 @@ import PropTypes, { InferProps } from 'prop-types';
 import { padStart } from '../../../utils';
 import ResultChart from './ResultChart.tsx';
 import { useNavigation } from '@react-navigation/native';
+import {useState} from "react";
 
 export default function WorkProgressBlock({
   attendanceData,
   totalMeeting,
 }: InferProps<typeof WorkProgressBlock.propTypes>) {
   const navigation = useNavigation();
+  const [chartHeight, setChartHeight] = useState<number>(60);
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
@@ -76,8 +78,10 @@ export default function WorkProgressBlock({
         <Text style={[fs_12_500, text_red, text_center, styles.mb4]}>
           Lượng việc (điểm)
         </Text>
-        <View style={[styles.row_chart]}>
-          <ResultChart />
+        <View style={[styles.row_chart]} onLayout={({nativeEvent}) => {
+            setChartHeight(nativeEvent.layout.height);
+        }}>
+          <ResultChart height={chartHeight} />
           <View
             style={{
               justifyContent: 'space-between',

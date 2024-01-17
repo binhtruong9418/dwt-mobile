@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/header/Header.tsx';
 import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
@@ -23,6 +23,7 @@ import {useRefreshOnFocus} from "../../hook/useRefeshOnFocus.ts";
 import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
 import ListDepartmentModal from "../../components/home/manager-component/ListDepartmentModal.tsx";
 
+const {width: windowWidth} = Dimensions.get('window');
 
 const columns = [
     {
@@ -170,13 +171,13 @@ export default function RewardAndPunishInfo({navigation}: any) {
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={[
                         styles.filter_wrapper,
-                        currentTabManager === 1 ? {gap: 10} : {width: '100%'}
+                        currentTabManager === 1 ? {gap: (windowWidth - 30) * 2 / 100} : {width: '100%'}
                     ]}
                     horizontal={true}
                 >
                     <TouchableOpacity
                         style={[styles.dropdown, {
-                            width: currentTabManager === 1 ? 130 : '38%',
+                            width: (windowWidth - 30) * 38 / 100,
                         }]}
                         onPress={() => {
                             setIsOpenStatusSelect(true);
@@ -187,7 +188,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
 
                     <TouchableOpacity
                         style={[styles.dropdown, {
-                            width: currentTabManager === 1 ? 100 : '25%',
+                            width: (windowWidth - 30) * 25 / 100,
                         }]}
                         onPress={() => {
                             setIsOpenTypeSelect(true);
@@ -198,7 +199,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
 
                     <TouchableOpacity
                         style={[styles.dropdown, {
-                            width: currentTabManager === 1 ? 120 : '33%',
+                            width: (windowWidth - 30) * 33 / 100,
                         }]}
                         onPress={() => {
                             setIsOpenTimeSelect(true);

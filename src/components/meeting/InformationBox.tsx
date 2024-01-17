@@ -1,21 +1,27 @@
-import {StyleSheet, Text, View} from "react-native";
+import {Pressable, StyleSheet, Text, View} from "react-native";
 import {fs_15_700, text_red} from "../../assets/style.ts";
 
-export default function InformationBox({listText, headerTitle, hasDot, textStyle }: any) {
+export default function InformationBox({listText, headerTitle, hasDot, textStyle, onPressItem}: any) {
     return (
         <View style={styles.wrapper}>
             <Text style={[fs_15_700, text_red]}>{headerTitle}</Text>
             <View style={styles.content}>
                 {listText && listText.length > 0 && listText.map((item: any, index: number) => {
                     return (
-                        <Text style={textStyle} key={index}>
-                            {
-                                hasDot ? '• '  : null
+                        <Pressable key={index} onPress={() => {
+                            if(onPressItem) {
+                                onPressItem(item)
                             }
-                            {
-                                item
-                            }
-                        </Text>
+                        }}>
+                            <Text style={textStyle}>
+                                {
+                                    hasDot ? '• ' : null
+                                }
+                                {
+                                    item
+                                }
+                            </Text>
+                        </Pressable>
                     );
                 })}
             </View>

@@ -15,6 +15,7 @@ import {dwtApi} from '../../api/service/dwtApi.ts';
 import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
 import {useQuery} from "@tanstack/react-query";
+import FileWebviewModal from "../../components/common/modal/FileWebviewModal.tsx";
 
 export default function WorkOfficeReportEdit({route, navigation}: any) {
     const {data} = route.params;
@@ -24,6 +25,8 @@ export default function WorkOfficeReportEdit({route, navigation}: any) {
     const [quantity, setQuantity] = useState('');
     const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
     const [files, setFiles] = useState<any[]>([]);
+    const [isOpenViewFile, setIsOpenViewFile] = useState(false);
+    const [listOpenFile, setListOpenFile] = useState<any[]>([]);
     const [
         isOpenConfirmUploadWorkReportModal,
         setIsOpenConfirmUploadWorkReportModal,
@@ -164,6 +167,7 @@ export default function WorkOfficeReportEdit({route, navigation}: any) {
                         placeholderTextColor={'#787878'}
                         placeholder={data.name}
                         editable={false}
+                        multiline={true}
                     />
                 </View>
 
@@ -249,10 +253,13 @@ export default function WorkOfficeReportEdit({route, navigation}: any) {
                     <View style={styles.listFile}>
                         {files.map((item, index) => (
                             <View key={index} style={styles.fileBox}>
-                                <View style={styles.row_gap3}>
+                                <TouchableOpacity style={styles.row_gap3} onPress={() => {
+                                    setIsOpenViewFile(true);
+                                    setListOpenFile([item.uri]);
+                                }}>
                                     <ImageIcon width={20} height={20}/>
                                     <Text style={[fs_15_400, text_black]}>{item.name}</Text>
-                                </View>
+                                </TouchableOpacity>
                                 {
                                     userInfo?.id === data?.user?.id && (
                                         <TouchableOpacity
@@ -293,6 +300,11 @@ export default function WorkOfficeReportEdit({route, navigation}: any) {
                 description={'Báo cáo thành công'}
             />
             <LoadingActivity isLoading={isLoading}/>
+            <FileWebviewModal
+                visible={isOpenViewFile}
+                setVisible={setIsOpenViewFile}
+                listFileUrl={listOpenFile}
+            />
         </SafeAreaView>
     );
 }

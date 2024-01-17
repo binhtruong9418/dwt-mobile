@@ -14,6 +14,7 @@ import ToastSuccessModal from '../../components/common/modal/ToastSuccessModal.t
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import ErrorScreen from '../../components/common/no-data/ErrorScreen.tsx';
 import LoadingActivity from '../../components/common/loading/LoadingActivity.tsx';
+import FileWebviewModal from "../../components/common/modal/FileWebviewModal.tsx";
 
 export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
     const {data} = route.params;
@@ -23,6 +24,8 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
     const [quantity, setQuantity] = useState('');
     const [isOpenUploadFileModal, setIsOpenUploadFileModal] = useState(false);
     const [files, setFiles] = useState<any[]>([]);
+    const [isOpenViewFile, setIsOpenViewFile] = useState(false);
+    const [listOpenFile, setListOpenFile] = useState<any[]>([]);
     const [
         isOpenConfirmUploadWorkReportModal,
         setIsOpenConfirmUploadWorkReportModal,
@@ -62,6 +65,8 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
         setNote('');
         setFiles([]);
         setIsCompleted(false);
+        setListOpenFile([]);
+        setIsOpenViewFile(false);
         setIsOpenConfirmUploadWorkReportModal(false);
         navigation.goBack();
     };
@@ -71,6 +76,8 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
         setIsCompleted(false);
         setFiles([]);
         setNote('');
+        setListOpenFile([]);
+        setIsOpenViewFile(false);
         navigation.goBack();
     };
 
@@ -155,7 +162,8 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
                         style={[styles.input, text_black, fs_15_400, styles.disable]}
                         placeholderTextColor={'#787878'}
                         placeholder={data.name}
-                        editable={false}
+                        readOnly={true}
+                        multiline={true}
                     />
                 </View>
 
@@ -239,7 +247,10 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
                 <View style={styles.inputBox}>
                     <View style={styles.listFile}>
                         {files.map((item, index) => (
-                            <View key={index} style={styles.fileBox}>
+                            <TouchableOpacity key={index} style={styles.fileBox} onPress={() => {
+                                setIsOpenViewFile(true);
+                                setListOpenFile([item.uri]);
+                            }}>
                                 <View style={styles.row_gap3}>
                                     <ImageIcon width={20} height={20}/>
                                     <Text style={[fs_15_400, text_black]}>{item.name}</Text>
@@ -254,7 +265,7 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
                                         </TouchableOpacity>
                                     )
                                 }
-                            </View>
+                            </TouchableOpacity>
                         ))}
                         {
                             userInfo?.id === data?.user?.id &&
@@ -283,6 +294,11 @@ export default function WorkOfficeAriseReportEdit({route, navigation}: any) {
                 description={'Báo cáo thành công'}
             />
             <LoadingActivity isLoading={isLoading}/>
+            <FileWebviewModal
+                visible={isOpenViewFile}
+                setVisible={setIsOpenViewFile}
+                listFileUrl={listOpenFile}
+            />
         </SafeAreaView>
     );
 }

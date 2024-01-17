@@ -4,7 +4,16 @@ import Header from '../../components/header/Header.tsx';
 import {useMemo, useState} from 'react';
 import AdminTabBlock from '../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../redux/connection';
-import {fs_12_400, fs_12_500, fs_15_700, text_black, text_center, text_gray} from "../../assets/style.ts";
+import {
+    fs_12_400,
+    fs_12_500,
+    fs_15_700,
+    mb10,
+    row_between,
+    text_black,
+    text_center,
+    text_gray
+} from "../../assets/style.ts";
 import DropdownIcon from "../../assets/img/dropdown-icon.svg";
 import dayjs from "dayjs";
 import MonthPickerModal from "../../components/common/modal/MonthPickerModal.tsx";
@@ -16,6 +25,7 @@ import {useQuery} from "@tanstack/react-query";
 import {dwtApi} from "../../api/service/dwtApi.ts";
 import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
 import EmptyDailyReportIcon from "../../assets/img/empty-daily-report.svg";
+import ListDepartmentModal from "../../components/home/manager-component/ListDepartmentModal.tsx";
 
 export default function MeetingInfo({navigation}: any) {
     const {
@@ -33,23 +43,46 @@ export default function MeetingInfo({navigation}: any) {
     });
     const [isOpenSelectMonth, setIsOpenSelectMonth] = useState(false);
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
+    const [isOpenDepartmentSelect, setIsOpenDepartmentSelect] = useState(false);
+    const [departmentValue, setDepartmentValue] = useState<any>({
+        label: 'Phòng ban',
+        value: 0,
+    });
+
+
+    const {
+        data: listDepartment = []
+    } = useQuery(['listDepartment'], async () => {
+        if (userInfo?.role === 'admin') {
+            const res = await dwtApi.getListDepartment();
+            return res?.data;
+        } else if (userInfo?.role === 'manager') {
+            const res = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
+            return await Promise.all(res?.data?.map(async (item: string) => {
+                const res = await dwtApi.getDepartmentById(item);
+                return res?.data;
+            }));
+        }
+    }, {
+        enabled: !!userInfo && ['manager', 'admin'].includes(userInfo?.role),
+    });
 
     const {
         data: listMeetingData = [],
         isLoading: isLoadingListMeeting,
-    } = useQuery(['listMeeting', currentDate.month, currentDate.year, currentTabManager], async ({queryKey}) => {
-
-        if(queryKey[3] === 1) {
-                const res = await dwtApi.getListMeeting({
-                    date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
+    } = useQuery(['listMeeting', currentDate.month, currentDate.year, currentTabManager, departmentValue], async ({queryKey}) => {
+        if (queryKey[3] === 1) {
+            const res = await dwtApi.getListMeeting({
+                date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
+                departement: queryKey[4]?.value === 0 ? undefined : queryKey[4]?.value,
+            });
+            if (userInfo?.role === 'manager') {
+                const listChildrenDepartment = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
+                return res?.data?.filter((item: any) => {
+                    return listChildrenDepartment?.data?.includes(item?.departement_id);
                 });
-                if(userInfo?.role === 'manager') {
-                    const listChildrenDepartment = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
-                    return res?.data?.filter((item: any) => {
-                        return listChildrenDepartment?.data?.includes(item?.departement_id);
-                    });
-                }
-                return res?.data;
+            }
+            return res?.data;
         } else {
             const res = await dwtApi.getListMeetingPersonal({
                 date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
@@ -71,20 +104,36 @@ export default function MeetingInfo({navigation}: any) {
 
     return (
         <SafeAreaView style={styles.wrapper}>
-            <AdminTabBlock />
+            <AdminTabBlock/>
             <Header title={'DANH SÁCH CUỘC HỌP'} handleGoBack={() => navigation.goBack()}/>
             <View style={styles.content}>
                 <View style={styles.top}>
-                    <TouchableOpacity
-                        style={styles.monthBox}
-                        onPress={() => {
-                            setIsOpenSelectMonth(true);
-                        }}>
-                        <Text style={[fs_15_700, text_black]}>
-                            Tháng {currentDate.month + 1}
-                        </Text>
-                        <DropdownIcon width={20} height={20}/>
-                    </TouchableOpacity>
+                    <View style={[currentTabManager === 1 ? row_between : {justifyContent: 'flex-end'}, mb10]}>
+                        {
+                            currentTabManager === 1 && (
+                                <TouchableOpacity
+                                    style={styles.monthBox}
+                                    onPress={() => {
+                                        setIsOpenDepartmentSelect(true);
+                                    }}>
+                                    <Text style={[fs_15_700, text_black]}>
+                                        {departmentValue.label}
+                                    </Text>
+                                    <DropdownIcon width={20} height={20}/>
+                                </TouchableOpacity>
+                            )
+                        }
+                        <TouchableOpacity
+                            style={styles.monthBox}
+                            onPress={() => {
+                                setIsOpenSelectMonth(true);
+                            }}>
+                            <Text style={[fs_15_700, text_black]}>
+                                Tháng {currentDate.month + 1}
+                            </Text>
+                            <DropdownIcon width={20} height={20}/>
+                        </TouchableOpacity>
+                    </View>
                     <DailyMeetingCalendar
                         currentDate={currentDate}
                         setCurrentDate={setCurrentDate}
@@ -93,10 +142,10 @@ export default function MeetingInfo({navigation}: any) {
                 </View>
 
                 {
-                    userInfo?.role === 'admin' || userInfo?.role === 'manager' && (
+                    currentTabManager === 1 && (
                         <View style={styles.totalReportBox}>
                             <Text style={[fs_12_500, text_gray]}>
-                                {listMeetingData.length} cuộc họp
+                                {listMeetingToday.length} cuộc họp
                             </Text>
                         </View>
                     )
@@ -151,6 +200,19 @@ export default function MeetingInfo({navigation}: any) {
                     notHasReceiveWork={true}
                 />
             </TouchableOpacity>
+
+            <ListDepartmentModal
+                visible={isOpenDepartmentSelect}
+                setVisible={setIsOpenDepartmentSelect}
+                currentDepartment={departmentValue}
+                setCurrentDepartment={setDepartmentValue}
+                listDepartment={listDepartment.map((item: any) => {
+                    return {
+                        label: item.name,
+                        value: item.id,
+                    };
+                })}
+            />
         </SafeAreaView>
     );
 }
@@ -169,8 +231,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 5,
         alignSelf: 'flex-end',
-        padding: 8,
-        marginBottom: 5,
     },
     top: {
         paddingHorizontal: 15,

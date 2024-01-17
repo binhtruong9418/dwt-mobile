@@ -48,17 +48,17 @@ export const LIST_BUSINESS_DEPARTMENT = [
 
 export const WORK_OFFICE_STATUS_COLOR = {
     '1': '#FFF',
-    '2': '#FFB822',
-    '3': '#89B6FA',
-    '4': '#F5325C',
+    '2': '#FEF08A',
+    '3': '#BFDBFE',
+    '4': '#F6C9C4',
 };
 
 export const WORK_STATUS_COLOR = {
     '1': '#FFF',
-    '2': '#FFB822',
-    '3': '#89B6FA',
-    '4': '#03D87F',
-    '5': '#F5325C',
+    '2': '#FEF08A',
+    '3': '#BFDBFE',
+    '4': '#BBF7D0',
+    '5': '#F6C9C4',
 };
 
 export const WORK_STORAGE_STATUS = [
@@ -251,12 +251,12 @@ export const LIST_WORK_STATUS_FILTER = [
 ];
 
 export const LIST_PROPOSE_STATUS_COLOR = {
-    0: '#FFF',
-    1: '#F9F2CE',
-    2: '#D9D9D9',
-    3: '#89B6FA',
-    4: '#D4F3D5',
-    5: '#D9D9D9',
+    'all': '#FFF',
+    'Converted': '#FFF',
+    'Sent': '#F9F2CE',
+    'CantSolve': '#D9D9D9',
+    'FoundSolution': '#89B6FA',
+    'Solved': '#D4F3D5',
 };
 
 export const LIST_ABSENCE_TYPE = [
@@ -288,27 +288,27 @@ export const LIST_ABSENCE_TYPE_COLOR = [
 export const LIST_PROPOSE_STATUS = [
     {
         label: 'Tất cả',
-        value: 0,
+        value: 'all',
     },
     {
         label: 'Đã tiếp nhận',
-        value: 1,
+        value: 'Sent',
     },
     {
         label: 'Đã giao',
-        value: 2,
+        value: 'Converted',
     },
     {
         label: 'Đã có hướng giải quyết',
-        value: 3,
+        value: 'FoundSolution',
     },
     {
         label: 'Đã giải quyết',
-        value: 4,
+        value: 'Solved',
     },
     {
         label: 'Không thể giải quyết',
-        value: 5,
+        value: 'CantSolve',
     },
 ];
 

@@ -2,7 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {
     fs_10_400,
     fs_10_500,
-    fs_12_400,
+    fs_12_400, fs_12_500, mt10,
     row_between,
     text_black,
     text_center, text_gray,
@@ -32,7 +32,30 @@ export default function FactoryReportDetail({data, navigation}: any) {
                 </View>
                 <Text style={[fs_10_500, text_gray]}>{dayjs(data?.logDate).format('DD/MM/YYYY')}</Text>
             </View>
-            <Text style={[fs_12_400, text_black]}>{data?.content}</Text>
+            <Text style={[fs_12_400, text_black]}>
+                <Text style={[data?.type === 1 ? fs_12_400 : fs_12_500]}>Báo cáo: </Text>
+                {data?.content}
+            </Text>
+            {
+                data?.mechanic_reports.length > 0 && (
+                    <View>
+                        <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
+                        {
+                            data?.mechanic_reports.map((item: any, index: number) => {
+                                const name = item?.mechanic_rule_report?.accessory_name;
+                                const mechanicUnit = item?.accessory_unit;
+                                const amount = item?.amount;
+                                const code = item?.mechanic_rule_report?.accessory_code;
+                                const total = item?.total.toLocaleString();
+                                const unit = item?.valid_unit;
+                                return (
+                                    <Text key={item.id} style={[fs_12_400, text_black]}>   • {amount} {mechanicUnit} {name} ({code}) = {total} {unit}</Text>
+                                )
+                            })
+                        }
+                    </View>
+                )
+            }
         </TouchableOpacity>
     )
 }

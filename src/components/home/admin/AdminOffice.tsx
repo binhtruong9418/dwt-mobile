@@ -94,9 +94,7 @@ export default function AdminOffice({
   const { data: totalPropose = 0 } = useQuery(
     ['totalProposeHome'],
     async () => {
-      const res = await dwtApi.getAllPropose({
-        date: dayjs().format('YYYY-MM-DD'),
-      });
+      const res = await dwtApi.getListDepartmentPropose();
       return res?.data?.total;
     }
   );
