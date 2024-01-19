@@ -12,7 +12,7 @@ export const LIST_FACTORY_DEPARTMENT = [
     56,
     61,
     62,
-    63,
+    63
 ]
 
 export const LIST_OFFICE_DEPARTMENT = [
@@ -43,7 +43,47 @@ export const LIST_BUSINESS_DEPARTMENT = [
     51,
     52,
     53,
-    75
+    75,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    101,
+    117,
+    100,
+    102,
+    103,
+    118,
+    104,
+    105,
+    106,
+    116,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115
 ]
 
 export const WORK_OFFICE_STATUS_COLOR = {

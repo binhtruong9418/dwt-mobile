@@ -35,7 +35,7 @@ const { width: windowWidth } = Dimensions.get('window');
 
 export default function SalaryInfo({ route,  navigation }: any) {
   const {
-    connection: { userInfo },
+    connection: { userInfo, listDepartmentGroup },
   } = useConnection();
   const [isOpenYearSelect, setIsOpenYearSelect] = useState(false);
   const [currentYear, setCurrentYear] = useState(dayjs().year());
@@ -64,7 +64,7 @@ export default function SalaryInfo({ route,  navigation }: any) {
     {
       enabled:
         !!userInfo &&
-        LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id),
+          listDepartmentGroup.business.includes(userInfo?.departement_id),
     }
   );
 
@@ -78,7 +78,7 @@ export default function SalaryInfo({ route,  navigation }: any) {
 
   useRefreshOnFocus(refetchListSalary);
 
-  if (!LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)) {
+  if (!listDepartmentGroup.business.includes(userInfo?.departement_id)) {
     return <ComingSoonScreenComponent navigation={navigation} />;
   }
 

@@ -68,6 +68,10 @@ export const dwtApi = {
         });
     },
 
+    getListDepartmentGroup: async (): Promise<any> => {
+        const url = `/department-group`;
+        return await axiosClient.get(url);
+    },
     //API lấy danh sách doanh nghiệp
     getListDepartment: async (): Promise<any> => {
         const url = 'departments/all';

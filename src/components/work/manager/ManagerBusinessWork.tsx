@@ -64,7 +64,7 @@ const columns = [
 ];
 export default function ManagerBusinessWork({navigation}: any) {
     const {
-        connection: {userInfo, currentTabManager},
+        connection: {userInfo, currentTabManager, listDepartmentGroup},
     } = useConnection();
     const [statusValue, setStatusValue] = useState(LIST_WORK_STATUS_FILTER[0]);
     const [currentMonth, setCurrentMonth] = useState({
@@ -89,12 +89,12 @@ export default function ManagerBusinessWork({navigation}: any) {
             if(userInfo?.role === 'manager'){
                 const res = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
                 return res.data.filter((item: any) =>
-                    LIST_BUSINESS_DEPARTMENT.includes(item.id)
+                    listDepartmentGroup.business.includes(item.id)
                 );
             } else {
                 const res = await dwtApi.getListDepartment();
                 return res.data.filter((item: any) =>
-                    LIST_BUSINESS_DEPARTMENT.includes(item.id)
+                    listDepartmentGroup.business.includes(item.id)
                 );
             }
         },

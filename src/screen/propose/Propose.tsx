@@ -72,26 +72,23 @@ export default function Propose({navigation}: any) {
     } = useInfiniteQuery(
         ['listPropose', statusValue, currentTabManager, fromDateValue, toDateValue, departmentValue],
         async ({pageParam = 1, queryKey}: any) => {
+            const params = {
+                status: queryKey[1].value === 'all' ? undefined : queryKey[1].value,
+                start_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
+                end_date: queryKey[4] ? dayjs(queryKey[4]).format('YYYY-MM-DD') : undefined,
+                limit: 15,
+                page: pageParam,
+            }
             if (queryKey[2] === 0) {
-                const response = await dwtApi.getListPersonalPropose({
-                    status: queryKey[1].value === 'all' ? undefined : queryKey[1].value,
-                    start_date: queryKey[3] ? undefined : dayjs(queryKey[3]).format('YYYY-MM-DD'),
-                    end_date: queryKey[4] ? undefined : dayjs(queryKey[4]).format('YYYY-MM-DD'),
-                    limit: 15,
-                    page: pageParam,
-                });
+                const response = await dwtApi.getListPersonalPropose(params);
                 return {
                     data: response.data.data,
                     nextPage: pageParam + 1
                 };
             } else {
                 const response = await dwtApi.getListDepartmentPropose({
-                    status: queryKey[1].value === 'all' ? undefined : queryKey[1].value,
-                    start_date: queryKey[3] ? undefined : dayjs(queryKey[3]).format('YYYY-MM-DD'),
-                    end_date: queryKey[4] ? undefined : dayjs(queryKey[4]).format('YYYY-MM-DD'),
-                    limit: 15,
+                    ...params,
                     department_id: queryKey[5].value === 0 ? undefined : queryKey[5].value,
-                    page: pageParam,
                 });
                 return {
                     data: response.data.data,
@@ -110,7 +107,6 @@ export default function Propose({navigation}: any) {
         },
     );
     const listPropose = pages.flatMap(page => page.data);
-
 
     const {
         data: listDepartment = []

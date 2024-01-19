@@ -62,7 +62,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
         label: 'Tất cả trạng thái',
         value: 0,
     });
-    const [timeValue, setTimeValue] = useState(dayjs());
+    const [timeValue, setTimeValue] = useState(null);
     const [isOpenTypeSelect, setIsOpenTypeSelect] = useState(false);
     const [typeValue, setTypeValue] = useState({
         label: 'Loại',
@@ -103,7 +103,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
         async ({pageParam = 1, queryKey}: any) => {
             const [_, status, type, time] = queryKey;
             const res = await dwtApi.getListRewardPunish({
-                create_at: dayjs(time).format('DD/MM/YYYY'),
+                create_at: time ? dayjs(time).format('DD/MM/YYYY') : undefined,
                 status: status?.value === 0 ? undefined : status?.value,
                 type: type?.value === 0 ? undefined : type?.value,
                 page: pageParam,
@@ -205,7 +205,7 @@ export default function RewardAndPunishInfo({navigation}: any) {
                             setIsOpenTimeSelect(true);
                         }}>
                         <Text style={[text_black, fs_14_400]}>
-                            {dayjs(timeValue).format('DD/MM/YYYY')}
+                            {timeValue ? dayjs(timeValue).format('DD/MM/YYYY') : "Thời gian"}
                         </Text>
                         <DropdownIcon width={20} height={20}/>
                     </TouchableOpacity>

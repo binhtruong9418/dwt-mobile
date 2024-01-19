@@ -97,7 +97,7 @@ export default function ManagerBusiness(
         ['totalMeetingHome'],
         async () => {
             const res = await dwtApi.getListMeeting({
-                date: dayjs().format('MM/YYYY'),
+                date: dayjs().format('DD/MM/YYYY'),
                 departement: userInfo?.departement_id,
             });
             return res?.data?.length;

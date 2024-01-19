@@ -14,8 +14,6 @@ export default function DailyCalendar(
         listProjectLogs,
     }: InferProps<typeof DailyCalendar.propTypes>) {
 
-    const {connection: {userInfo}} = useConnection();
-
     const haveLog = (item: any) => {
         if (listUserReports) {
             return !!listUserReports.find(
@@ -49,6 +47,7 @@ export default function DailyCalendar(
                 contentContainerStyle={{
                     paddingBottom: 10,
                 }}
+
                 style={{
                     borderBottomColor: '#D0D0D0',
                     borderBottomWidth: 1,

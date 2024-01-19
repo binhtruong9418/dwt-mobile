@@ -34,6 +34,7 @@ axiosClient.interceptors.response.use(
     // Handle errors
     const errorMessage = 'Something went wrong!';
 
+    console.log(error)
     if (error.response.data) {
       throw error.response.data;
     }

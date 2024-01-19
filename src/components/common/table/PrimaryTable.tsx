@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
+        borderWidth: 0.5,
+        borderColor: '#D9D9D9',
     },
     cell: {
         paddingVertical: 8,

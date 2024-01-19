@@ -24,7 +24,6 @@ import { useConnection } from '../../../redux/connection';
 import ReportAndProposeBlock from "../manager-component/ReportAndProposeBlock.tsx";
 import { getMonthFormat } from '../../../utils';
 import UserFilterModal from "../../common/modal/UserFilterModal.tsx";
-import { LIST_OFFICE_DEPARTMENT } from '../../../assets/constant.ts';
 import WorkOfficeManagerTable from "../manager-component/WorkOfficeManagerTable.tsx";
 
 export default function AdminOffice({
@@ -33,7 +32,7 @@ export default function AdminOffice({
   navigation,
 }: any) {
   const {
-    connection: { userInfo },
+    connection: { userInfo, listDepartmentGroup },
   } = useConnection();
   const [isOpenDepartmentModal, setIsOpenDepartmentModal] =
     useState<boolean>(false);
@@ -60,7 +59,7 @@ export default function AdminOffice({
     async () => {
       const res = await dwtApi.getListDepartment();
       return res.data.filter((item: any) =>
-        LIST_OFFICE_DEPARTMENT.includes(item.id)
+          listDepartmentGroup.office.includes(item.id)
       );
     }
   );
@@ -79,16 +78,16 @@ export default function AdminOffice({
   );
 
   const { data: totalMeeting = 0 } = useQuery(
-    ['totalMeetingHome'],
-    async () => {
-      const res = await dwtApi.getListMeeting({
-        date: dayjs().format('MM/YYYY'),
-      });
-      return res?.data?.length;
-    },
-    {
-      enabled: !!userInfo,
-    }
+      ['totalMeetingHome'],
+      async () => {
+        const res = await dwtApi.getListMeeting({
+          date: dayjs().format('DD/MM/YYYY'),
+        });
+        return res?.data?.totalMeetingsMonth;
+      },
+      {
+        enabled: !!userInfo,
+      }
   );
 
   const { data: totalPropose = 0 } = useQuery(

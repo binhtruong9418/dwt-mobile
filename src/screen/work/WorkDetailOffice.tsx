@@ -47,6 +47,7 @@ export default function WorkDetailOffice({route, navigation}: any) {
             enabled: !!userInfo && !!data.id && !!userInfo.id,
         }
     );
+    console.log(data.id)
 
     const workDetail = useMemo(() => {
         if (data.isWorkArise) {
@@ -68,7 +69,7 @@ export default function WorkDetailOffice({route, navigation}: any) {
                     : WORK_STATUS_OFFICE[1],
                 totalReport: workDetailData?.count_report,
                 totalCompletedValue: `${workDetailData?.keysPassed} / ${workDetailData?.criteria_required}`,
-                totalWorker: workDetailData?.users ? workDetailData?.users.length : 0,
+                totalWorker: 1,
                 totalTmpKpi: workDetailData?.kpiValue,
                 managerComment: workDetailData?.managerComment,
                 managerKpi: workDetailData?.managerManDay,

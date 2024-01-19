@@ -91,7 +91,7 @@ export default function Profile({navigation}: any) {
     const {
         onSetUserInfo,
         onSetCurrentTabManager,
-        connection: {userInfo},
+        connection: {userInfo, listDepartmentGroup},
     } = useConnection();
     const [isOpenUploadAvatar, setIsOpenUploadAvatar] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -140,7 +140,7 @@ export default function Profile({navigation}: any) {
         isLoading: isLoadingSalary,
         refetch: refetchSalary,
     } = useQuery(['listSalary', userInfo?.departement_id], async () => {
-        if(LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id)) {
+        if(listDepartmentGroup.business.includes(userInfo?.departement_id)) {
             const res = await dwtApi.getSalaryHistory({
                 year_f: dayjs().format('YYYY'),
             });
@@ -157,7 +157,7 @@ export default function Profile({navigation}: any) {
         }
         return 0;
     }, {
-        enabled: !!userInfo && LIST_BUSINESS_DEPARTMENT.includes(userInfo?.departement_id),
+        enabled: !!userInfo && listDepartmentGroup.business.includes(userInfo?.departement_id),
     });
 
     const handleUploadAvatar = async (images: any) => {
@@ -288,7 +288,7 @@ export default function Profile({navigation}: any) {
                         <View style={styles.box}>
                             <Text style={[fs_12_400, text_gray]}>Lượng tạm tính</Text>
                             <Text style={[fs_25_700, text_black]}>
-                                {totalSalary.toLocaleString()}
+                                {(totalSalary.toFixed(0)).toLocaleString()}
                             </Text>
                         </View>
                     </View>

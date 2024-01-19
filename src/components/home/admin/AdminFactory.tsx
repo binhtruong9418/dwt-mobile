@@ -63,9 +63,9 @@ export default function AdminFactory(
         ['totalMeetingHome'],
         async () => {
             const res = await dwtApi.getListMeeting({
-                date: dayjs().format('MM/YYYY'),
+                date: dayjs().format('DD/MM/YYYY'),
             });
-            return res?.data?.length;
+            return res?.data?.totalMeetingsMonth;
         },
         {
             enabled: !!userInfo,

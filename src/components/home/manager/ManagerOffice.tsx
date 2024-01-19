@@ -24,7 +24,6 @@ import {useConnection} from '../../../redux/connection';
 import ReportAndProposeBlock from "../manager-component/ReportAndProposeBlock.tsx";
 import {getMonthFormat} from '../../../utils';
 import UserFilterModal from "../../common/modal/UserFilterModal.tsx";
-import {LIST_OFFICE_DEPARTMENT} from '../../../assets/constant.ts';
 import WorkOfficeManagerTable from "../manager-component/WorkOfficeManagerTable.tsx";
 import MainTarget from "../MainTarget.tsx";
 
@@ -97,14 +96,13 @@ export default function ManagerOffice(
         }
     );
 
-    const {data: totalMeeting = 0} = useQuery(
+    const { data: totalMeeting = 0 } = useQuery(
         ['totalMeetingHome'],
         async () => {
             const res = await dwtApi.getListMeeting({
-                date: dayjs().format('MM/YYYY'),
-                departement: userInfo?.departement_id,
+                date: dayjs().format('DD/MM/YYYY'),
             });
-            return res?.data?.length;
+            return res?.data?.totalMeetingsMonth;
         },
         {
             enabled: !!userInfo,

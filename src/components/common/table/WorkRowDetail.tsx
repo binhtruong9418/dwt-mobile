@@ -68,7 +68,8 @@ export default function WorkRowDetail(
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={isDepartment ? styles.departmentButton : styles.button}
+                    style={isDepartment ? [styles.departmentButton, styles.leftBorder]
+                        : [styles.button, styles.leftBorder]}
                     onPress={() => {
                         if (isDepartment) {
                             // @ts-ignore
@@ -92,7 +93,7 @@ export default function WorkRowDetail(
                 {
                     !isDepartment && (
                         <TouchableOpacity
-                            style={styles.button}
+                            style={[styles.button, styles.leftBorder]}
                             onPress={() => {
                                 // @ts-ignore
                                 navigation.navigate('WorkReport', {
@@ -116,9 +117,9 @@ const styles = StyleSheet.create({
         borderLeftColor: '#D9D9D9',
         borderLeftWidth: 0.5,
         borderRightColor: '#D9D9D9',
-        borderRightWidth: 0.5,
+        borderRightWidth: 1,
         borderBottomColor: '#D9D9D9',
-        borderBottomWidth: 0.5,
+        borderBottomWidth: 1,
         paddingTop: 12,
     },
     row: {
@@ -138,27 +139,23 @@ const styles = StyleSheet.create({
         borderTopColor: '#D9D9D9',
         borderTopWidth: 1,
         borderBottomColor: '#D9D9D9',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         marginTop: 10,
     },
     button: {
         flex: 1 / 3,
         justifyContent: 'center',
         alignItems: 'center',
-        borderLeftColor: '#D9D9D9',
-        borderLeftWidth: 0.5,
-        borderRightColor: '#D9D9D9',
-        borderRightWidth: 0.5,
         paddingVertical: 7,
     },
     departmentButton: {
         flex: 1 / 2,
         justifyContent: 'center',
         alignItems: 'center',
-        borderLeftColor: '#D9D9D9',
-        borderLeftWidth: 0.5,
-        borderRightColor: '#D9D9D9',
-        borderRightWidth: 0.5,
         paddingVertical: 7,
     },
+    leftBorder: {
+        borderLeftColor: '#D9D9D9',
+        borderLeftWidth: 0.5,
+    }
 });

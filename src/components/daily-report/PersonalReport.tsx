@@ -17,7 +17,7 @@ import DailyCalendar from './DailyCalendar.tsx';
 import PersonalReportDetail from './PersonalReportDetail.tsx';
 import PrimaryButton from '../common/button/PrimaryButton.tsx';
 import MonthPickerModal from '../common/modal/MonthPickerModal.tsx';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import LoadingActivity from '../common/loading/LoadingActivity.tsx';
@@ -70,6 +70,14 @@ export default function PersonalReport() {
             itemDate.date() === currentDate.date
         );
     });
+
+    useEffect(() => {
+        setCurrentDate({
+            month: dayjs().month(),
+            year: dayjs().year(),
+            date: dayjs().date(),
+        })
+    }, [dayjs().date()]);
 
     useRefreshOnFocus(reFetchUserReport)
 

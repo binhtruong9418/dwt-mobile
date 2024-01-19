@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
 import {useCallback} from 'react';
-import {setCurrentTabManager, setUserInfo} from './reducer';
+import {setCurrentTabManager, setListDepartmentGroup, setUserInfo} from './reducer';
 
 export const useConnection = () => {
   const connection = useSelector((state: RootState) => state.connection);
@@ -21,5 +21,12 @@ export const useConnection = () => {
     [dispatch],
   );
 
-  return {connection, onSetUserInfo, onSetCurrentTabManager};
+  const onSetListDepartmentGroup = useCallback(
+    (listDepartmentGroup: any) => {
+      dispatch(setListDepartmentGroup(listDepartmentGroup));
+    },
+    [dispatch],
+  );
+
+  return {connection, onSetUserInfo, onSetCurrentTabManager, onSetListDepartmentGroup};
 };

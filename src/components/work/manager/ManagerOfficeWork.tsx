@@ -13,12 +13,10 @@ import PrimaryTable from '../../../components/common/table/PrimaryTable.tsx';
 import AddIcon from '../../../assets/img/add.svg';
 import DropdownIcon from '../../../assets/img/dropdown-icon.svg';
 import {fs_14_400, text_black} from '../../../assets/style.ts';
-import WorkStatusFilterModal from '../../../components/common/modal/WorkStatusFilterModal.tsx';
 import {
     LIST_OFFICE_DEPARTMENT,
     LIST_WORK_STATUS_FILTER,
     WORK_OFFICE_STATUS_COLOR,
-    WORK_STATUS_COLOR,
 } from '../../../assets/constant.ts';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../../api/service/dwtApi.ts';
@@ -61,7 +59,7 @@ const columns = [
 ];
 export default function ManagerOfficeWork({navigation}: any) {
     const {
-        connection: {userInfo, currentTabManager},
+        connection: {userInfo, currentTabManager, listDepartmentGroup},
     } = useConnection();
     const [statusValue, setStatusValue] = useState(LIST_WORK_STATUS_FILTER[0]);
     const [currentMonth, setCurrentMonth] = useState({
@@ -91,12 +89,12 @@ export default function ManagerOfficeWork({navigation}: any) {
             if(userInfo?.role === 'admin') {
                 const res = await dwtApi.getListDepartment();
                 return res.data.filter((item: any) =>
-                    LIST_OFFICE_DEPARTMENT.includes(item.id)
+                    listDepartmentGroup.office.includes(item.id)
                 );
             } else {
                 const res = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
                 return res.data.filter((item: any) =>
-                    LIST_OFFICE_DEPARTMENT.includes(item.id)
+                    listDepartmentGroup.office.includes(item.id)
                 );
             }
         },

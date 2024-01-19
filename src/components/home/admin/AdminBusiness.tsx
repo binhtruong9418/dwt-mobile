@@ -27,7 +27,7 @@ export default function AdminBusiness({
   rewardAndPunishData,
 }: any) {
   const {
-    connection: { userInfo },
+    connection: { userInfo, listDepartmentGroup },
   } = useConnection();
   const navigation = useNavigation();
   const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
@@ -55,9 +55,9 @@ export default function AdminBusiness({
         async () => {
             const res = await dwtApi.getListDepartment();
             return res.data.filter((item: any) =>
-                LIST_BUSINESS_DEPARTMENT.includes(item.id)
+                listDepartmentGroup.business.includes(item.id)
             );
-        }
+        }, {enabled: !!listDepartmentGroup}
     );
 
   const { data: totalReport = 0 } = useQuery(
@@ -77,9 +77,9 @@ export default function AdminBusiness({
     ['totalMeetingHome'],
     async () => {
       const res = await dwtApi.getListMeeting({
-        date: dayjs().format('MM/YYYY'),
+          date: dayjs().format('DD/MM/YYYY'),
       });
-      return res?.data?.length;
+      return res?.data?.totalMeetingsMonth;
     },
     {
       enabled: !!userInfo,
