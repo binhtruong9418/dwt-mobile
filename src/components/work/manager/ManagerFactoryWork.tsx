@@ -29,6 +29,7 @@ import PlusButtonModal from "../../../components/work/PlusButtonModal.tsx";
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PrimaryLoading from "../../../components/common/loading/PrimaryLoading.tsx";
 import {useConnection} from '../../../redux/connection';
+import UserFilterModal from "../../common/modal/UserFilterModal.tsx";
 
 export default function ManagerFactoryWork({navigation}: any) {
     const {
@@ -51,15 +52,31 @@ export default function ManagerFactoryWork({navigation}: any) {
         value: 0,
         label: 'Nhân sự',
     });
+    const [searchUserValue, setSearchUserValue] = useState('');
+
+
+    const {
+        data: listUsers = [],
+    } = useQuery(
+        ['dwtApi.getListAllUser', searchUserValue],
+        async ({pageParam = 1, queryKey}) => {
+            const res = await dwtApi.searchUser({
+                q: queryKey[1],
+            });
+
+            return res?.data?.data
+        },
+    );
     const {
         data: productionDiaryData = {},
         isLoading: loadingProductionDiary,
         refetch: refetchListData,
     } = useQuery(
-        ['managerFactoryWork', currentDate.month, currentDate.year],
+        ['managerFactoryWork', currentDate.month, currentDate.year, currentUser],
         ({queryKey}: any) =>
             dwtApi.getProductionDiaryPerMonth({
                 date: `${queryKey[2]}-${queryKey[1] + 1}`,
+                user_id: queryKey[3].value === 0 ? undefined : queryKey[3].value,
             })
     );
     const {data: listProjectLogs = []} = productionDiaryData;
@@ -190,6 +207,26 @@ export default function ManagerFactoryWork({navigation}: any) {
                 setCurrentMonth={setCurrentDate}
             />
             <LoadingActivity isLoading={loadingProductionDiary}/>
+            <UserFilterModal
+                visible={isOpenSelectUser}
+                setVisible={setIsOpenSelectUser}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                searchValue={searchUserValue}
+                setSearchValue={setSearchUserValue}
+                listUser={[
+                    {
+                        value: 0,
+                        label: 'Tất cả',
+                    },
+                    ...listUsers.map((item: any) => {
+                        return {
+                            value: item.id,
+                            label: item.name,
+                        };
+                    }),
+                ]}
+            />
         </SafeAreaView>
     );
 }

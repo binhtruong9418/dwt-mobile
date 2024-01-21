@@ -354,8 +354,8 @@ export default function WorkDetailDepartment({route, navigation}: any) {
 
                 <View style={styles.commentBlock}>
                     <View style={row_between}>
-                        <Text style={[fs_15_700, text_red, windowWidth < 300 && {
-                            width: '70%'
+                        <Text style={[fs_15_700, text_red, windowWidth < 330 && {
+                            width: '65%'
                         }]}>
                             DANH SÁCH TIÊU CHÍ CÔNG VIỆC
                         </Text>

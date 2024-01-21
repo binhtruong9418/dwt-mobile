@@ -39,13 +39,6 @@ export default function ManagerFactory(
         date: dayjs().date(),
     });
     const [isOpenTimeSelect, setIsOpenTimeSelect] = useState(false);
-    const [isOpenUserSelect, setIsOpenUserSelect] = useState(false);
-    const [currentUserId, setCurrentUserId] = useState({
-        label: 'Nhân sự',
-        value: 0,
-    });
-    const [searchUserValue, setSearchUserValue] = useState('');
-
     const [isOpenPlusButton, setIsOpenPlusButton] = useState(false);
 
 
@@ -62,13 +55,18 @@ export default function ManagerFactory(
         }
     );
 
-    const { data: totalMeeting = 0 } = useQuery(
+    const {data: totalMeeting = 0} = useQuery(
         ['totalMeetingHome'],
         async () => {
-            const res = await dwtApi.getListMeeting({
-                date: dayjs().format('DD/MM/YYYY'),
-            });
-            return res?.data?.totalMeetingsMonth;
+            try {
+                const res = await dwtApi.getListMeeting({
+                    date: dayjs().format('DD/MM/YYYY'),
+                });
+                return res?.data?.totalMeetingsMonth;
+
+            } catch (err) {
+                console.log(err)
+            }
         },
         {
             enabled: !!userInfo,
@@ -96,17 +94,6 @@ export default function ManagerFactory(
         const res: any = await dwtApi.getTotalTmpMainTarget('mechanic', dayjs().format('YYYY-MM'));
         return res?.data
     })
-
-    const {
-        data: listUsers = [],
-    } = useQuery(["dwtApi.getListAllUser", searchUserValue], async ({queryKey}) => {
-            const res = await dwtApi.searchUser({
-                q: queryKey[1],
-            })
-
-            return res?.data?.data
-        },
-    )
 
     const {data: managerFactoryData = {}, isLoading: loadingProductionDiary, refetch: refetchFactoryWork} =
         useQuery(
@@ -154,31 +141,6 @@ export default function ManagerFactory(
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}
             >
-
-                {/*<View style={styles.filter_wrapper}>*/}
-                {/*    <TouchableOpacity*/}
-                {/*        style={styles.dropdown}*/}
-                {/*        onPress={() => {*/}
-                {/*            setIsOpenTimeSelect(true);*/}
-                {/*        }}*/}
-                {/*    >*/}
-                {/*        <Text style={[text_black, fs_12_400]}>*/}
-                {/*            Tháng {currentDate.month + 1}/{currentDate.year}*/}
-                {/*        </Text>*/}
-                {/*        <DropdownIcon width={20} height={20}/>*/}
-                {/*    </TouchableOpacity>*/}
-                {/*    <TouchableOpacity*/}
-                {/*        style={styles.dropdown}*/}
-                {/*        onPress={() => {*/}
-                {/*            setIsOpenUserSelect(true);*/}
-                {/*        }}*/}
-                {/*    >*/}
-                {/*        <Text style={[text_black, fs_12_400]}>*/}
-                {/*            {currentUserId.label}*/}
-                {/*        </Text>*/}
-                {/*        <DropdownIcon width={20} height={20}/>*/}
-                {/*    </TouchableOpacity>*/}
-                {/*</View>*/}
                 <WorkProgressBlock
                     attendanceData={attendanceData}
                     totalMeeting={totalMeeting}
@@ -279,27 +241,6 @@ export default function ManagerFactory(
                 setVisible={setIsOpenTimeSelect}
                 setCurrentMonth={setCurrentDate}
                 currentMonth={currentDate}
-            />
-
-            <UserFilterModal
-                visible={isOpenUserSelect}
-                setVisible={setIsOpenUserSelect}
-                currentUser={currentUserId}
-                setCurrentUser={setCurrentUserId}
-                searchValue={searchUserValue}
-                setSearchValue={setSearchUserValue}
-                listUser={[
-                    {
-                        value: 0,
-                        label: 'Tất cả',
-                    },
-                    ...listUsers.map((item: any) => {
-                        return {
-                            value: item.id,
-                            label: item.name,
-                        };
-                    }),
-                ]}
             />
         </View>
     );

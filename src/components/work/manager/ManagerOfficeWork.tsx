@@ -117,8 +117,6 @@ export default function ManagerOfficeWork({navigation}: any) {
         },
     );
 
-    console.log(listUsers.length)
-
     const {
         data: {listTargetWorkData, listAriseWorkData} = {
             listTargetWorkData: [],

@@ -1,4 +1,4 @@
-import {Dimensions, Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import Logo from '../../assets/img/logo.svg';
 import {useRef, useState} from 'react';
 import UsernameInput from '../../components/common/input/UsernameInput.tsx';
@@ -74,69 +74,69 @@ const Login = ({navigation}: any) => {
 
     return (
         <SafeAreaView style={styles.wrapper}>
-            <Logo width={width - 60} height={200}/>
-            <View style={styles.container}>
-                <UsernameInput
-                    username={username}
-                    setUsername={setUsername}
-                    errorMsg={usernameError}
-                    onSubmitEditing={() => {
-                        passwordRef?.current?.focus()
-                    }}
-                />
-                <View>
-                    <View style={styles.passwordContainer}>
-                        <Text style={[fs_14_400, text_black]}>{'Mật khẩu'}</Text>
-                        <View style={styles.row_center}>
-                            <TextInput
-                                placeholder={'Mật khẩu đăng nhập'}
-                                placeholderTextColor="rgba(0, 0, 0, 0.25)"
-                                style={[fs_14_400, text_black, styles.input]}
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry={hidePassword}
-                                ref={passwordRef}
-                            />
-                            <Pressable
-                                onPress={() => setHidePassword(!hidePassword)}
-                                hitSlop={8}
-                                style={styles.icon}>
-                                <FontawesomeIcon
-                                    name={hidePassword ? 'eye-slash' : 'eye'}
-                                    size={16}
-                                    color="#000"
+                <Logo width={width - 60} height={180}/>
+                <View style={styles.container}>
+                    <UsernameInput
+                        username={username}
+                        setUsername={setUsername}
+                        errorMsg={usernameError}
+                        onSubmitEditing={() => {
+                            passwordRef?.current?.focus()
+                        }}
+                    />
+                    <View>
+                        <View style={styles.passwordContainer}>
+                            <Text style={[fs_14_400, text_black]}>{'Mật khẩu'}</Text>
+                            <View style={styles.row_center}>
+                                <TextInput
+                                    placeholder={'Mật khẩu đăng nhập'}
+                                    placeholderTextColor="rgba(0, 0, 0, 0.25)"
+                                    style={[fs_14_400, text_black, styles.input]}
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    secureTextEntry={hidePassword}
+                                    ref={passwordRef}
                                 />
-                            </Pressable>
+                                <Pressable
+                                    onPress={() => setHidePassword(!hidePassword)}
+                                    hitSlop={8}
+                                    style={styles.icon}>
+                                    <FontawesomeIcon
+                                        name={hidePassword ? 'eye-slash' : 'eye'}
+                                        size={16}
+                                        color="#000"
+                                    />
+                                </Pressable>
+                            </View>
                         </View>
+                        {passwordError && (
+                            <Text style={[text_gray, fs_12_400, styles.error]}>{passwordError}</Text>
+                        )}
                     </View>
-                    {passwordError && (
-                        <Text style={[text_gray, fs_12_400, styles.error]}>{passwordError}</Text>
-                    )}
+                    <Pressable
+                        style={styles.forgotPassword}
+                        onPress={() => {
+                            navigation.navigate('ForgotPassword');
+                        }}
+                        hitSlop={8}
+                    >
+                        <Text style={[fs_14_400, text_black]}>Quên mật khẩu</Text>
+                    </Pressable>
+                    <PrimaryButton
+                        onPress={handleLogin}
+                        text={'Đăng nhập'}
+                        loading={isLoading}
+                        disabled={isLoading}
+                    />
                 </View>
-                <Pressable
-                    style={styles.forgotPassword}
-                    onPress={() => {
-                        navigation.navigate('ForgotPassword');
-                    }}
-                    hitSlop={8}
-                >
-                    <Text style={[fs_14_400, text_black]}>Quên mật khẩu</Text>
-                </Pressable>
-                <PrimaryButton
-                    onPress={handleLogin}
-                    text={'Đăng nhập'}
-                    loading={isLoading}
-                    disabled={isLoading}
-                />
-            </View>
-            <View style={styles.footer}>
-                <Pressable style={styles.forgotPassword} hitSlop={10}>
-                    <Text style={[fs_14_400, text_black, styles.footerText]}>
-                        Nếu gặp vấn đề về tài khoản hãy liên hệ đến{' '}
-                        <Text style={[text_red]}>Admin</Text>
-                    </Text>
-                </Pressable>
-            </View>
+                <View style={styles.footer}>
+                    <Pressable style={styles.forgotPassword} hitSlop={10}>
+                        <Text style={[fs_14_400, text_black, styles.footerText]}>
+                            Nếu gặp vấn đề về tài khoản hãy liên hệ đến{' '}
+                            <Text style={[text_red]}>Admin</Text>
+                        </Text>
+                    </Pressable>
+                </View>
         </SafeAreaView>
     );
 };

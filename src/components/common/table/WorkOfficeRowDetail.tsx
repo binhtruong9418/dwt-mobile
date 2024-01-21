@@ -139,8 +139,6 @@ const styles = StyleSheet.create({
         flex: 1,
         borderTopColor: '#D9D9D9',
         borderTopWidth: 1,
-        borderBottomColor: '#D9D9D9',
-        borderBottomWidth: 0.5,
         marginTop: 10,
     },
     button: {
@@ -157,6 +155,6 @@ const styles = StyleSheet.create({
     },
     leftBorder: {
         borderLeftColor: '#D9D9D9',
-        borderLeftWidth: 0.5,
+        borderLeftWidth: 1,
     }
 });

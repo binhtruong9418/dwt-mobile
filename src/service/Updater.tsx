@@ -15,7 +15,7 @@ export function updater<T>(Component: React.ComponentType<any>) {
             try {
                 const res = await dwtApi.getListDepartmentGroup();
                 onSetListDepartmentGroup(res.data);
-            } catch {
+            } catch (err) {
                 onSetListDepartmentGroup({
                     business: LIST_BUSINESS_DEPARTMENT,
                     office: LIST_OFFICE_DEPARTMENT,

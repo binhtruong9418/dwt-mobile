@@ -252,7 +252,6 @@ export const dwtApi = {
     },
     getDepartmentDailyReport: async (params = {}): Promise<any> => {
         const url = 'daily-report/department';
-        console.log(params);
         return await axiosClient.get(url, {params});
     },
 
@@ -376,7 +375,6 @@ export const dwtApi = {
     //BE provide work storages api with three different endpoints for 3 roles: admin, manager, user
     //each endpoint has same params so we will create a function to call all of them
     getListJobs: async (role: 'manager' | 'admin' | 'user' = 'user', params = {}): Promise<any> => {
-        console.log(role)
         const url = '/list-job/' + role;
         return await axiosClient.get(url, {params});
     },

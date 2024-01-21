@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   item: {
-    width: 90,
+    width: 100,
     justifyContent: 'center',
   },
   divider: {

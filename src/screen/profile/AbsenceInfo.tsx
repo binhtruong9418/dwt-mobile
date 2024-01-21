@@ -73,31 +73,26 @@ export default function AbsenceInfo({navigation}: any) {
     } = useInfiniteQuery(
         ['getListAbsence', absentType.value, fromDateValue, toDateValue, departmentValue, currentTabManager],
         async ({pageParam = 1, queryKey}: any) => {
-            const startDate = queryKey[2] ?
-                dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined;
-            const endDate = queryKey[3] ?
-                dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined;
+            const params = {
+                absent_type: queryKey[1] === 0 ? undefined : Number(queryKey[1]),
+                start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
+                end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
+                limit: 10,
+                page: pageParam,
+            }
+            console.log(params)
             if (queryKey[5] === 1) {
+                const departmentDefaultId = userInfo?.role === 'admin' ? undefined : userInfo?.departement_id;
                 const res = await dwtApi.getAllAbsenceManager({
-                    absent_type: queryKey[1] === 0 ? undefined : Number(queryKey[1]),
-                    start_date: startDate,
-                    end_date: endDate,
-                    department: queryKey[4].value === 0 ? undefined : queryKey[4].value,
-                    limit: 10,
-                    page: pageParam,
+                    ...params,
+                    department: queryKey[4].value === 0 ? departmentDefaultId : queryKey[4].value,
                 });
                 return {
                     data: res?.data?.data,
                     nextPage: pageParam + 1,
                 }
             } else {
-                const res = await dwtApi.getAllAbsencePersonal(userInfo?.id, {
-                    absent_type: queryKey[1] === 0 ? undefined : Number(queryKey[1]),
-                    start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
-                    end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
-                    limit: 10,
-                    page: pageParam,
-                });
+                const res = await dwtApi.getAllAbsencePersonal(userInfo?.id, params);
                 return {
                     data: res?.data?.data,
                     nextPage: pageParam + 1,
@@ -123,10 +118,6 @@ export default function AbsenceInfo({navigation}: any) {
     }
 
     useRefreshOnFocus(refetchListAbsence);
-
-    if (isLoadingListAbsence) {
-        return <PrimaryLoading/>
-    }
 
     return (
         <SafeAreaView style={styles.wrapper}>

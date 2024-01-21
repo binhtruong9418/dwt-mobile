@@ -77,8 +77,8 @@ export default function CreateFactoryDailyReportModal({
         type: 0,
       });
       return {
-        mechanicRuleReport0: response0.data,
-        mechanicRuleReport1: response1.data,
+        mechanicRuleReport0: response0?.data?.data,
+        mechanicRuleReport1: response1?.data?.data,
       };
     });
 

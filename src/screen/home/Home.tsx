@@ -85,7 +85,6 @@ export default function Home({navigation}: any) {
         const currentVersion = VersionCheck.getCurrentVersion()
         const res = await axios.get('https://zombie-game.fun/api/release');
         const newVersion = res.data.data.version;
-        console.log(currentVersion, newVersion)
         if (currentVersion !== newVersion) {
             setIsOpenUpdateVersion(true);
         }

@@ -1,5 +1,5 @@
 import {
-    FlatList,
+    FlatList, Pressable,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -174,7 +174,9 @@ export default function WorkOfficeListReport({route, navigation}: any) {
                             dayjs(reportDate).year();
                         return (
                             <View>
-                                <Text style={styles.title}>{formatDate}</Text>
+                                <Pressable onPress={() => handlePressDay(reportDate)}>
+                                    <Text style={styles.title}>{formatDate}</Text>
+                                </Pressable>
                                 <View style={row_between}>
                                     <Text style={styles.description}>
                                         {item?.note ?? item?.target_log_details[0]?.note}

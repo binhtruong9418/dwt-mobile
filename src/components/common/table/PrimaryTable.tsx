@@ -77,10 +77,6 @@ export default function PrimaryTable(
 const styles = StyleSheet.create({
     wrapper: {
         width: '100%',
-        borderLeftColor: '#D9D9D9',
-        borderLeftWidth: 0.5,
-        borderRightColor: '#D9D9D9',
-        borderRightWidth: 0.5,
     },
     row: {
         flexDirection: 'row',

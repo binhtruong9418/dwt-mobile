@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
     content: {
         paddingTop: 10,
         paddingHorizontal: 15,
+        paddingBottom: 10,
     },
     disable: {
         backgroundColor: '#F0EEEE',

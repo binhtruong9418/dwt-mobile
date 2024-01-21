@@ -277,7 +277,7 @@ export default function Profile({navigation}: any) {
 
                     <View style={styles.twoBoxContainer}>
                         <View style={styles.box}>
-                            <Text style={[fs_12_400, text_gray]}>
+                            <Text style={[fs_12_400, text_gray, text_center]}>
                                 Bạn đã gắn bó cùng công ty
                             </Text>
                             <Text style={[fs_25_700, text_black]}>
@@ -287,8 +287,8 @@ export default function Profile({navigation}: any) {
 
                         <View style={styles.box}>
                             <Text style={[fs_12_400, text_gray]}>Lượng tạm tính</Text>
-                            <Text style={[fs_25_700, text_black]}>
-                                {(totalSalary.toFixed(0)).toLocaleString()}
+                            <Text style={[fs_25_700, text_black, text_center]}>
+                                {(Math.ceil(totalSalary)).toLocaleString()}
                             </Text>
                         </View>
                     </View>
@@ -412,6 +412,7 @@ const styles = StyleSheet.create({
     box: {
         width: '48%',
         paddingVertical: 7,
+        paddingHorizontal: 3,
         alignItems: 'center',
         borderRadius: 8,
         borderWidth: 1,

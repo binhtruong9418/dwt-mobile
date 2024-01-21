@@ -119,7 +119,9 @@ export default function RowTable({
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    borderWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderLeftWidth: 0.5,
+    borderRightWidth: 0.5,
     borderColor: '#D9D9D9',
   },
   cell: {

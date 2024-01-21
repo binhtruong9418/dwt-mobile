@@ -47,7 +47,6 @@ export default function WorkDetailOffice({route, navigation}: any) {
             enabled: !!userInfo && !!data.id && !!userInfo.id,
         }
     );
-    console.log(data.id)
 
     const workDetail = useMemo(() => {
         if (data.isWorkArise) {
@@ -85,7 +84,6 @@ export default function WorkDetailOffice({route, navigation}: any) {
                     const listFile = item?.files ?
                         item?.files?.split(',').map((file: any) => file.split('/').pop()).join(', ')
                         : '';
-                    console.log(item?.files)
                     return {
                         ...item,
                         date: dayjs(item.report_date).format('DD/MM/YYYY'),
@@ -131,7 +129,6 @@ export default function WorkDetailOffice({route, navigation}: any) {
                 const listFile = item?.targetLogDetails[0]?.files ?
                     item?.targetLogDetails[0]?.files?.split(',').map((file: any) => file.split('/').pop()).join(', ')
                     : '';
-                console.log(item?.targetLogDetails[0]?.files)
                 return {
                     ...item,
                     date: dayjs(item.reportedDate).format('DD/MM/YYYY'),
