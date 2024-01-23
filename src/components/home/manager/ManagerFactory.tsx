@@ -24,9 +24,9 @@ import MainTarget from "../MainTarget.tsx";
 
 export default function ManagerFactory(
     {
-        attendanceData,
         rewardAndPunishData,
-        navigation
+        navigation,
+        leftDepartmentData,
     }: any) {
     const {connection: {userInfo}} = useConnection()
     const [currentDate, setCurrentDate] = useState<{
@@ -142,7 +142,7 @@ export default function ManagerFactory(
                 showsVerticalScrollIndicator={false}
             >
                 <WorkProgressBlock
-                    attendanceData={attendanceData}
+                    leftDepartmentData={leftDepartmentData}
                     totalMeeting={totalMeeting}
                 />
                 <ReportAndProposeBlock

@@ -37,7 +37,7 @@ export default function AbsenceItem({ item, currentTabManager }: any) {
                 <View style={[styles.gap5, {flex: 0.6}]}>
                     {currentTabManager === 1 && (
                         <Text style={[fs_14_400, text_black]}>
-                            {item.users?.name}
+                            {item.user_name}
                         </Text>
                     )}
                     <Text style={[fs_14_400, text_black]}>

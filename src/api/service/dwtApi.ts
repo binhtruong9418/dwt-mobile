@@ -348,27 +348,27 @@ export const dwtApi = {
         return await axiosClient.post(url, data);
     },
     getListPersonalPropose: async (params = {}): Promise<any> => {
-        const url = '/personal-report';
+        const url = 'personal-report';
         return await axiosClient.get(url, {params});
     },
     getListDepartmentPropose: async (params = {}): Promise<any> => {
-        const url = '/reports';
+        const url = 'reports';
         return await axiosClient.get(url, {params});
     },
 
     //API nghi phep
-    getAllAbsencePersonal: async (userId: string, params = {}): Promise<any> => {
-        const url = `user-leave-web/${userId}`;
+    getAllAbsencePersonal: async (params = {}): Promise<any> => {
+        const url = `mobile/leave-request/self`;
         return await axiosClient.get(url, {params});
     },
 
     createAbsence: async (data: any): Promise<any> => {
-        const url = 'leave-web';
+        const url = 'mobile/leave-request/store';
         return await axiosClient.post(url, data);
     },
 
     getAllAbsenceManager: async (params = {}): Promise<any> => {
-        const url = 'leave-web';
+        const url = 'mobile/leave-request/manager';
         return await axiosClient.get(url, {params});
     },
     //API KHO VIỆC
@@ -398,6 +398,11 @@ export const dwtApi = {
     getMeetingById: async (id: number): Promise<any> => {
         const url = `/mobile/meeting/show/${id}`;
         return await axiosClient.get(url);
+    },
+
+    getListMeetingByMonth: async (params = {}): Promise<any> => {
+        const url = '/mobile/meeting/month/list';
+        return await axiosClient.get(url, {params});
     },
 
     getMainTarget: async () => {
@@ -457,5 +462,10 @@ export const dwtApi = {
     createRewardPunish: async (data: any): Promise<any> => {
         const url = '/rewards-and-punishment/store';
         return await axiosClient.post(url, data);
+    },
+
+    getHomeLeftBarData: async (): Promise<any> => {
+        const url = 'info-attendance/statistic-by-day';
+        return await axiosClient.get(url);
     }
 };

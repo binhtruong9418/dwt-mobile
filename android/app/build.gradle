@@ -79,8 +79,9 @@ android {
         applicationId "com.dwtapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 35
-        versionName "1.1.7"
+        versionCode 36
+        versionName "1.1.8"
+        resConfigs('vi')
     }
     signingConfigs {
         debug {

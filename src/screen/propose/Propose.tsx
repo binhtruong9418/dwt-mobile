@@ -79,6 +79,7 @@ export default function Propose({navigation}: any) {
                 limit: 15,
                 page: pageParam,
             }
+            console.log(params, 'params')
             if (queryKey[2] === 0) {
                 const response = await dwtApi.getListPersonalPropose(params);
                 return {

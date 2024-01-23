@@ -21,7 +21,7 @@ import EmptyDailyReportIcon from "../../../assets/img/empty-daily-report.svg";
 
 export default function AdminFactory(
     {
-        attendanceData,
+        leftDepartmentData,
         rewardAndPunishData,
         navigation
     }: any) {
@@ -156,7 +156,7 @@ export default function AdminFactory(
                 {/*    </TouchableOpacity>*/}
                 {/*</View>*/}
                 <WorkProgressBlock
-                    attendanceData={attendanceData}
+                    leftDepartmentData={leftDepartmentData}
                     totalMeeting={totalMeeting}
                 />
                 <ReportAndProposeBlock

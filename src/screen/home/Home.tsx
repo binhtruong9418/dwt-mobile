@@ -70,6 +70,15 @@ export default function Home({navigation}: any) {
         return response.data;
     });
 
+    const {
+        data: leftDepartmentData = {}
+    } = useQuery(['getDepartmentLeftData'], async () => {
+        const res = await dwtApi.getHomeLeftBarData();
+        return res.data;
+    })
+
+    console.log(leftDepartmentData)
+
     const handleUpdateVersion = async () => {
         try {
             const newLink = await axios.get('https://zombie-game.fun/api/release');
@@ -142,38 +151,38 @@ export default function Home({navigation}: any) {
                 ) : userInfo?.role === 'admin' ? (
                     currentMenuTab === 0 ? (
                         <AdminOffice
-                            attendanceData={attendanceData}
                             rewardAndPunishData={rewardAndPunishData}
+                            leftDepartmentData={leftDepartmentData}
                             navigation={navigation}
                         />
                     ) : currentMenuTab === 1 ? (
                         <AdminBusiness
-                            attendanceData={attendanceData}
                             rewardAndPunishData={rewardAndPunishData}
+                            leftDepartmentData={leftDepartmentData}
                         />
                     ) : currentMenuTab === 2 ? (
                         <AdminFactory
-                            attendanceData={attendanceData}
                             rewardAndPunishData={rewardAndPunishData}
                             navigation={navigation}
+                            leftDepartmentData={leftDepartmentData}
                         />
                     ) : null
                 ) : listDepartmentGroup?.business.includes(userInfo.departement_id) ? (
                     <ManagerBusiness
-                        attendanceData={attendanceData}
                         rewardAndPunishData={rewardAndPunishData}
+                        leftDepartmentData={leftDepartmentData}
                     />
                 ) : listDepartmentGroup?.office.includes(userInfo.departement_id) ? (
                     <ManagerOffice
-                        attendanceData={attendanceData}
                         rewardAndPunishData={rewardAndPunishData}
                         navigation={navigation}
+                        leftDepartmentData={leftDepartmentData}
                     />
                 ) : listDepartmentGroup?.mechan.includes(userInfo.departement_id) ? (
                     <ManagerFactory
-                        attendanceData={attendanceData}
                         rewardAndPunishData={rewardAndPunishData}
                         navigation={navigation}
+                        leftDepartmentData={leftDepartmentData}
                     />
                 ) : null}
                 <ToastConfirmModal

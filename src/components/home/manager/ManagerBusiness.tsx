@@ -24,8 +24,8 @@ import {getMonthFormat} from "../../../utils";
 
 export default function ManagerBusiness(
     {
-        attendanceData,
         rewardAndPunishData,
+        leftDepartmentData,
     }: any) {
     const {
         connection: {userInfo},
@@ -208,7 +208,6 @@ export default function ManagerBusiness(
     }
     return (
         <View style={styles.wrapper}>
-
             <View style={{
                 paddingHorizontal: 15,
                 paddingVertical: 10
@@ -255,8 +254,8 @@ export default function ManagerBusiness(
                     </TouchableOpacity>
                 </View>
                 <WorkProgressBlock
-                    attendanceData={attendanceData}
                     totalMeeting={totalMeeting}
+                    leftDepartmentData={leftDepartmentData}
                 />
                 <ReportAndProposeBlock
                     totalDailyReport={totalReport}

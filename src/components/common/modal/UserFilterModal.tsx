@@ -74,7 +74,7 @@ export default function UserFilterModal(
                         style={styles.input}>
                         <SearchIcon width={20} height={20}/>
                         <TextInput
-                            style={{padding: 0, width: '80%'}}
+                            style={{padding: 0, width: '80%', color: '#000'}}
                             value={searchValue}
                             onChangeText={setSearchValue}
                             placeholder={'Tìm kiếm'}

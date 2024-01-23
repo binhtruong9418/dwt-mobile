@@ -29,9 +29,9 @@ import MainTarget from "../MainTarget.tsx";
 
 export default function ManagerOffice(
     {
-        attendanceData,
         rewardAndPunishData,
         navigation,
+        leftDepartmentData
     }: any) {
     const {
         connection: {userInfo},
@@ -244,7 +244,7 @@ export default function ManagerOffice(
                     </TouchableOpacity>
                 </View>
                 <WorkProgressBlock
-                    attendanceData={attendanceData}
+                    leftDepartmentData={leftDepartmentData}
                     totalMeeting={totalMeeting}
                 />
                 <ReportAndProposeBlock

@@ -72,22 +72,22 @@ export default function MeetingInfo({navigation}: any) {
         isLoading: isLoadingListMeeting,
     } = useQuery(['listMeeting', currentDate.month, currentDate.year, currentTabManager, departmentValue], async ({queryKey}) => {
         if (queryKey[3] === 1) {
-            const res = await dwtApi.getListMeeting({
+            const res = await dwtApi.getListMeetingByMonth({
                 date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
                 departement: queryKey[4]?.value === 0 ? undefined : queryKey[4]?.value,
             });
             if (userInfo?.role === 'manager') {
                 const listChildrenDepartment = await dwtApi.getListChildrenDepartment(userInfo?.departement_id);
-                return res?.data?.filter((item: any) => {
+                return res?.data?.meetings.filter((item: any) => {
                     return listChildrenDepartment?.data?.includes(item?.departement_id);
                 });
             }
-            return res?.data;
+            return res?.data?.meetings;
         } else {
-            const res = await dwtApi.getListMeetingPersonal({
+            const res = await dwtApi.getListMeetingByMonth({
                 date: dayjs().month(Number(queryKey[1])).year(Number(queryKey[2])).format('MM/YYYY'),
             });
-            return res?.data;
+            return res?.data?.meetings;
         }
     })
 

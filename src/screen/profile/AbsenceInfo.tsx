@@ -64,58 +64,34 @@ export default function AbsenceInfo({navigation}: any) {
     });
 
     const {
-        data: {pages = []} = {},
+        data: listAbsence = [],
         isLoading: isLoadingListAbsence,
         refetch: refetchListAbsence,
-        hasNextPage: hasNextPageListAbsence,
-        fetchNextPage: fetchNextPageListAbsence,
-        isFetching: isFetchingListAbsence,
-    } = useInfiniteQuery(
-        ['getListAbsence', absentType.value, fromDateValue, toDateValue, departmentValue, currentTabManager],
-        async ({pageParam = 1, queryKey}: any) => {
+    } = useQuery(
+        ['getListAbsence', absentType.value, currentTabManager],
+        async ({queryKey}: any) => {
             const params = {
                 absent_type: queryKey[1] === 0 ? undefined : Number(queryKey[1]),
-                start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
-                end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
-                limit: 10,
-                page: pageParam,
+                // start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
+                // end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
+                // limit: 10,
+                // page: pageParam,
             }
-            console.log(params)
-            if (queryKey[5] === 1) {
+            if (queryKey[2] === 1) {
                 const departmentDefaultId = userInfo?.role === 'admin' ? undefined : userInfo?.departement_id;
                 const res = await dwtApi.getAllAbsenceManager({
                     ...params,
-                    department: queryKey[4].value === 0 ? departmentDefaultId : queryKey[4].value,
+                    // department: queryKey[4].value === 0 ? departmentDefaultId : queryKey[4].value,
                 });
-                return {
-                    data: res?.data?.data,
-                    nextPage: pageParam + 1,
-                }
+                return res.data
             } else {
-                const res = await dwtApi.getAllAbsencePersonal(userInfo?.id, params);
-                return {
-                    data: res?.data?.data,
-                    nextPage: pageParam + 1,
-                }
-            }
-        },
-        {
-            getNextPageParam: lastPage => {
-                const {nextPage} = lastPage;
-                if (lastPage.data.length < 10) {
-                    return undefined;
-                }
-                return nextPage;
+                const res = await dwtApi.getAllAbsencePersonal(params);
+                return res.data
             }
         },
     );
-    const listAbsence = pages?.flatMap(item => item.data) || [];
 
-    const getMoreData = async () => {
-        if (hasNextPageListAbsence) {
-            await fetchNextPageListAbsence();
-        }
-    }
+    console.log(listAbsence);
 
     useRefreshOnFocus(refetchListAbsence);
 
@@ -193,14 +169,6 @@ export default function AbsenceInfo({navigation}: any) {
                     };
                 })}
                 keyExtractor={(item, index) => index.toString()}
-                onEndReachedThreshold={0.5}
-                onEndReached={getMoreData}
-                refreshing={isFetchingListAbsence}
-                ListFooterComponent={
-                    isFetchingListAbsence ? (
-                        <ActivityIndicator size={'large'} color={'#CA1F24'}/>
-                    ) : null
-                }
                 ItemSeparatorComponent={() => <View style={{height: 5}}/>}
                 renderItem={({item}) => {
                     return (
