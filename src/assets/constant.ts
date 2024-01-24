@@ -290,13 +290,23 @@ export const LIST_WORK_STATUS_FILTER = [
     },
 ];
 
-export const LIST_PROPOSE_STATUS_COLOR = {
+export const LIST_PROPOSE_STATUS_COLOR_DATA = {
     'all': '#FFF',
     'Converted': '#FFF',
     'Sent': '#F9F2CE',
     'CantSolve': '#D9D9D9',
     'FoundSolution': '#89B6FA',
     'Solved': '#D4F3D5',
+};
+
+
+export const LIST_PROPOSE_STATUS_COLOR = {
+    '-1': '#FFF',
+    '4': '#FFF',
+    '0': '#F9F2CE',
+    '3': '#D9D9D9',
+    '1': '#89B6FA',
+    '2': '#D4F3D5',
 };
 
 export const LIST_ABSENCE_TYPE = [
@@ -328,27 +338,27 @@ export const LIST_ABSENCE_TYPE_COLOR = [
 export const LIST_PROPOSE_STATUS = [
     {
         label: 'Tất cả',
-        value: 'all',
-    },
-    {
-        label: 'Đã tiếp nhận',
-        value: 'Sent',
+        value: -1,
     },
     {
         label: 'Đã giao',
-        value: 'Converted',
+        value: 4,
+    },
+    {
+        label: 'Đã tiếp nhận',
+        value: 0,
     },
     {
         label: 'Đã có hướng giải quyết',
-        value: 'FoundSolution',
+        value: 1,
     },
     {
         label: 'Đã giải quyết',
-        value: 'Solved',
+        value: 2,
     },
     {
         label: 'Không thể giải quyết',
-        value: 'CantSolve',
+        value: 3,
     },
 ];
 

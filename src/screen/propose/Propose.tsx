@@ -1,11 +1,5 @@
 import Header from '../../components/header/Header.tsx';
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {fs_14_400, text_black} from '../../assets/style.ts';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import PrimaryTable from '../../components/common/table/PrimaryTable.tsx';
@@ -13,15 +7,10 @@ import AddIcon from '../../assets/img/add.svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useMemo, useState} from 'react';
 import ProposeStatusFilterModal from '../../components/common/modal/ProposeStatusFilterModal.tsx';
-import DatePickerModal from '../../components/common/modal/DatePickerModal.tsx';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
-import {
-    LIST_PROPOSE_STATUS,
-    LIST_PROPOSE_STATUS_COLOR,
-} from '../../assets/constant.ts';
+import {LIST_PROPOSE_STATUS, LIST_PROPOSE_STATUS_COLOR_DATA,} from '../../assets/constant.ts';
 import dayjs from 'dayjs';
-import PrimaryLoading from '../../components/common/loading/PrimaryLoading.tsx';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import {useConnection} from "../../redux/connection";
 import AdminTabBlock from "../../components/common/tab/AdminTabBlock.tsx";
@@ -73,7 +62,7 @@ export default function Propose({navigation}: any) {
         ['listPropose', statusValue, currentTabManager, fromDateValue, toDateValue, departmentValue],
         async ({pageParam = 1, queryKey}: any) => {
             const params = {
-                status: queryKey[1].value === 'all' ? undefined : queryKey[1].value,
+                status: queryKey[1].value === -1 ? undefined : queryKey[1].value,
                 start_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
                 end_date: queryKey[4] ? dayjs(queryKey[4]).format('YYYY-MM-DD') : undefined,
                 limit: 15,
@@ -128,16 +117,15 @@ export default function Propose({navigation}: any) {
 
 
     const tableData = useMemo(() => {
-        const data = listPropose.map((item: any, index: number) => {
+        return listPropose.map((item: any, index: number) => {
             return {
                 ...item,
                 index: index + 1,
                 creator: item.user.name,
                 date: dayjs(item.created_at).format('DD/MM/YYYY'),
-                bgColor: LIST_PROPOSE_STATUS_COLOR[item.status as keyof typeof LIST_PROPOSE_STATUS_COLOR] || '#fff',
+                bgColor: LIST_PROPOSE_STATUS_COLOR_DATA[item.status as keyof typeof LIST_PROPOSE_STATUS_COLOR_DATA] || '#fff',
             };
         });
-        return data;
     }, [listPropose]);
 
     useRefreshOnFocus(refetchPropose);

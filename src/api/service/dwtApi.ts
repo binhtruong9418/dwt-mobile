@@ -357,18 +357,18 @@ export const dwtApi = {
     },
 
     //API nghi phep
-    getAllAbsencePersonal: async (params = {}): Promise<any> => {
-        const url = `mobile/leave-request/self`;
+    getAllAbsencePersonal: async (id: string, params = {}): Promise<any> => {
+        const url = `user-leave-web/${id}`;
         return await axiosClient.get(url, {params});
     },
 
     createAbsence: async (data: any): Promise<any> => {
-        const url = 'mobile/leave-request/store';
+        const url = 'leave-web';
         return await axiosClient.post(url, data);
     },
 
     getAllAbsenceManager: async (params = {}): Promise<any> => {
-        const url = 'mobile/leave-request/manager';
+        const url = 'leave-web';
         return await axiosClient.get(url, {params});
     },
     //API KHO VIỆC

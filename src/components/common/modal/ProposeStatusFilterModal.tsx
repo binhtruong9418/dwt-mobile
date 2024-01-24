@@ -67,7 +67,7 @@ export default function ProposeStatusFilterModal({
                 styles.row,
                 index === 0 && styles.borderTopBottom,
                 {
-                  backgroundColor: LIST_PROPOSE_STATUS_COLOR[item.value as keyof typeof LIST_PROPOSE_STATUS_COLOR],
+                  backgroundColor: LIST_PROPOSE_STATUS_COLOR[item.value.toString() as keyof typeof LIST_PROPOSE_STATUS_COLOR],
                 },
               ]}>
               <PrimaryCheckbox

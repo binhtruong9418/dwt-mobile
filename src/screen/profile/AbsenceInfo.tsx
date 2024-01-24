@@ -11,9 +11,6 @@ import Header from '../../components/header/Header.tsx';
 import DropdownIcon from '../../assets/img/dropdown-icon.svg';
 import {fs_14_400, text_black, text_gray} from '../../assets/style.ts';
 import {useState} from 'react';
-import NoSalaryIcon from "../../assets/img/absence/no-salary.svg";
-import AllowIcon from "../../assets/img/absence/allow.svg";
-import WorkIcon from "../../assets/img/absence/work.svg";
 import {
     LIST_ABSENCE_TYPE,
     LIST_ABSENCE_TYPE_COLOR,
@@ -26,7 +23,6 @@ import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {dwtApi} from '../../api/service/dwtApi.ts';
 import {useRefreshOnFocus} from '../../hook/useRefeshOnFocus.ts';
 import dayjs from "dayjs";
-import PrimaryLoading from "../../components/common/loading/PrimaryLoading.tsx";
 import ListDepartmentModal from "../../components/home/manager-component/ListDepartmentModal.tsx";
 import DatePickerFromToModal from "../../components/common/modal/DatePickerFromToModal.tsx";
 import AbsenceItem from "../../components/absence/AbsenceItem.tsx";
@@ -64,34 +60,60 @@ export default function AbsenceInfo({navigation}: any) {
     });
 
     const {
-        data: listAbsence = [],
+        data: {pages = []} = {},
         isLoading: isLoadingListAbsence,
         refetch: refetchListAbsence,
-    } = useQuery(
-        ['getListAbsence', absentType.value, currentTabManager],
-        async ({queryKey}: any) => {
+        hasNextPage: hasNextPageListAbsence,
+        fetchNextPage: fetchNextPageListAbsence,
+        isFetching: isFetchingListAbsence,
+    } = useInfiniteQuery(
+        ['getListAbsence', absentType.value, fromDateValue, toDateValue, departmentValue, currentTabManager],
+        async ({pageParam = 1, queryKey}: any) => {
             const params = {
                 absent_type: queryKey[1] === 0 ? undefined : Number(queryKey[1]),
-                // start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
-                // end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
-                // limit: 10,
-                // page: pageParam,
+                start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
+                end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
+                datetime: (queryKey[3] && queryKey[2]) ?
+                    dayjs(queryKey[2]).format('DD/MM/YYYY') + ' - ' + dayjs(queryKey[3]).format('DD/MM/YYYY')
+                    : undefined,
+                limit: 10,
+                page: pageParam,
             }
-            if (queryKey[2] === 1) {
+            if (queryKey[5] === 1) {
                 const departmentDefaultId = userInfo?.role === 'admin' ? undefined : userInfo?.departement_id;
                 const res = await dwtApi.getAllAbsenceManager({
                     ...params,
-                    // department: queryKey[4].value === 0 ? departmentDefaultId : queryKey[4].value,
+                    department: queryKey[4].value === 0 ? departmentDefaultId : queryKey[4].value,
                 });
-                return res.data
+                return {
+                    data: res?.data?.data,
+                    nextPage: pageParam + 1,
+                }
             } else {
-                const res = await dwtApi.getAllAbsencePersonal(params);
-                return res.data
+                const res = await dwtApi.getAllAbsencePersonal(userInfo?.id, params);
+                return {
+                    data: res?.data?.data,
+                    nextPage: pageParam + 1,
+                }
+            }
+        },
+        {
+            getNextPageParam: lastPage => {
+                const {nextPage} = lastPage;
+                if (lastPage.data.length < 10) {
+                    return undefined;
+                }
+                return nextPage;
             }
         },
     );
+    const listAbsence = pages?.flatMap(item => item.data) || [];
 
-    console.log(listAbsence);
+    const getMoreData = async () => {
+        if (hasNextPageListAbsence) {
+            await fetchNextPageListAbsence();
+        }
+    }
 
     useRefreshOnFocus(refetchListAbsence);
 
@@ -169,6 +191,14 @@ export default function AbsenceInfo({navigation}: any) {
                     };
                 })}
                 keyExtractor={(item, index) => index.toString()}
+                onEndReachedThreshold={0.5}
+                onEndReached={getMoreData}
+                refreshing={isFetchingListAbsence}
+                ListFooterComponent={
+                    isFetchingListAbsence ? (
+                        <ActivityIndicator size={'large'} color={'#CA1F24'}/>
+                    ) : null
+                }
                 ItemSeparatorComponent={() => <View style={{height: 5}}/>}
                 renderItem={({item}) => {
                     return (
