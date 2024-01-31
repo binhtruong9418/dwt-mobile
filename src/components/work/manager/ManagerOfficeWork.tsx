@@ -24,10 +24,8 @@ import dayjs from 'dayjs';
 import {useRefreshOnFocus} from '../../../hook/useRefeshOnFocus.ts';
 import PlusButtonModal from '../../../components/work/PlusButtonModal.tsx';
 import MonthPickerModal from '../../../components/common/modal/MonthPickerModal.tsx';
-import AdminTabBlock from '../../../components/common/tab/AdminTabBlock.tsx';
 import {useConnection} from '../../../redux/connection';
 import ListDepartmentModal from '../../../components/home/manager-component/ListDepartmentModal.tsx';
-import WorkRowDetail from '../../../components/common/table/WorkRowDetail.tsx';
 import {getMonthFormat} from '../../../utils';
 import WorkOfficeStatusFilterModal from "../../common/modal/WorkOfficeStatusFilterModal.tsx";
 import TabOfficeBlock from "../TabOfficeBlock.tsx";
@@ -202,6 +200,7 @@ export default function ManagerOfficeWork({navigation}: any) {
                 return [];
         }
     }, [currentTab, statusValue, listTargetWorkData, listAriseWorkData]);
+
 
     useRefreshOnFocus(() => {
         refetchWork();

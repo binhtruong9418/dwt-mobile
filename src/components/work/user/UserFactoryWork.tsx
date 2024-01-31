@@ -97,7 +97,7 @@ export default function UserFactoryWork({navigation}: any) {
                         navigation.navigate('UserFactoryWorkDay');
                     }}
                 >
-                    <Text style={[fs_12_700, text_white]}>Xem theo ngày</Text>
+                    <Text style={[fs_12_700, text_white, text_center]}>Xem theo ngày</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.content}>
