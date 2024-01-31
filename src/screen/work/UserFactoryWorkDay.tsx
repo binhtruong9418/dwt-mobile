@@ -9,7 +9,7 @@ import {
 import {
     fs_10_500,
     fs_12_400, fs_12_500,
-    fs_15_700,
+    fs_15_700, row_between,
     text_black,
     text_center,
     text_white,
@@ -152,21 +152,20 @@ export default function UserFactoryWorkDay({navigation}: any) {
                                             {item?.content}
                                         </Text>
                                         {
-                                            item?.mechanic_reports.length > 0 && (
+                                            item?.mechanic_target_reports.length > 0 && (
                                                 <View>
                                                     <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
                                                     {
-                                                        item?.mechanic_reports.map((report: any, index: number) => {
-                                                            const name = report?.mechanic_rule_report?.accessory_name;
-                                                            const mechanicUnit = report?.accessory_unit;
+                                                        item?.mechanic_target_reports.map((report: any, index: number) => {
+                                                            const name = report?.mechanic_target?.name;
+                                                            const mechanicUnit = report?.unit_name;
                                                             const amount = report?.amount;
-                                                            const code = report?.mechanic_rule_report?.accessory_code;
-                                                            const total = report?.total.toLocaleString();
-                                                            const unit = report?.valid_unit;
+                                                            const code = report?.mechanic_target?.code;
+                                                            const total = report?.total_kpi;
                                                             return (
                                                                 <Text key={report.id}
                                                                       style={[fs_12_400, text_black]}> • {amount} {mechanicUnit} {name} ({code})
-                                                                    = {total} {unit}</Text>
+                                                                    = {total} KPI</Text>
                                                             )
                                                         })
                                                     }

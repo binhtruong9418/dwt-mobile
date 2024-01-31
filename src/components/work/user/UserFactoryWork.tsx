@@ -1,5 +1,6 @@
 import {FlatList, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {
+    fs_12_400,
     fs_12_700,
     fs_14_400,
     fs_14_700,
@@ -21,6 +22,7 @@ import {useRefreshOnFocus} from '../../../hook/useRefeshOnFocus.ts';
 import HomeHeader from "../../home/HomeHeader.tsx";
 import FactoryReportDetail from "../../home/home-component/FactoryReportDetail.tsx";
 import ChevronLeftIcon from "../../../assets/img/chevron-left-dark.svg";
+import EmptyDailyReportIcon from "../../../assets/img/empty-daily-report.svg";
 
 export default function UserFactoryWork({navigation}: any) {
     const {connection: {userInfo}} = useConnection();
@@ -126,6 +128,18 @@ export default function UserFactoryWork({navigation}: any) {
                     keyExtractor={(item, index) => index.toString()}
                     style={{marginTop: 20}}
                     ItemSeparatorComponent={() => <View style={{height: 15}}/>}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View>
+                                <EmptyDailyReportIcon
+                                    style={{alignSelf: 'center', marginTop: 50}}
+                                />
+                                <Text style={[fs_12_400, text_black, text_center]}>
+                                    Chưa có báo cáo.
+                                </Text>
+                            </View>
+                        );
+                    }}
                 />
             </View>
             <TouchableOpacity

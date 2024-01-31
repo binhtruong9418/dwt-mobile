@@ -41,17 +41,25 @@ export default function FactoryReportDetail({data, navigation}: any) {
                     <View>
                         <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
                         {
-                            data?.mechanic_reports.map((item: any, index: number) => {
-                                const name = item?.mechanic_rule_report?.accessory_name;
-                                const mechanicUnit = item?.accessory_unit;
-                                const amount = item?.amount;
-                                const code = item?.mechanic_rule_report?.accessory_code;
-                                const total = item?.total.toLocaleString();
-                                const unit = item?.valid_unit;
-                                return (
-                                    <Text key={item.id} style={[fs_12_400, text_black]}>   • {amount} {mechanicUnit} {name} ({code}) = {total} {unit}</Text>
-                                )
-                            })
+                            data?.mechanic_target_reports.length > 0 && (
+                                <View>
+                                    <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
+                                    {
+                                        data?.mechanic_target_reports.map((report: any, index: number) => {
+                                            const name = report?.mechanic_target?.name;
+                                            const mechanicUnit = report?.unit_name;
+                                            const amount = report?.amount;
+                                            const code = report?.mechanic_target?.code;
+                                            const total = report?.total_kpi;
+                                            return (
+                                                <Text key={report.id}
+                                                      style={[fs_12_400, text_black]}> • {amount} {mechanicUnit} {name} ({code})
+                                                    = {total} KPI</Text>
+                                            )
+                                        })
+                                    }
+                                </View>
+                            )
                         }
                     </View>
                 )
