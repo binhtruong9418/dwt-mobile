@@ -54,7 +54,7 @@ export default function DailyCalendar(
                 }}
                 initialScrollIndex={currentDate.date - 1}
                 getItemLayout={(data, index) => {
-                    return { length: 45, offset: index * 45, index };
+                    return { length: 55, offset: index * 55, index };
                 }}
                 initialNumToRender={dayjs().daysInMonth()}
                 showsHorizontalScrollIndicator={false}

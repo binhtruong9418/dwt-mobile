@@ -77,10 +77,14 @@ export default function AdminBusiness(
     const {data: totalMeeting = 0} = useQuery(
         ['totalMeetingHome'],
         async () => {
-            const res = await dwtApi.getListMeeting({
-                date: dayjs().format('DD/MM/YYYY'),
-            });
-            return res?.data?.totalMeetingsMonth;
+            try {
+                const res = await dwtApi.getListMeetingHomePage({
+                    date: dayjs().format('DD/MM/YYYY'),
+                });
+                return res?.data?.total;
+            } catch (err) {
+                console.log(err)
+            }
         },
         {
             enabled: !!userInfo,

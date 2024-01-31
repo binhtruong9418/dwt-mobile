@@ -323,17 +323,17 @@ export const dwtApi = {
     },
 
     createProductionReport: async (data: any) => {
-        const url = 'mobile/production-diary-v2/store-log';
+        const url = 'project-work-logs';
         return await axiosClient.post(url, data);
     },
 
-    getMechanicRuleReport: async (params = {}): Promise<any> => {
-        const url = 'mobile/production-diary-v2/mechanic-rule-report';
+    getListMechanicTarget: async (params = {}): Promise<any> => {
+        const url = 'mechanic-target/all';
         return await axiosClient.get(url, {params});
     },
 
     getFactoryPersonalResult: async (params = {}): Promise<any> => {
-        const url = 'mechanic/get-result';
+        const url = 'mobile/production-diary-v2/mechanic-department-result-v2';
         return await axiosClient.get(url, {params});
     },
 
@@ -386,11 +386,16 @@ export const dwtApi = {
 
     //API HOP giao ban
     getListMeeting: async (params = {}): Promise<any> => {
+        const url = '/mobile/meeting/month/list';
+        return await axiosClient.get(url, {params});
+    },
+
+    getListMeetingHomePage: async (params = {}): Promise<any> => {
         const url = '/mobile/meeting/list';
         return await axiosClient.get(url, {params});
     },
 
-    getListMeetingPersonal: async (params = {}): Promise<any> => {
+    getListMeetingPersonalForManager: async (params = {}): Promise<any> => {
         const url = '/mobile/meeting/listIndividual';
         return await axiosClient.get(url, {params});
     },
@@ -398,11 +403,6 @@ export const dwtApi = {
     getMeetingById: async (id: number): Promise<any> => {
         const url = `/mobile/meeting/show/${id}`;
         return await axiosClient.get(url);
-    },
-
-    getListMeetingByMonth: async (params = {}): Promise<any> => {
-        const url = '/mobile/meeting/month/list';
-        return await axiosClient.get(url, {params});
     },
 
     getMainTarget: async () => {

@@ -59,11 +59,11 @@ export default function ManagerFactory(
         ['totalMeetingHome'],
         async () => {
             try {
-                const res = await dwtApi.getListMeeting({
+                const res = await dwtApi.getListMeetingHomePage({
                     date: dayjs().format('DD/MM/YYYY'),
+                    departement: userInfo?.departement_id,
                 });
-                return res?.data?.totalMeetingsMonth;
-
+                return res?.data?.total;
             } catch (err) {
                 console.log(err)
             }

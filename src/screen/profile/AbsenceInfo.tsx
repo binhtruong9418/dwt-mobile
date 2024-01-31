@@ -70,7 +70,7 @@ export default function AbsenceInfo({navigation}: any) {
         ['getListAbsence', absentType.value, fromDateValue, toDateValue, departmentValue, currentTabManager],
         async ({pageParam = 1, queryKey}: any) => {
             const params = {
-                absent_type: queryKey[1] === 0 ? undefined : Number(queryKey[1]),
+                "absentType[]": queryKey[1] === 0 ? undefined : Number(queryKey[1]),
                 start_date: queryKey[2] ? dayjs(queryKey[2]).format('YYYY-MM-DD') : undefined,
                 end_date: queryKey[3] ? dayjs(queryKey[3]).format('YYYY-MM-DD') : undefined,
                 datetime: (queryKey[3] && queryKey[2]) ?
@@ -79,6 +79,7 @@ export default function AbsenceInfo({navigation}: any) {
                 limit: 10,
                 page: pageParam,
             }
+            console.log(params)
             if (queryKey[5] === 1) {
                 const departmentDefaultId = userInfo?.role === 'admin' ? undefined : userInfo?.departement_id;
                 const res = await dwtApi.getAllAbsenceManager({
