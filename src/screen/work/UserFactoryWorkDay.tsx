@@ -133,6 +133,7 @@ export default function UserFactoryWorkDay({navigation}: any) {
                                         });
                                     }}
                                 >
+                                    <Text style={styles.textTime}>{dayjs(item?.created_at).format('HH:mm')}</Text>
                                     <View style={styles.logWrapper}>
                                         <View
                                             style={[
@@ -299,9 +300,11 @@ const styles = StyleSheet.create({
     },
     boxContainer: {
         width: '100%',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
     },
     logWrapper: {
-        width: '100%',
+        width: '85%',
         backgroundColor: '#F4F4F4',
         borderRadius: 12,
         elevation: 5,
@@ -329,5 +332,10 @@ const styles = StyleSheet.create({
         bottom: 10,
         right: 15,
         zIndex: 2,
+    },
+    textTime: {
+        ...fs_12_400,
+        ...text_black,
+        top: -8
     },
 });

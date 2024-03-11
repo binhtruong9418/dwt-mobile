@@ -37,29 +37,22 @@ export default function FactoryReportDetail({data, navigation}: any) {
                 {data?.content}
             </Text>
             {
-                data?.mechanic_reports.length > 0 && (
+                data?.mechanic_target_reports.length > 0 && (
                     <View>
                         <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
                         {
-                            data?.mechanic_target_reports.length > 0 && (
-                                <View>
-                                    <Text style={[fs_12_500, text_black]}>Hoàn thành: </Text>
-                                    {
-                                        data?.mechanic_target_reports.map((report: any, index: number) => {
-                                            const name = report?.mechanic_target?.name;
-                                            const mechanicUnit = report?.unit_name;
-                                            const amount = report?.amount;
-                                            const code = report?.mechanic_target?.code;
-                                            const total = report?.total_kpi;
-                                            return (
-                                                <Text key={report.id}
-                                                      style={[fs_12_400, text_black]}> • {amount} {mechanicUnit} {name} ({code})
-                                                    = {total} KPI</Text>
-                                            )
-                                        })
-                                    }
-                                </View>
-                            )
+                            data?.mechanic_target_reports.map((report: any, index: number) => {
+                                const name = report?.mechanic_target?.name;
+                                const mechanicUnit = report?.unit_name;
+                                const amount = report?.amount;
+                                const code = report?.mechanic_target?.code;
+                                const total = report?.total_kpi;
+                                return (
+                                    <Text key={report.id}
+                                          style={[fs_12_400, text_black]}> • {amount} {mechanicUnit} {name} ({code})
+                                        = {total} KPI</Text>
+                                )
+                            })
                         }
                     </View>
                 )

@@ -1,5 +1,5 @@
 import {Text, View} from "react-native";
-import {fs_15_700, text_red} from "../../assets/style.ts";
+import {fs_15_700, text_center, text_red} from "../../assets/style.ts";
 
 export default function MainTarget({ name, value, unit, tmpAmount }: any) {
     return (
@@ -16,12 +16,13 @@ export default function MainTarget({ name, value, unit, tmpAmount }: any) {
                 width: 0,
                 height: 4,
             },
+            paddingHorizontal: 5,
             shadowOpacity: 0.25,
             shadowRadius: 4,
             justifyContent: 'center',
             alignItems: 'center',
         }}>
-            <Text style={[fs_15_700, text_red]}>{name}: {tmpAmount ?? 0}/{value} {unit}</Text>
+            <Text style={[fs_15_700, text_red, text_center]}>{name}: {tmpAmount ?? 0}/{value}{unit}</Text>
         </View>
     );
 }

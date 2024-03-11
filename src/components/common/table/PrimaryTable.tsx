@@ -9,6 +9,8 @@ import {
 import {fs_12_500, text_black, text_center} from '../../../assets/style.ts';
 import RowTable from './RowTable.tsx';
 import PropTypes, {InferProps} from 'prop-types';
+import {useCallback, useMemo, useState} from "react";
+import {useFocusEffect} from "@react-navigation/native";
 
 export default function PrimaryTable(
     {
@@ -21,6 +23,7 @@ export default function PrimaryTable(
         getMoreData,
         rowDetailComponent,
     }: InferProps<typeof PrimaryTable.propTypes>) {
+
     return (
         <View style={styles.wrapper}>
             <View style={styles.row}>

@@ -117,12 +117,12 @@ export default function ProjectWorkDetail({route, navigation}: any) {
                             {
                                 title: 'Tiêu chí',
                                 key: 'name',
-                                width: 0.3,
+                                width: 0.35,
                             },
                             {
                                 title: 'Số lượng',
                                 key: 'amount',
-                                width: 0.25,
+                                width: 0.2,
                             },
                             {
                                 title: 'Kết quả',
