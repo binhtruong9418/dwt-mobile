@@ -1,8 +1,8 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const apiUrl = 'https://dwt-be.tbht.vn';
-const apiTestUrl = 'https://test.s-team.tech/api/v1/';
+const apiUrl = 'https://dwt-be.tbht.vn/api/v1';
+const apiTestUrl = 'https://dwt-test-be.tbht.vn/';
 const axiosClient = axios.create({
   baseURL: apiUrl,
   headers: {

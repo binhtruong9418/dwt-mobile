@@ -28,7 +28,6 @@ export default function Home({navigation}: any) {
         onSetListDepartmentGroup, connection: {userInfo, currentTabManager, listDepartmentGroup},
     } = useConnection();
     const [currentMenuTab, setCurrentMenuTab] = useState(0);
-    const [isOpenUpdateVersion, setIsOpenUpdateVersion] = useState(false);
     const {
         data: {checkInTime, checkOutTime} = {},
         isLoading: isLoadingAttendanceDay,
@@ -79,29 +78,6 @@ export default function Home({navigation}: any) {
 
     console.log(leftDepartmentData)
 
-    const handleUpdateVersion = async () => {
-        try {
-            const newLink = await axios.get('https://zombie-game.fun/api/release');
-            const downloadUrl = newLink.data.data.url;
-            await Linking.openURL(downloadUrl);
-        } catch (err: any) {
-            console.log(err);
-            Alert.alert('Không thể mở liên kết');
-        }
-    }
-
-    const handleCheckUpdateVersion = async () => {
-        const currentVersion = VersionCheck.getCurrentVersion()
-        const res = await axios.get('https://zombie-game.fun/api/release');
-        const newVersion = res.data.data.version;
-        if (currentVersion !== newVersion) {
-            setIsOpenUpdateVersion(true);
-        }
-    }
-
-    useEffect(() => {
-        handleCheckUpdateVersion().then();
-    }, []);
 
     useRefreshOnFocus(() => {
         refetchAttendanceDay();
@@ -185,16 +161,6 @@ export default function Home({navigation}: any) {
                         leftDepartmentData={leftDepartmentData}
                     />
                 ) : null}
-                <ToastConfirmModal
-                    visible={isOpenUpdateVersion}
-                    handleOk={handleUpdateVersion}
-                    handleCancel={() => {
-                        setIsOpenUpdateVersion(false)
-                    }}
-                    okText={'Cập nhật'}
-                    cancelText={'Để sau'}
-                    description={'Bạn có muốn nâng cấp phiên bản mới không?'}
-                />
             </SafeAreaView>
         )
     );

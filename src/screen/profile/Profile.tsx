@@ -110,16 +110,16 @@ export default function Profile({navigation}: any) {
         navigation.navigate('Login');
     };
 
-    const handleOpenUpdateLink = async () => {
-        try {
-            const newLink = await axios.get('https://zombie-game.fun/api/release');
-            const downloadUrl = newLink.data.data.url;
-            await Linking.openURL(downloadUrl);
-        } catch (err: any) {
-            console.log(err);
-            Alert.alert('Không thể mở liên kết');
-        }
-    };
+    // const handleOpenUpdateLink = async () => {
+    //     try {
+    //         const newLink = await axios.get('https://zombie-game.fun/api/release');
+    //         const downloadUrl = newLink.data.data.url;
+    //         await Linking.openURL(downloadUrl);
+    //     } catch (err: any) {
+    //         console.log(err);
+    //         Alert.alert('Không thể mở liên kết');
+    //     }
+    // };
     const {
         data: userData = {},
         isLoading: isLoadingUserData,
@@ -330,11 +330,11 @@ export default function Profile({navigation}: any) {
                         buttonStyle={styles.buttonStyle}
                     />
 
-                    <PrimaryButton
-                        onPress={handleOpenUpdateLink}
-                        text={'Cập nhật phiên bản mới nhất'}
-                        buttonStyle={styles.buttonStyle}
-                    />
+                    {/*<PrimaryButton*/}
+                    {/*    onPress={handleOpenUpdateLink}*/}
+                    {/*    text={'Cập nhật phiên bản mới nhất'}*/}
+                    {/*    buttonStyle={styles.buttonStyle}*/}
+                    {/*/>*/}
                     <Text style={[fs_12_400, text_gray, text_center, {marginTop: 10}]}>
                         Phiên bản {currentVersion}
                     </Text>
